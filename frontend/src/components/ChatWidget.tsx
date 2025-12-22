@@ -3,7 +3,7 @@ import Image from "./Image";
 import ChatContainer from "./chatbox/ChatContainer";
 import Overplay from "./Overplay";
 
-function Home() {
+function ChatWidget() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const toggleChat = () => {
@@ -18,11 +18,10 @@ function Home() {
         <button
           onClick={toggleChat}
           className="
-          fixed bottom-6 right-6 z-99
+          fixed bottom-6 right-6 z-98
           w-14 h-14 rounded-full
-          shadow-lg bg-blue-600
+          shadow-lg bg-blue-500
           flex items-center justify-center
-          hover:bg-blue-700
         "
         >
           <Image
@@ -39,4 +38,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default ChatWidget;

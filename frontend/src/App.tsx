@@ -1,12 +1,12 @@
 import { BrowserRouter as Router } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import ScrollToTop from "./components/ScrollToTop";
-import Home from "./components/Home";
+import ChatWidget from "./components/ChatWidget";
 
 function App() {
   return (
     <Router>
-      <Home />
+      <ChatWidget />
       <Toaster />
       <ScrollToTop />
     </Router>
