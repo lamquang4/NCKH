@@ -43,6 +43,16 @@ function MessageList() {
       type: "ai",
       text: "Hooks cho phép bạn dùng state và lifecycle trong function component.",
     },
+    {
+      id: 9,
+      type: "user",
+      text: "Bạn có thể giải thích hooks không?",
+    },
+    {
+      id: 10,
+      type: "user",
+      text: "Bạn có thể giải thích hooks không?",
+    },
   ];
 
   const bottomRef = useRef<HTMLDivElement | null>(null);
@@ -50,6 +60,7 @@ function MessageList() {
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, []);
+
   return (
     <div className="flex-1 min-h-0 overflow-y-auto space-y-4 text-[0.9rem] custom-scroll px-3 py-6">
       {messages.map((msg) => (

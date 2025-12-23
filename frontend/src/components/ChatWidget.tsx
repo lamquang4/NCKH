@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Image from "./Image";
 import ChatContainer from "./chatbox/ChatContainer";
 import Overplay from "./Overplay";
@@ -6,9 +6,9 @@ import Overplay from "./Overplay";
 function ChatWidget() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const toggleChat = () => {
+  const toggleChat = useCallback(() => {
     setIsOpen((prev) => !prev);
-  };
+  }, []);
 
   return (
     <>

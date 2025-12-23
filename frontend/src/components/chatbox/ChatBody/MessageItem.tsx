@@ -1,6 +1,7 @@
 import toast from "react-hot-toast";
-import Image from "../Image";
+import Image from "../../Image";
 import MessageAction from "./MessageAction";
+import { memo, useCallback } from "react";
 
 type props = {
   type: "user" | "ai";
@@ -8,10 +9,10 @@ type props = {
 };
 
 function MessageItem({ type, text }: props) {
-  const handleCopy = async () => {
+  const handleCopy = useCallback(async () => {
     await navigator.clipboard.writeText(text);
     toast.success("Đã sao chép tin nhắn");
-  };
+  }, [text]);
 
   return (
     <div
@@ -45,4 +46,4 @@ function MessageItem({ type, text }: props) {
   );
 }
 
-export default MessageItem;
+export default memo(MessageItem);
