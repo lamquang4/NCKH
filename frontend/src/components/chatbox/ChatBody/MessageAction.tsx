@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 type Props = {
   onCopy: () => void;
 };
@@ -5,10 +7,7 @@ type Props = {
 function MessageAction({ onCopy }: Props) {
   return (
     <div className="flex gap-1 items-center">
-      <button
-        onClick={onCopy}
-        title="Copy"
-      >
+      <button onClick={onCopy} title="Copy">
         <svg
           color="#808089"
           className="w-4 h-4"
@@ -16,10 +15,10 @@ function MessageAction({ onCopy }: Props) {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <g clip-path="url(#clip0_79_58146)">
+          <g clipPath="url(#clip0_79_58146)">
             <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
+              fillRule="evenodd"
+              clipRule="evenodd"
               d="M5.33333 1.33325C4.96514 1.33325 4.66667 1.63173 4.66667 1.99992V11.3333C4.66667 11.7014 4.96514 11.9999 5.33333 11.9999H13.3333C13.7015 11.9999 14 11.7014 14 11.3333V1.99992C14 1.63173 13.7015 1.33325 13.3333 1.33325H5.33333ZM6 10.6666V2.66659H12.6667V10.6666H6Z"
               fill="currentColor"
             ></path>
@@ -44,4 +43,4 @@ function MessageAction({ onCopy }: Props) {
   );
 }
 
-export default MessageAction;
+export default memo(MessageAction);

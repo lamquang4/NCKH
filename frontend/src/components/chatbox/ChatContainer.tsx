@@ -1,7 +1,7 @@
-import { useState } from "react";
-import ChatBody from "./ChatBody";
-import ChatHeader from "./ChatHeader";
-import ChatInput from "./ChatInput";
+import { memo, useCallback, useState } from "react";
+import ChatBody from "./ChatBody/ChatBody";
+import ChatHeader from "./ChatHeader/ChatHeader";
+import ChatFooter from "./ChatFooter/ChatFooter";
 type Props = {
   onClose: () => void;
 };
@@ -9,21 +9,19 @@ type Props = {
 function ChatContainer({ onClose }: Props) {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
-  const toggleExpand = () => {
+  const toggleExpand = useCallback(() => {
     setIsExpanded((prev) => !prev);
-  };
+  }, []);
+
   return (
     <div className="h-screen flex justify-center items-center">
       <div
         className={`
-          bg-white shadow-xl flex flex-col overflow-hidden z-99
-          transition-all duration-300
-          ${
-            isExpanded
-              ? "w-full h-full rounded-none"
-              : "w-[600px] h-[580px] rounded-2xl"
-          }
-        `}
+    bg-white shadow-xl flex flex-col overflow-hidden z-99
+    transition-all duration-300
+    w-full h-full
+    ${isExpanded ? "rounded-none" : "md:w-[600px] md:h-[580px] md:rounded-2xl"}
+  `}
       >
         <ChatHeader
           onClose={onClose}
@@ -31,10 +29,10 @@ function ChatContainer({ onClose }: Props) {
           isExpanded={isExpanded}
         />
         <ChatBody />
-        <ChatInput />
+        <ChatFooter />
       </div>
     </div>
   );
 }
 
-export default ChatContainer;
+export default memo(ChatContainer);
