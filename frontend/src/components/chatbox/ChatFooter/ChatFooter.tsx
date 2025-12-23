@@ -42,9 +42,9 @@ function ChatFooter() {
   };
 
   return (
-    <div className="border-t border-gray-200 px-3 py-2.5">
+    <div className="border-t border-gray-200 px-3 py-3">
       {previewImages.length > 0 && (
-        <div className="mb-3">
+        <div className="pb-3">
           <Swiper
             spaceBetween={8}
             slidesPerView="auto"
@@ -88,12 +88,15 @@ function ChatFooter() {
       )}
 
       <div
-        className={`border border-gray-300 rounded-2xl p-2 transition-all flex items-center gap-2`}
+        className={`border border-gray-300 rounded-2xl transition-all flex items-center gap-2`}
       >
         <form onSubmit={handleSubmit} className="w-full">
           <ChatInput ref={inputRef} onInput={handleInput} />
 
-          <div className={`flex justify-between items-center gap-2 flex-wrap`}>
+          <label
+            htmlFor="message"
+            className={`flex justify-between px-3 pb-3 items-center gap-2 flex-wrap`}
+          >
             <div className="flex gap-2">
               <ChatImage
                 InputId="images"
@@ -106,7 +109,7 @@ function ChatFooter() {
             </div>
 
             <SendButton hasText={hasText} />
-          </div>
+          </label>
         </form>
       </div>
 
