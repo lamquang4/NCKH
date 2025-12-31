@@ -13,5 +13,3 @@ https://github.com/lamquang4/NCKH.git
 ```
 docker compose up --build
 ```
-
-## Mục lục
