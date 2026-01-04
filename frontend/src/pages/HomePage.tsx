@@ -1,7 +1,11 @@
 import LayoutPage from "../components/LayoutPage";
 
 function HomePage() {
-  return <LayoutPage>Trang chủ</LayoutPage>;
+  return (
+    <LayoutPage>
+      <div>Trang chủ</div>
+    </LayoutPage>
+  );
 }
 
 export default HomePage;

@@ -14,15 +14,10 @@ function ChatWidget() {
     <>
       {isOpen && <ChatContainer onClose={toggleChat} />}
 
-      <div>
+      <div className="fixed bottom-6 right-6 z-98">
         <button
           onClick={toggleChat}
-          className="
-          fixed bottom-6 right-6 z-98
-          w-14 h-14 rounded-full
-          shadow-lg bg-blue-500
-          flex items-center justify-center
-        "
+          className="w-14 h-14 rounded-full shadow-lg bg-blue-500 flex items-center justify-center"
         >
           <Image
             source="/assets/chat-box.png"

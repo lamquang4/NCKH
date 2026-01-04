@@ -50,14 +50,14 @@ function MessageList() {
           stock: 5,
         },
         {
-          id: 5,
+          id: 3,
           name: "Laptop 1",
           price: 12000000,
           image: "/assets/products/laptop1.png",
           stock: 5,
         },
         {
-          id: 2,
+          id: 4,
           name: "Bàn phím 2",
           price: 95000,
           image: "/assets/products/banphim2.png",
@@ -71,7 +71,7 @@ function MessageList() {
           stock: 5,
         },
         {
-          id: 5,
+          id: 6,
           name: "Laptop 1",
           price: 12000000,
           image: "/assets/products/laptop1.png",

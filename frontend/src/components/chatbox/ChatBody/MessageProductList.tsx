@@ -11,9 +11,11 @@ function MessageProductList({ products }: any) {
       <div className="flex items-center gap-3">
         <div className="flex gap-2 ">
           {products.slice(0, 3).map((p: any, index: number) => (
-            <div className="w-20 h-20 rounded-md overflow-hidden border border-gray-200 relative">
+            <div
+              className="w-20 h-20 rounded-md overflow-hidden border border-gray-200 relative"
+              key={p.id}
+            >
               <Image
-                key={p.id}
                 source={p.image}
                 alt={p.name}
                 className="w-full object-cover"
