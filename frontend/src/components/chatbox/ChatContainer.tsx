@@ -14,14 +14,12 @@ function ChatContainer({ onClose }: Props) {
   }, []);
 
   return (
-    <div className="h-screen flex justify-center items-center">
+    <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
       <div
-        className={`
-    bg-white shadow-xl flex flex-col overflow-hidden z-99
-    transition-all duration-300
-    w-full h-full
-    ${isExpanded ? "rounded-none" : "md:w-[600px] md:h-[580px] md:rounded-2xl"}
-  `}
+        className={`bg-white pointer-events-auto shadow-xl flex flex-col overflow-hidden transition-all duration-300 w-full h-full
+    ${
+      isExpanded ? "rounded-none" : "md:w-[600px] md:h-[580px] md:rounded-2xl"
+    }`}
       >
         <ChatHeader
           onClose={onClose}
