@@ -14,7 +14,7 @@ function ChatContainer({ onClose }: Props) {
   }, []);
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
+    <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-99">
       <div
         className={`bg-white pointer-events-auto shadow-xl flex flex-col overflow-hidden transition-all duration-300 w-full h-full
     ${
