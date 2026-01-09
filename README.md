@@ -1,6 +1,6 @@
 # Trợ lý ảo đặt hàng và tư vấn sản phẩm theo kiến trúc Microservice
 
-## Cài đặt mô trường
+## Cài đặt môi trường
 
 **1. Clone repository**
 
