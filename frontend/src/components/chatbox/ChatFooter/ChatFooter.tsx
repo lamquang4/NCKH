@@ -17,10 +17,20 @@ function ChatFooter() {
     setHasText(el.value.trim().length > 0);
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const message = inputRef.current?.value;
+  const handleSubmit = (e?: React.FormEvent) => {
+    e?.preventDefault();
+
+    const message = inputRef.current?.value?.trim();
+
+    if (!message) {
+      return;
+    }
+
     console.log(message);
+
+    inputRef.current!.value = "";
+    inputRef.current!.style.height = "auto";
+    setHasText(false);
   };
 
   return (
@@ -29,7 +39,11 @@ function ChatFooter() {
         className={`border border-gray-300 rounded-2xl transition-all flex items-center gap-2`}
       >
         <form onSubmit={handleSubmit} className="w-full">
-          <ChatInput ref={inputRef} onInput={handleInput} />
+          <ChatInput
+            ref={inputRef}
+            onInput={handleInput}
+            onSubmit={handleSubmit}
+          />
 
           <label
             htmlFor="message"
