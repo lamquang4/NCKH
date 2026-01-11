@@ -1,10 +1,10 @@
-package com.backend.categroy_service;
+package com.backend.category_service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class CategroyServiceApplicationTests {
+class CategoryServiceApplicationTests {
 
 	@Test
 	void contextLoads() {
