@@ -66,7 +66,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: test
+    needs: [test-frontend, test-backend]
     if: ${{ github.ref == 'refs/heads/main' }}
 
     steps:
@@ -81,7 +81,7 @@ jobs:
 
   create_issue:
     runs-on: ubuntu-latest
-    needs: [test-frontend, test-backend]
+    needs: [test-frontend, test-backend, deploy]
     if: failure()
     permissions:
       issues: write
@@ -100,6 +100,7 @@ jobs:
 
             **Test frontend:** ${{ needs.test-frontend.result }}
             **Test backend:** ${{ needs.test-backend.result }}
+            **Deploy:** \`${{ needs.deploy.result || 'skipped' }}\`
 
             **Workflow Run:** ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}
 
@@ -138,6 +139,39 @@ jobs:
                 repo: context.repo.repo,
                 issue_number: issue.number,
                 body: `Test job has passed. Closing CI/CD failure issue.`,
+              });
+
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                state: 'closed',
+              });
+            }
+
+  close_issue_deploy:
+    runs-on: ubuntu-latest
+    needs: deploy
+    if: needs.deploy.result == 'success'
+    permissions:
+      issues: write
+
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const title = `FAILURE: CI/CD Pipeline Failed on branch ${context.ref.replace('refs/heads/', '')}`;
+            const results = await github.rest.search.issuesAndPullRequests({
+              q: `is:open repo:${context.repo.owner}/${context.repo.repo} in:title "${title}" label:ci/cd-failure`,
+            });
+
+            for (const issue of results.data.items) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                body: `Deploy job has passed. Closing CI/CD failure issue.`,
               });
 
               await github.rest.issues.update({
