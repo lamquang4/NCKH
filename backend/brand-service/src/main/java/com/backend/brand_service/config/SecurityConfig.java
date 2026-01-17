@@ -1,4 +1,4 @@
-package com.backend.assistant_service.config;
+package com.backend.brand_service.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
