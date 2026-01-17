@@ -1,4 +1,4 @@
-package com.backend.chat_service.entity;
+package com.backend.chat_service.model;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;

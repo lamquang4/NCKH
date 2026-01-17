@@ -1,5 +1,8 @@
 package com.backend.order_service.repository;
 
-public class OrderRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import com.backend.order_service.entity.Order;
+
+public interface OrderRepository extends JpaRepository<Order, String> {
     
 }

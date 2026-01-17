@@ -1,4 +1,4 @@
-package com.backend.cart_service.entity;
+package com.backend.cart_service.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

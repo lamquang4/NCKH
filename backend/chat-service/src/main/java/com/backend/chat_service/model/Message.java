@@ -1,4 +1,4 @@
-package com.backend.chat_service.entity;
+package com.backend.chat_service.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

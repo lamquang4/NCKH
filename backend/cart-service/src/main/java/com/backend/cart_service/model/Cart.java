@@ -1,4 +1,4 @@
-package com.backend.cart_service.entity;
+package com.backend.cart_service.model;
 
 import java.time.LocalDateTime;
 import java.util.List;

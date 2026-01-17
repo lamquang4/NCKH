@@ -1,15 +1,16 @@
-FROM maven:3-openjdk-17 AS build
+FROM maven:3.9.6-eclipse-temurin-17 AS build
 WORKDIR /app
 
-COPY . .
+COPY pom.xml .
+RUN mvn dependency:go-offline -B
 
-RUN mvn clean package -DskipTests
+COPY src ./src
+RUN mvn package -DskipTests
 
-FROM eclipse-temurin:17-jdk-jammy
+FROM eclipse-temurin:17-jre-jammy
 WORKDIR /app
 
-COPY --from=build /app/target/user-service-0.0.1-SNAPSHOT.jar .
+COPY --from=build /app/target/user-service-0.0.1-SNAPSHOT.jar app.jar
 
 EXPOSE 8080
-
-ENTRYPOINT ["java", "-jar", "user-service-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-jar","app.jar"]

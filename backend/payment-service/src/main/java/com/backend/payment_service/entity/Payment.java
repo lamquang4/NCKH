@@ -45,6 +45,8 @@ public class Payment {
     private Integer status; // 1 thành công, 0 hoàn tiền
 
     @Builder.Default
-    @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Builder.Default
+    private LocalDateTime updatedAt = LocalDateTime.now();
 }

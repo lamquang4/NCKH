@@ -1,5 +1,9 @@
 package com.backend.cart_service.repository;
 
-public class CartRepository {
-    
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+import com.backend.cart_service.model.Cart;
+
+public interface CartRepository extends MongoRepository<Cart, String> {
+
 }
