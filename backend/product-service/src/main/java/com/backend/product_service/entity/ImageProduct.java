@@ -32,7 +32,7 @@ public class ImageProduct {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(nullable = false, length = 250)
+    @Column(nullable = false, length = 255)
     private String image;
 
     @ManyToOne
@@ -40,6 +40,5 @@ public class ImageProduct {
     private Product product;
 
     @Builder.Default
-    @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 }

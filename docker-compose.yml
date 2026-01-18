@@ -1,4 +1,8 @@
-version: "4"
+version: "3.9"
+
+networks:
+  app-network:
+    driver: bridge
 
 services:
   mysql:
@@ -13,9 +17,13 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
       - ./mysql-init:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
+
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
+      timeout: 5s
       retries: 5
 
   mongodb:
@@ -25,107 +33,204 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+    networks:
+      - app-network
+
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   eureka-server:
     build: ./backend/eureka-server
     container_name: eureka-server
     ports:
       - "8761:8761"
+    networks:
+      - app-network
+
+    environment:
+      JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+      interval: 10s
+      retries: 5
 
   api-gateway:
     build: ./backend/api-gateway
     container_name: api-gateway
     ports:
       - "8080:8080"
+    networks:
+      - app-network
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
     depends_on:
-      - eureka-server
+      eureka-server:
+        condition: service_healthy
 
   assistant-service:
     build: ./backend/assistant-service
     container_name: assistant-service
+    networks:
+      - app-network
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
+    depends_on:
+      eureka-server:
+        condition: service_healthy
 
   user-service:
     build: ./backend/user-service
     container_name: user-service
+    networks:
+      - app-network
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/user_db
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/userdb
       SPRING_DATASOURCE_USERNAME: dev
       SPRING_DATASOURCE_PASSWORD: dev123
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
+
     depends_on:
       mysql:
+        condition: service_healthy
+      eureka-server:
         condition: service_healthy
 
   product-service:
     build: ./backend/product-service
     container_name: product-service
+    networks:
+      - app-network
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/product_db
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/productdb
       SPRING_DATASOURCE_USERNAME: dev
       SPRING_DATASOURCE_PASSWORD: dev123
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
     depends_on:
       mysql:
+        condition: service_healthy
+      eureka-server:
         condition: service_healthy
 
   category-service:
     build: ./backend/category-service
     container_name: category-service
+    networks:
+      - app-network
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/category_db
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/categorydb
       SPRING_DATASOURCE_USERNAME: dev
       SPRING_DATASOURCE_PASSWORD: dev123
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
+
+    depends_on:
+      mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+
+  brand-service:
+    build: ./backend/brand-service
+    container_name: brand-service
+    networks:
+      - app-network
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/branddb
+      SPRING_DATASOURCE_USERNAME: dev
+      SPRING_DATASOURCE_PASSWORD: dev123
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
+
+    depends_on:
+      mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
 
   order-service:
     build: ./backend/order-service
     container_name: order-service
+    networks:
+      - app-network
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/order_db
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/orderdb
       SPRING_DATASOURCE_USERNAME: dev
       SPRING_DATASOURCE_PASSWORD: dev123
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
+
+    depends_on:
+      mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
 
   payment-service:
     build: ./backend/payment-service
     container_name: payment-service
+    networks:
+      - app-network
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/payment_db
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/paymentdb
       SPRING_DATASOURCE_USERNAME: dev
       SPRING_DATASOURCE_PASSWORD: dev123
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
+
+    depends_on:
+      mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
 
   cart-service:
     build: ./backend/cart-service
     container_name: cart-service
+    networks:
+      - app-network
     environment:
-      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/cart_db
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/cartdb
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
+
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
 
   chat-service:
     build: ./backend/chat-service
     container_name: chat-service
+    networks:
+      - app-network
     environment:
-      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/chat_db
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/chatdb
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-      args:
-        VITE_API_URL: http://localhost:8080
+      args: VITE_BACKEND_URL=http://localhost:8090
     container_name: frontend
     ports:
       - "5173:5173"
+    networks:
+      - app-network
     depends_on:
       - api-gateway
 

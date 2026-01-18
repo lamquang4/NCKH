@@ -65,9 +65,11 @@ public class Order {
   private Double total;
 
   @Builder.Default
-  @Column(nullable = false)
   private LocalDateTime createdAt = LocalDateTime.now();
 
-  @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @Builder.Default
+  private LocalDateTime updatedAt = LocalDateTime.now();
+
+  @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<OrderItem> items;
 }
