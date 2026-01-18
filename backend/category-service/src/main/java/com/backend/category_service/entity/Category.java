@@ -28,6 +28,9 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
+    @Column(nullable = false, length = 255)
+    private String image;
+
     @Column(nullable = false, unique = true, length = 50)
     private String name;
 

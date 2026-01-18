@@ -65,7 +65,7 @@ public class Product {
     private List<ImageProduct> images;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProductSpecification> specifications;
+    private List<Specification> specifications;
 
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
