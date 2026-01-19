@@ -1,11 +1,14 @@
 import { Link } from "react-router-dom";
-import Image from "../../Image";
+import Image from "../../../Image";
 import SearchDesktop from "./SearchDesktop";
 import ProfileMenu from "./ProfileMenu";
-import { BiCart, BiMenu, BiSearch, BiUser } from "react-icons/bi";
+import { AiOutlineMenu } from "react-icons/ai";
+import { IoSearchOutline } from "react-icons/io5";
+import { AiOutlineUser } from "react-icons/ai";
+import { PiShoppingCart } from "react-icons/pi";
 import { useCallback, useEffect, useState } from "react";
 import SearchMobile from "./SearchMobile";
-import Overplay from "../../Overplay";
+import Overplay from "../../../Overplay";
 import MenuMobile from "./MenuMobile";
 
 function Header() {
@@ -56,7 +59,7 @@ function Header() {
                 <div
                   className={`flex items-center gap-1 hover:text-white hover:bg-blue-500 px-2 py-1.5 rounded-md group-hover:bg-blue-500 group-hover:text-white`}
                 >
-                  <BiUser size={24} />
+                  <AiOutlineUser size={22} />
                   <span>Tài khoản</span>
                 </div>
 
@@ -66,7 +69,8 @@ function Header() {
               <Link to={"/cart"} className="relative">
                 <div className="flex items-center gap-1 hover:text-white hover:bg-blue-500 px-2 py-1.5 rounded-md">
                   <div className="relative">
-                    <BiCart size={24} />
+                    <PiShoppingCart size={22} />
+
                     <small className="absolute flex items-center justify-center top-[-12px] right-[-11px] bg-[#E30019] text-white text-[0.7rem] font-medium leading-none  rounded-full w-[20px] h-[20px]">
                       0
                     </small>
@@ -80,16 +84,16 @@ function Header() {
             {/* Mobile */}
             <div className="flex lg:hidden items-center gap-4 relative">
               <button onClick={toggleSearch}>
-                <BiSearch size={24} />
+                <IoSearchOutline size={22} />
               </button>
 
               <div className="relative cursor-pointer group">
-                <BiUser size={24} />
+                <AiOutlineUser size={22} />
                 <ProfileMenu />
               </div>
 
               <Link to={"/cart"} className="relative">
-                <BiCart size={24} />
+                <PiShoppingCart size={22} />
 
                 <small className="absolute flex items-center justify-center top-[-9px] right-[-11px] bg-[#E30019] text-white text-[0.7rem] font-medium leading-none  rounded-full w-[20px] h-[20px]">
                   0
@@ -97,12 +101,11 @@ function Header() {
               </Link>
 
               <button onClick={toggleMobileMenu}>
-                <BiMenu size={26} />
+                <AiOutlineMenu size={22} />
               </button>
             </div>
           </div>
 
-          {/* Mobile Search */}
           <SearchMobile onToggleSearch={toggleSearch} openSearch={openSearch} />
 
           <MenuMobile isOpen={menuMobileOpen} onToggleMenu={toggleMobileMenu} />

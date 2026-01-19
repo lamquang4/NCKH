@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 function MessageProductList({ products }: any) {
   return (
     <Link
-      to={"/"}
+      to={"/products"}
       className="inline-flex bg-white hover:bg-gray-100 border border-gray-200 rounded-xl p-2.5 cursor-pointer max-w-fit text-black"
     >
       <div className="flex items-center gap-3">

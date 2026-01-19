@@ -1,5 +1,5 @@
 import Home from "../../components/client/home/Home";
-import LayoutPage from "../../components/client/LayoutPage";
+import LayoutPage from "../../components/client/layout/LayoutPage";
 
 function HomePage() {
   return (

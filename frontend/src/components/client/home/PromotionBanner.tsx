@@ -14,7 +14,7 @@ function PromotionBanner({ banners }: Props) {
   return (
     <section className="mb-[40px]">
       <div className="mx-auto max-w-[1200px] w-full">
-        <div className="grid grid-cols-2 gap-[20px] sm:gap-[30px]">
+        <div className="grid lg:grid-cols-2 grid-cols-1 gap-[15px]">
           {banners.map((banner, index) => (
             <Link to="/products" key={index}>
               <div className="relative w-full">

@@ -7,7 +7,7 @@ type Props = {
 function MessageAction({ onCopy }: Props) {
   return (
     <div className="flex gap-1 items-center">
-      <button onClick={onCopy} title="Copy">
+      <button onClick={onCopy}>
         <svg
           color="#808089"
           className="w-4 h-4"
