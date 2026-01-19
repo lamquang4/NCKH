@@ -10,34 +10,63 @@ function ProductCard({ product }: Props) {
       <div className="relative group  border-gray-300 border">
         <Link to={`/product`}>
           {product.images.length > 0 && (
-            <div className=" w-full overflow-hidden pt-[100%]">
+            <div className="w-full overflow-hidden pt-[100%] relative group">
               <Image
                 source={product.images[0]}
-                alt={product.title}
-                className="absolute inset-0 w-full h-full object-cover"
+                alt={product.name}
+                className="absolute inset-0 w-full h-full object-cover z-1 group-hover:opacity-0"
                 loading="lazy"
               />
+
+              {product.images[1] && (
+                <Image
+                  source={product.images[1]}
+                  alt={product.name}
+                  className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 z-2"
+                  loading="lazy"
+                />
+              )}
             </div>
           )}
         </Link>
 
+        {product.discount > 0 && (
+          <div className="absolute top-2 right-2 z-10 font-semibold text-center">
+            <p className="text-white text-[0.8rem] px-2 py-1 bg-[#E30019] w-10 h-10 rounded-full text-center flex justify-center items-center">
+              -{Math.floor((product.discount / product.price) * 100)}%
+            </p>
+          </div>
+        )}
+
         {product.stock === 0 && (
-          <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center text-white p-1 font-medium bg-[#C62028] uppercase">
+          <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center text-white p-1 font-medium bg-[#E30019] uppercase">
             Hết hàng
           </p>
         )}
       </div>
 
       <div className="space-y-[6px]">
-        <p className="font-normal">
+        <p className="font-normal line-clamp-2">
           {product.brand.name} - {product.category.name}
         </p>
 
-        <h5 className="font-medium capitalize">{product.name}</h5>
+        <h5 className="font-medium capitalize line-clamp-2">{product.name}</h5>
 
-        <h5 className="font-semibold text-[#E30019]">
-          {product.price.toLocaleString("vi-VN")}₫
-        </h5>
+        {product.discount > 0 ? (
+          <div className="flex gap-[12px]">
+            <del className="text-[#707072] text-[1rem]">
+              {product.price.toLocaleString("vi-VN")}₫
+            </del>
+
+            <h5 className="font-semibold text-[#E30019]">
+              {(product.price - product.discount).toLocaleString("vi-VN")}₫
+            </h5>
+          </div>
+        ) : (
+          <h5 className="font-semibold text-[#E30019]">
+            {product.price.toLocaleString("vi-VN")}₫
+          </h5>
+        )}
       </div>
     </div>
   );

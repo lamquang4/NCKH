@@ -29,13 +29,17 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(unique = true, length = 254)
+    @Column(nullable = false, unique = true, length = 254)
     private String email;
 
-    @Column(length = 100)
+    @Column(nullable = false, length = 100)
     private String fullname;
 
+    @Column(nullable = false, unique = true, length = 15)
+    private String phone;
+
     private LocalDate birthDate;
+
     private Integer gender;
 
     @Column(length = 60)
@@ -49,9 +53,6 @@ public class User {
 
     @Column(unique = true)
     private String googleId;
-
-    @Column(unique = true)
-    private String facebookId;
 
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();

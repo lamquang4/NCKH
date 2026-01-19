@@ -1,5 +1,5 @@
 import { memo, useState } from "react";
-import { BiSearch } from "react-icons/bi";
+import { IoSearchOutline } from "react-icons/io5";
 import { useNavigate, useLocation, matchPath } from "react-router-dom";
 
 function SearchDesktop() {
@@ -55,7 +55,7 @@ function SearchDesktop() {
           className="px-3 font-medium bg-blue-500 text-white"
           type="submit"
         >
-          <BiSearch size={22} />
+          <IoSearchOutline size={22} />
         </button>
       </form>
 

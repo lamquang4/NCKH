@@ -3,7 +3,7 @@ import Image from "../../Image";
 import ChatContainer from "../chatbox/ChatContainer";
 import Overplay from "../../Overplay";
 
-function ChatWidget() {
+function FloatingWidget() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const toggleChat = useCallback(() => {
@@ -33,4 +33,4 @@ function ChatWidget() {
   );
 }
 
-export default ChatWidget;
+export default FloatingWidget;

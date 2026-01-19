@@ -2,7 +2,7 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 import Header from "./header/Header";
 import Footer from "./Footer";
-import ChatWidget from "./chatbox/ChatWidget";
+import FloatingWidget from "./FloatingWidget";
 
 export default function LayoutPage({
   children,
@@ -16,7 +16,7 @@ export default function LayoutPage({
     <>
       {!isPage && <Header />}
       {children}
-      {!isPage && <ChatWidget />}
+      {!isPage && <FloatingWidget />}
       {!isPage && <Footer />}
     </>
   );

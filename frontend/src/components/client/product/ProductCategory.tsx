@@ -8,6 +8,7 @@ function ProductCategory() {
       id: "1",
       name: "Laptop Dell Inspiron 15",
       price: 18990000,
+      discount: 0,
       stock: 12,
       images: [
         "/assets/products/laptop1/1.png",
@@ -20,6 +21,7 @@ function ProductCategory() {
       id: "2",
       name: "Laptop ASUS Vivobook 14",
       price: 16490000,
+      discount: 1500000,
       stock: 10,
       images: [
         "/assets/products/laptop2/1.png",
@@ -32,6 +34,7 @@ function ProductCategory() {
       id: "3",
       name: "Laptop HP Pavilion 15",
       price: 17990000,
+      discount: 0,
       stock: 7,
       images: [
         "/assets/products/laptop3/1.png",
@@ -46,6 +49,7 @@ function ProductCategory() {
       id: "4",
       name: "Tai nghe Sony WH-1000XM5",
       price: 7990000,
+      discount: 2000000,
       stock: 5,
       images: [
         "/assets/products/tainghe1/1.png",
@@ -58,6 +62,7 @@ function ProductCategory() {
       id: "5",
       name: "Tai nghe Apple AirPods Pro 2",
       price: 6490000,
+      discount: 0,
       stock: 9,
       images: [
         "/assets/products/tainghe2/1.jpg",
@@ -72,6 +77,7 @@ function ProductCategory() {
       id: "6",
       name: "Chuột Logitech G Pro X",
       price: 2990000,
+      discount: 500000,
       stock: 20,
       images: [
         "/assets/products/chuot1/1.png",
@@ -84,6 +90,7 @@ function ProductCategory() {
       id: "7",
       name: "Chuột Razer DeathAdder V3",
       price: 2590000,
+      discount: 1000000,
       stock: 15,
       images: [
         "/assets/products/chuot2/1.jpg",
@@ -98,6 +105,7 @@ function ProductCategory() {
       id: "8",
       name: "Ghế Gaming DXRacer Formula",
       price: 6990000,
+      discount: 2000000,
       stock: 6,
       images: ["/assets/products/ghe1/1.png", "/assets/products/ghe1/2.png"],
       category: { name: "Ghế" },
@@ -107,6 +115,7 @@ function ProductCategory() {
       id: "9",
       name: "Ghế Công Thái Học Sihoo M57",
       price: 5490000,
+      discount: 1500000,
       stock: 8,
       images: ["/assets/products/ghe2/1.jpg", "/assets/products/ghe2/2.jpg"],
       category: { name: "Ghế" },
