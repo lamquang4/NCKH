@@ -46,7 +46,7 @@ public class User {
     private String password;
 
     @Column(nullable = false)
-    private Integer role;
+    private String role; // customer, admin
 
     @Column(nullable = false)
     private Integer status;

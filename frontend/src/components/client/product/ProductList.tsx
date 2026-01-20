@@ -1,10 +1,11 @@
+import type { Product } from "../../../types/type";
 import Image from "../../Image";
 import ProductCard from "./ProductCard";
 import ProductCardSkeleton from "./ProductCardSkeleton";
 
 interface Props {
   category?: string;
-  products: any[];
+  products: Product[];
   isLoading: boolean;
   total: number;
 }

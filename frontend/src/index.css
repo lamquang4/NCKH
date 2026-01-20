@@ -33,7 +33,7 @@ input[type="number"]::-webkit-inner-spin-button {
   opacity: 1 !important;
 }
 .swiper-pagination-bullet-active {
-  background-color: #e30019 !important;
+  background-color: #FF4C58 !important;
 }
 
 .apexcharts-toolbar {
