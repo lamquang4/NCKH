@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import Image from "../../Image";
+import type { Product } from "../../../types/type";
 
 interface Props {
-  product: any;
+  product: Product;
 }
 function ProductCard({ product }: Props) {
   return (
@@ -12,7 +13,7 @@ function ProductCard({ product }: Props) {
           {product.images.length > 0 && (
             <div className="w-full overflow-hidden pt-[100%] relative group">
               <Image
-                source={product.images[0]}
+                source={product.images[0].image}
                 alt={product.name}
                 className="absolute inset-0 w-full h-full object-cover z-1 group-hover:opacity-0"
                 loading="lazy"
@@ -20,7 +21,7 @@ function ProductCard({ product }: Props) {
 
               {product.images[1] && (
                 <Image
-                  source={product.images[1]}
+                  source={product.images[0].image}
                   alt={product.name}
                   className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 z-2"
                   loading="lazy"
@@ -32,14 +33,14 @@ function ProductCard({ product }: Props) {
 
         {product.discount > 0 && (
           <div className="absolute top-2 right-2 z-10 font-semibold text-center">
-            <p className="text-white text-[0.8rem] px-2 py-1 bg-[#E30019] w-10 h-10 rounded-full text-center flex justify-center items-center">
+            <p className="text-white text-[0.8rem] px-2 py-1 bg-[#FF4C58] w-10 h-10 rounded-full text-center flex justify-center items-center">
               -{Math.floor((product.discount / product.price) * 100)}%
             </p>
           </div>
         )}
 
         {product.stock === 0 && (
-          <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center text-white p-1 font-medium bg-[#E30019] uppercase">
+          <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center text-white p-1 font-medium bg-[#FF4C58] uppercase z-10">
             Hết hàng
           </p>
         )}
@@ -58,12 +59,12 @@ function ProductCard({ product }: Props) {
               {product.price.toLocaleString("vi-VN")}₫
             </del>
 
-            <h5 className="font-semibold text-[#E30019]">
+            <h5 className="font-semibold text-[#FF4C58]">
               {(product.price - product.discount).toLocaleString("vi-VN")}₫
             </h5>
           </div>
         ) : (
-          <h5 className="font-semibold text-[#E30019]">
+          <h5 className="font-semibold text-[#FF4C58]">
             {product.price.toLocaleString("vi-VN")}₫
           </h5>
         )}

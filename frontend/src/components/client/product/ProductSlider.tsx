@@ -3,10 +3,11 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import { FreeMode } from "swiper/modules";
 import ProductCard from "./ProductCard";
+import type { Product } from "../../../types/type";
 
 interface Props {
   title: string;
-  products: any[];
+  products: Product[];
 }
 
 function ProductSlider({ title, products }: Props) {

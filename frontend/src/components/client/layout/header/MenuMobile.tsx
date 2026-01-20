@@ -3,16 +3,14 @@ import { FaPlus } from "react-icons/fa6";
 import { FaMinus } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Overplay from "../../../Overplay";
+import { mockCategories } from "../../../../mocks/mocksCategory";
 
 type MenuMobileProps = {
   isOpen: boolean;
   onToggleMenu: () => void;
 };
 function MenuMobile({ isOpen, onToggleMenu }: MenuMobileProps) {
-  const categories = [
-    { id: "1", name: "Laptop", slug: "laptop" },
-    { id: "2", name: "Chuột", slug: "chuot" },
-  ];
+  const categories = mockCategories
   const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
 
   const toggleOpen = (menu: string) => {

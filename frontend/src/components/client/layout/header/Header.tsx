@@ -76,7 +76,7 @@ function Header() {
                   <div className="relative">
                     <PiShoppingCart size={22} />
 
-                    <small className="absolute flex items-center justify-center top-[-12px] right-[-11px] bg-[#E30019] text-white text-[0.7rem] font-medium leading-none  rounded-full w-[20px] h-[20px]">
+                    <small className="absolute flex items-center justify-center top-[-12px] right-[-11px] bg-[#FF4C58] text-white text-[0.7rem] font-medium leading-none  rounded-full w-[20px] h-[20px]">
                       0
                     </small>
                   </div>
@@ -103,7 +103,7 @@ function Header() {
               <Link to={"/cart"} className="relative">
                 <PiShoppingCart size={22} />
 
-                <small className="absolute flex items-center justify-center top-[-9px] right-[-11px] bg-[#E30019] text-white text-[0.7rem] font-medium leading-none  rounded-full w-[20px] h-[20px]">
+                <small className="absolute flex items-center justify-center top-[-9px] right-[-11px] bg-[#FF4C58] text-white text-[0.7rem] font-medium leading-none  rounded-full w-[20px] h-[20px]">
                   0
                 </small>
               </Link>
@@ -120,11 +120,13 @@ function Header() {
         </div>
       </header>
 
-      <AuthModal
-        type={authType}
-        onClose={() => setAuthType(null)}
-        onSwitch={(type) => setAuthType(type)}
-      />
+      {authType && (
+        <AuthModal
+          type={authType}
+          onClose={() => setAuthType(null)}
+          onSwitch={(type) => setAuthType(type)}
+        />
+      )}
 
       {openSearch && <Overplay onClose={toggleSearch} IndexForZ={12} />}
     </>

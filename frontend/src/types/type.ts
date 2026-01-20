@@ -1,66 +1,94 @@
+// USER
 export interface User {
   id?: string;
-  fullname: string;
   email: string;
-  role?: number;
+  fullname: string;
+  phone?: string;
+  birthDate?: string;
+  gender?: number;
   password?: string;
-  status?: number;
+  role: "customer" | "admin";
+  status: number;
+  googleId?: string;
+  createdAt?: string;
 }
 
+// BRAND
+export interface Brand {
+  id?: string;
+  name: string;
+  slug: string;
+  createdAt?: string;
+}
+
+// CATEGORY
 export interface Category {
   id?: string;
   name: string;
-  slug?: string;
-  status: number;
-}
-
-export interface Author {
-  id?: string;
-  fullname: string;
-  slug?: string;
-}
-
-export interface Publisher {
-  id?: string;
-  name: string;
-  slug?: string;
-}
-
-export interface Book {
-  id: string;
-  images: ImageBook[];
-  title: string;
-  price: number;
-  discount: number;
-  description: string;
-  publicationDate: string;
-  numberOfPages: number;
-  weight: number;
-  width: number;
-  length: number;
-  thickness: number;
   slug: string;
+  image?: string;
   status: number;
-  stock: number;
-  category: Category;
-  author: Author;
-  publisher: Publisher;
-  totalSold?: number;
+  createdAt?: string;
 }
 
-export interface ImageBook {
+// PRODUCT
+export interface ImageProduct {
   id: string;
   image: string;
 }
 
-export interface Address {
+export interface Specification {
+  id: string;
+  specKey: string;
+  specValue: string;
+  displayOrder: number;
+}
+
+export interface Product {
+  id: string;
+  name: string;
+  slug: string;
+  price: number;
+  discount: number;
+  description: string;
+  status: number;
+  stock: number;
+  category: Category;
+  brand: Brand;
+  images: ImageProduct[];
+  specifications: Specification[];
+  createdAt?: string;
+}
+
+// CART
+export interface ProductInCart {
+  id: string;
+  productId: string;
+  name: string;
+  images: string[];
+  price: number;
+  discount: number;
+  slug: string;
+  quantity: number;
+  stock: number;
+}
+
+export interface Cart {
   id?: string;
-  fullname: string;
-  phone: string;
-  speaddress: string;
-  ward: string;
-  city: string;
-  user?: string;
+  userId?: string;
+  items: ProductInCart[];
+  createdAt?: string;
+}
+
+// ORDER
+export interface ProductBuy {
+  id: string;
+  productId: string;
+  name: string;
+  images: string[];
+  quantity: number;
+  price: number;
+  discount: number;
 }
 
 export interface Order {
@@ -72,22 +100,11 @@ export interface Order {
   speaddress: string;
   city: string;
   ward: string;
-  accountEmail: string;
   paymethod: string;
-  items: ProductBuy[];
   status: number;
   total: number;
+  items: ProductBuy[];
   createdAt: string;
-}
-
-export interface ProductBuy {
-  id: string;
-  bookId: string;
-  title: string;
-  images: string[];
-  quantity: number;
-  price: number;
-  discount: number;
 }
 
 export interface OrderAdd {
@@ -98,43 +115,43 @@ export interface OrderAdd {
   ward: string;
   paymethod: string;
   items: {
-    bookId: string;
+    productId: string;
     quantity: number;
     price: number;
     discount: number;
   }[];
 }
 
+// PAYMENT
 export interface Payment {
   id?: string;
   orderId: string;
-  orderCode: string;
   paymethod: string;
   amount: number;
-  transactionId: string;
-  status: number;
+  transactionId?: string;
+  status: number; // 1 success, 0 refund
+  createdAt?: string;
+}
+
+// CHAT
+export interface Chat {
+  id: string;
+  userId: string;
+  sessionData: Record<string, any>;
   createdAt: string;
 }
 
-export interface ProductInCart {
+export interface Message {
   id: string;
-  bookId: string;
-  title: string;
-  images: string[];
-  name: string;
-  price: number;
-  discount: number;
-  slug: string;
-  quantity: number;
-  stock: number;
+  chatId: string;
+  isBot: boolean;
+  content: string;
+  products: string[];
+  extraData: Record<string, any>;
+  createdAt: string;
 }
 
-export interface Cart {
-  id?: string;
-  user?: string;
-  items: ProductInCart[];
-}
-
+// ADDRESS
 export type Ward = {
   name: string;
   mergedFrom: string[];
