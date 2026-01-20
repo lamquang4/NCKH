@@ -50,7 +50,7 @@ function MenuMobile({ isOpen, onToggleMenu }: MenuMobileProps) {
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="lucide lucide-x-icon lucide-x w-3.5"
+              className="lucide lucide-x-icon lucide-x w-4"
               viewBox="5 5 14 14"
             >
               <path d="M18 6 6 18"></path>

@@ -1,7 +1,12 @@
 import { memo } from "react";
 import { Link } from "react-router-dom";
 
-function ProfileMenu() {
+type Props = {
+  onLogin: () => void;
+  onRegister: () => void;
+};
+
+function ProfileMenu({ onLogin, onRegister }: Props) {
   const user = false;
 
   return (
@@ -12,17 +17,11 @@ function ProfileMenu() {
             Xin chào, Quang Lâm
           </p>
 
-          <Link
-            className="hover:bg-gray-100 w-full block p-2.5"
-            to="/account"
-          >
+          <Link className="hover:bg-gray-100 w-full block p-2.5" to="/account">
             Thông tin tài khoản
           </Link>
 
-          <Link
-            className="hover:bg-gray-100 w-full block p-2.5"
-            to="/order"
-          >
+          <Link className="hover:bg-gray-100 w-full block p-2.5" to="/order">
             Đơn hàng
           </Link>
 
@@ -32,19 +31,19 @@ function ProfileMenu() {
         </>
       ) : (
         <>
-          <Link
-            className="hover:bg-gray-100 w-full block p-2.5 "
-            to="/login"
+          <button
+            onClick={onLogin}
+            className="hover:bg-gray-100 w-full block p-2.5 text-left"
           >
             Đăng nhập
-          </Link>
+          </button>
 
-          <Link
-            className="hover:bg-gray-100 w-full block p-2.5 text-[0.9rem]"
-            to="/register"
+          <button
+            onClick={onRegister}
+            className="hover:bg-gray-100 w-full block p-2.5 text-left"
           >
             Đăng ký
-          </Link>
+          </button>
         </>
       )}
     </div>

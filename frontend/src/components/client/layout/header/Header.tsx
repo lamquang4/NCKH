@@ -10,8 +10,10 @@ import { useCallback, useEffect, useState } from "react";
 import SearchMobile from "./SearchMobile";
 import Overplay from "../../../Overplay";
 import MenuMobile from "./MenuMobile";
+import AuthModal from "../auth/AuthModal";
 
 function Header() {
+  const [authType, setAuthType] = useState<"login" | "register" | null>(null);
   const [openSearch, setOpenSearch] = useState<boolean>(false);
   const [menuMobileOpen, setMenuMobileOpen] = useState<boolean>(false);
 
@@ -63,7 +65,10 @@ function Header() {
                   <span>Tài khoản</span>
                 </div>
 
-                <ProfileMenu />
+                <ProfileMenu
+                  onLogin={() => setAuthType("login")}
+                  onRegister={() => setAuthType("register")}
+                />
               </div>
 
               <Link to={"/cart"} className="relative">
@@ -89,7 +94,10 @@ function Header() {
 
               <div className="relative cursor-pointer group">
                 <AiOutlineUser size={22} />
-                <ProfileMenu />
+                <ProfileMenu
+                  onLogin={() => setAuthType("login")}
+                  onRegister={() => setAuthType("register")}
+                />
               </div>
 
               <Link to={"/cart"} className="relative">
@@ -111,6 +119,12 @@ function Header() {
           <MenuMobile isOpen={menuMobileOpen} onToggleMenu={toggleMobileMenu} />
         </div>
       </header>
+
+      <AuthModal
+        type={authType}
+        onClose={() => setAuthType(null)}
+        onSwitch={(type) => setAuthType(type)}
+      />
 
       {openSearch && <Overplay onClose={toggleSearch} IndexForZ={12} />}
     </>
