@@ -4,35 +4,10 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import { FreeMode } from "swiper/modules";
 import { Link } from "react-router-dom";
+import { mockCategories } from "../../../mocks/mockCategories";
 
 function CategoryList() {
-  const categories = [
-    {
-      id: "1",
-      name: "Laptop",
-      image: "/assets/categories/laptop.png",
-    },
-    {
-      id: "2",
-      name: "Bàn phím",
-      image: "/assets/categories/banphim.png",
-    },
-    {
-      id: "3",
-      name: "Chuột",
-      image: "/assets/categories/chuot.png",
-    },
-    {
-      id: "4",
-      name: "Tai nghe",
-      image: "/assets/categories/tainghe.png",
-    },
-    {
-      id: "5",
-      name: "Ghế",
-      image: "/assets/categories/ghe.png",
-    },
-  ];
+  const categories = mockCategories;
 
   return (
     <>
@@ -53,10 +28,13 @@ function CategoryList() {
                     key={category.id}
                     className="!flex !flex-col !items-center !w-auto group"
                   >
-                    <Link to={`/products`} className="space-y-[8px]">
+                    <Link
+                      to={`/products/${category.slug}`}
+                      className="space-y-[8px]"
+                    >
                       <div className="w-[110px] sm:w-[130px]  border border-gray-300 overflow-hidden rounded-full group-hover:border-black">
                         <Image
-                          source={category.image}
+                          source={category.image || ""}
                           alt={category.name}
                           className="w-full h-full block object-cover rounded-full"
                           loading="lazy"

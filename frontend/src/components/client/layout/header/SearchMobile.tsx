@@ -1,5 +1,6 @@
 import { memo, useEffect, useState } from "react";
 import { matchPath, useLocation, useNavigate } from "react-router-dom";
+import Suggestion from "../../Suggestion";
 
 type Props = {
   onToggleSearch: () => void;
@@ -92,7 +93,9 @@ function SearchMobile({ onToggleSearch, openSearch }: Props) {
         </div>
 
         {focused && search && (
-          <div className="fixed left-1/2 translate-x-[-50%] z-12 w-full bg-white shadow-lg border-gray-300 border"></div>
+          <div className="fixed left-1/2 translate-x-[-50%] z-12 w-full bg-white shadow-lg border-gray-300 border">
+            <Suggestion search={search} />
+          </div>
         )}
       </div>
     </div>

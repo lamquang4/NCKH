@@ -9,21 +9,21 @@ function ProductCard({ product }: Props) {
   return (
     <div className="space-y-[15px]" key={product.id}>
       <div className="relative group  border-gray-300 border">
-        <Link to={`/product`}>
+        <Link to={`/product/${product.slug}`}>
           {product.images.length > 0 && (
             <div className="w-full overflow-hidden pt-[100%] relative group">
               <Image
                 source={product.images[0].image}
                 alt={product.name}
-                className="absolute inset-0 w-full h-full object-cover z-1 group-hover:opacity-0"
+                className="absolute inset-0 w-full h-full object-cover z-1 transition-opacity duration-300 group-hover:opacity-0"
                 loading="lazy"
               />
 
               {product.images[1] && (
                 <Image
-                  source={product.images[0].image}
+                  source={product.images[1].image}
                   alt={product.name}
-                  className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 z-2"
+                  className="absolute inset-0 w-full h-full object-cover z-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                   loading="lazy"
                 />
               )}

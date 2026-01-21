@@ -24,7 +24,7 @@ function ProductDetail({ product }: Props) {
   };
 
   return (
-    <section className="w-full my-[40px] px-[15px]">
+    <section className="w-full mb-[40px] px-[15px]">
       <div className="mx-auto w-full max-w-[1200px]">
         <div className="flex flex-col lg:flex-row gap-x-[15px] gap-y-[30px] w-full">
           <div className="flex-1/6" id="div1">

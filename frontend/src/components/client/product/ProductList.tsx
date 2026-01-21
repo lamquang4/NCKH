@@ -1,3 +1,4 @@
+import { useLocation, useNavigate } from "react-router-dom";
 import type { Product } from "../../../types/type";
 import Image from "../../Image";
 import ProductCard from "./ProductCard";
@@ -11,17 +12,66 @@ interface Props {
 }
 
 function ProductList({ category, products, isLoading, total }: Props) {
+  const navigate = useNavigate();
+  const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const search = searchParams.get("q");
+  const pathname = location.pathname;
+
+  const sortArray = [
+    {
+      name: "Mới nhất",
+      sort: "newest",
+    },
+    {
+      name: "Giá (thấp-cao)",
+      sort: "price-asc",
+    },
+    {
+      name: "Giá (cao-thấp)",
+      sort: "price-desc",
+    },
+    {
+      name: "Bán chạy nhất",
+      sort: "bestseller",
+    },
+  ];
+
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const sort = e.target.value;
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (sort) {
+      params.set("sort", sort);
+    } else {
+      params.delete("sort");
+    }
+    params.set("page", "1");
+    navigate(`${pathname}?${params.toString()}`);
+  };
 
   return (
     <>
       <div className="mb-[50px] space-y-[15px]">
-        {!isLoading && (category || search) && (
-          <h2 className=" text-black capitalize">
-            {search ? search : category} ({total})
-          </h2>
-        )}
+        <div className="flex justify-between items-center flex-wrap gap-[15px]">
+          {!isLoading && (category || search) && (
+            <h2 className=" text-black capitalize">
+              {search ? search : category} ({total})
+            </h2>
+          )}
+
+          <select
+            onChange={handleSortChange}
+            value={searchParams.get("sort") ?? ""}
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-[0.9rem] rounded-sm block p-2 outline-0"
+          >
+            {sortArray.map((item, index) => (
+              <option value={item.sort} key={index}>
+                {item.name}
+              </option>
+            ))}
+          </select>
+        </div>
 
         {isLoading ? (
           <div className="grid grid-cols-2 gap-x-[12px] gap-y-[35px] lg:grid-cols-3 2xl:grid-cols-4 sm:grid-cols-2">
