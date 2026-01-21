@@ -16,7 +16,7 @@ function ProductBuyList({ items }: Props) {
           className="flex justify-between rounded-lg bg-white gap-[15px]"
           key={index}
         >
-          <div className="relative border border-gray-300">
+          <div className="relative border border-gray-300 bg-gray-100">
             <div className="w-[120px] h-[120px]">
               <Image
                 source={`${item.images[0]}`}

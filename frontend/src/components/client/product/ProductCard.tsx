@@ -11,7 +11,7 @@ function ProductCard({ product }: Props) {
       <div className="relative group  border-gray-300 border">
         <Link to={`/product/${product.slug}`}>
           {product.images.length > 0 && (
-            <div className="w-full overflow-hidden pt-[100%] relative group">
+            <div className="w-full overflow-hidden pt-[100%] relative group bg-gray-100">
               <Image
                 source={product.images[0].image}
                 alt={product.name}
