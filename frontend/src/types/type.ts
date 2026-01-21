@@ -61,7 +61,7 @@ export interface Product {
 }
 
 // CART
-export interface ProductInCart {
+export interface CartItem {
   id: string;
   productId: string;
   name: string;
@@ -76,12 +76,12 @@ export interface ProductInCart {
 export interface Cart {
   id?: string;
   userId?: string;
-  items: ProductInCart[];
+  items: CartItem[];
   createdAt?: string;
 }
 
 // ORDER
-export interface ProductBuy {
+export interface OrderItem {
   id: string;
   productId: string;
   name: string;
@@ -103,7 +103,7 @@ export interface Order {
   paymethod: string;
   status: number;
   total: number;
-  items: ProductBuy[];
+  items: OrderItem[];
   createdAt: string;
 }
 

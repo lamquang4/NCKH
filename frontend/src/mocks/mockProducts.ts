@@ -176,4 +176,98 @@ và mức giá hợp lý trong phân khúc.
     ],
     createdAt: "2024-01-05T10:00:00",
   },
+  // ===== CHUỘT =====
+  {
+    id: "6",
+    name: "Chuột Logitech G Pro X",
+    slug: "chuot-logitech-g-pro-x",
+    price: 2990000,
+    discount: 100000,
+    description: "Chuột gaming Logitech G Pro X siêu nhẹ, chính xác cao.",
+    status: 1,
+    stock: 20,
+    category: { id: "c3", name: "Chuột", slug: "chuot", status: 1 },
+    brand: { id: "b6", name: "Logitech", slug: "logitech" },
+    images: [
+      { id: "i11", image: "/assets/products/chuot1/1.png" },
+      { id: "i12", image: "/assets/products/chuot1/2.png" },
+    ],
+    specifications: [
+      { id: "s14", specKey: "DPI", specValue: "25600", displayOrder: 1 },
+      { id: "s15", specKey: "Trọng lượng", specValue: "63g", displayOrder: 2 },
+    ],
+    createdAt: "2024-01-06T10:00:00",
+  },
+
+  {
+    id: "7",
+    name: "Chuột Razer DeathAdder V3",
+    slug: "chuot-razer-deathadder-v3",
+    price: 2590000,
+    discount: 150000,
+    description: "Chuột gaming Razer DeathAdder V3 công thái học.",
+    status: 1,
+    stock: 15,
+    category: { id: "c3", name: "Chuột", slug: "chuot", status: 1 },
+    brand: { id: "b7", name: "Razer", slug: "razer" },
+    images: [
+      { id: "i13", image: "/assets/products/chuot2/1.jpg" },
+      { id: "i14", image: "/assets/products/chuot2/2.jpg" },
+    ],
+    specifications: [
+      { id: "s16", specKey: "DPI", specValue: "30000", displayOrder: 1 },
+      { id: "s17", specKey: "Trọng lượng", specValue: "59g", displayOrder: 2 },
+    ],
+    createdAt: "2024-01-07T10:00:00",
+  },
+
+  // ===== GHẾ =====
+  {
+    id: "8",
+    name: "Ghế Gaming DXRacer Formula",
+    slug: "ghe-gaming-dxracer-formula",
+    price: 6990000,
+    discount: 200000,
+    description: "Ghế gaming DXRacer Formula bền bỉ, hỗ trợ cột sống.",
+    status: 1,
+    stock: 6,
+    category: { id: "c4", name: "Ghế", slug: "ghe", status: 1 },
+    brand: { id: "b8", name: "DXRacer", slug: "dxracer" },
+    images: [
+      { id: "i15", image: "/assets/products/ghe1/1.png" },
+      { id: "i16", image: "/assets/products/ghe1/2.png" },
+    ],
+    specifications: [
+      { id: "s18", specKey: "Chất liệu", specValue: "Da PU", displayOrder: 1 },
+      { id: "s19", specKey: "Tải trọng", specValue: "120kg", displayOrder: 2 },
+    ],
+    createdAt: "2024-01-08T10:00:00",
+  },
+
+  {
+    id: "9",
+    name: "Ghế Công Thái Học Sihoo M57",
+    slug: "ghe-cong-thai-hoc-sihoo-m57",
+    price: 5490000,
+    discount: 0,
+    description: "Ghế công thái học Sihoo M57 hỗ trợ lưng và cổ.",
+    status: 1,
+    stock: 8,
+    category: { id: "c4", name: "Ghế", slug: "ghe", status: 1 },
+    brand: { id: "b9", name: "Sihoo", slug: "sihoo" },
+    images: [
+      { id: "i17", image: "/assets/products/ghe2/1.jpg" },
+      { id: "i18", image: "/assets/products/ghe2/2.jpg" },
+    ],
+    specifications: [
+      {
+        id: "s20",
+        specKey: "Chất liệu",
+        specValue: "Lưới cao cấp",
+        displayOrder: 1,
+      },
+      { id: "s21", specKey: "Tải trọng", specValue: "130kg", displayOrder: 2 },
+    ],
+    createdAt: "2024-01-09T10:00:00",
+  },
 ];

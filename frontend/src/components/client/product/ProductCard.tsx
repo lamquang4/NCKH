@@ -15,15 +15,15 @@ function ProductCard({ product }: Props) {
               <Image
                 source={product.images[0].image}
                 alt={product.name}
-                className="absolute inset-0 w-full h-full object-cover z-1 group-hover:opacity-0"
+                className="absolute inset-0 w-full h-full object-cover z-1 transition-opacity duration-300 group-hover:opacity-0"
                 loading="lazy"
               />
 
               {product.images[1] && (
                 <Image
-                  source={product.images[0].image}
+                  source={product.images[1].image}
                   alt={product.name}
-                  className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 z-2"
+                  className="absolute inset-0 w-full h-full object-cover z-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                   loading="lazy"
                 />
               )}
