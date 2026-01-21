@@ -101,6 +101,24 @@ services:
       eureka-server:
         condition: service_healthy
 
+  auth-service:
+    build: ./backend/auth-service
+    container_name: auth-service
+    networks:
+      - app-network
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/authdb
+      SPRING_DATASOURCE_USERNAME: dev
+      SPRING_DATASOURCE_PASSWORD: dev123
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
+
+    depends_on:
+      mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+
   product-service:
     build: ./backend/product-service
     container_name: product-service

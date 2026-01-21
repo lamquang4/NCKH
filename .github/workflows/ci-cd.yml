@@ -42,6 +42,7 @@ jobs:
         service:
           - assistant-service
           - user-service
+          - auth-service
           - product-service
           - category-service
           - brand-service
