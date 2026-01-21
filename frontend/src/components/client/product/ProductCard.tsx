@@ -9,7 +9,7 @@ function ProductCard({ product }: Props) {
   return (
     <div className="space-y-[15px]" key={product.id}>
       <div className="relative group  border-gray-300 border">
-        <Link to={`/product`}>
+        <Link to={`/product/${product.slug}`}>
           {product.images.length > 0 && (
             <div className="w-full overflow-hidden pt-[100%] relative group">
               <Image

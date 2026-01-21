@@ -3,14 +3,14 @@ import { FaPlus } from "react-icons/fa6";
 import { FaMinus } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Overplay from "../../../Overplay";
-import { mockCategories } from "../../../../mocks/mocksCategory";
+import { mockCategories } from "../../../../mocks/mockCategories";
 
 type MenuMobileProps = {
   isOpen: boolean;
   onToggleMenu: () => void;
 };
 function MenuMobile({ isOpen, onToggleMenu }: MenuMobileProps) {
-  const categories = mockCategories
+  const categories = mockCategories;
   const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
 
   const toggleOpen = (menu: string) => {
@@ -76,7 +76,7 @@ function MenuMobile({ isOpen, onToggleMenu }: MenuMobileProps) {
             >
               <li>
                 <Link
-                  to={`/books/all`}
+                  to={`/products/all`}
                   className="py-[15px]  font-medium hover:text-black"
                 >
                   Tất cả
@@ -85,7 +85,7 @@ function MenuMobile({ isOpen, onToggleMenu }: MenuMobileProps) {
               {categories.map((category) => (
                 <li key={category.id}>
                   <Link
-                    to={`/books/${category.slug}`}
+                    to={`/products/${category.slug}`}
                     className="py-[15px]  font-medium hover:text-black"
                   >
                     {category.name}

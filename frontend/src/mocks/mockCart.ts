@@ -3,7 +3,6 @@ import { mockProducts } from "./mockProducts";
 
 const p1 = mockProducts.find((p) => p.id === "1")!;
 const p2 = mockProducts.find((p) => p.id === "2")!;
-const p3 = mockProducts.find((p) => p.id === "4")!; // tai nghe
 
 export const mockCart: Cart = {
   id: "cart_001",
@@ -31,17 +30,6 @@ export const mockCart: Cart = {
       slug: p2.slug,
       quantity: 1,
       stock: p2.stock,
-    },
-    {
-      id: "item_003",
-      productId: p3.id,
-      name: p3.name,
-      images: p3.images.map((img) => img.image),
-      price: p3.price,
-      discount: p3.discount,
-      slug: p3.slug,
-      quantity: 6,
-      stock: p3.stock,
     },
   ],
 };

@@ -5,7 +5,7 @@ export interface User {
   fullname: string;
   phone?: string;
   birthDate?: string;
-  gender?: number;
+  gender?: number | null;
   password?: string;
   role: "customer" | "admin";
   status: number;

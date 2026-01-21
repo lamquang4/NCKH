@@ -7,7 +7,7 @@ type Props = {
 };
 
 function ProfileMenu({ onLogin, onRegister }: Props) {
-  const user = false;
+  const user = true;
 
   return (
     <div className="text-[0.9rem] absolute top-full right-0 z-20 bg-white shadow-md rounded-sm overflow-hidden hidden group-hover:block min-w-[120px] font-normal">
@@ -17,11 +17,17 @@ function ProfileMenu({ onLogin, onRegister }: Props) {
             Xin chào, Quang Lâm
           </p>
 
-          <Link className="hover:bg-gray-100 w-full block p-2.5" to="/account">
+          <Link
+            className="hover:bg-gray-100 w-full block p-2.5"
+            to="/account/profile"
+          >
             Thông tin tài khoản
           </Link>
 
-          <Link className="hover:bg-gray-100 w-full block p-2.5" to="/order">
+          <Link
+            className="hover:bg-gray-100 w-full block p-2.5"
+            to="/order/history"
+          >
             Đơn hàng
           </Link>
 
