@@ -12,7 +12,7 @@ export const mockProducts: Product[] = [
     status: 1,
     stock: 12,
     category: { id: "c1", name: "Laptop", slug: "laptop", status: 1 },
-    brand: { id: "b1", name: "Dell", slug: "dell" },
+    brand: { id: "b1", name: "Dell", slug: "dell", status: 1 },
     images: [
       { id: "i1", image: "/assets/products/laptop1/1.png" },
       { id: "i2", image: "/assets/products/laptop1/2.png" },
@@ -91,7 +91,7 @@ và mức giá hợp lý trong phân khúc.
     status: 1,
     stock: 10,
     category: { id: "c1", name: "Laptop", slug: "laptop", status: 1 },
-    brand: { id: "b2", name: "ASUS", slug: "asus" },
+    brand: { id: "b2", name: "ASUS", slug: "asus", status: 1 },
     images: [
       { id: "i3", image: "/assets/products/laptop2/1.png" },
       { id: "i4", image: "/assets/products/laptop2/2.png" },
@@ -114,7 +114,7 @@ và mức giá hợp lý trong phân khúc.
     status: 1,
     stock: 7,
     category: { id: "c1", name: "Laptop", slug: "laptop", status: 1 },
-    brand: { id: "b3", name: "HP", slug: "hp" },
+    brand: { id: "b3", name: "HP", slug: "hp", status: 1 },
     images: [
       { id: "i5", image: "/assets/products/laptop3/1.png" },
       { id: "i6", image: "/assets/products/laptop3/2.png" },
@@ -138,7 +138,7 @@ và mức giá hợp lý trong phân khúc.
     status: 1,
     stock: 5,
     category: { id: "c2", name: "Tai nghe", slug: "tai-nghe", status: 1 },
-    brand: { id: "b4", name: "Sony", slug: "sony" },
+    brand: { id: "b4", name: "Sony", slug: "sony", status: 1 },
     images: [
       { id: "i7", image: "/assets/products/tainghe1/1.png" },
       { id: "i8", image: "/assets/products/tainghe1/2.png" },
@@ -165,7 +165,7 @@ và mức giá hợp lý trong phân khúc.
     status: 1,
     stock: 9,
     category: { id: "c2", name: "Tai nghe", slug: "tai-nghe", status: 1 },
-    brand: { id: "b5", name: "Apple", slug: "apple" },
+    brand: { id: "b5", name: "Apple", slug: "apple", status: 1 },
     images: [
       { id: "i9", image: "/assets/products/tainghe2/1.jpg" },
       { id: "i10", image: "/assets/products/tainghe2/2.jpg" },
@@ -187,7 +187,7 @@ và mức giá hợp lý trong phân khúc.
     status: 1,
     stock: 20,
     category: { id: "c3", name: "Chuột", slug: "chuot", status: 1 },
-    brand: { id: "b6", name: "Logitech", slug: "logitech" },
+    brand: { id: "b6", name: "Logitech", slug: "logitech", status: 1 },
     images: [
       { id: "i11", image: "/assets/products/chuot1/1.png" },
       { id: "i12", image: "/assets/products/chuot1/2.png" },
@@ -209,7 +209,7 @@ và mức giá hợp lý trong phân khúc.
     status: 1,
     stock: 15,
     category: { id: "c3", name: "Chuột", slug: "chuot", status: 1 },
-    brand: { id: "b7", name: "Razer", slug: "razer" },
+    brand: { id: "b7", name: "Razer", slug: "razer", status: 1 },
     images: [
       { id: "i13", image: "/assets/products/chuot2/1.jpg" },
       { id: "i14", image: "/assets/products/chuot2/2.jpg" },
@@ -232,7 +232,7 @@ và mức giá hợp lý trong phân khúc.
     status: 1,
     stock: 6,
     category: { id: "c4", name: "Ghế", slug: "ghe", status: 1 },
-    brand: { id: "b8", name: "DXRacer", slug: "dxracer" },
+    brand: { id: "b8", name: "DXRacer", slug: "dxracer", status: 1 },
     images: [
       { id: "i15", image: "/assets/products/ghe1/1.png" },
       { id: "i16", image: "/assets/products/ghe1/2.png" },
@@ -254,7 +254,7 @@ và mức giá hợp lý trong phân khúc.
     status: 1,
     stock: 8,
     category: { id: "c4", name: "Ghế", slug: "ghe", status: 1 },
-    brand: { id: "b9", name: "Sihoo", slug: "sihoo" },
+    brand: { id: "b9", name: "Sihoo", slug: "sihoo", status: 1 },
     images: [
       { id: "i17", image: "/assets/products/ghe2/1.jpg" },
       { id: "i18", image: "/assets/products/ghe2/2.jpg" },
