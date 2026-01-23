@@ -14,7 +14,7 @@ function PaymentList() {
   const totalItems = payments.length;
 
   const array = [
-    { name: "Tát cả", value: null },
+    { name: "Tất cả", value: null },
     { name: "Thành công", value: 1 },
     { name: "Hoàn tiền", value: 0 },
   ];

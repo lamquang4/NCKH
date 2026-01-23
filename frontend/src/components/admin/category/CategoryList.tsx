@@ -4,7 +4,6 @@ import Pagination from "../Pagination";
 import Image from "../../Image";
 import Loading from "../../Loading";
 import InputSearch from "../InputSearch";
-import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import FilterDropDownMenu from "../FilterDropDownMenu";
 import { FaRegEyeSlash } from "react-icons/fa6";
@@ -36,20 +35,11 @@ function CategoryList() {
     if (!id) {
       return;
     }
-    try {
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message);
-    }
   };
 
   const handleUpdateStatus = async (id: string, status: number) => {
     if (!id && !status) {
       return;
-    }
-
-    try {
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message);
     }
   };
   return (

@@ -6,7 +6,6 @@ import FilterDropDownMenu from "../FilterDropDownMenu";
 import Image from "../../Image";
 import Loading from "../../Loading";
 import InputSearch from "../InputSearch";
-import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import { mockUsers } from "../../../mocks/mockUsers";
 import ListHeader from "../list/ListHeader";
@@ -35,11 +34,6 @@ function AdminList() {
       return;
     }
       */
-
-    try {
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message);
-    }
   };
 
   const handleUpdateStatus = async (id: string, status: number) => {
@@ -53,11 +47,6 @@ function AdminList() {
       return;
     }
       */
-
-    try {
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message);
-    }
   };
 
   return (
@@ -67,7 +56,7 @@ function AdminList() {
         totalItems={totalItems}
         addLink="/admin/add-admin"
       />
-      
+
       <ListBody>
         <div className="p-[1.2rem]">
           <InputSearch />

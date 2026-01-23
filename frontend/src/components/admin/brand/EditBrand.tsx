@@ -43,11 +43,6 @@ function EditBrand() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    try {
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message);
-    }
   };
 
   return (

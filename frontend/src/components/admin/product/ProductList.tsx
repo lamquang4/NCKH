@@ -7,7 +7,6 @@ import FilterDropDownMenu from "../FilterDropDownMenu";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import Loading from "../../Loading";
 import InputSearch from "../InputSearch";
-import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import ListHeader from "../list/ListHeader";
 import { mockProducts } from "../../../mocks/mockProducts";
@@ -37,20 +36,11 @@ function ProductList() {
     if (!id) {
       return;
     }
-    try {
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message);
-    }
   };
 
   const handleUpdateStatus = async (id: string, status: number) => {
     if (!id && !status) {
       return;
-    }
-
-    try {
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message);
     }
   };
 

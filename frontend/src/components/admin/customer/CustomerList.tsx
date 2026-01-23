@@ -4,7 +4,6 @@ import FilterDropDownMenu from "../FilterDropDownMenu";
 import Image from "../../Image";
 import Loading from "../../Loading";
 import InputSearch from "../InputSearch";
-import toast from "react-hot-toast";
 import { mockUsers } from "../../../mocks/mockUsers";
 import ListHeader from "../list/ListHeader";
 import ListBody from "../list/ListBody";
@@ -24,11 +23,6 @@ function CustomerList() {
   const handleUpdateStatus = async (id: string, status: number) => {
     if (!id && !status) {
       return;
-    }
-
-    try {
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message);
     }
   };
 

@@ -131,11 +131,6 @@ function EditProduct() {
       );
       return;
     }
-
-    try {
-    } catch (err: any) {
-      toast.error(err?.response?.data?.msg);
-    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -205,8 +200,6 @@ function EditProduct() {
       toast.error(err?.response?.data?.message);
     }
   };
-
-  console.log(specifications);
 
   return (
     <>
