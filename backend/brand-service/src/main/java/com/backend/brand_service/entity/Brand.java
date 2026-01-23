@@ -34,6 +34,9 @@ public class Brand {
     @Column(nullable = false, unique = true)
     private String slug;
 
+    @Column(nullable = false)
+    private Integer status;
+
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
 

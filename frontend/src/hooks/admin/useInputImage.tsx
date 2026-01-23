@@ -1,3 +1,4 @@
+
 import { useCallback, useEffect, useState, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -37,7 +38,7 @@ export function useInputImage(max: number = 1) {
       const incomingFiles = Array.from(files);
 
       if (previewImages.length + incomingFiles.length > max) {
-        toast.error(`Tổng số hình ảnh không được vượt quá ${max}`);
+        toast.error(`Tổng số hình ảnh không được vượt quá ${max}.`);
         e.target.value = "";
         return;
       }
