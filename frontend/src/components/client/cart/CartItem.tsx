@@ -14,7 +14,7 @@ function CartItem({ item }: Props) {
     <>
       <div className="w-full relative space-y-[20px]" key={item.id}>
         <div className="flex gap-[10px] w-full sm:flex-row flex-col">
-          <Link to={`/book/${item.slug}`} className="mx-auto">
+          <Link to={`/product/${item.slug}`} className="mx-auto bg-gray-100">
             <div className="w-[200px] h-[200px] overflow-hidden">
               <Image
                 source={`${item.images[0]}`}

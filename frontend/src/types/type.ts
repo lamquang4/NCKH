@@ -18,6 +18,7 @@ export interface Brand {
   id?: string;
   name: string;
   slug: string;
+  status: number;
   createdAt?: string;
 }
 
@@ -42,6 +43,7 @@ export interface Specification {
   specKey: string;
   specValue: string;
   displayOrder: number;
+  isNew?: boolean;
 }
 
 export interface Product {
@@ -95,6 +97,7 @@ export interface Order {
   id: string;
   orderCode: string;
   userId: string;
+  email: string;
   fullname: string;
   phone: string;
   speaddress: string;
@@ -126,11 +129,12 @@ export interface OrderAdd {
 export interface Payment {
   id?: string;
   orderId: string;
+  orderCode: string;
   paymethod: string;
   amount: number;
   transactionId?: string;
   status: number; // 1 success, 0 refund
-  createdAt?: string;
+  createdAt: string;
 }
 
 // CHAT

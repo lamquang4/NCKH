@@ -35,7 +35,6 @@ function OrderInfo({ order, isLoading }: Props) {
               <p className="font-medium">
                 Ngày:{" "}
                 <span className="font-normal">
-                  {" "}
                   {order?.createdAt && (
                     <>
                       {new Date(order.createdAt).toLocaleDateString("vi-VN", {

@@ -139,18 +139,6 @@ function AccountForm() {
                 />
                 <span className="text-[0.9rem]">Nữ</span>
               </label>
-
-              <label className="flex items-center gap-[6px] cursor-pointer">
-                <input
-                  type="radio"
-                  name="gender"
-                  className="scale-140 accent-blue-500"
-                  value={2}
-                  checked={data.gender === 2}
-                  onChange={handleChange}
-                />
-                <span className="text-[0.9rem]">Khác</span>
-              </label>
             </div>
           </div>
 

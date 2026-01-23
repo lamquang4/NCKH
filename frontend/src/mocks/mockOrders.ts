@@ -7,6 +7,7 @@ export const mockOrders: Order[] = [
   {
     id: "order_001",
     orderCode: "DH240001",
+    email: "lamquang@gmail.com",
     userId: "user_001",
     fullname: "Nguyễn Văn A",
     phone: "0909123456",
@@ -46,6 +47,7 @@ export const mockOrders: Order[] = [
   {
     id: "order_002",
     orderCode: "DH240002",
+    email: "lamquang@gmail.com",
     userId: "user_001",
     fullname: "Nguyễn Văn A",
     phone: "0909123456",

@@ -18,6 +18,7 @@ function OrderList() {
     { status: 2, name: "Đang giao" },
     { status: 3, name: "Giao thành công" },
     { status: 4, name: "Đã hủy" },
+    { status: 5, name: "Trả hàng" },
   ];
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

@@ -1,0 +1,160 @@
+import { VscTrash } from "react-icons/vsc";
+import { LiaEdit } from "react-icons/lia";
+import { TbLock, TbLockOpen } from "react-icons/tb";
+import Pagination from "../Pagination";
+import FilterDropDownMenu from "../FilterDropDownMenu";
+import Image from "../../Image";
+import Loading from "../../Loading";
+import InputSearch from "../InputSearch";
+import { Link } from "react-router-dom";
+import { mockUsers } from "../../../mocks/mockUsers";
+import ListHeader from "../list/ListHeader";
+import ListBody from "../list/ListBody";
+
+function AdminList() {
+  const array = [
+    { name: "Tất cả", value: null },
+    { name: "Bình thường", value: 1 },
+    { name: "Bị khóa", value: 0 },
+  ];
+
+  const isLoading = false;
+
+  const admins = mockUsers;
+  const totalItems = admins.length;
+
+  const handleDelete = async (id: string) => {
+    if (!id) {
+      return;
+    }
+
+    /*
+    if (id === user?.id) {
+      toast.error("Bạn không thể xóa chính tài khoản của mình");
+      return;
+    }
+      */
+  };
+
+  const handleUpdateStatus = async (id: string, status: number) => {
+    if (!id && !status) {
+      return;
+    }
+
+    /*
+    if (id === user?.id) {
+      toast.error("Bạn không thể khóa chính tài khoản của mình");
+      return;
+    }
+      */
+  };
+
+  return (
+    <>
+      <ListHeader
+        title="Quản trị viên"
+        totalItems={totalItems}
+        addLink="/admin/add-admin"
+      />
+
+      <ListBody>
+        <div className="p-[1.2rem]">
+          <InputSearch />
+        </div>
+
+        <table className="w-[350%] border-collapse sm:w-[220%] xl:w-full text-[0.9rem]">
+          <thead>
+            <tr className="bg-[#E9EDF2] text-left">
+              <th className="p-[1rem]">Họ tên</th>
+
+              <th className="p-[1rem]">Email</th>
+
+              <th className="p-[1rem]  ">
+                <FilterDropDownMenu
+                  title="Tình trạng"
+                  array={array}
+                  paramName="status"
+                />
+              </th>
+              <th className="p-[1rem]  ">Hành động</th>
+            </tr>
+          </thead>
+          <tbody>
+            {isLoading ? (
+              <tr>
+                <td colSpan={8} className="w-full">
+                  <Loading height={60} size={50} color="black" thickness={2} />
+                </td>
+              </tr>
+            ) : admins.length > 0 ? (
+              admins.map((admin) => (
+                <tr key={admin.id} className="hover:bg-[#f2f3f8]">
+                  <td className="p-[1rem] text-[0.9rem] font-semibold">
+                    {admin.fullname}
+                  </td>
+                  <td className="p-[1rem]  ">{admin.email}</td>
+
+                  <td className="p-[1rem]  ">
+                    {admin.status === 1 ? "Bình thường" : "Bị khóa"}
+                  </td>
+                  <td className="p-[1rem]  ">
+                    <div className="flex items-center gap-[15px]">
+                      <button
+                        disabled={isLoading}
+                        onClick={() =>
+                          handleUpdateStatus(
+                            admin.id || "",
+                            admin.status === 1 ? 0 : 1,
+                          )
+                        }
+                      >
+                        {admin.status === 1 ? (
+                          <TbLock size={22} className="text-[#74767d]" />
+                        ) : (
+                          <TbLockOpen size={22} className="text-[#74767d]" />
+                        )}
+                      </button>
+
+                      <Link to={`/admin/edit-admin/${admin.id}`}>
+                        <LiaEdit size={22} className="text-[#076ffe]" />
+                      </Link>
+
+                      <button
+                        disabled={isLoading}
+                        onClick={() => handleDelete(admin.id || "")}
+                      >
+                        <VscTrash size={22} className="text-[#d9534f]" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={8} className="w-full h-[70vh]">
+                  <div className="flex justify-center items-center">
+                    <Image
+                      source={"/assets/notfound1.png"}
+                      alt={""}
+                      className={"w-[135px]"}
+                      loading="lazy"
+                    />
+                  </div>
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </ListBody>
+
+      <Pagination
+        totalPages={1}
+        currentPage={1}
+        limit={12}
+        totalItems={totalItems}
+      />
+    </>
+  );
+}
+
+export default AdminList;
