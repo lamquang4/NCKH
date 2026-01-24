@@ -1,6 +1,6 @@
 package com.backend.cart_service.exception;
 
-import com.backend.cart_service.dto.ApiResponse;
+import com.backend.cart_service.dto.response.ApiResponse;
 import com.mongodb.DuplicateKeyException;
 
 import org.springframework.dao.DataAccessResourceFailureException;

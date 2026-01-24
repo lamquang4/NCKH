@@ -1,6 +1,6 @@
 package com.backend.category_service.exception;
 
-import com.backend.category_service.dto.ApiResponse;
+import com.backend.category_service.dto.response.ApiResponse;
 
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.dao.DataIntegrityViolationException;

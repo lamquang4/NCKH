@@ -1,10 +1,12 @@
 import { ReactSortable } from "react-sortablejs";
-import type { Specification } from "../../../types/type";
+import type { SpecificationResponse } from "../../../types/type";
 import { memo } from "react";
 
 type Props = {
-  specifications: Specification[];
-  setSpecifications: React.Dispatch<React.SetStateAction<Specification[]>>;
+  specifications: SpecificationResponse[];
+  setSpecifications: React.Dispatch<
+    React.SetStateAction<SpecificationResponse[]>
+  >;
   addSpecification: () => void;
   removeSpecification: (id: string) => void;
   clearSpecifications?: () => void;

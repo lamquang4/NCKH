@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import Image from "../../Image";
-import type { Product } from "../../../types/type";
+import type { ProductResponse } from "../../../types/type";
 
 interface Props {
-  product: Product;
+  product: ProductResponse;
 }
 function ProductCard({ product }: Props) {
   return (

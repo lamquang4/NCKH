@@ -1,6 +1,6 @@
 package com.backend.auth_service.exception;
 
-import com.backend.auth_service.dto.ApiResponse;
+import com.backend.auth_service.dto.response.ApiResponse;
 
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.dao.DataIntegrityViolationException;

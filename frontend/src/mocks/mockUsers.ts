@@ -1,6 +1,6 @@
-import type { User } from "../types/type";
+import type { UserResponse } from "../types/type";
 
-export const mockUsers: User[] = [
+export const mockUsers: UserResponse[] = [
   // Google
   {
     id: "u1",
@@ -23,7 +23,6 @@ export const mockUsers: User[] = [
     phone: "0912345678",
     birthDate: "2000-08-15",
     gender: 0,
-    password: "hashed_password_example",
     role: "customer",
     status: 1,
     createdAt: "2024-01-02T10:30:00",
@@ -37,7 +36,6 @@ export const mockUsers: User[] = [
     phone: "0909999999",
     birthDate: "1995-01-01",
     gender: 1,
-    password: "hashed_admin_password",
     role: "admin",
     status: 1,
     createdAt: "2024-01-01T08:00:00",

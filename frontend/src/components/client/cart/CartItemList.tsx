@@ -1,12 +1,12 @@
 import { memo, useMemo } from "react";
-import type { Cart } from "../../../types/type";
+import type { CartResponse } from "../../../types/type";
 import { Link, useNavigate } from "react-router-dom";
 import Image from "../../Image";
 import toast from "react-hot-toast";
 import CartItem from "./CartItem";
 
 type Props = {
-  cart: Cart;
+  cart: CartResponse;
   mutate?: () => void;
 };
 

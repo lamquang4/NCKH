@@ -1,9 +1,9 @@
-import type { Order } from "../types/type";
+import type { OrderResponse } from "../types/type";
 import { mockProducts } from "./mockProducts";
 
 const p = (id: string) => mockProducts.find((i) => i.id === id)!;
 
-export const mockOrders: Order[] = [
+export const mockOrders: OrderResponse[] = [
   {
     id: "order_001",
     orderCode: "DH240001",
@@ -15,7 +15,7 @@ export const mockOrders: Order[] = [
     ward: "Phường Bến Thành",
     city: "TP. Hồ Chí Minh",
     paymethod: "COD",
-    status: 1, // 0: chờ | 1: đang giao | 2: hoàn thành | 3: huỷ
+    status: 1,
     createdAt: "2026-01-20T09:30:00Z",
 
     items: [

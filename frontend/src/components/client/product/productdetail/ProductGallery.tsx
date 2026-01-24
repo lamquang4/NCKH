@@ -3,11 +3,11 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import Image from "../../../Image";
 import { memo, useEffect, useState } from "react";
-import type { ImageProduct } from "../../../../types/type";
+import type { ImageProductResponse } from "../../../../types/type";
 import ImageViewer from "../../../ImageViewer";
 
 type Props = {
-  images: ImageProduct[];
+  images: ImageProductResponse[];
 };
 
 function ProductGallery({ images }: Props) {

@@ -1,12 +1,11 @@
-import type { CartItem } from "../../../types/type";
+import type { CartItemResponse } from "../../../types/type";
 import { Link } from "react-router-dom";
 import Image from "../../Image";
 import { HiOutlineMinusSmall, HiOutlinePlusSmall } from "react-icons/hi2";
 import { memo } from "react";
 
 type Props = {
-  item: CartItem;
-  mutate?: () => void;
+  item: CartItemResponse;
 };
 
 function CartItem({ item }: Props) {

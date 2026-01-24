@@ -1,9 +1,12 @@
 import { memo } from "react";
-import type { Category, Specification } from "../../../../types/type";
+import type {
+  CategoryResponse,
+  SpecificationResponse,
+} from "../../../../types/type";
 
 type Props = {
-  category: Category;
-  specifications: Specification[];
+  category: CategoryResponse;
+  specifications: SpecificationResponse[];
 };
 function ProductInformation({ category, specifications }: Props) {
   return (

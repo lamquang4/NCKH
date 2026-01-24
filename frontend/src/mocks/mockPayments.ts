@@ -1,6 +1,6 @@
-import type { Payment } from "../types/type";
+import type { PaymentResponse } from "../types/type";
 
-export const mockPayments: Payment[] = [
+export const mockPayments: PaymentResponse[] = [
   {
     id: "p1",
     orderId: "o1",

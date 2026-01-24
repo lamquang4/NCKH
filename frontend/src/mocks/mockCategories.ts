@@ -1,6 +1,6 @@
-import type { Category } from "../types/type";
+import type { CategoryResponse } from "../types/type";
 
-export const mockCategories: Category[] = [
+export const mockCategories: CategoryResponse[] = [
   {
     id: "c1",
     name: "Laptop",

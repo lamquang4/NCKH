@@ -23,7 +23,7 @@ function ProductListCategory() {
         <div className="mx-auto max-w-[1200px] w-full">
           <ProductList
             products={products}
-            category="Tất cả sản phẩm"
+            title="Tất cả sản phẩm"
             isLoading={false}
             total={products.length}
           />
