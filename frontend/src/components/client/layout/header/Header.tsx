@@ -14,24 +14,31 @@ import AuthModal from "../auth/AuthModal";
 
 function Header() {
   const [authType, setAuthType] = useState<"login" | "register" | null>(null);
-  const [openSearch, setOpenSearch] = useState<boolean>(false);
+  const [searchOpen, setSearchOpen] = useState<boolean>(false);
   const [menuMobileOpen, setMenuMobileOpen] = useState<boolean>(false);
+  const [profileMenuOpen, setProfileMenuOpen] = useState<boolean>(false);
+
+  const toggleProfileMenu = useCallback(() => {
+    setProfileMenuOpen((prev) => !prev);
+    setMenuMobileOpen(false);
+    setSearchOpen(false);
+  }, []);
 
   const toggleSearch = useCallback(() => {
-    setOpenSearch((prev) => !prev);
+    setSearchOpen((prev) => !prev);
     setMenuMobileOpen(false);
   }, []);
 
   const toggleMobileMenu = useCallback(() => {
     setMenuMobileOpen((prev) => !prev);
-    setOpenSearch(false);
+    setSearchOpen(false);
   }, []);
 
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) {
         setMenuMobileOpen(false);
-        setOpenSearch(false);
+        setSearchOpen(false);
       }
     };
 
@@ -57,7 +64,11 @@ function Header() {
             </div>
 
             <div className="hidden lg:flex items-center gap-[15px] font-medium">
-              <div className="relative cursor-pointer transition-colors group">
+              <div
+                className="relative cursor-pointer transition-colors group"
+                onMouseEnter={toggleProfileMenu}
+                onMouseLeave={toggleProfileMenu}
+              >
                 <div
                   className={`flex items-center gap-1 hover:text-white hover:bg-blue-500 px-2 py-1.5 rounded-md group-hover:bg-blue-500 group-hover:text-white`}
                 >
@@ -66,6 +77,7 @@ function Header() {
                 </div>
 
                 <ProfileMenu
+                  profileMenuOpen={profileMenuOpen}
                   onLogin={() => setAuthType("login")}
                   onRegister={() => setAuthType("register")}
                 />
@@ -92,9 +104,14 @@ function Header() {
                 <IoSearchOutline size={22} />
               </button>
 
-              <div className="relative cursor-pointer group">
+              <div
+                className="relative cursor-pointer group"
+                onMouseEnter={toggleProfileMenu}
+                onMouseLeave={toggleProfileMenu}
+              >
                 <AiOutlineUser size={22} />
                 <ProfileMenu
+                  profileMenuOpen={profileMenuOpen}
                   onLogin={() => setAuthType("login")}
                   onRegister={() => setAuthType("register")}
                 />
@@ -114,7 +131,7 @@ function Header() {
             </div>
           </div>
 
-          <SearchMobile onToggleSearch={toggleSearch} openSearch={openSearch} />
+          <SearchMobile onToggleSearch={toggleSearch} searchOpen={searchOpen} />
 
           <MenuMobile isOpen={menuMobileOpen} onToggleMenu={toggleMobileMenu} />
         </div>
@@ -128,7 +145,7 @@ function Header() {
         />
       )}
 
-      {openSearch && <Overplay onClose={toggleSearch} IndexForZ={12} />}
+      {searchOpen && <Overplay onClose={toggleSearch} IndexForZ={12} />}
     </>
   );
 }

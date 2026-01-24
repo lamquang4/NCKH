@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
-import type { Order } from "../../../types/type";
+import type { OrderResponse } from "../../../types/type";
 import Image from "../../Image";
 import { CiCalendar } from "react-icons/ci";
 import { memo } from "react";
 
 type Props = {
-  order: Order;
+  order: OrderResponse;
 };
 
 function OrderCard({ order }: Props) {

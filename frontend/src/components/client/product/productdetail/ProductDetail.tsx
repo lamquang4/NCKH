@@ -1,13 +1,13 @@
 import { memo, useState } from "react";
 import { HiOutlineMinusSmall } from "react-icons/hi2";
 import { HiOutlinePlusSmall } from "react-icons/hi2";
-import type { Product } from "../../../../types/type";
+import type { ProductResponse } from "../../../../types/type";
 import ProductGallery from "./ProductGallery";
 import ProductInformation from "./ProductInformation";
 import ProductDescription from "./ProductDescription";
 
 type Props = {
-  product: Product;
+  product: ProductResponse;
 };
 
 function ProductDetail({ product }: Props) {

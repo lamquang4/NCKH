@@ -4,10 +4,10 @@ import { LuArchive, LuCheck, LuStar, LuTruck } from "react-icons/lu";
 import { RiArrowLeftSLine } from "react-icons/ri";
 import { TbCancel } from "react-icons/tb";
 import { Link } from "react-router-dom";
-import type { Order } from "../../../../types/type";
+import type { OrderResponse } from "../../../../types/type";
 
 type Props = {
-  order: Order;
+  order: OrderResponse;
   isLoading: boolean;
 };
 

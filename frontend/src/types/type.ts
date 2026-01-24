@@ -1,6 +1,22 @@
-// USER
-export interface User {
-  id?: string;
+// Request
+export interface OrderRequest {
+  fullname: string;
+  phone: string;
+  speaddress: string;
+  city: string;
+  ward: string;
+  paymethod: string;
+  items: OrderItemRequest[];
+}
+
+export interface OrderItemRequest {
+  productId: string;
+  quantity: number;
+  price: number;
+  discount: number;
+}
+
+export interface UserRequest {
   email: string;
   fullname: string;
   phone?: string;
@@ -10,11 +26,68 @@ export interface User {
   role: "customer" | "admin";
   status: number;
   googleId?: string;
+}
+
+export interface BrandRequest {
+  name: string;
+  status: number;
+}
+
+export interface CategoryRequest {
+  name: string;
+  image: string;
+  status: number;
+}
+
+export interface ImageProductRequest {
+  image: string;
+}
+
+export interface SpecificationRequest {
+  specKey: string;
+  specValue: string;
+  displayOrder: number;
+  isNew?: boolean;
+}
+
+export interface ProductRequest {
+  name: string;
+  price: number;
+  discount: number;
+  description: string;
+  status: number;
+  stock: number;
+  categoryId: string;
+  brandId: BrandRequest;
+  images: ImageProductRequest[];
+  specifications: SpecificationRequest[];
+}
+
+export interface CartItemRequest {
+  productId: string;
+  quantity: number;
+}
+
+export interface MessageRequest {
+  chatId: string;
+  content: string;
+}
+
+// Response
+export interface UserResponse {
+  id?: string;
+  email: string;
+  fullname: string;
+  phone?: string;
+  birthDate?: string;
+  gender?: number | null;
+  role: "customer" | "admin";
+  status: number;
+  googleId?: string;
   createdAt?: string;
 }
 
-// BRAND
-export interface Brand {
+export interface BrandResponse {
   id?: string;
   name: string;
   slug: string;
@@ -22,8 +95,7 @@ export interface Brand {
   createdAt?: string;
 }
 
-// CATEGORY
-export interface Category {
+export interface CategoryResponse {
   id?: string;
   name: string;
   slug: string;
@@ -32,13 +104,12 @@ export interface Category {
   createdAt?: string;
 }
 
-// PRODUCT
-export interface ImageProduct {
+export interface ImageProductResponse {
   id: string;
   image: string;
 }
 
-export interface Specification {
+export interface SpecificationResponse {
   id: string;
   specKey: string;
   specValue: string;
@@ -46,7 +117,7 @@ export interface Specification {
   isNew?: boolean;
 }
 
-export interface Product {
+export interface ProductResponse {
   id: string;
   name: string;
   slug: string;
@@ -55,15 +126,14 @@ export interface Product {
   description: string;
   status: number;
   stock: number;
-  category: Category;
-  brand: Brand;
-  images: ImageProduct[];
-  specifications: Specification[];
+  category: CategoryResponse;
+  brand: BrandResponse;
+  images: ImageProductResponse[];
+  specifications: SpecificationResponse[];
   createdAt?: string;
 }
 
-// CART
-export interface CartItem {
+export interface CartItemResponse {
   id: string;
   productId: string;
   name: string;
@@ -75,15 +145,14 @@ export interface CartItem {
   stock: number;
 }
 
-export interface Cart {
+export interface CartResponse {
   id?: string;
   userId?: string;
-  items: CartItem[];
+  items: CartItemResponse[];
   createdAt?: string;
 }
 
-// ORDER
-export interface OrderItem {
+export interface OrderItemResponse {
   id: string;
   productId: string;
   name: string;
@@ -93,7 +162,7 @@ export interface OrderItem {
   discount: number;
 }
 
-export interface Order {
+export interface OrderResponse {
   id: string;
   orderCode: string;
   userId: string;
@@ -106,27 +175,11 @@ export interface Order {
   paymethod: string;
   status: number;
   total: number;
-  items: OrderItem[];
+  items: OrderItemResponse[];
   createdAt: string;
 }
 
-export interface OrderAdd {
-  fullname: string;
-  phone: string;
-  speaddress: string;
-  city: string;
-  ward: string;
-  paymethod: string;
-  items: {
-    productId: string;
-    quantity: number;
-    price: number;
-    discount: number;
-  }[];
-}
-
-// PAYMENT
-export interface Payment {
+export interface PaymentResponse {
   id?: string;
   orderId: string;
   orderCode: string;
@@ -137,15 +190,15 @@ export interface Payment {
   createdAt: string;
 }
 
-// CHAT
-export interface Chat {
+export interface ChatResponse {
   id: string;
   userId: string;
   sessionData: Record<string, any>;
+  messages: MessageResponse[];
   createdAt: string;
 }
 
-export interface Message {
+export interface MessageResponse {
   id: string;
   chatId: string;
   isBot: boolean;
@@ -155,7 +208,6 @@ export interface Message {
   createdAt: string;
 }
 
-// ADDRESS
 export type Ward = {
   name: string;
   mergedFrom: string[];

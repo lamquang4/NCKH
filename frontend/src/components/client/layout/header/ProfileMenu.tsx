@@ -4,55 +4,62 @@ import { Link } from "react-router-dom";
 type Props = {
   onLogin: () => void;
   onRegister: () => void;
+  profileMenuOpen: boolean;
 };
 
-function ProfileMenu({ onLogin, onRegister }: Props) {
+function ProfileMenu({ onLogin, onRegister, profileMenuOpen }: Props) {
   const user = true;
 
+  if (!profileMenuOpen) return null;
+
   return (
-    <div className="text-[0.9rem] absolute top-full right-0 z-20 bg-white shadow-md rounded-sm overflow-hidden hidden group-hover:block min-w-[120px] font-normal">
-      {user ? (
-        <>
-          <p className="border-b p-2.5 border-gray-200 max-w-[210px] overflow-hidden text-ellipsis whitespace-nowrap text-center">
-            Xin chào, Quang Lâm
-          </p>
+    <>
+      {profileMenuOpen && (
+        <div className="text-[0.9rem] absolute top-full right-0 z-20 bg-white shadow-md rounded-sm overflow-hidden min-w-[125px] font-normal">
+          {user ? (
+            <>
+              <p className="border-b p-2.5 border-gray-200 max-w-[210px] overflow-hidden text-ellipsis whitespace-nowrap text-center">
+                Xin chào, Quang Lâm
+              </p>
 
-          <Link
-            className="hover:bg-gray-100 w-full block p-2.5"
-            to="/account/profile"
-          >
-            Thông tin tài khoản
-          </Link>
+              <Link
+                className="hover:bg-gray-100 w-full block p-2.5"
+                to="/account/profile"
+              >
+                Thông tin tài khoản
+              </Link>
 
-          <Link
-            className="hover:bg-gray-100 w-full block p-2.5"
-            to="/order/history"
-          >
-            Đơn hàng
-          </Link>
+              <Link
+                className="hover:bg-gray-100 w-full block p-2.5"
+                to="/order/history"
+              >
+                Đơn hàng
+              </Link>
 
-          <button className="hover:bg-gray-100 w-full block p-2.5 text-left">
-            Đăng xuất
-          </button>
-        </>
-      ) : (
-        <>
-          <button
-            onClick={onLogin}
-            className="hover:bg-gray-100 w-full block p-2.5 text-left"
-          >
-            Đăng nhập
-          </button>
+              <button className="hover:bg-gray-100 w-full block p-2.5 text-left">
+                Đăng xuất
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={onLogin}
+                className="hover:bg-gray-100 w-full block p-2.5 text-left"
+              >
+                Đăng nhập
+              </button>
 
-          <button
-            onClick={onRegister}
-            className="hover:bg-gray-100 w-full block p-2.5 text-left"
-          >
-            Đăng ký
-          </button>
-        </>
+              <button
+                onClick={onRegister}
+                className="hover:bg-gray-100 w-full block p-2.5 text-left"
+              >
+                Đăng ký
+              </button>
+            </>
+          )}
+        </div>
       )}
-    </div>
+    </>
   );
 }
 

@@ -1,17 +1,17 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import type { Product } from "../../../types/type";
+import type { ProductResponse } from "../../../types/type";
 import Image from "../../Image";
 import ProductCard from "./ProductCard";
 import ProductCardSkeleton from "./ProductCardSkeleton";
 
 interface Props {
-  category?: string;
-  products: Product[];
+  title?: string;
+  products: ProductResponse[];
   isLoading: boolean;
   total: number;
 }
 
-function ProductList({ category, products, isLoading, total }: Props) {
+function ProductList({ title, products, isLoading, total }: Props) {
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -54,9 +54,9 @@ function ProductList({ category, products, isLoading, total }: Props) {
     <>
       <div className="mb-[50px] space-y-[15px]">
         <div className="flex justify-between items-center flex-wrap gap-[15px]">
-          {!isLoading && (category || search) && (
+          {!isLoading && (title || search) && (
             <h2 className=" text-black capitalize">
-              {search ? search : category} ({total})
+              {search ? search : title} ({total})
             </h2>
           )}
 

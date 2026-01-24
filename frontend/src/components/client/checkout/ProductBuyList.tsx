@@ -1,9 +1,9 @@
 import { memo } from "react";
 import Image from "../../Image";
-import type { CartItem } from "../../../types/type";
+import type { CartItemResponse } from "../../../types/type";
 
 type Props = {
-  items: CartItem[];
+  items: CartItemResponse[];
 };
 
 function ProductBuyList({ items }: Props) {

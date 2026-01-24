@@ -1,6 +1,6 @@
-import type { Product } from "../types/type";
+import type { ProductResponse } from "../types/type";
 
-export const mockProducts: Product[] = [
+export const mockProducts: ProductResponse[] = [
   // ===== LAPTOP =====
   {
     id: "1",

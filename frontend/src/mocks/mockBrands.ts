@@ -1,6 +1,6 @@
-import type { Brand } from "../types/type";
+import type { BrandResponse } from "../types/type";
 
-export const mockBrands: Brand[] = [
+export const mockBrands: BrandResponse[] = [
   {
     id: "b1",
     name: "Dell",

@@ -1,6 +1,6 @@
 package com.backend.chat_service.exception;
 
-import com.backend.chat_service.dto.ApiResponse;
+import com.backend.chat_service.dto.response.ApiResponse;
 import com.mongodb.DuplicateKeyException;
 
 import org.springframework.dao.DataAccessResourceFailureException;
