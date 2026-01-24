@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
-import type { Specification } from "../../types/type";
+import type { SpecificationResponse } from "../../types/type";
 
 type UseSpecificationOptions = {
-  initialSpecifications?: Specification[];
+  initialSpecifications?: SpecificationResponse[];
   autoCreateEmpty?: boolean;
 };
 
-const createEmptySpec = (order: number): Specification => ({
+const createEmptySpec = (order: number): SpecificationResponse => ({
   id: crypto.randomUUID(),
   specKey: "",
   specValue: "",
@@ -18,7 +18,7 @@ export const useSpecification = ({
   initialSpecifications = [],
   autoCreateEmpty = false,
 }: UseSpecificationOptions = {}) => {
-  const [specifications, setSpecifications] = useState<Specification[]>(
+  const [specifications, setSpecifications] = useState<SpecificationResponse[]>(
     initialSpecifications,
   );
 
