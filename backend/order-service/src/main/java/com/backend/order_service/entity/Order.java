@@ -11,6 +11,10 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -63,11 +67,12 @@ public class Order {
   @Column(nullable = false)
   private Double total;
 
-  @Builder.Default
-  private LocalDateTime createdAt = LocalDateTime.now();
+  @CreatedDate
+  @Column(updatable = false)
+  private LocalDateTime createdAt;
 
-  @Builder.Default
-  private LocalDateTime updatedAt = LocalDateTime.now();
+  @LastModifiedDate
+  private LocalDateTime updatedAt;
 
   @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<OrderItem> items;

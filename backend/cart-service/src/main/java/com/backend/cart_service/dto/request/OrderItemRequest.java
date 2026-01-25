@@ -1,5 +1,8 @@
 package com.backend.cart_service.dto.request;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,8 +13,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class OrderItemRequest {
+    @NotBlank(message = "ProductId không được để trống")
     private String productId;
+
+    @Min(value = 1, message = "Số lượng phải >= 1")
     private int quantity;
+
+    @Positive(message = "Giá phải > 0")
     private double price;
+
+    @Min(value = 0, message = "Giảm giá không hợp lệ")
     private double discount;
 }

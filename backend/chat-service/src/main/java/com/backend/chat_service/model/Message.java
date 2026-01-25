@@ -29,11 +29,14 @@ public class Message {
     private String chatId;
 
     private boolean isBot; // true nếu là trợ lý ảo, false nếu là user
-    private String content; // văn bản
+    private String content; // nội dung tin nhắn
+
     @Builder.Default
     private List<String> products = new ArrayList<>();
+
     @Builder.Default
     private Map<String, Object> extraData = new HashMap<>();
+
     @CreatedDate
     private LocalDateTime createdAt;
 }
