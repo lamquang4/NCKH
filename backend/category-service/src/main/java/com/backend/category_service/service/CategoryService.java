@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.backend.category_service.dto.request.CategoryRequest;
@@ -72,7 +73,10 @@ public class CategoryService {
         return CategoryMapper.toResponse(category);
     }
 
-    public CategoryResponse createCategory(CategoryRequest request, MultipartFile image) {
+    @Transactional
+    public CategoryResponse createCategory(
+            CategoryRequest request,
+            MultipartFile image) {
 
         if (categoryRepository.existsByName(request.getName())) {
             throw new IllegalArgumentException("Tên danh mục đã tồn tại");
@@ -81,16 +85,21 @@ public class CategoryService {
         Category category = CategoryMapper.toEntity(request);
         category.setSlug(SlugUtil.toSlug(request.getName()));
 
-        categoryRepository.save(category);
+        Category savedCategory = categoryRepository.save(category);
 
         if (image != null && !image.isEmpty()) {
-            category.setImage(uploadToCloudinary(image, category.getId()));
+            String imageUrl = uploadImage(image, savedCategory.getId());
+            savedCategory.setImage(imageUrl);
         }
 
-        return CategoryMapper.toResponse(category);
+        return CategoryMapper.toResponse(savedCategory);
     }
 
-    public CategoryResponse updateCategory(String id, CategoryRequest request, MultipartFile image) {
+    @Transactional
+    public CategoryResponse updateCategory(
+            String id,
+            CategoryRequest request,
+            MultipartFile image) {
 
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Danh mục không tồn tại"));
@@ -105,7 +114,8 @@ public class CategoryService {
         category.setSlug(SlugUtil.toSlug(category.getName()));
 
         if (image != null && !image.isEmpty()) {
-            category.setImage(uploadToCloudinary(image, category.getId()));
+            String imageUrl = uploadImage(image, category.getId());
+            category.setImage(imageUrl);
         }
 
         return CategoryMapper.toResponse(category);
@@ -120,24 +130,67 @@ public class CategoryService {
         return CategoryMapper.toResponse(category);
     }
 
+    @Transactional
     public void deleteCategory(String id) {
+
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Danh mục không tồn tại"));
+
+        deleteFolder(category.getId());
 
         categoryRepository.delete(category);
     }
 
-    private String uploadToCloudinary(MultipartFile file, String id) {
+    private void deleteFolder(String categoryId) {
         try {
+            String folderPath = "nckh/categories/" + categoryId;
+
+            cloudinary.api().deleteResourcesByPrefix(
+                    folderPath,
+                    ObjectUtils.emptyMap());
+
+            cloudinary.api().deleteFolder(
+                    folderPath,
+                    ObjectUtils.emptyMap());
+
+        } catch (Exception e) {
+            throw new IllegalStateException("Xóa hình thất bại", e);
+        }
+    }
+
+    private String uploadImage(MultipartFile file, String categoryId) {
+
+        // validate size (2MB)
+        if (file.getSize() > 2 * 1024 * 1024) {
+            throw new IllegalArgumentException("Dung lượng hình tối đa 2MB");
+        }
+
+        // validate type
+        String contentType = file.getContentType();
+        List<String> allowedTypes = List.of(
+                "image/jpeg",
+                "image/png",
+                "image/webp");
+
+        if (contentType == null || !allowedTypes.contains(contentType)) {
+            throw new IllegalArgumentException("Chỉ cho phép JPG, PNG, WEBP");
+        }
+
+        try {
+            String publicId = "nckh/categories/" + categoryId;
+
             Map<?, ?> uploadResult = cloudinary.uploader().upload(
                     file.getBytes(),
                     ObjectUtils.asMap(
-                            "folder", "nckh/category",
-                            "public_id", id,
-                            "overwrite", true));
+                            "public_id", publicId,
+                            "overwrite", true,
+                            "resource_type", "image"));
+
             return uploadResult.get("secure_url").toString();
+
         } catch (IOException e) {
-            throw new IllegalStateException("Upload hình thất bại");
+            throw new IllegalStateException("Upload hình thất bại", e);
         }
     }
+
 }
