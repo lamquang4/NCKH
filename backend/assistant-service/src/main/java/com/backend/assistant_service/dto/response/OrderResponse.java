@@ -1,5 +1,6 @@
 package com.backend.assistant_service.dto.response;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class OrderResponse {
     private String ward;
     private String paymethod;
     private Integer status;
-    private double total;
+    private BigDecimal total;
     private List<OrderItemResponse> items;
     private LocalDateTime createdAt;
 }

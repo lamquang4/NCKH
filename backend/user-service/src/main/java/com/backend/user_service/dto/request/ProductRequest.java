@@ -1,5 +1,6 @@
 package com.backend.user_service.dto.request;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import jakarta.validation.Valid;
@@ -21,10 +22,10 @@ public class ProductRequest {
     private String name;
 
     @Positive(message = "Giá phải > 0")
-    private double price;
+    private BigDecimal price;
 
     @Min(value = 0, message = "Giảm giá không hợp lệ")
-    private double discount;
+    private BigDecimal discount;
 
     private String description;
 

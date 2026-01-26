@@ -1,5 +1,7 @@
 package com.backend.order_service.dto.request;
 
+import java.math.BigDecimal;
+
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
@@ -20,8 +22,8 @@ public class OrderItemRequest {
     private int quantity;
 
     @Positive(message = "Giá phải > 0")
-    private double price;
+    private BigDecimal price;
 
     @Min(value = 0, message = "Giảm giá không hợp lệ")
-    private double discount;
+    private BigDecimal discount;
 }

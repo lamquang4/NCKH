@@ -9,6 +9,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -65,7 +67,7 @@ public class Order {
   private Integer status;
 
   @Column(nullable = false)
-  private Double total;
+  private BigDecimal total;
 
   @CreatedDate
   @Column(updatable = false)
