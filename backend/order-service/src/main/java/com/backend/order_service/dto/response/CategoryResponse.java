@@ -1,6 +1,5 @@
 package com.backend.order_service.dto.response;
 
-import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,5 +15,4 @@ public class CategoryResponse {
     private String slug;
     private String image;
     private Integer status;
-    private LocalDateTime createdAt;
 }

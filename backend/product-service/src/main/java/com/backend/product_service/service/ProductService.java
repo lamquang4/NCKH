@@ -1,6 +1,7 @@
 package com.backend.product_service.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -12,7 +13,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.backend.product_service.client.BrandServiceClient;
+import com.backend.product_service.client.CategoryServiceClient;
 import com.backend.product_service.dto.request.ProductRequest;
+import com.backend.product_service.dto.request.SpecificationRequest;
+import com.backend.product_service.dto.response.BrandResponse;
+import com.backend.product_service.dto.response.CategoryResponse;
 import com.backend.product_service.dto.response.ProductResponse;
 import com.backend.product_service.entity.ImageProduct;
 import com.backend.product_service.entity.Product;
@@ -32,14 +39,20 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ImageProductRepository imageProductRepository;
     private final SpecificationRepository specificationRepository;
+    private final CategoryServiceClient categoryServiceClient;
+    private final BrandServiceClient brandServiceClient;
     private final Cloudinary cloudinary;
 
     public ProductService(ProductRepository productRepository, ImageProductRepository imageProductRepository,
             SpecificationRepository specificationRepository,
+            CategoryServiceClient categoryServiceClient,
+            BrandServiceClient brandServiceClient,
             Cloudinary cloudinary) {
         this.productRepository = productRepository;
         this.imageProductRepository = imageProductRepository;
         this.specificationRepository = specificationRepository;
+        this.categoryServiceClient = categoryServiceClient;
+        this.brandServiceClient = brandServiceClient;
         this.cloudinary = cloudinary;
     }
 
@@ -64,7 +77,7 @@ public class ProductService {
             productPage = productRepository.findAll(pageable);
         }
 
-        return productPage.map(ProductMapper::toResponse);
+        return productPage.map(this::mapWithClient);
     }
 
     // lấy các sản phẩm có status = 1 phân trang
@@ -90,7 +103,44 @@ public class ProductService {
             productPage = productRepository.findByStatus(1, pageable);
         }
 
-        return productPage.map(ProductMapper::toResponse);
+        return productPage.map(this::mapWithClient);
+    }
+
+    // lấy các sản phẩm dựa vào category slug và có status = 1 phân trang
+    public Page<ProductResponse> getActiveProductsByCategory(
+            int page,
+            int limit,
+            String q,
+            String sort,
+            String slug) {
+
+        Sort sortOption = buildSort(sort);
+
+        Pageable pageable = PageRequest.of(
+                page - 1,
+                limit,
+                sortOption);
+
+        CategoryResponse category = categoryServiceClient.getCategoryBySlug(slug);
+
+        Page<Product> productPage;
+
+        if (q != null && !q.isBlank()) {
+            productPage = productRepository
+                    .findByStatusAndCategoryIdAndNameContainingIgnoreCase(
+                            1,
+                            category.getId(),
+                            q,
+                            pageable);
+        } else {
+            productPage = productRepository
+                    .findByStatusAndCategoryId(
+                            1,
+                            category.getId(),
+                            pageable);
+        }
+
+        return productPage.map(this::mapWithClient);
     }
 
     // lấy tất cả sản phẩm có status = 1
@@ -98,7 +148,7 @@ public class ProductService {
         return productRepository
                 .findByStatus(1, Sort.by("createdAt").descending())
                 .stream()
-                .map(ProductMapper::toResponse)
+                .map(this::mapWithClient)
                 .collect(Collectors.toList());
     }
 
@@ -107,7 +157,7 @@ public class ProductService {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Sản phẩm không tồn tại"));
 
-        return ProductMapper.toResponse(product);
+        return mapWithClient(product);
     }
 
     // lấy sản phẩm có status = 1 theo id
@@ -116,7 +166,7 @@ public class ProductService {
         Product product = productRepository.findByIdAndStatus(id, 1)
                 .orElseThrow(() -> new EntityNotFoundException("Sản phẩm không tồn tại hoặc đã bị vô hiệu hóa"));
 
-        return ProductMapper.toResponse(product);
+        return mapWithClient(product);
     }
 
     // cập nhật tình trạng sản phẩm
@@ -143,14 +193,16 @@ public class ProductService {
         Product product = ProductMapper.toEntity(request);
         product.setSlug(SlugUtil.toSlug(request.getName()));
 
+        if (product.getSpecifications() != null) {
+            product.getSpecifications().forEach(spec -> spec.setProduct(product));
+        }
+
         Product savedProduct = productRepository.save(product);
 
         if (files != null && !files.isEmpty()) {
-
             List<ImageProduct> images = files.stream()
                     .map(file -> uploadImageOnCloudinary(file, savedProduct))
                     .collect(Collectors.toList());
-
             savedProduct.setImages(images);
         }
 
@@ -175,6 +227,8 @@ public class ProductService {
 
         ProductMapper.updateEntity(product, request);
         product.setSlug(SlugUtil.toSlug(product.getName()));
+
+        syncSpecifications(product, request.getSpecifications());
 
         if (files != null && !files.isEmpty()) {
 
@@ -335,6 +389,53 @@ public class ProductService {
             default:
                 return Sort.by("createdAt").descending();
         }
+    }
+
+    private void syncSpecifications(
+            Product product,
+            List<SpecificationRequest> requests) {
+
+        Map<String, Specification> existingMap = product.getSpecifications().stream()
+                .collect(Collectors.toMap(
+                        Specification::getId,
+                        s -> s));
+
+        List<Specification> newList = new ArrayList<>();
+
+        if (requests != null) {
+            for (SpecificationRequest req : requests) {
+
+                if (req.getId() != null && existingMap.containsKey(req.getId())) {
+                    // UPDATE
+                    Specification spec = existingMap.get(req.getId());
+                    spec.setSpecKey(req.getSpecKey());
+                    spec.setSpecValue(req.getSpecValue());
+                    spec.setDisplayOrder(req.getDisplayOrder());
+                    newList.add(spec);
+                } else {
+                    // INSERT
+                    newList.add(
+                            Specification.builder()
+                                    .specKey(req.getSpecKey())
+                                    .specValue(req.getSpecValue())
+                                    .displayOrder(req.getDisplayOrder())
+                                    .product(product)
+                                    .build());
+                }
+            }
+        }
+
+        product.getSpecifications().clear();
+        product.getSpecifications().addAll(newList);
+    }
+
+    private ProductResponse mapWithClient(Product product) {
+
+        CategoryResponse category = categoryServiceClient.getCategoryById(product.getCategoryId());
+
+        BrandResponse brand = brandServiceClient.getBrandById(product.getBrandId());
+
+        return ProductMapper.toResponse(product, category, brand);
     }
 
 }

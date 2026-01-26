@@ -7,7 +7,6 @@ export const mockCategories: CategoryResponse[] = [
     slug: "laptop",
     image: "/assets/categories/laptop.png",
     status: 1,
-    createdAt: "2024-01-01T09:00:00",
   },
   {
     id: "c2",
@@ -15,7 +14,6 @@ export const mockCategories: CategoryResponse[] = [
     slug: "ban-phim",
     image: "/assets/categories/banphim.png",
     status: 1,
-    createdAt: "2024-01-02T09:00:00",
   },
   {
     id: "c3",
@@ -23,7 +21,6 @@ export const mockCategories: CategoryResponse[] = [
     slug: "chuot",
     image: "/assets/categories/chuot.png",
     status: 1,
-    createdAt: "2024-01-03T09:00:00",
   },
   {
     id: "c4",
@@ -31,7 +28,6 @@ export const mockCategories: CategoryResponse[] = [
     slug: "tai-nghe",
     image: "/assets/categories/tainghe.png",
     status: 1,
-    createdAt: "2024-01-04T09:00:00",
   },
   {
     id: "c5",
@@ -39,6 +35,5 @@ export const mockCategories: CategoryResponse[] = [
     slug: "ghe",
     image: "/assets/categories/ghe.png",
     status: 1,
-    createdAt: "2024-01-05T09:00:00",
   },
 ];

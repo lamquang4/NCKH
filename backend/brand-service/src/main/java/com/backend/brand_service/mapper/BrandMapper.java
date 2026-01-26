@@ -27,7 +27,6 @@ public class BrandMapper {
                 .name(brand.getName())
                 .slug(brand.getSlug())
                 .status(brand.getStatus())
-                .createdAt(brand.getCreatedAt())
                 .build();
     }
 

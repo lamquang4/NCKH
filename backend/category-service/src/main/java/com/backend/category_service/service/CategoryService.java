@@ -66,6 +66,7 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
+    // lấy 1 category theo id
     public CategoryResponse getCategoryById(String id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Danh mục không tồn tại"));
@@ -73,6 +74,15 @@ public class CategoryService {
         return CategoryMapper.toResponse(category);
     }
 
+    // lấy 1 category theo slug
+    public CategoryResponse getCategoryBySlug(String slug) {
+        Category category = categoryRepository.findBySlug(slug)
+                .orElseThrow(() -> new EntityNotFoundException("Danh mục không tồn tại"));
+
+        return CategoryMapper.toResponse(category);
+    }
+
+    // thêm category
     @Transactional
     public CategoryResponse createCategory(
             CategoryRequest request,
@@ -95,6 +105,7 @@ public class CategoryService {
         return CategoryMapper.toResponse(savedCategory);
     }
 
+    // cập nhật category
     @Transactional
     public CategoryResponse updateCategory(
             String id,
@@ -121,6 +132,7 @@ public class CategoryService {
         return CategoryMapper.toResponse(category);
     }
 
+    // cập nhật status category
     public CategoryResponse updateCategoryStatus(String id, Integer status) {
 
         Category category = categoryRepository.findById(id)
@@ -130,6 +142,7 @@ public class CategoryService {
         return CategoryMapper.toResponse(category);
     }
 
+    // xóa category
     @Transactional
     public void deleteCategory(String id) {
 

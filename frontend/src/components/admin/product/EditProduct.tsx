@@ -77,15 +77,7 @@ function EditProduct() {
 
   useEffect(() => {
     if (product?.specifications?.length) {
-      setSpecifications(
-        product.specifications
-          .slice()
-          .sort((a, b) => a.displayOrder - b.displayOrder)
-          .map((s) => ({
-            ...s,
-            isNew: false,
-          })),
-      );
+      setSpecifications(product?.specifications);
     }
   }, [product, setSpecifications]);
 

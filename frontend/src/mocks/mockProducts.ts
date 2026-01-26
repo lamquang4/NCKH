@@ -22,7 +22,6 @@ export const mockProducts: ProductResponse[] = [
       { id: "s2", specKey: "RAM", specValue: "8GB", displayOrder: 2 },
       { id: "s3", specKey: "SSD", specValue: "512GB", displayOrder: 3 },
     ],
-    createdAt: "2024-01-01T10:00:00",
   },
 
   {
@@ -101,7 +100,6 @@ và mức giá hợp lý trong phân khúc.
       { id: "s5", specKey: "RAM", specValue: "16GB", displayOrder: 2 },
       { id: "s6", specKey: "SSD", specValue: "512GB", displayOrder: 3 },
     ],
-    createdAt: "2024-01-02T10:00:00",
   },
 
   {
@@ -124,7 +122,6 @@ và mức giá hợp lý trong phân khúc.
       { id: "s8", specKey: "RAM", specValue: "16GB", displayOrder: 2 },
       { id: "s9", specKey: "SSD", specValue: "1TB", displayOrder: 3 },
     ],
-    createdAt: "2024-01-03T10:00:00",
   },
 
   // ===== TAI NGHE =====
@@ -152,7 +149,6 @@ và mức giá hợp lý trong phân khúc.
       },
       { id: "s11", specKey: "Pin", specValue: "30 giờ", displayOrder: 2 },
     ],
-    createdAt: "2024-01-04T10:00:00",
   },
 
   {
@@ -174,7 +170,6 @@ và mức giá hợp lý trong phân khúc.
       { id: "s12", specKey: "Chip", specValue: "Apple H2", displayOrder: 1 },
       { id: "s13", specKey: "Pin", specValue: "24 giờ", displayOrder: 2 },
     ],
-    createdAt: "2024-01-05T10:00:00",
   },
   // ===== CHUỘT =====
   {
@@ -196,7 +191,6 @@ và mức giá hợp lý trong phân khúc.
       { id: "s14", specKey: "DPI", specValue: "25600", displayOrder: 1 },
       { id: "s15", specKey: "Trọng lượng", specValue: "63g", displayOrder: 2 },
     ],
-    createdAt: "2024-01-06T10:00:00",
   },
 
   {
@@ -218,7 +212,6 @@ và mức giá hợp lý trong phân khúc.
       { id: "s16", specKey: "DPI", specValue: "30000", displayOrder: 1 },
       { id: "s17", specKey: "Trọng lượng", specValue: "59g", displayOrder: 2 },
     ],
-    createdAt: "2024-01-07T10:00:00",
   },
 
   // ===== GHẾ =====
@@ -241,7 +234,6 @@ và mức giá hợp lý trong phân khúc.
       { id: "s18", specKey: "Chất liệu", specValue: "Da PU", displayOrder: 1 },
       { id: "s19", specKey: "Tải trọng", specValue: "120kg", displayOrder: 2 },
     ],
-    createdAt: "2024-01-08T10:00:00",
   },
 
   {
@@ -268,6 +260,5 @@ và mức giá hợp lý trong phân khúc.
       },
       { id: "s21", specKey: "Tải trọng", specValue: "130kg", displayOrder: 2 },
     ],
-    createdAt: "2024-01-09T10:00:00",
   },
 ];

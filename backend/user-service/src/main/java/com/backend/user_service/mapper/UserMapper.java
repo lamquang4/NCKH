@@ -25,7 +25,6 @@ public final class UserMapper {
                 .role(user.getRole())
                 .status(user.getStatus())
                 .googleId(user.getGoogleId())
-                .createdAt(user.getCreatedAt())
                 .build();
     }
 

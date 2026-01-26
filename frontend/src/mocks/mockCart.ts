@@ -7,7 +7,6 @@ const p2 = mockProducts.find((p) => p.id === "2")!;
 export const mockCart: CartResponse = {
   id: "cart_001",
   userId: "user_123",
-  createdAt: "2026-01-21T10:30:00Z",
   items: [
     {
       id: "item_001",

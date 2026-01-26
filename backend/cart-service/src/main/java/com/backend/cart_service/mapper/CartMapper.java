@@ -22,7 +22,6 @@ public final class CartMapper {
                 .id(cart.getId())
                 .userId(cart.getUserId())
                 .items(items)
-                .createdAt(cart.getCreatedAt())
                 .build();
     }
 }

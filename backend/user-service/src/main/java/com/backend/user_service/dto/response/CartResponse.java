@@ -1,6 +1,5 @@
 package com.backend.user_service.dto.response;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,5 +14,4 @@ public class CartResponse {
     private String id;
     private String userId;
     private List<CartItemResponse> items;
-    private LocalDateTime createdAt;
 }
