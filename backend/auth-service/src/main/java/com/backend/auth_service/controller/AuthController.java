@@ -1,7 +1,12 @@
 package com.backend.auth_service.controller;
 
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.backend.auth_service.service.AuthService;
 
+@RestController
+@RequestMapping("/api/auth")
 public class AuthController {
     private final AuthService authService;
 

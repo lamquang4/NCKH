@@ -1,5 +1,6 @@
 package com.backend.brand_service.dto.response;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -15,8 +16,8 @@ public class ProductResponse {
     private String id;
     private String name;
     private String slug;
-    private double price;
-    private double discount;
+    private BigDecimal price;
+    private BigDecimal discount;
     private String description;
     private Integer status;
     private Integer stock;

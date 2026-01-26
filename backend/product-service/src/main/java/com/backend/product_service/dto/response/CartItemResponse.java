@@ -1,5 +1,6 @@
 package com.backend.product_service.dto.response;
 
+import java.math.BigDecimal;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,8 +16,8 @@ public class CartItemResponse {
     private String productId;
     private String name;
     private List<String> images;
-    private double price;
-    private double discount;
+    private BigDecimal price;
+    private BigDecimal discount;
     private String slug;
     private int quantity;
     private int stock;

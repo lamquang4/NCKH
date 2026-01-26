@@ -1,5 +1,7 @@
 package com.backend.order_service.entity;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -34,10 +36,10 @@ public class OrderItem {
   private Integer quantity;
 
   @Column(nullable = false)
-  private Double price;
+  private BigDecimal price;
 
   @Column(nullable = false)
-  private Double discount;
+  private BigDecimal discount;
 
   @ManyToOne
   @JoinColumn(name = "orderId", nullable = false)

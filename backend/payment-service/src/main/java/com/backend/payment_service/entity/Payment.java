@@ -7,7 +7,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,7 +42,7 @@ public class Payment {
     private String paymethod;
 
     @Column(nullable = false)
-    private Double amount;
+    private BigDecimal amount;
 
     @Column(length = 100)
     private String transactionId;
@@ -44,9 +50,10 @@ public class Payment {
     @Column(length = 20)
     private Integer status; // 1 thành công, 0 hoàn tiền
 
-    @Builder.Default
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
 
-    @Builder.Default
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
 }

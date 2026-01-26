@@ -1,5 +1,6 @@
 package com.backend.payment_service.dto.response;
 
+import java.math.BigDecimal;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +17,6 @@ public class OrderItemResponse {
     private String name;
     private List<String> images;
     private int quantity;
-    private double price;
-    private double discount;
+    private BigDecimal price;
+    private BigDecimal discount;
 }

@@ -17,7 +17,7 @@ export interface OrderItemRequest {
 }
 
 export interface UserRequest {
-  email: string;
+  email?: string;
   fullname: string;
   phone?: string;
   birthDate?: string;

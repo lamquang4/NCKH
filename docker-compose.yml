@@ -42,6 +42,19 @@ services:
       timeout: 5s
       retries: 5
 
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   eureka-server:
     build: ./backend/eureka-server
     container_name: eureka-server
@@ -215,11 +228,15 @@ services:
       - app-network
     environment:
       SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/cartdb
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
       JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
 
     depends_on:
       mongodb:
+        condition: service_healthy
+      redis:
         condition: service_healthy
       eureka-server:
         condition: service_healthy
