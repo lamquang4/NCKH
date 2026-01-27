@@ -152,6 +152,30 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
+    // lấy tất cả sản phẩm có status = 1 theo category id
+    public List<ProductResponse> getAllActiveProductsByCategoryId(String categoryId) {
+        return productRepository
+                .findByStatusAndCategoryId(
+                        1,
+                        categoryId,
+                        Sort.by("createdAt").descending())
+                .stream()
+                .map(this::mapWithClient)
+                .collect(Collectors.toList());
+    }
+
+    // lấy tất cả sản phẩm có status = 1 theo brand id
+    public List<ProductResponse> getAllActiveProductsByBrandId(String brandId) {
+        return productRepository
+                .findByStatusAndBrandId(
+                        1,
+                        brandId,
+                        Sort.by("createdAt").descending())
+                .stream()
+                .map(this::mapWithClient)
+                .collect(Collectors.toList());
+    }
+
     // lấy sản phẩm theo id
     public ProductResponse getProductById(String id) {
         Product product = productRepository.findById(id)
@@ -169,7 +193,7 @@ public class ProductService {
         return mapWithClient(product);
     }
 
-    // cập nhật tình trạng sản phẩm
+    // cập nhật status sản phẩm
     public ProductResponse updateProductStatus(String id, Integer status) {
 
         Product product = productRepository.findById(id)
@@ -291,6 +315,16 @@ public class ProductService {
         specificationRepository.delete(specification);
     }
 
+    // kiểm tra product nào có id brand không
+    public boolean existsProductByBrandId(String brandId) {
+        return productRepository.existsByBrandId(brandId);
+    }
+
+    // kiểm tra product nào có id category không
+    public boolean existsProductByCategoryId(String categoryId) {
+        return productRepository.existsByCategoryId(categoryId);
+    }
+
     private void deleteImageOnCloudinary(String productId, String imageId) {
         try {
             String publicId = "nckh/products/"
@@ -391,6 +425,7 @@ public class ProductService {
         }
     }
 
+    // xử lý thêm, sửa, xóa specifications
     private void syncSpecifications(
             Product product,
             List<SpecificationRequest> requests) {
@@ -425,6 +460,7 @@ public class ProductService {
             }
         }
 
+        // cái nào không có trong newList → bị orphan → DB DELETE
         product.getSpecifications().clear();
         product.getSpecifications().addAll(newList);
     }

@@ -51,4 +51,18 @@ public interface ProductRepository extends JpaRepository<Product, String> {
                         String name,
                         Pageable pageable);
 
+        boolean existsByBrandId(String brandId);
+
+        boolean existsByCategoryId(String categoryId);
+
+        List<Product> findByStatusAndCategoryId(
+                        Integer status,
+                        String categoryId,
+                        Sort sort);
+
+        List<Product> findByStatusAndBrandId(
+                        Integer status,
+                        String brandId,
+                        Sort sort);
+
 }
