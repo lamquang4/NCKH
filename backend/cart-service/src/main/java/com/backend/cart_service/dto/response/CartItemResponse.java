@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class CartItemResponse {
-    private String id;
     private String productId;
     private String name;
     private List<String> images;

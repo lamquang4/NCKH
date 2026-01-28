@@ -14,9 +14,20 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import java.time.LocalDateTime;
 
-
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+        // Lỗi nghiệp vụ
+        @ExceptionHandler(BaseBusinessException.class)
+        public ResponseEntity<ErrorResponse> handleBusinessException(
+                        BaseBusinessException ex) {
+                return ResponseEntity.status(ex.getHttpStatus()).body(
+                                ErrorResponse.builder()
+                                                .message(ex.getMessage())
+                                                .errorCode(ex.getErrorCode())
+                                                .timestamp(LocalDateTime.now())
+                                                .build());
+        }
+
         // Lỗi validation dữ liệu đầu vào
         @ExceptionHandler(MethodArgumentNotValidException.class)
         public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidException ex) {

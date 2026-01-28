@@ -11,9 +11,10 @@ import org.springframework.stereotype.Service;
 import com.backend.user_service.dto.request.UserRequest;
 import com.backend.user_service.dto.response.UserResponse;
 import com.backend.user_service.entity.User;
+import com.backend.user_service.exception.ConflictException;
+import com.backend.user_service.exception.NotFoundException;
 import com.backend.user_service.mapper.UserMapper;
 import com.backend.user_service.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class UserService {
@@ -76,7 +77,7 @@ public class UserService {
 
     public UserResponse getUserById(String id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Người dùng không tồn tại"));
+                .orElseThrow(() -> new NotFoundException("Người dùng không tìm thấy"));
 
         return UserMapper.toResponse(user);
     }
@@ -84,12 +85,12 @@ public class UserService {
     public UserResponse updateUser(String id, UserRequest request) {
 
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Người dùng không tồn tại"));
+                .orElseThrow(() -> new NotFoundException("Người dùng không tìm thấy"));
 
         if (request.getEmail() != null &&
                 !request.getEmail().equals(user.getEmail()) &&
                 userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("Email đã được sử dụng");
+            throw new ConflictException("Email đã được sử dụng");
         }
 
         UserMapper.updateEntity(user, request, passwordEncoder);
@@ -100,7 +101,7 @@ public class UserService {
     public UserResponse updateUserStatus(String id, Integer status) {
 
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Người dùng không tồn tại"));
+                .orElseThrow(() -> new NotFoundException("Người dùng không tìm thấy"));
 
         user.setStatus(status);
 
@@ -110,7 +111,7 @@ public class UserService {
     public void deleteUser(String id) {
 
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Người dùng không tồn tại"));
+                .orElseThrow(() -> new NotFoundException("Người dùng không tìm thấy"));
 
         userRepository.delete(user);
     }

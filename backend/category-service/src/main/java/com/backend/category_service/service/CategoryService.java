@@ -19,13 +19,15 @@ import com.backend.category_service.dto.request.CategoryRequest;
 import com.backend.category_service.dto.response.CategoryResponse;
 import com.backend.category_service.dto.response.ProductResponse;
 import com.backend.category_service.entity.Category;
+import com.backend.category_service.exception.BadRequestException;
+import com.backend.category_service.exception.ConflictException;
+import com.backend.category_service.exception.ExternalServiceException;
+import com.backend.category_service.exception.NotFoundException;
 import com.backend.category_service.mapper.CategoryMapper;
 import com.backend.category_service.repository.CategoryRepository;
 import com.backend.category_service.utils.SlugUtil;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-
-import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class CategoryService {
@@ -75,7 +77,7 @@ public class CategoryService {
     // lấy 1 category theo id
     public CategoryResponse getCategoryById(String id) {
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Danh mục không tồn tại"));
+                .orElseThrow(() -> new NotFoundException("Danh mục không tìm thấy"));
 
         return CategoryMapper.toResponse(category);
     }
@@ -83,7 +85,7 @@ public class CategoryService {
     // lấy 1 category theo slug
     public CategoryResponse getCategoryBySlug(String slug) {
         Category category = categoryRepository.findBySlug(slug)
-                .orElseThrow(() -> new EntityNotFoundException("Danh mục không tồn tại"));
+                .orElseThrow(() -> new NotFoundException("Danh mục không tìm thấy"));
 
         return CategoryMapper.toResponse(category);
     }
@@ -95,7 +97,7 @@ public class CategoryService {
             MultipartFile image) {
 
         if (categoryRepository.existsByName(request.getName())) {
-            throw new IllegalArgumentException("Tên danh mục đã tồn tại");
+            throw new ConflictException("Tên danh mục đã được sử dụng");
         }
 
         Category category = CategoryMapper.toEntity(request);
@@ -119,12 +121,12 @@ public class CategoryService {
             MultipartFile image) {
 
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Danh mục không tồn tại"));
+                .orElseThrow(() -> new NotFoundException("Danh mục không tìm thấy"));
 
         categoryRepository.findByName(request.getName())
                 .filter(c -> !c.getId().equals(id))
                 .ifPresent(c -> {
-                    throw new IllegalArgumentException("Tên danh mục đã tồn tại");
+                    throw new ConflictException("Tên danh mục đã được sử dụng");
                 });
 
         CategoryMapper.updateEntity(category, request);
@@ -143,7 +145,7 @@ public class CategoryService {
     public CategoryResponse updateCategoryStatus(String id, Integer status) {
 
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Danh mục không tồn tại"));
+                .orElseThrow(() -> new NotFoundException("Danh mục không tìm thấy"));
 
         category.setStatus(status);
         categoryRepository.save(category);
@@ -171,12 +173,12 @@ public class CategoryService {
     public void deleteCategory(String id) {
 
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Danh mục không tồn tại"));
+                .orElseThrow(() -> new NotFoundException("Danh mục không tìm thấy"));
 
         Boolean isUsed = productServiceClient.existsByCategoryId(id);
 
         if (Boolean.TRUE.equals(isUsed)) {
-            throw new IllegalStateException(
+            throw new ConflictException(
                     "Danh mục này không thể xóa vì đang được sử dụng bởi sản phẩm");
         }
 
@@ -198,7 +200,7 @@ public class CategoryService {
                     ObjectUtils.emptyMap());
 
         } catch (Exception e) {
-            throw new IllegalStateException("Xóa hình thất bại", e);
+            throw new ExternalServiceException("Xóa hình thất bại");
         }
     }
 
@@ -206,7 +208,7 @@ public class CategoryService {
 
         // validate size (2MB)
         if (file.getSize() > 2 * 1024 * 1024) {
-            throw new IllegalArgumentException("Dung lượng hình tối đa 2MB");
+            throw new BadRequestException("Dung lượng hình tối đa 2MB");
         }
 
         // validate type
@@ -217,7 +219,7 @@ public class CategoryService {
                 "image/webp");
 
         if (contentType == null || !allowedTypes.contains(contentType)) {
-            throw new IllegalArgumentException("Chỉ cho phép JPG, PNG, WEBP");
+            throw new BadRequestException("Hình chỉ cho phép JPG, PNG, WEBP");
         }
 
         try {
@@ -233,7 +235,7 @@ public class CategoryService {
             return uploadResult.get("secure_url").toString();
 
         } catch (IOException e) {
-            throw new IllegalStateException("Upload hình thất bại", e);
+            throw new ExternalServiceException("Upload hình thất bại");
         }
     }
 

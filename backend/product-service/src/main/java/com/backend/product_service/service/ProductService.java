@@ -1,6 +1,7 @@
 package com.backend.product_service.service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,10 @@ import com.backend.product_service.dto.response.ProductResponse;
 import com.backend.product_service.entity.ImageProduct;
 import com.backend.product_service.entity.Product;
 import com.backend.product_service.entity.Specification;
+import com.backend.product_service.exception.BadRequestException;
+import com.backend.product_service.exception.ConflictException;
+import com.backend.product_service.exception.ExternalServiceException;
+import com.backend.product_service.exception.NotFoundException;
 import com.backend.product_service.mapper.ProductMapper;
 import com.backend.product_service.repository.ImageProductRepository;
 import com.backend.product_service.repository.ProductRepository;
@@ -31,8 +36,6 @@ import com.backend.product_service.repository.SpecificationRepository;
 import com.backend.product_service.utils.SlugUtil;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-
-import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class ProductService {
@@ -179,7 +182,7 @@ public class ProductService {
     // lấy sản phẩm theo id
     public ProductResponse getProductById(String id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Sản phẩm không tồn tại"));
+                .orElseThrow(() -> new NotFoundException("Sản phẩm không tìm thấy"));
 
         return mapWithClient(product);
     }
@@ -188,7 +191,7 @@ public class ProductService {
     public ProductResponse getActiveProductById(String id) {
 
         Product product = productRepository.findByIdAndStatus(id, 1)
-                .orElseThrow(() -> new EntityNotFoundException("Sản phẩm không tồn tại hoặc đã bị vô hiệu hóa"));
+                .orElseThrow(() -> new NotFoundException("Sản phẩm không tìm thấy"));
 
         return mapWithClient(product);
     }
@@ -197,7 +200,7 @@ public class ProductService {
     public ProductResponse updateProductStatus(String id, Integer status) {
 
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Sản phẩm không tồn tại"));
+                .orElseThrow(() -> new NotFoundException("Sản phẩm không tìm thấy"));
 
         product.setStatus(status);
 
@@ -209,9 +212,29 @@ public class ProductService {
     public ProductResponse createProduct(
             ProductRequest request,
             List<MultipartFile> files) {
+        if (request.getPrice() == null
+                || request.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new BadRequestException("Giá bán phải lớn hơn 0");
+        }
+
+        if (request.getDiscount() != null) {
+
+            if (request.getDiscount().compareTo(BigDecimal.ZERO) < 0) {
+                throw new BadRequestException("Số tiền giảm giá không được nhỏ hơn 0");
+            }
+
+            if (request.getDiscount().compareTo(request.getPrice()) >= 0) {
+                throw new BadRequestException("Số tiền giảm giá phải nhỏ hơn giá bán");
+            }
+        }
+
+        if (request.getStock() == null
+                || request.getStock() > 0) {
+            throw new BadRequestException("Số lượng tồn kho phải lớn hơn 0");
+        }
 
         if (productRepository.existsByName(request.getName())) {
-            throw new IllegalArgumentException("Tên sản phẩm đã tồn tại");
+            throw new ConflictException("Tên sản phẩm đã được sử dụng");
         }
 
         Product product = ProductMapper.toEntity(request);
@@ -241,12 +264,33 @@ public class ProductService {
             List<MultipartFile> files) {
 
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Sản phẩm không tồn tại"));
+                .orElseThrow(() -> new NotFoundException("Sản phẩm không tìm thấy"));
+
+        if (request.getPrice() == null
+                || request.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new BadRequestException("Giá bán phải lớn hơn 0");
+        }
+
+        if (request.getDiscount() != null) {
+
+            if (request.getDiscount().compareTo(BigDecimal.ZERO) < 0) {
+                throw new BadRequestException("Số tiền giảm giá không được nhỏ hơn 0");
+            }
+
+            if (request.getDiscount().compareTo(request.getPrice()) >= 0) {
+                throw new BadRequestException("Số tiền giảm giá phải nhỏ hơn giá bán");
+            }
+        }
+
+        if (request.getStock() == null
+                || request.getStock() > 0) {
+            throw new BadRequestException("Số lượng tồn kho phải lớn hơn 0");
+        }
 
         productRepository.findByName(request.getName())
                 .filter(p -> !p.getId().equals(id))
                 .ifPresent(p -> {
-                    throw new IllegalArgumentException("Tên sản phẩm đã tồn tại");
+                    throw new ConflictException("Tên sản phẩm đã được sử dụng");
                 });
 
         ProductMapper.updateEntity(product, request);
@@ -275,7 +319,7 @@ public class ProductService {
     public void deleteProduct(String id) {
 
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Sản phẩm không tồn tại"));
+                .orElseThrow(() -> new NotFoundException("Sản phẩm không tìm thấy"));
 
         deleteFolderOnCloudinary(product.getId());
 
@@ -287,7 +331,7 @@ public class ProductService {
     public void deleteProductImage(String productId, String imageId) {
 
         ImageProduct image = imageProductRepository.findById(imageId)
-                .orElseThrow(() -> new EntityNotFoundException("Hình không tồn tại"));
+                .orElseThrow(() -> new NotFoundException("Hình không tìm thấy"));
 
         if (!image.getProduct().getId().equals(productId)) {
             throw new IllegalArgumentException("Hình không thuộc sản phẩm");
@@ -305,9 +349,8 @@ public class ProductService {
             String specificationId) {
 
         Specification specification = specificationRepository.findById(specificationId)
-                .orElseThrow(() -> new EntityNotFoundException("Thông số không tồn tại"));
+                .orElseThrow(() -> new NotFoundException("Thông số không tìm thấy"));
 
-        // đảm bảo spec thuộc product
         if (!specification.getProduct().getId().equals(productId)) {
             throw new IllegalArgumentException("Thông số không thuộc sản phẩm");
         }
@@ -354,7 +397,7 @@ public class ProductService {
                     ObjectUtils.emptyMap());
 
         } catch (Exception e) {
-            throw new IllegalStateException("Xóa hình thất bại", e);
+            throw new ExternalServiceException("Xóa hình thất bại");
         }
     }
 
@@ -364,7 +407,7 @@ public class ProductService {
 
         // Validate size
         if (file.getSize() > 2 * 1024 * 1024) {
-            throw new IllegalArgumentException("Dung lượng hình tối đa 2MB");
+            throw new BadRequestException("Dung lượng hình tối đa 2MB");
         }
 
         // Validate type
@@ -375,7 +418,7 @@ public class ProductService {
                 "image/webp");
 
         if (contentType == null || !allowedTypes.contains(contentType)) {
-            throw new IllegalArgumentException("Chỉ cho phép JPG, PNG, WEBP");
+            throw new BadRequestException("Hình chỉ cho phép JPG, PNG, WEBP");
         }
 
         String imageId = UUID.randomUUID().toString();
@@ -400,7 +443,7 @@ public class ProductService {
                     .build();
 
         } catch (IOException e) {
-            throw new IllegalStateException("Upload hình thất bại", e);
+            throw new ExternalServiceException("Upload hình thất bại");
         }
     }
 
@@ -441,14 +484,14 @@ public class ProductService {
             for (SpecificationRequest req : requests) {
 
                 if (req.getId() != null && existingMap.containsKey(req.getId())) {
-                    // UPDATE
+                    // Cập nhật
                     Specification spec = existingMap.get(req.getId());
                     spec.setSpecKey(req.getSpecKey());
                     spec.setSpecValue(req.getSpecValue());
                     spec.setDisplayOrder(req.getDisplayOrder());
                     newList.add(spec);
                 } else {
-                    // INSERT
+                    // Thêm
                     newList.add(
                             Specification.builder()
                                     .specKey(req.getSpecKey())
@@ -460,7 +503,7 @@ public class ProductService {
             }
         }
 
-        // cái nào không có trong newList → bị orphan → DB DELETE
+        // cái nào không có trong newList thì bị xóa
         product.getSpecifications().clear();
         product.getSpecifications().addAll(newList);
     }
@@ -470,6 +513,14 @@ public class ProductService {
         CategoryResponse category = categoryServiceClient.getCategoryById(product.getCategoryId());
 
         BrandResponse brand = brandServiceClient.getBrandById(product.getBrandId());
+
+        if (category == null) {
+            throw new NotFoundException("Danh mục không tìm thấy");
+        }
+
+        if (brand == null) {
+            throw new NotFoundException("Thương hiệu không tìm thấy");
+        }
 
         return ProductMapper.toResponse(product, category, brand);
     }

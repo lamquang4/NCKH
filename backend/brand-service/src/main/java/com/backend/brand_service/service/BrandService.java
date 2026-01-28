@@ -17,10 +17,11 @@ import com.backend.brand_service.dto.request.BrandRequest;
 import com.backend.brand_service.dto.response.BrandResponse;
 import com.backend.brand_service.dto.response.ProductResponse;
 import com.backend.brand_service.entity.Brand;
+import com.backend.brand_service.exception.ConflictException;
+import com.backend.brand_service.exception.NotFoundException;
 import com.backend.brand_service.mapper.BrandMapper;
 import com.backend.brand_service.repository.BrandRepository;
 import com.backend.brand_service.util.SlugUtil;
-import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class BrandService {
@@ -66,7 +67,7 @@ public class BrandService {
     // lấy 1 brand theo id
     public BrandResponse getBrandById(String id) {
         Brand brand = brandRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Thương hiệu không tồn tại"));
+                .orElseThrow(() -> new NotFoundException("Thương hiệu không tìm thấy"));
 
         return BrandMapper.toResponse(brand);
     }
@@ -75,7 +76,7 @@ public class BrandService {
     public BrandResponse createBrand(BrandRequest request) {
 
         if (brandRepository.existsByName(request.getName())) {
-            throw new IllegalArgumentException("Tên thương hiệu đã tồn tại");
+            throw new ConflictException("Tên thương hiệu đã được sử dụng");
         }
 
         Brand brand = BrandMapper.toEntity(request);
@@ -90,12 +91,12 @@ public class BrandService {
     public BrandResponse updateBrand(String id, BrandRequest request) {
 
         Brand brand = brandRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Thương hiệu không tồn tại"));
+                .orElseThrow(() -> new NotFoundException("Thương hiệu không tìm thấy"));
 
         brandRepository.findByName(request.getName())
                 .filter(b -> !b.getId().equals(id))
                 .ifPresent(b -> {
-                    throw new IllegalArgumentException("Tên thương hiệu đã tồn tại");
+                    throw new ConflictException("Tên thương hiệu đã được sử dụng");
                 });
 
         BrandMapper.updateEntity(brand, request);
@@ -109,7 +110,7 @@ public class BrandService {
     public BrandResponse updateBrandStatus(String id, Integer status) {
 
         Brand brand = brandRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Thương hiệu không tồn tại"));
+                .orElseThrow(() -> new NotFoundException("Thương hiệu không tìm thấy"));
 
         brand.setStatus(status);
         brandRepository.save(brand);
@@ -136,12 +137,12 @@ public class BrandService {
     public void deleteBrand(String id) {
 
         Brand brand = brandRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Thương hiệu không tồn tại"));
+                .orElseThrow(() -> new NotFoundException("Thương hiệu không tìm thấy"));
 
         Boolean isUsed = productServiceClient.existsByBrandId(id);
 
         if (Boolean.TRUE.equals(isUsed)) {
-            throw new IllegalStateException(
+            throw new ConflictException(
                     "Thương hiệu này không thể xóa vì đang được sử dụng bởi sản phẩm");
         }
 
