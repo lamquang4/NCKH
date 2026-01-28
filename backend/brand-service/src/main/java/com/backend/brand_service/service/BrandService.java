@@ -8,10 +8,14 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.backend.brand_service.client.ProductServiceClient;
 import com.backend.brand_service.dto.request.BrandRequest;
 import com.backend.brand_service.dto.response.BrandResponse;
+import com.backend.brand_service.dto.response.ProductResponse;
 import com.backend.brand_service.entity.Brand;
 import com.backend.brand_service.mapper.BrandMapper;
 import com.backend.brand_service.repository.BrandRepository;
@@ -21,9 +25,11 @@ import jakarta.persistence.EntityNotFoundException;
 @Service
 public class BrandService {
     private final BrandRepository brandRepository;
+    private final ProductServiceClient productServiceClient;
 
-    public BrandService(BrandRepository brandRepository) {
+    public BrandService(BrandRepository brandRepository, ProductServiceClient productServiceClient) {
         this.brandRepository = brandRepository;
+        this.productServiceClient = productServiceClient;
     }
 
     // lấy tất cả brand phân trang
@@ -57,6 +63,7 @@ public class BrandService {
                 .collect(Collectors.toList());
     }
 
+    // lấy 1 brand theo id
     public BrandResponse getBrandById(String id) {
         Brand brand = brandRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Thương hiệu không tồn tại"));
@@ -98,12 +105,29 @@ public class BrandService {
     }
 
     // cập nhật status
+    @Transactional
     public BrandResponse updateBrandStatus(String id, Integer status) {
 
         Brand brand = brandRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Thương hiệu không tồn tại"));
 
         brand.setStatus(status);
+        brandRepository.save(brand);
+
+        // cập nhật status brand ẩn thì các sản phẩm thuộc brand đó sẽ ẩn theo
+        if (status == 0) {
+            ResponseEntity<List<ProductResponse>> response = productServiceClient.getAllActiveProductsByBrandId(id);
+
+            List<ProductResponse> products = response.getBody();
+
+            if (products != null && !products.isEmpty()) {
+                for (ProductResponse product : products) {
+                    productServiceClient.updateProductStatus(
+                            product.getId(),
+                            0);
+                }
+            }
+        }
 
         return BrandMapper.toResponse(brand);
     }
@@ -113,6 +137,13 @@ public class BrandService {
 
         Brand brand = brandRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Thương hiệu không tồn tại"));
+
+        Boolean isUsed = productServiceClient.existsByBrandId(id);
+
+        if (Boolean.TRUE.equals(isUsed)) {
+            throw new IllegalStateException(
+                    "Thương hiệu này không thể xóa vì đang được sử dụng bởi sản phẩm");
+        }
 
         brandRepository.delete(brand);
     }

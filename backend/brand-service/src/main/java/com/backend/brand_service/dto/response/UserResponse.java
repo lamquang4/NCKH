@@ -1,7 +1,6 @@
 package com.backend.brand_service.dto.response;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,5 +20,4 @@ public class UserResponse {
     private String role;
     private Integer status;
     private String googleId;
-    private LocalDateTime createdAt;
 }

@@ -44,10 +44,10 @@ export interface ImageProductRequest {
 }
 
 export interface SpecificationRequest {
+  id?: string;
   specKey: string;
   specValue: string;
   displayOrder: number;
-  isNew?: boolean;
 }
 
 export interface ProductRequest {
@@ -84,7 +84,6 @@ export interface UserResponse {
   role: "customer" | "admin";
   status: number;
   googleId?: string;
-  createdAt?: string;
 }
 
 export interface BrandResponse {
@@ -92,7 +91,6 @@ export interface BrandResponse {
   name: string;
   slug: string;
   status: number;
-  createdAt?: string;
 }
 
 export interface CategoryResponse {
@@ -101,7 +99,6 @@ export interface CategoryResponse {
   slug: string;
   image?: string;
   status: number;
-  createdAt?: string;
 }
 
 export interface ImageProductResponse {
@@ -114,7 +111,6 @@ export interface SpecificationResponse {
   specKey: string;
   specValue: string;
   displayOrder: number;
-  isNew?: boolean;
 }
 
 export interface ProductResponse {
@@ -130,7 +126,6 @@ export interface ProductResponse {
   brand: BrandResponse;
   images: ImageProductResponse[];
   specifications: SpecificationResponse[];
-  createdAt?: string;
 }
 
 export interface CartItemResponse {
@@ -149,7 +144,6 @@ export interface CartResponse {
   id?: string;
   userId?: string;
   items: CartItemResponse[];
-  createdAt?: string;
 }
 
 export interface OrderItemResponse {

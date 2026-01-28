@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class SpecificationRequest {
+    private String id;
+    
     @NotBlank(message = "Spec key không được để trống")
     private String specKey;
 

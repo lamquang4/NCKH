@@ -1,7 +1,6 @@
 package com.backend.auth_service.dto.response;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,5 +24,4 @@ public class ProductResponse {
     private BrandResponse brand;
     private List<ImageProductResponse> images;
     private List<SpecificationResponse> specifications;
-    private LocalDateTime createdAt;
 }

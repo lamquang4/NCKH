@@ -1,6 +1,5 @@
 package com.backend.category_service.dto.response;
 
-import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,5 +14,4 @@ public class BrandResponse {
     private String name;
     private String slug;
     private Integer status;
-    private LocalDateTime createdAt;
 }

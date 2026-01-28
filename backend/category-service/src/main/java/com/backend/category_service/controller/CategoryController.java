@@ -58,6 +58,11 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.getCategoryById(id));
     }
 
+    @GetMapping("/slug/{id}")
+    public ResponseEntity<CategoryResponse> getCategoryBySlug(@PathVariable String slug) {
+        return ResponseEntity.ok(categoryService.getCategoryBySlug(slug));
+    }
+
     @PostMapping(consumes = "multipart/form-data")
     public ResponseEntity<CategoryResponse> create(
             @Valid @RequestPart("category") CategoryRequest request,

@@ -11,6 +11,8 @@ import com.backend.category_service.entity.Category;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, String> {
+    Optional<Category> findBySlug(String slug);
+
     Optional<Category> findByName(String name);
 
     Page<Category> findByNameContainingIgnoreCase(String q, Pageable pageable);

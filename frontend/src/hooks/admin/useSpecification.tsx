@@ -11,7 +11,6 @@ const createEmptySpec = (order: number): SpecificationResponse => ({
   specKey: "",
   specValue: "",
   displayOrder: order,
-  isNew: true,
 });
 
 export const useSpecification = ({

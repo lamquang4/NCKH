@@ -12,7 +12,6 @@ export const mockUsers: UserResponse[] = [
     role: "customer",
     status: 1,
     googleId: "google_123456789",
-    createdAt: "2024-01-01T09:00:00",
   },
 
   // Thủ công
@@ -25,7 +24,6 @@ export const mockUsers: UserResponse[] = [
     gender: 0,
     role: "customer",
     status: 1,
-    createdAt: "2024-01-02T10:30:00",
   },
 
   // admin
@@ -38,6 +36,5 @@ export const mockUsers: UserResponse[] = [
     gender: 1,
     role: "admin",
     status: 1,
-    createdAt: "2024-01-01T08:00:00",
   },
 ];

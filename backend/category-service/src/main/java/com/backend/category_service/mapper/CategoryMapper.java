@@ -27,7 +27,6 @@ public class CategoryMapper {
                 .slug(category.getSlug())
                 .image(category.getImage())
                 .status(category.getStatus())
-                .createdAt(category.getCreatedAt())
                 .build();
     }
 
