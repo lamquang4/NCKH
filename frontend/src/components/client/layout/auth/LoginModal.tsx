@@ -1,6 +1,5 @@
 import { HiOutlineEyeOff, HiOutlineEye } from "react-icons/hi";
 import { memo, useState } from "react";
-import SocialAuth from "./SocialAuth";
 
 type Props = {
   onClose: () => void;
@@ -108,8 +107,6 @@ function LoginModal({ onClose, onSwitchRegister }: Props) {
               >
                 Đăng nhập
               </button>
-
-              <SocialAuth title="đăng nhập" />
 
               <p className="flex gap-1.5 justify-center font-medium">
                 Bạn chưa có tài khoản ư?

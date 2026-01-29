@@ -20,4 +20,5 @@ public class CartItemResponse {
     private String slug;
     private int quantity;
     private int stock;
+    private int status;
 }

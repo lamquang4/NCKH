@@ -12,46 +12,47 @@ import com.backend.cart_service.model.CartItem;
 
 public final class CartMapper {
 
-    private CartMapper() {
-    }
+        private CartMapper() {
+        }
 
-    public static CartResponse toResponse(
-            Cart cart,
-            List<CartItemResponse> items) {
+        public static CartResponse toResponse(
+                        Cart cart,
+                        List<CartItemResponse> items) {
 
-        return CartResponse.builder()
-                .id(cart.getId())
-                .userId(cart.getUserId())
-                .items(items)
-                .build();
-    }
+                return CartResponse.builder()
+                                .id(cart.getId())
+                                .userId(cart.getUserId())
+                                .items(items)
+                                .build();
+        }
 
-    public static CartItemResponse toItemResponse(
-            CartItem cartItem,
-            ProductResponse product) {
+        public static CartItemResponse toItemResponse(
+                        CartItem cartItem,
+                        ProductResponse product) {
 
-        return CartItemResponse.builder()
-                .productId(product.getId())
-                .name(product.getName())
-                .slug(product.getSlug())
-                .images(
-                        product.getImages() == null
-                                ? List.of()
-                                : product.getImages().stream()
-                                        .map(ImageProductResponse::getImage)
-                                        .toList())
-                .price(product.getPrice())
-                .discount(product.getDiscount())
-                .quantity(cartItem.getQuantity())
-                .stock(product.getStock())
-                .build();
-    }
+                return CartItemResponse.builder()
+                                .productId(product.getId())
+                                .name(product.getName())
+                                .slug(product.getSlug())
+                                .images(
+                                                product.getImages() == null
+                                                                ? List.of()
+                                                                : product.getImages().stream()
+                                                                                .map(ImageProductResponse::getImage)
+                                                                                .toList())
+                                .price(product.getPrice())
+                                .discount(product.getDiscount())
+                                .quantity(cartItem.getQuantity())
+                                .stock(product.getStock())
+                                .status(product.getStatus())
+                                .build();
+        }
 
-    public static CartItem toItemEntity(CartItemRequest request) {
+        public static CartItem toItemEntity(CartItemRequest request) {
 
-        return CartItem.builder()
-                .productId(request.getProductId())
-                .quantity(request.getQuantity())
-                .build();
-    }
+                return CartItem.builder()
+                                .productId(request.getProductId())
+                                .quantity(request.getQuantity())
+                                .build();
+        }
 }

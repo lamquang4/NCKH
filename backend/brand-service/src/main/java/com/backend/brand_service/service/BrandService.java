@@ -139,7 +139,7 @@ public class BrandService {
         Brand brand = brandRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Thương hiệu không tìm thấy"));
 
-        Boolean isUsed = productServiceClient.existsByBrandId(id);
+        Boolean isUsed = productServiceClient.existsProductByBrandId(id);
 
         if (Boolean.TRUE.equals(isUsed)) {
             throw new ConflictException(

@@ -169,7 +169,7 @@ public class ProductController {
         }
 
         @GetMapping("/exist/brand/{brandId}")
-        public ResponseEntity<Boolean> existsByBrandId(
+        public ResponseEntity<Boolean> existsProductByBrandId(
                         @PathVariable String brandId) {
 
                 return ResponseEntity.ok(
@@ -177,7 +177,7 @@ public class ProductController {
         }
 
         @GetMapping("/exist/category/{categoryId}")
-        public ResponseEntity<Boolean> existsByCategoryId(
+        public ResponseEntity<Boolean> existsProductByCategoryId(
                         @PathVariable String categoryId) {
 
                 return ResponseEntity.ok(

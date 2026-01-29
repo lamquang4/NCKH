@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import com.backend.cart_service.client.ProductServiceClient;
 import com.backend.cart_service.dto.request.CartItemRequest;
 import com.backend.cart_service.dto.response.CartItemResponse;
@@ -62,6 +62,10 @@ public class CartService {
     // thêm sản phẩm vào giỏ hàng
     public CartResponse addToCart(String userId, CartItemRequest request) {
 
+        if (request.getQuantity() < 1) {
+            throw new BadRequestException("Số lượng phải lớn hơn hoặc bằng 1");
+        }
+
         Cart cart = getCartFromRedis(userId);
 
         if (cart == null) {
@@ -84,6 +88,7 @@ public class CartService {
         }
 
         cart = cartRepository.save(cart);
+
         saveCartToRedis(userId, cart);
 
         return getCartByUserId(userId);
@@ -132,6 +137,29 @@ public class CartService {
         saveCartToRedis(userId, cart);
 
         return getCartByUserId(userId);
+    }
+
+    // xóa sản phẩm có id đó khỏi tất cả giỏ hàng
+    @Transactional
+    public void removeProductFromAllCarts(String productId) {
+
+        List<Cart> carts = cartRepository.findByItemsProductId(productId);
+
+        if (carts.isEmpty()) {
+            return;
+        }
+
+        for (Cart cart : carts) {
+
+            boolean removed = cart.getItems()
+                    .removeIf(item -> item.getProductId().equals(productId));
+
+            if (removed) {
+                cartRepository.save(cart);
+
+                redisTemplate.delete(CART_KEY_PREFIX + cart.getUserId());
+            }
+        }
     }
 
     private CartItemResponse mapWithClient(CartItem cartItem) {

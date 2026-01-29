@@ -11,7 +11,6 @@ export const mockUsers: UserResponse[] = [
     gender: 1,
     role: "customer",
     status: 1,
-    googleId: "google_123456789",
   },
 
   // Thủ công

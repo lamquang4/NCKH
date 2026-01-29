@@ -16,7 +16,7 @@ import jakarta.validation.constraints.NotNull;
 @FeignClient(name = "product-service")
 public interface ProductServiceClient {
     @GetMapping("/api/product/exist/category/{categoryId}")
-    Boolean existsByCategoryId(@PathVariable String categoryId);
+    Boolean existsProductByCategoryId(@PathVariable String categoryId);
 
     @GetMapping("/api/product/category/{categoryId}")
     ResponseEntity<List<ProductResponse>> getAllActiveProductsByCategoryId(@PathVariable String categoryId);

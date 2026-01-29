@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.backend.product_service.client.BrandServiceClient;
+import com.backend.product_service.client.CartServiceClient;
 import com.backend.product_service.client.CategoryServiceClient;
 import com.backend.product_service.dto.request.ProductRequest;
 import com.backend.product_service.dto.request.SpecificationRequest;
@@ -44,18 +45,21 @@ public class ProductService {
     private final SpecificationRepository specificationRepository;
     private final CategoryServiceClient categoryServiceClient;
     private final BrandServiceClient brandServiceClient;
+    private final CartServiceClient cartServiceClient;
     private final Cloudinary cloudinary;
 
     public ProductService(ProductRepository productRepository, ImageProductRepository imageProductRepository,
             SpecificationRepository specificationRepository,
             CategoryServiceClient categoryServiceClient,
             BrandServiceClient brandServiceClient,
+            CartServiceClient cartServiceClient,
             Cloudinary cloudinary) {
         this.productRepository = productRepository;
         this.imageProductRepository = imageProductRepository;
         this.specificationRepository = specificationRepository;
         this.categoryServiceClient = categoryServiceClient;
         this.brandServiceClient = brandServiceClient;
+        this.cartServiceClient = cartServiceClient;
         this.cloudinary = cloudinary;
     }
 
@@ -322,6 +326,8 @@ public class ProductService {
                 .orElseThrow(() -> new NotFoundException("Sản phẩm không tìm thấy"));
 
         deleteFolderOnCloudinary(product.getId());
+
+        cartServiceClient.removeProductFromAllCarts(product.getId());
 
         productRepository.delete(product);
     }

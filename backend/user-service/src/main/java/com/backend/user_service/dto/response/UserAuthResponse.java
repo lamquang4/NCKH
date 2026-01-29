@@ -1,6 +1,5 @@
-package com.backend.order_service.dto.response;
+package com.backend.user_service.dto.response;
 
-import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,13 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserResponse {
+public class UserAuthResponse {
     private String id;
     private String email;
-    private String fullname;
-    private String phone;
-    private LocalDate birthDate;
-    private Integer gender;
+    private String password; // hash
     private String role;
     private Integer status;
+    private String fullname;
 }

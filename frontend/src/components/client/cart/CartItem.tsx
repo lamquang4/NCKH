@@ -103,14 +103,24 @@ function CartItem({ item }: Props) {
           </div>
         </div>
 
-        {item.stock < item.quantity && (
-          <div>
-            <p className="text-[#FF4C58] font-semibold text-center">
-              Sản phẩm hiện tại không đủ số lượng. Vui lòng giảm số lượng hoặc
-              xóa sản phẩm khỏi giỏ hàng
-            </p>
-          </div>
-        )}
+        <div className="flex gap-2 flex-col">
+          {item.stock < item.quantity && (
+            <div>
+              <p className="text-[#FF4C58] font-semibold text-center">
+                Sản phẩm hiện tại không đủ số lượng. Vui lòng giảm số lượng hoặc
+                xóa sản phẩm khỏi giỏ hàng!
+              </p>
+            </div>
+          )}
+
+          {item.status === 0 && (
+            <div>
+              <p className="text-[#FF4C58] font-semibold text-center">
+                Sản phẩm đang tạm ngừng bán. Vui lòng xóa sản phẩm khỏi giỏ hàng!
+              </p>
+            </div>
+          )}
+        </div>
       </div>
 
       <hr className="border-gray-300" />

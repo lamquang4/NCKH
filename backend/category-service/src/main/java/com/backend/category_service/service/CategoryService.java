@@ -175,7 +175,7 @@ public class CategoryService {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Danh mục không tìm thấy"));
 
-        Boolean isUsed = productServiceClient.existsByCategoryId(id);
+        Boolean isUsed = productServiceClient.existsProductByCategoryId(id);
 
         if (Boolean.TRUE.equals(isUsed)) {
             throw new ConflictException(

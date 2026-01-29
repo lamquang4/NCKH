@@ -18,6 +18,7 @@ export const mockCart: CartResponse = {
       slug: p1.slug,
       quantity: 2,
       stock: p1.stock,
+      status: 1,
     },
     {
       id: "item_002",
@@ -29,6 +30,7 @@ export const mockCart: CartResponse = {
       slug: p2.slug,
       quantity: 1,
       stock: p2.stock,
+      status: 1,
     },
   ],
 };
