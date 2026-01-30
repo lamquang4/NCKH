@@ -38,6 +38,11 @@ function CartItemList({ cart }: Props) {
     return cart.items.filter((item) => item.quantity > item.stock);
   }, [cart?.items]);
 
+  const unavailableItems = useMemo(() => {
+    if (!cart?.items) return [];
+    return cart.items.filter((item) => item.status === 0);
+  }, [cart?.items]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -51,6 +56,12 @@ function CartItemList({ cart }: Props) {
       toast.error(
         "Một số sản phẩm không đủ hàng so với số lượng bạn muốn mua trong giỏ hàng",
       );
+      navigate("/cart");
+      return;
+    }
+
+    if (unavailableItems.length > 0) {
+      toast.error("Một số sản phẩm đang tạm ngừng bán trong giỏ hàng");
       navigate("/cart");
       return;
     }

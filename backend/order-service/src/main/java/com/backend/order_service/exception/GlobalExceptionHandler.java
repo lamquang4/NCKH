@@ -1,6 +1,5 @@
 package com.backend.order_service.exception;
 
-import com.backend.order_service.dto.response.ErrorResponse;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -11,10 +10,24 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import com.backend.order_service.dto.response.ErrorResponse;
 import java.time.LocalDateTime;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+        // Lỗi nghiệp vụ
+        @ExceptionHandler(BaseBusinessException.class)
+        public ResponseEntity<ErrorResponse> handleBusinessException(
+                        BaseBusinessException ex) {
+                return ResponseEntity.status(ex.getHttpStatus()).body(
+                                ErrorResponse.builder()
+                                                .message(ex.getMessage())
+                                                .errorCode(ex.getErrorCode())
+                                                .timestamp(LocalDateTime.now())
+                                                .build());
+        }
+
         // Lỗi validation dữ liệu đầu vào
         @ExceptionHandler(MethodArgumentNotValidException.class)
         public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidException ex) {

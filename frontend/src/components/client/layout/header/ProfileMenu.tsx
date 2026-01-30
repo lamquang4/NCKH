@@ -8,7 +8,7 @@ type Props = {
 };
 
 function ProfileMenu({ onLogin, onRegister, profileMenuOpen }: Props) {
-  const user = true;
+  const user = false;
 
   if (!profileMenuOpen) return null;
 

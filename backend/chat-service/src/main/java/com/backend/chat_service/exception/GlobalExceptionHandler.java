@@ -15,6 +15,17 @@ import java.time.LocalDateTime;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+        // Lỗi nghiệp vụ
+        @ExceptionHandler(BaseBusinessException.class)
+        public ResponseEntity<ErrorResponse> handleBusinessException(
+                        BaseBusinessException ex) {
+                return ResponseEntity.status(ex.getHttpStatus()).body(
+                                ErrorResponse.builder()
+                                                .message(ex.getMessage())
+                                                .errorCode(ex.getErrorCode())
+                                                .timestamp(LocalDateTime.now())
+                                                .build());
+        }
 
         // Lỗi validation
         @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -35,7 +46,7 @@ public class GlobalExceptionHandler {
                                                 .build());
         }
 
-        // Lỗi trùng dữ liệu (MongoDB)
+        // Lỗi trùng dữ liệu
         @ExceptionHandler(DuplicateKeyException.class)
         public ResponseEntity<ErrorResponse> handleDuplicateKeyException(DuplicateKeyException ex) {
 

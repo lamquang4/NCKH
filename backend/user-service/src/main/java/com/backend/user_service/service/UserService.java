@@ -7,13 +7,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import com.backend.user_service.dto.request.UserRequest;
 import com.backend.user_service.dto.response.UserResponse;
 import com.backend.user_service.entity.User;
+import com.backend.user_service.exception.ConflictException;
+import com.backend.user_service.exception.NotFoundException;
 import com.backend.user_service.mapper.UserMapper;
 import com.backend.user_service.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
+import com.backend.user_service.utils.ValidationUtils;
 
 @Service
 public class UserService {
@@ -76,42 +78,105 @@ public class UserService {
 
     public UserResponse getUserById(String id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Người dùng không tồn tại"));
+                .orElseThrow(() -> new NotFoundException("Người dùng không tìm thấy"));
 
         return UserMapper.toResponse(user);
     }
 
+    // kiểm tra email đã được sử dụng chưa
+    public boolean existsUserByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    // tạo user
+    public UserResponse createUser(UserRequest request) {
+
+        if (!ValidationUtils.validateEmail(request.getEmail())) {
+            throw new IllegalArgumentException("Email không hợp lệ");
+        }
+
+        if (!ValidationUtils.validatePhone(request.getPhone())) {
+            throw new IllegalArgumentException("Số điện thoại không hợp lệ");
+        }
+
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new ConflictException("Email đã được sử dụng");
+        }
+
+        if (userRepository.existsByPhone(request.getPhone())) {
+            throw new ConflictException("Số điện thoại đã được sử dụng");
+        }
+
+        User user = UserMapper.toEntity(request);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setRole(
+                request.getRole() == null ? "customer" : request.getRole());
+        user.setStatus(
+                request.getStatus() == null ? 1 : request.getStatus());
+
+        userRepository.save(user);
+
+        return UserMapper.toResponse(user);
+    }
+
+    // cập nhật user
+    @Transactional
     public UserResponse updateUser(String id, UserRequest request) {
 
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Người dùng không tồn tại"));
+                .orElseThrow(() -> new NotFoundException("User không tồn tại"));
 
-        if (request.getEmail() != null &&
-                !request.getEmail().equals(user.getEmail()) &&
-                userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("Email đã được sử dụng");
+        if (!ValidationUtils.validateEmail(request.getEmail())) {
+            throw new IllegalArgumentException("Email không hợp lệ");
         }
 
-        UserMapper.updateEntity(user, request, passwordEncoder);
+        if (!ValidationUtils.validatePhone(request.getPhone())) {
+            throw new IllegalArgumentException("Số điện thoại không hợp lệ");
+        }
+
+        userRepository.findByPhone(request.getPhone())
+                .filter(p -> !p.getId().equals(id))
+                .ifPresent(p -> {
+                    throw new ConflictException("Số điện thoại đã được sử dụng");
+                });
+
+        UserMapper.updateEntity(user, request);
+
+        user.setRole(
+                request.getRole() == null ? "customer" : request.getRole());
+
+        user.setStatus(
+                request.getStatus() == null ? 1 : request.getStatus());
+
+        if (request.getPassword() != null) {
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
 
         return UserMapper.toResponse(user);
     }
 
+    // cập nhật status
     public UserResponse updateUserStatus(String id, Integer status) {
 
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Người dùng không tồn tại"));
+                .orElseThrow(() -> new NotFoundException("Người dùng không tìm thấy"));
 
         user.setStatus(status);
 
         return UserMapper.toResponse(user);
     }
 
+    // xóa user
     public void deleteUser(String id) {
 
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Người dùng không tồn tại"));
+                .orElseThrow(() -> new NotFoundException("Người dùng không tìm thấy"));
 
         userRepository.delete(user);
+    }
+
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("Người dùng không tìm thấy"));
     }
 }

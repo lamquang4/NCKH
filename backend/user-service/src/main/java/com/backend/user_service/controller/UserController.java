@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.data.domain.Page;
 import com.backend.user_service.dto.request.UserRequest;
+import com.backend.user_service.dto.response.UserAuthResponse;
 import com.backend.user_service.dto.response.UserResponse;
+import com.backend.user_service.mapper.UserMapper;
 import com.backend.user_service.service.UserService;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.Valid;
@@ -88,4 +90,19 @@ public class UserController {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/exist/user/{email}")
+    public ResponseEntity<Boolean> existsUserByEmail(
+            @PathVariable String email) {
+
+        return ResponseEntity.ok(
+                userService.existsUserByEmail(email));
+    }
+
+    @GetMapping("/email/{email}")
+    public UserAuthResponse getUserByEmail(@PathVariable String email) {
+        return UserMapper.toAuthResponse(
+                userService.getUserByEmail(email));
+    }
+
 }

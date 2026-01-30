@@ -83,7 +83,6 @@ export interface UserResponse {
   gender?: number | null;
   role: "customer" | "admin";
   status: number;
-  googleId?: string;
 }
 
 export interface BrandResponse {
@@ -138,6 +137,7 @@ export interface CartItemResponse {
   slug: string;
   quantity: number;
   stock: number;
+  status: number;
 }
 
 export interface CartResponse {

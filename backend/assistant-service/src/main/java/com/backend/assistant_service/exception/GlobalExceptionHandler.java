@@ -1,6 +1,5 @@
 package com.backend.assistant_service.exception;
 
-import com.backend.assistant_service.dto.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -9,10 +8,23 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import com.backend.assistant_service.dto.response.ErrorResponse;
 import java.time.LocalDateTime;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+        // Lỗi nghiệp vụ
+        @ExceptionHandler(BaseBusinessException.class)
+        public ResponseEntity<ErrorResponse> handleBusinessException(
+                        BaseBusinessException ex) {
+                return ResponseEntity.status(ex.getHttpStatus()).body(
+                                ErrorResponse.builder()
+                                                .message(ex.getMessage())
+                                                .errorCode(ex.getErrorCode())
+                                                .timestamp(LocalDateTime.now())
+                                                .build());
+        }
 
         // Lỗi validation dữ liệu đầu vào
         @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -19,5 +19,4 @@ public class UserResponse {
     private Integer gender;
     private String role;
     private Integer status;
-    private String googleId;
 }
