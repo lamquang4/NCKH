@@ -22,7 +22,8 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "payment", indexes = {
-        @Index(name = "idx_payment_order", columnList = "orderId")
+        @Index(name = "idx_payment_order", columnList = "orderId"),
+        @Index(name = "idx_payment_order_code", columnList = "orderCode")
 })
 @Getter
 @Setter
@@ -37,6 +38,9 @@ public class Payment {
 
     @Column(nullable = false)
     private String orderId;
+
+    @Column(nullable = false)
+    private String orderCode;
 
     @Column(nullable = false, length = 20)
     private String paymethod;
