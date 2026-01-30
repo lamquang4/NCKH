@@ -65,4 +65,6 @@ public interface ProductRepository extends JpaRepository<Product, String> {
                         String brandId,
                         Sort sort);
 
+        List<Product> findByIdInAndStatus(List<String> ids, Integer status);
+
 }

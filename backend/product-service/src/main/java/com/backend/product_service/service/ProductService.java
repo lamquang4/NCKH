@@ -374,6 +374,23 @@ public class ProductService {
         return productRepository.existsByCategoryId(categoryId);
     }
 
+    public List<ProductResponse> getProductsByIds(List<String> ids) {
+
+        if (ids == null || ids.isEmpty()) {
+            return List.of();
+        }
+
+        List<Product> products = productRepository.findByIdInAndStatus(ids, 1);
+
+        if (products.isEmpty()) {
+            throw new NotFoundException("Không tìm thấy sản phẩm");
+        }
+
+        return products.stream()
+                .map(this::mapWithClient)
+                .toList();
+    }
+
     private void deleteImageOnCloudinary(String productId, String imageId) {
         try {
             String publicId = "nckh/products/"

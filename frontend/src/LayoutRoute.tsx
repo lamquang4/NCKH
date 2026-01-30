@@ -22,7 +22,7 @@ import CategoryListPage from "./pages/admin/CategoryListPage";
 import AddCategoryPage from "./pages/admin/AddCategoryPage";
 import EditCategoryPage from "./pages/admin/EditCategoryPage";
 import OrderListPage from "./pages/admin/OrderListPage";
-import OrderDetailAdmin from "./components/admin/order/OrderDetail";
+import OrderDetailAdmin from "./pages/admin/OrderDetailPage";
 import ProductListPage from "./pages/admin/ProductListPage";
 import AddProductPage from "./pages/admin/AddProductPage";
 import EditProductPage from "./pages/admin/EditProductPage";

@@ -1,29 +1,21 @@
 package com.backend.product_service.mapper;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import com.backend.product_service.dto.request.ImageProductRequest;
 import com.backend.product_service.dto.request.ProductRequest;
-import com.backend.product_service.dto.request.SpecificationRequest;
 import com.backend.product_service.dto.response.BrandResponse;
 import com.backend.product_service.dto.response.CategoryResponse;
-import com.backend.product_service.dto.response.ImageProductResponse;
 import com.backend.product_service.dto.response.ProductResponse;
-import com.backend.product_service.dto.response.SpecificationResponse;
-import com.backend.product_service.entity.ImageProduct;
 import com.backend.product_service.entity.Product;
-import com.backend.product_service.entity.Specification;
 
-public class ProductMapper {
+public final class ProductMapper {
 
         private ProductMapper() {
         }
 
         public static Product toEntity(ProductRequest request) {
-                if (request == null) {
+                if (request == null)
                         return null;
-                }
 
                 Product product = Product.builder()
                                 .name(request.getName())
@@ -39,32 +31,18 @@ public class ProductMapper {
                 if (request.getImages() != null) {
                         product.setImages(
                                         request.getImages().stream()
-                                                        .map(ProductMapper::toImageEntity)
-                                                        .collect(Collectors.toList()));
+                                                        .map(ImageProductMapper::toEntity)
+                                                        .toList());
                 }
 
                 if (request.getSpecifications() != null) {
                         product.setSpecifications(
                                         request.getSpecifications().stream()
-                                                        .map(ProductMapper::toSpecificationEntity)
-                                                        .collect(Collectors.toList()));
+                                                        .map(SpecificationMapper::toEntity)
+                                                        .toList());
                 }
 
                 return product;
-        }
-
-        private static ImageProduct toImageEntity(ImageProductRequest request) {
-                return ImageProduct.builder()
-                                .image(request.getImage())
-                                .build();
-        }
-
-        private static Specification toSpecificationEntity(SpecificationRequest request) {
-                return Specification.builder()
-                                .specKey(request.getSpecKey())
-                                .specValue(request.getSpecValue())
-                                .displayOrder(request.getDisplayOrder())
-                                .build();
         }
 
         public static void updateEntity(Product product, ProductRequest request) {
@@ -82,20 +60,21 @@ public class ProductMapper {
                         product.getImages().clear();
                         product.getImages().addAll(
                                         request.getImages().stream()
-                                                        .map(ProductMapper::toImageEntity)
-                                                        .collect(Collectors.toList()));
+                                                        .map(ImageProductMapper::toEntity)
+                                                        .toList());
                 }
 
                 if (request.getSpecifications() != null) {
                         product.getSpecifications().clear();
                         product.getSpecifications().addAll(
                                         request.getSpecifications().stream()
-                                                        .map(ProductMapper::toSpecificationEntity)
-                                                        .collect(Collectors.toList()));
+                                                        .map(SpecificationMapper::toEntity)
+                                                        .toList());
                 }
         }
 
         public static ProductResponse toResponse(Product product) {
+
                 return ProductResponse.builder()
                                 .id(product.getId())
                                 .name(product.getName())
@@ -109,14 +88,14 @@ public class ProductMapper {
                                                 product.getImages() == null
                                                                 ? List.of()
                                                                 : product.getImages().stream()
-                                                                                .map(ProductMapper::toImageResponse)
-                                                                                .collect(Collectors.toList()))
+                                                                                .map(ImageProductMapper::toResponse)
+                                                                                .toList())
                                 .specifications(
                                                 product.getSpecifications() == null
                                                                 ? List.of()
                                                                 : product.getSpecifications().stream()
-                                                                                .map(ProductMapper::toSpecificationResponse)
-                                                                                .collect(Collectors.toList()))
+                                                                                .map(SpecificationMapper::toResponse)
+                                                                                .toList())
                                 .build();
         }
 
@@ -125,45 +104,9 @@ public class ProductMapper {
                         CategoryResponse category,
                         BrandResponse brand) {
 
-                return ProductResponse.builder()
-                                .id(product.getId())
-                                .name(product.getName())
-                                .slug(product.getSlug())
-                                .price(product.getPrice())
-                                .discount(product.getDiscount())
-                                .description(product.getDescription())
-                                .status(product.getStatus())
-                                .stock(product.getStock())
-                                .category(category)
-                                .brand(brand)
-                                .images(
-                                                product.getImages() == null
-                                                                ? List.of()
-                                                                : product.getImages().stream()
-                                                                                .map(ProductMapper::toImageResponse)
-                                                                                .toList())
-                                .specifications(
-                                                product.getSpecifications() == null
-                                                                ? List.of()
-                                                                : product.getSpecifications().stream()
-                                                                                .map(ProductMapper::toSpecificationResponse)
-                                                                                .toList())
-                                .build();
-        }
-
-        private static ImageProductResponse toImageResponse(ImageProduct image) {
-                return ImageProductResponse.builder()
-                                .id(image.getId())
-                                .image(image.getImage())
-                                .build();
-        }
-
-        private static SpecificationResponse toSpecificationResponse(Specification spec) {
-                return SpecificationResponse.builder()
-                                .id(spec.getId())
-                                .specKey(spec.getSpecKey())
-                                .specValue(spec.getSpecValue())
-                                .displayOrder(spec.getDisplayOrder())
-                                .build();
+                ProductResponse response = toResponse(product);
+                response.setCategory(category);
+                response.setBrand(brand);
+                return response;
         }
 }
