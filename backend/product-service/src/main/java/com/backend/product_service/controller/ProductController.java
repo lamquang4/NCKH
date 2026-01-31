@@ -37,13 +37,13 @@ public class ProductController {
         }
 
         @GetMapping
-        public ResponseEntity<?> getProducts(
+        public ResponseEntity<?> getAllProducts(
                         @RequestParam(defaultValue = "1") int page,
                         @RequestParam(defaultValue = "12") int limit,
                         @RequestParam(required = false) String q,
                         @RequestParam(required = false) Integer status) {
 
-                Page<ProductResponse> productPage = productService.getProducts(page, limit, q, status);
+                Page<ProductResponse> productPage = productService.getAllProducts(page, limit, q, status);
 
                 return ResponseEntity.ok(
                                 Map.of(
@@ -84,6 +84,28 @@ public class ProductController {
                                                 "products", productPage.getContent(),
                                                 "totalPages", productPage.getTotalPages(),
                                                 "total", productPage.getTotalElements()));
+        }
+
+        @GetMapping("/active/discount")
+        public ResponseEntity<?> getActiveDiscountProducts(
+                        @RequestParam(defaultValue = "1") int page,
+                        @RequestParam(defaultValue = "12") int limit,
+                        @RequestParam(required = false) String q,
+                        @RequestParam(required = false) String sort) {
+
+                Page<ProductResponse> productPage = productService.getActiveDiscountProducts(page, limit, q, sort);
+
+                return ResponseEntity.ok(
+                                Map.of(
+                                                "products", productPage.getContent(),
+                                                "totalPages", productPage.getTotalPages(),
+                                                "total", productPage.getTotalElements()));
+        }
+
+        @GetMapping("/bestseller")
+        public ResponseEntity<List<ProductResponse>> getActiveBestSellerProducts() {
+                return ResponseEntity.ok(
+                                productService.getActiveBestSellerProducts());
         }
 
         @GetMapping("/category/{categoryId}")

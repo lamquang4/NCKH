@@ -74,6 +74,17 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
+    // lấy các category có status = 1
+    public List<CategoryResponse> getActiveCategories() {
+
+        return categoryRepository
+                .findByStatus(1)
+                .stream()
+                .sorted((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt()))
+                .map(CategoryMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
     // lấy 1 category theo id
     public CategoryResponse getCategoryById(String id) {
         Category category = categoryRepository.findById(id)

@@ -51,6 +51,11 @@ public class BrandController {
         return ResponseEntity.ok(brandService.getAllBrands());
     }
 
+    @GetMapping("/active")
+    public ResponseEntity<List<BrandResponse>> getActiveBrands() {
+        return ResponseEntity.ok(brandService.getActiveBrands());
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<BrandResponse> getBrandById(@PathVariable String id) {
         return ResponseEntity.ok(brandService.getBrandById(id));
