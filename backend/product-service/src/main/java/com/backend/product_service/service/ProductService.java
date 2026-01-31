@@ -68,8 +68,8 @@ public class ProductService {
         this.cloudinary = cloudinary;
     }
 
-    // lấy các sản phẩm có phân trang
-    public Page<ProductResponse> getProducts(
+    // lấy tất cả sản phẩm có phân trang
+    public Page<ProductResponse> getAllProducts(
             int page,
             int limit,
             String q,
@@ -155,10 +155,57 @@ public class ProductService {
         return productPage.map(this::mapWithClient);
     }
 
-    // lấy tất cả sản phẩm có status = 1
-    public List<ProductResponse> getAllActiveProducts() {
+    // lấy các sản phẩm giảm giá có status = 1
+    public Page<ProductResponse> getActiveDiscountProducts(
+            int page,
+            int limit,
+            String q,
+            String sort) {
+
+        Sort sortOption = buildSort(sort);
+
+        Pageable pageable = PageRequest.of(
+                page - 1,
+                limit,
+                sortOption);
+
+        Page<Product> productPage;
+
+        if (q != null && !q.isBlank()) {
+            productPage = productRepository
+                    .findByStatusAndDiscountGreaterThanAndNameContainingIgnoreCase(
+                            1,
+                            BigDecimal.ZERO,
+                            q,
+                            pageable);
+        } else {
+            productPage = productRepository
+                    .findByStatusAndDiscountGreaterThan(
+                            1,
+                            BigDecimal.ZERO,
+                            pageable);
+        }
+
+        return productPage.map(this::mapWithClient);
+    }
+
+    // lấy các sản phẩm có status = 1
+    public List<ProductResponse> getActiveProducts() {
         return productRepository
                 .findByStatus(1, Sort.by("createdAt").descending())
+                .stream()
+                .map(this::mapWithClient)
+                .collect(Collectors.toList());
+    }
+
+    // lấy các sản phẩm bán chạy có status = 1
+    public List<ProductResponse> getActiveBestSellerProducts() {
+
+        return productRepository
+                .findByStatusAndTotalSoldGreaterThan(
+                        1,
+                        0,
+                        Sort.by("totalSold").descending())
                 .stream()
                 .map(this::mapWithClient)
                 .collect(Collectors.toList());
@@ -249,6 +296,9 @@ public class ProductService {
         Product product = ProductMapper.toEntity(request);
         product.setSlug(SlugUtil.toSlug(request.getName()));
 
+        product.setFinalPrice(
+                calculateFinalPrice(request.getPrice(), request.getDiscount()));
+
         if (product.getSpecifications() != null) {
             product.getSpecifications().forEach(spec -> spec.setProduct(product));
         }
@@ -304,6 +354,9 @@ public class ProductService {
 
         ProductMapper.updateEntity(product, request);
         product.setSlug(SlugUtil.toSlug(product.getName()));
+
+        product.setFinalPrice(
+                calculateFinalPrice(request.getPrice(), request.getDiscount()));
 
         syncSpecifications(product, request.getSpecifications());
 
@@ -524,6 +577,7 @@ public class ProductService {
         }
     }
 
+    // sắp xếp
     private Sort buildSort(String sort) {
 
         if (sort == null || sort.isBlank()) {
@@ -532,10 +586,10 @@ public class ProductService {
 
         switch (sort) {
             case "price-asc":
-                return Sort.by("price").ascending();
+                return Sort.by("finalPrice").ascending();
 
             case "price-desc":
-                return Sort.by("price").descending();
+                return Sort.by("finalPrice").descending();
 
             case "bestseller":
                 return Sort.by("totalSold").descending();
@@ -600,6 +654,13 @@ public class ProductService {
         }
 
         return ProductMapper.toResponse(product, category, brand);
+    }
+
+    private BigDecimal calculateFinalPrice(BigDecimal price, BigDecimal discount) {
+        if (discount == null || discount.compareTo(BigDecimal.ZERO) <= 0) {
+            return price;
+        }
+        return price.subtract(discount);
     }
 
 }

@@ -81,6 +81,7 @@ public final class ProductMapper {
                                 .slug(product.getSlug())
                                 .price(product.getPrice())
                                 .discount(product.getDiscount())
+                                .finalPrice(product.getFinalPrice())
                                 .description(product.getDescription())
                                 .status(product.getStatus())
                                 .stock(product.getStock())

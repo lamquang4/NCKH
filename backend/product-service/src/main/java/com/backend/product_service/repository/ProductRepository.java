@@ -1,5 +1,6 @@
 package com.backend.product_service.repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,6 +35,11 @@ public interface ProductRepository extends JpaRepository<Product, String> {
                         Integer status,
                         Sort sort);
 
+        List<Product> findByStatusAndTotalSoldGreaterThan(
+                        Integer status,
+                        Integer totalSold,
+                        Sort sort);
+
         boolean existsByName(String name);
 
         Optional<Product> findByIdAndStatus(String id, int i);
@@ -66,5 +72,16 @@ public interface ProductRepository extends JpaRepository<Product, String> {
                         Sort sort);
 
         List<Product> findByIdInAndStatus(List<String> ids, Integer status);
+
+        Page<Product> findByStatusAndDiscountGreaterThan(
+                        Integer status,
+                        BigDecimal discount,
+                        Pageable pageable);
+
+        Page<Product> findByStatusAndDiscountGreaterThanAndNameContainingIgnoreCase(
+                        Integer status,
+                        BigDecimal discount,
+                        String name,
+                        Pageable pageable);
 
 }

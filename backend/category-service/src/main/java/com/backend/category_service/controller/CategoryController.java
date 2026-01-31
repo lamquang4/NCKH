@@ -53,6 +53,11 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.getAllCategories());
     }
 
+    @GetMapping("/active")
+    public ResponseEntity<List<CategoryResponse>> getActiveCategories() {
+        return ResponseEntity.ok(categoryService.getActiveCategories());
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<CategoryResponse> getCategoryById(@PathVariable String id) {
         return ResponseEntity.ok(categoryService.getCategoryById(id));

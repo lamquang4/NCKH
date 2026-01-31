@@ -49,6 +49,9 @@ public class Product {
     @Column(nullable = false)
     private BigDecimal discount;
 
+    @Column(nullable = false)
+    private BigDecimal finalPrice;
+
     @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 

@@ -118,6 +118,7 @@ export interface ProductResponse {
   slug: string;
   price: number;
   discount: number;
+  finalPrice: number;
   description: string;
   status: number;
   stock: number;

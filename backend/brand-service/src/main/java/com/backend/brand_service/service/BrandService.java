@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.backend.brand_service.client.ProductServiceClient;
 import com.backend.brand_service.dto.request.BrandRequest;
 import com.backend.brand_service.dto.response.BrandResponse;
+import com.backend.brand_service.dto.response.CategoryResponse;
 import com.backend.brand_service.dto.response.ProductResponse;
 import com.backend.brand_service.entity.Brand;
 import com.backend.brand_service.exception.ConflictException;
@@ -60,6 +61,17 @@ public class BrandService {
         return brandRepository
                 .findAll(Sort.by("createdAt").descending())
                 .stream()
+                .map(BrandMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    // lấy các brand có status = 1
+    public List<BrandResponse> getActiveBrands() {
+
+        return brandRepository
+                .findByStatus(1)
+                .stream()
+                .sorted((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt()))
                 .map(BrandMapper::toResponse)
                 .collect(Collectors.toList());
     }
