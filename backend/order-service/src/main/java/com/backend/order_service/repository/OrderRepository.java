@@ -56,4 +56,6 @@ public interface OrderRepository extends JpaRepository<Order, String> {
                         Pageable pageable);
 
         Optional<Order> findByOrderCode(String orderCode);
+
+        boolean existsByItems_ProductId(String productId);
 }

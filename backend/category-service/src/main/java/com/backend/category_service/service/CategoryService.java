@@ -200,7 +200,7 @@ public class CategoryService {
                     ObjectUtils.emptyMap());
 
         } catch (Exception e) {
-            throw new ExternalServiceException("Xóa hình thất bại");
+            throw new ExternalServiceException("Xóa hình thất bại" + e);
         }
     }
 
@@ -235,7 +235,7 @@ public class CategoryService {
             return uploadResult.get("secure_url").toString();
 
         } catch (IOException e) {
-            throw new ExternalServiceException("Upload hình thất bại");
+            throw new ExternalServiceException("Upload hình thất bại" + e);
         }
     }
 

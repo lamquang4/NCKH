@@ -36,7 +36,6 @@ public class CartService {
 
     // lấy giỏ hàng của user
     public CartResponse getCartByUserId(String userId) {
-
         Cart cart = getCartFromRedis(userId);
 
         if (cart == null) {
@@ -160,6 +159,20 @@ public class CartService {
                 redisTemplate.delete(CART_KEY_PREFIX + cart.getUserId());
             }
         }
+    }
+
+    @Transactional
+    public void clearCartByUserId(String userId) {
+        Cart cart = cartRepository.findByUserId(userId).orElse(null);
+
+        if (cart == null) {
+            return;
+        }
+
+        cart.getItems().clear();
+        cartRepository.save(cart);
+
+        redisTemplate.delete(CART_KEY_PREFIX + userId);
     }
 
     private CartItemResponse mapWithClient(CartItem cartItem) {

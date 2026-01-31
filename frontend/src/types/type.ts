@@ -121,6 +121,7 @@ export interface ProductResponse {
   description: string;
   status: number;
   stock: number;
+  totalSold: number;
   category: CategoryResponse;
   brand: BrandResponse;
   images: ImageProductResponse[];

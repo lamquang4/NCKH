@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.backend.product_service.dto.request.ProductRequest;
+import com.backend.product_service.dto.request.StockRequest;
 import com.backend.product_service.dto.response.ProductResponse;
 import com.backend.product_service.service.ProductService;
 
@@ -190,5 +191,21 @@ public class ProductController {
                         @RequestBody List<String> ids) {
 
                 return productService.getProductsByIds(ids);
+        }
+
+        @PostMapping("/decrease")
+        public ResponseEntity<Void> decreaseStock(
+                        @RequestBody List<StockRequest> requests) {
+
+                productService.decreaseStock(requests);
+                return ResponseEntity.ok().build();
+        }
+
+        @PostMapping("/increase")
+        public ResponseEntity<Void> increaseStock(
+                        @RequestBody List<StockRequest> requests) {
+
+                productService.increaseStock(requests);
+                return ResponseEntity.ok().build();
         }
 }

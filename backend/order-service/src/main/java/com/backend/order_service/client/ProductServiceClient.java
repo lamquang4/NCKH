@@ -6,10 +6,17 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.backend.order_service.dto.request.StockRequest;
 import com.backend.order_service.dto.response.ProductResponse;
 
 @FeignClient(name = "product-service")
 public interface ProductServiceClient {
     @PostMapping("/api/product/products")
     List<ProductResponse> getProductsByIds(@RequestBody List<String> ids);
+
+    @PostMapping("/api/product/stock/decrease")
+    void decreaseStock(@RequestBody List<StockRequest> requests);
+
+    @PostMapping("/api/product/stock/increase")
+    void increaseStock(@RequestBody List<StockRequest> requests);
 }

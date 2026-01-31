@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.backend.user_service.dto.request.UserRequest;
 import com.backend.user_service.dto.response.UserResponse;
 import com.backend.user_service.entity.User;
+import com.backend.user_service.exception.BadRequestException;
 import com.backend.user_service.exception.ConflictException;
 import com.backend.user_service.exception.NotFoundException;
 import com.backend.user_service.mapper.UserMapper;
@@ -92,11 +93,11 @@ public class UserService {
     public UserResponse createUser(UserRequest request) {
 
         if (!ValidationUtils.validateEmail(request.getEmail())) {
-            throw new IllegalArgumentException("Email không hợp lệ");
+            throw new BadRequestException("Email không hợp lệ");
         }
 
         if (!ValidationUtils.validatePhone(request.getPhone())) {
-            throw new IllegalArgumentException("Số điện thoại không hợp lệ");
+            throw new BadRequestException("Số điện thoại không hợp lệ");
         }
 
         if (userRepository.existsByEmail(request.getEmail())) {
@@ -127,11 +128,11 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("User không tồn tại"));
 
         if (!ValidationUtils.validateEmail(request.getEmail())) {
-            throw new IllegalArgumentException("Email không hợp lệ");
+            throw new BadRequestException("Email không hợp lệ");
         }
 
         if (!ValidationUtils.validatePhone(request.getPhone())) {
-            throw new IllegalArgumentException("Số điện thoại không hợp lệ");
+            throw new BadRequestException("Số điện thoại không hợp lệ");
         }
 
         userRepository.findByPhone(request.getPhone())
