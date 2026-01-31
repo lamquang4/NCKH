@@ -20,6 +20,7 @@ public class ProductResponse {
     private String description;
     private Integer status;
     private Integer stock;
+    private Integer totalSold;
     private CategoryResponse category;
     private BrandResponse brand;
     private List<ImageProductResponse> images;

@@ -61,6 +61,10 @@ public class Product {
     @Column(nullable = false)
     private Integer stock;
 
+    @Builder.Default
+    @Column(nullable = false)
+    private Integer totalSold = 0;
+
     @Column(nullable = false)
     private String categoryId;
 

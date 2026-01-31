@@ -18,8 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.backend.product_service.client.BrandServiceClient;
 import com.backend.product_service.client.CartServiceClient;
 import com.backend.product_service.client.CategoryServiceClient;
+import com.backend.product_service.client.OrderServiceClient;
 import com.backend.product_service.dto.request.ProductRequest;
 import com.backend.product_service.dto.request.SpecificationRequest;
+import com.backend.product_service.dto.request.StockRequest;
 import com.backend.product_service.dto.response.BrandResponse;
 import com.backend.product_service.dto.response.CategoryResponse;
 import com.backend.product_service.dto.response.ProductResponse;
@@ -46,6 +48,7 @@ public class ProductService {
     private final CategoryServiceClient categoryServiceClient;
     private final BrandServiceClient brandServiceClient;
     private final CartServiceClient cartServiceClient;
+    private final OrderServiceClient orderServiceClient;
     private final Cloudinary cloudinary;
 
     public ProductService(ProductRepository productRepository, ImageProductRepository imageProductRepository,
@@ -53,6 +56,7 @@ public class ProductService {
             CategoryServiceClient categoryServiceClient,
             BrandServiceClient brandServiceClient,
             CartServiceClient cartServiceClient,
+            OrderServiceClient orderServiceClient,
             Cloudinary cloudinary) {
         this.productRepository = productRepository;
         this.imageProductRepository = imageProductRepository;
@@ -60,6 +64,7 @@ public class ProductService {
         this.categoryServiceClient = categoryServiceClient;
         this.brandServiceClient = brandServiceClient;
         this.cartServiceClient = cartServiceClient;
+        this.orderServiceClient = orderServiceClient;
         this.cloudinary = cloudinary;
     }
 
@@ -325,6 +330,13 @@ public class ProductService {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Sản phẩm không tìm thấy"));
 
+        boolean existsInOrder = orderServiceClient.existsProductInOrder(id);
+
+        if (existsInOrder) {
+            throw new BadRequestException(
+                    "Sản phẩm này không thể xóa vì đã tồn tại trong đơn hàng");
+        }
+
         deleteFolderOnCloudinary(product.getId());
 
         cartServiceClient.removeProductFromAllCarts(product.getId());
@@ -340,7 +352,7 @@ public class ProductService {
                 .orElseThrow(() -> new NotFoundException("Hình không tìm thấy"));
 
         if (!image.getProduct().getId().equals(productId)) {
-            throw new IllegalArgumentException("Hình không thuộc sản phẩm");
+            throw new ConflictException("Hình không thuộc sản phẩm");
         }
 
         deleteImageOnCloudinary(productId, imageId);
@@ -358,7 +370,7 @@ public class ProductService {
                 .orElseThrow(() -> new NotFoundException("Thông số không tìm thấy"));
 
         if (!specification.getProduct().getId().equals(productId)) {
-            throw new IllegalArgumentException("Thông số không thuộc sản phẩm");
+            throw new ConflictException("Thông số không thuộc sản phẩm");
         }
 
         specificationRepository.delete(specification);
@@ -391,6 +403,48 @@ public class ProductService {
                 .toList();
     }
 
+    // trừ só lượng stock
+    @Transactional
+    public void decreaseStock(List<StockRequest> requests) {
+
+        for (StockRequest req : requests) {
+
+            Product product = productRepository.findById(req.getProductId())
+                    .orElseThrow(() -> new NotFoundException("Sản phẩm không tồn tại"));
+
+            if (product.getStock() < req.getQuantity()) {
+                throw new BadRequestException(
+                        "Sản phẩm " + product.getName() + " không đủ tồn kho");
+            }
+
+            product.setStock(product.getStock() - req.getQuantity());
+            product.setTotalSold(product.getTotalSold() + req.getQuantity());
+
+            productRepository.save(product);
+        }
+    }
+
+    // trả số lượng stock
+    @Transactional
+    public void increaseStock(List<StockRequest> requests) {
+
+        for (StockRequest req : requests) {
+
+            Product product = productRepository.findById(req.getProductId())
+                    .orElseThrow(() -> new NotFoundException("Sản phẩm không tồn tại"));
+
+            if (product.getStock() < req.getQuantity()) {
+                throw new BadRequestException("Sản phẩm không đủ tồn kho");
+            }
+
+            product.setStock(product.getStock() + req.getQuantity());
+            product.setTotalSold(
+                    Math.max(0, product.getTotalSold() - req.getQuantity()));
+
+            productRepository.save(product);
+        }
+    }
+
     private void deleteImageOnCloudinary(String productId, String imageId) {
         try {
             String publicId = "nckh/products/"
@@ -403,7 +457,7 @@ public class ProductService {
                     ObjectUtils.asMap("resource_type", "image"));
 
         } catch (Exception e) {
-            throw new IllegalStateException("Xóa hình thất bại", e);
+            throw new ExternalServiceException("Xóa hình thất bại" + e);
         }
     }
 
@@ -420,7 +474,7 @@ public class ProductService {
                     ObjectUtils.emptyMap());
 
         } catch (Exception e) {
-            throw new ExternalServiceException("Xóa hình thất bại");
+            throw new ExternalServiceException("Xóa hình thất bại" + e);
         }
     }
 
@@ -466,7 +520,7 @@ public class ProductService {
                     .build();
 
         } catch (IOException e) {
-            throw new ExternalServiceException("Upload hình thất bại");
+            throw new ExternalServiceException("Upload hình thất bại" + e);
         }
     }
 

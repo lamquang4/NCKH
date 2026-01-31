@@ -129,6 +129,8 @@ function ProductList() {
                     <td className="p-[1rem]  ">
                       <div className="flex flex-col gap-1.5">
                         <p>Hiện có: {product.stock}</p>
+
+                        <p>Đã bán: {product.totalSold}</p>
                       </div>
                     </td>
 

@@ -11,6 +11,7 @@ export const mockProducts: ProductResponse[] = [
     description: "Laptop Dell Inspiron 15 phù hợp cho học tập và văn phòng.",
     status: 1,
     stock: 12,
+    totalSold: 5,
     category: { id: "c1", name: "Laptop", slug: "laptop", status: 1 },
     brand: { id: "b1", name: "Dell", slug: "dell", status: 1 },
     images: [
@@ -89,6 +90,7 @@ và mức giá hợp lý trong phân khúc.
 `,
     status: 1,
     stock: 10,
+    totalSold: 5,
     category: { id: "c1", name: "Laptop", slug: "laptop", status: 1 },
     brand: { id: "b2", name: "ASUS", slug: "asus", status: 1 },
     images: [
@@ -111,6 +113,7 @@ và mức giá hợp lý trong phân khúc.
     description: "HP Pavilion 15 thiết kế đẹp, hiệu năng ổn định.",
     status: 1,
     stock: 7,
+    totalSold: 5,
     category: { id: "c1", name: "Laptop", slug: "laptop", status: 1 },
     brand: { id: "b3", name: "HP", slug: "hp", status: 1 },
     images: [
@@ -134,6 +137,7 @@ và mức giá hợp lý trong phân khúc.
     description: "Tai nghe chống ồn cao cấp Sony WH-1000XM5.",
     status: 1,
     stock: 5,
+    totalSold: 5,
     category: { id: "c2", name: "Tai nghe", slug: "tai-nghe", status: 1 },
     brand: { id: "b4", name: "Sony", slug: "sony", status: 1 },
     images: [
@@ -160,6 +164,7 @@ và mức giá hợp lý trong phân khúc.
     description: "AirPods Pro 2 với chip H2, âm thanh vượt trội.",
     status: 1,
     stock: 9,
+    totalSold: 5,
     category: { id: "c2", name: "Tai nghe", slug: "tai-nghe", status: 1 },
     brand: { id: "b5", name: "Apple", slug: "apple", status: 1 },
     images: [
@@ -181,6 +186,7 @@ và mức giá hợp lý trong phân khúc.
     description: "Chuột gaming Logitech G Pro X siêu nhẹ, chính xác cao.",
     status: 1,
     stock: 20,
+    totalSold: 5,
     category: { id: "c3", name: "Chuột", slug: "chuot", status: 1 },
     brand: { id: "b6", name: "Logitech", slug: "logitech", status: 1 },
     images: [
@@ -202,6 +208,7 @@ và mức giá hợp lý trong phân khúc.
     description: "Chuột gaming Razer DeathAdder V3 công thái học.",
     status: 1,
     stock: 15,
+    totalSold: 5,
     category: { id: "c3", name: "Chuột", slug: "chuot", status: 1 },
     brand: { id: "b7", name: "Razer", slug: "razer", status: 1 },
     images: [
@@ -224,6 +231,7 @@ và mức giá hợp lý trong phân khúc.
     description: "Ghế gaming DXRacer Formula bền bỉ, hỗ trợ cột sống.",
     status: 1,
     stock: 6,
+    totalSold: 5,
     category: { id: "c4", name: "Ghế", slug: "ghe", status: 1 },
     brand: { id: "b8", name: "DXRacer", slug: "dxracer", status: 1 },
     images: [
@@ -245,6 +253,7 @@ và mức giá hợp lý trong phân khúc.
     description: "Ghế công thái học Sihoo M57 hỗ trợ lưng và cổ.",
     status: 1,
     stock: 8,
+    totalSold: 5,
     category: { id: "c4", name: "Ghế", slug: "ghe", status: 1 },
     brand: { id: "b9", name: "Sihoo", slug: "sihoo", status: 1 },
     images: [

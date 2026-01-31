@@ -32,7 +32,8 @@ public class ProductRequest {
     @NotNull(message = "Tình trạng không được để trống")
     private Integer status;
 
-    @Min(value = 0, message = "Tồn kho không hợp lệ")
+    @NotNull(message = "Số lượng không được để trống")
+    @Min(value = 1, message = "Số lượng phải >= 1")
     private Integer stock;
 
     @NotBlank(message = "CategoryId không được để trống")

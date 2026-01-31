@@ -13,26 +13,35 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.backend.order_service.dto.request.OrderRequest;
+import com.backend.order_service.dto.request.StockRequest;
 import com.backend.order_service.dto.response.OrderResponse;
 import com.backend.order_service.dto.response.ProductResponse;
 import com.backend.order_service.entity.Order;
 import com.backend.order_service.entity.OrderItem;
+import com.backend.order_service.exception.BadRequestException;
 import com.backend.order_service.exception.NotFoundException;
 import com.backend.order_service.mapper.OrderMapper;
 import com.backend.order_service.repository.OrderRepository;
+import com.backend.order_service.utils.ValidationUtils;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+
+import com.backend.order_service.client.PaymentServiceClient;
 import com.backend.order_service.client.ProductServiceClient;
 
 @Service
 public class OrderService {
         private final OrderRepository orderRepository;
         private final ProductServiceClient ProductServiceClient;
+        private final PaymentServiceClient paymentServiceClient;
 
-        public OrderService(OrderRepository orderRepository, ProductServiceClient ProductServiceClient) {
+        public OrderService(OrderRepository orderRepository, ProductServiceClient ProductServiceClient,
+                        PaymentServiceClient paymentServiceClient) {
                 this.orderRepository = orderRepository;
                 this.ProductServiceClient = ProductServiceClient;
+                this.paymentServiceClient = paymentServiceClient;
         }
 
         // lấy tất cả đơn hàng phân trang
@@ -189,6 +198,10 @@ public class OrderService {
                         OrderRequest request,
                         String userId) {
 
+                if (!ValidationUtils.validatePhone(request.getPhone())) {
+                        throw new BadRequestException("Số điện thoại không hợp lệ");
+                }
+
                 String orderCode = generateOrderCode();
 
                 Order order = OrderMapper.toEntity(
@@ -196,6 +209,21 @@ public class OrderService {
                                 userId,
                                 orderCode);
 
+                // COD
+                if ("cod".equalsIgnoreCase(request.getPaymethod())) {
+                        order.setStatus(0); // chờ xác nhận
+
+                        Order savedOrder = orderRepository.save(order);
+
+                        // trừ tồn kho ngay
+                        ProductServiceClient.decreaseStock(
+                                        buildStockRequests(savedOrder));
+
+                        return OrderMapper.toResponse(savedOrder);
+                }
+
+                // MOMO
+                order.setStatus(-1); // chờ thanh toán
                 Order savedOrder = orderRepository.save(order);
 
                 return OrderMapper.toResponse(savedOrder);
@@ -210,8 +238,30 @@ public class OrderService {
                 Order order = orderRepository.findById(orderId)
                                 .orElseThrow(() -> new NotFoundException("Đơn hàng không tìm thấy"));
 
-                order.setStatus(status);
+                Integer oldStatus = order.getStatus();
 
+                // trả hàng
+                if (status == 5 && oldStatus != 5) {
+
+                        // hoàn tiền nếu là momo
+                        if ("momo".equalsIgnoreCase(order.getPaymethod())) {
+                                paymentServiceClient.refundMomoByOrderCode(order.getOrderCode());
+                        }
+
+                        // trả tồn kho
+                        ProductServiceClient.increaseStock(
+                                        buildStockRequests(order));
+                }
+
+                // hủy đơn
+                if (status == 4 && oldStatus != 4) {
+                        if ("cod".equalsIgnoreCase(order.getPaymethod())) {
+                                ProductServiceClient.increaseStock(
+                                                buildStockRequests(order));
+                        }
+                }
+
+                order.setStatus(status);
                 orderRepository.save(order);
         }
 
@@ -220,7 +270,7 @@ public class OrderService {
                 Random random = new Random();
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < 6; i++) {
-                        sb.append(chars.charAt(random.nextInt(chars.length())));
+                        sb.append("ORD" + chars.charAt(random.nextInt(chars.length())));
                 }
                 return sb.toString();
         }
@@ -243,4 +293,42 @@ public class OrderService {
                 return OrderMapper.toResponse(order, productMap);
         }
 
+        private List<StockRequest> buildStockRequests(Order order) {
+                return order.getItems().stream()
+                                .map(item -> new StockRequest(
+                                                item.getProductId(),
+                                                item.getQuantity()))
+                                .toList();
+        }
+
+        // xóa đơn hàng
+        @Transactional
+        public void deleteOrderByCode(String orderCode) {
+                Order order = orderRepository.findByOrderCode(orderCode)
+                                .orElseThrow(() -> new NotFoundException("Đơn hàng không tìm thấy"));
+
+                orderRepository.delete(order);
+        }
+
+        @Transactional
+        public void confirmGatewayPayment(String orderCode) {
+
+                Order order = orderRepository.findByOrderCode(orderCode)
+                                .orElseThrow(() -> new NotFoundException("Đơn hàng không tìm thấy"));
+
+                if (order.getStatus() != -1) {
+                        return;
+                }
+
+                // trừ tồn kho
+                ProductServiceClient.increaseStock(
+                                buildStockRequests(order));
+
+                order.setStatus(0);
+                orderRepository.save(order);
+        }
+
+        public boolean existsOrderByProductId(String productId) {
+                return orderRepository.existsByItems_ProductId(productId);
+        }
 }

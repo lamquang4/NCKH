@@ -84,6 +84,7 @@ public final class ProductMapper {
                                 .description(product.getDescription())
                                 .status(product.getStatus())
                                 .stock(product.getStock())
+                                .totalSold(product.getTotalSold())
                                 .images(
                                                 product.getImages() == null
                                                                 ? List.of()
