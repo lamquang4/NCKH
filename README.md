@@ -36,6 +36,6 @@ docker compose up --build
 | Hạng mục   | Môi trường / Nền tảng |
 | ---------- | --------------------- |
 | Frontend   | Render                |
-| Backend    | Kubernetes            |
+| Backend    | Render                |
 | DB MySQL   | Aiven                 |
 | DB MongoDB | MongoDB Atlas         |
