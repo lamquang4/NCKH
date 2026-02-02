@@ -8,6 +8,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import com.backend.product_service.entity.Product;
 
@@ -84,4 +86,21 @@ public interface ProductRepository extends JpaRepository<Product, String> {
                         String name,
                         Pageable pageable);
 
+        Page<Product> findByStatusAndTotalSoldGreaterThan(
+                        int status,
+                        int totalSold,
+                        Pageable pageable);
+
+        List<Product> findTop10ByStatusOrderByCreatedAtDesc(int status);
+
+        Optional<Product> findBySlugAndStatus(String slug, int status);
+
+        @Query("""
+                            SELECT p FROM Product p
+                            WHERE p.status = 1
+                              AND LOWER(p.name) LIKE LOWER(CONCAT('%', :q, '%'))
+                        """)
+        List<Product> searchActiveProducts(
+                        @Param("q") String q,
+                        Pageable pageable);
 }

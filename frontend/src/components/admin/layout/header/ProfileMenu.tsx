@@ -3,7 +3,8 @@ import Image from "../../../Image";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
-import { mockUsers } from "../../../../mocks/mockUsers";
+import useGetUser from "../../../../hooks/useGetUser";
+import useGetAccount from "../../../../hooks/auth/useGetAccount";
 
 type Props = {
   menuOpen: boolean;
@@ -11,7 +12,8 @@ type Props = {
 };
 
 function ProfileMenu({ menuOpen, onToggleMenu }: Props) {
-  const user = mockUsers[2];
+  const { account } = useGetAccount("admin");
+  const { user } = useGetUser(account?.id || "");
   return (
     <>
       {user && (

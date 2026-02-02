@@ -8,33 +8,21 @@ import ImageViewer from "../../ImageViewer";
 import { HiMiniXMark } from "react-icons/hi2";
 import toast from "react-hot-toast";
 import TextBoxEditor from "../textboxeditor/TextBoxEditor";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { VscTrash } from "react-icons/vsc";
 import InputImage1 from "../InputImage1";
 import { useInputImage } from "../../../hooks/admin/useInputImage";
 import { useInputImage1 } from "../../../hooks/admin/useInputImage1";
-import { mockCategories } from "../../../mocks/mockCategories";
-import { mockBrands } from "../../../mocks/mockBrands";
-import { mockProducts } from "../../../mocks/mockProducts";
 import { useSpecification } from "../../../hooks/admin/useSpecification";
 import SpecificationEditor from "./SpecificationEditor";
+import useGetAllCategories from "../../../hooks/admin/category/useGetAllCategories";
+import useGetAllBrands from "../../../hooks/admin/brand/useGetAllBrands";
+import useGetProduct from "../../../hooks/admin/product/useGetProduct";
+import useUpdateProduct from "../../../hooks/admin/product/useUpdateProduct";
 
 function EditProduct() {
   const navigate = useNavigate();
-  // const { id } = useParams();
-
-  const product = mockProducts[0];
-  const isLoading = false;
-  const categories = mockCategories;
-  const brands = mockBrands;
-
-  const {
-    specifications,
-    setSpecifications,
-    addSpecification,
-    removeSpecification,
-    updateSpecification,
-  } = useSpecification();
+  const { id } = useParams();
 
   const [data, setData] = useState({
     name: "",
@@ -51,6 +39,19 @@ function EditProduct() {
   const [viewerImage, setViewerImage] = useState<string>("");
 
   const max = 10;
+
+  const { product } = useGetProduct(id as string);
+  const { updateProduct, isLoading } = useUpdateProduct(id as string);
+  const { categories } = useGetAllCategories();
+  const { brands } = useGetAllBrands();
+
+  const {
+    specifications,
+    setSpecifications,
+    addSpecification,
+    removeSpecification,
+    updateSpecification,
+  } = useSpecification();
 
   const {
     previewImages,
@@ -149,26 +150,17 @@ function EditProduct() {
     }
 
     try {
-      const formData = new FormData();
-
-      const productData = {
+      await updateProduct({
         name: data.name,
-        price: Number(data.price),
-        discount: Number(data.discount),
+        price: data.price,
+        discount: data.discount,
         description: data.description,
-        stock: Number(data.stock),
-        status: data.status,
-        category: { id: data.category },
-        brand: { id: data.brand },
-      };
-
-      formData.append(
-        "product",
-        new Blob([JSON.stringify(productData)], { type: "application/json" }),
-      );
-
-      selectedFiles.forEach((file) => {
-        formData.append("files", file);
+        status: Number(data.status),
+        stock: data.stock,
+        categoryId: data.category,
+        brandId: data.brand,
+        images: selectedFiles,
+        specifications: specifications,
       });
 
       if (selectedFiles1.length > 0) {

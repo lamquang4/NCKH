@@ -2,15 +2,17 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import { validateEmail } from "../../../utils/validateEmail";
+import useAddAdmin from "../../../hooks/admin/user/useAddAdmin";
 
 function AddAdmin() {
-  const isLoading = false;
   const [data, setData] = useState({
     email: "",
     password: "",
     phone: "",
     fullname: "",
   });
+
+  const { addAdmin, isLoading } = useAddAdmin();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -34,6 +36,15 @@ function AddAdmin() {
       return;
     }
     try {
+      await addAdmin({
+        fullname: data.fullname.trim(),
+        phone: data.phone.trim(),
+        email: data.email.trim(),
+        password: data.password.trim(),
+        role: "admin",
+        status: 1,
+      });
+
       setData({
         email: "",
         phone: "",

@@ -8,13 +8,25 @@ import { Link } from "react-router-dom";
 import FilterDropDownMenu from "../FilterDropDownMenu";
 import { FaRegEyeSlash } from "react-icons/fa6";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
-import { mockBrands } from "../../../mocks/mockBrands";
 import ListHeader from "../list/ListHeader";
 import ListBody from "../list/ListBody";
+import useGetBrands from "../../../hooks/admin/brand/useGetBrands";
+import useDeleteBrand from "../../../hooks/admin/brand/useDeleteBrand";
+import useUpdateStatusBrand from "../../../hooks/admin/brand/useUpdateStatusBrand";
+import toast from "react-hot-toast";
 function BrandList() {
-  const brands = mockBrands;
-  const isLoading = false;
-  const totalItems = brands.length;
+  const {
+    brands,
+    isLoading,
+    totalItems,
+    totalPages,
+    currentPage,
+    limit,
+    mutate,
+  } = useGetBrands();
+  const { deleteBrand, isLoading: isLoadingDelete } = useDeleteBrand();
+  const { updateStatusBrand, isLoading: isLoadingUpdate } =
+    useUpdateStatusBrand();
 
   const array = [
     {
@@ -35,11 +47,27 @@ function BrandList() {
     if (!id) {
       return;
     }
+
+    try {
+      await deleteBrand(id);
+      mutate();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message);
+      mutate();
+    }
   };
 
   const handleUpdateStatus = async (id: string, status: number) => {
     if (!id && !status) {
       return;
+    }
+
+    try {
+      await updateStatusBrand(id, status);
+      mutate();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message);
+      mutate();
     }
   };
   return (
@@ -88,7 +116,7 @@ function BrandList() {
                   <td className="p-[1rem]  ">
                     <div className="flex items-center gap-[15px]">
                       <button
-                        disabled={isLoading}
+                        disabled={isLoadingUpdate}
                         onClick={() =>
                           handleUpdateStatus(
                             brand.id || "",
@@ -111,7 +139,7 @@ function BrandList() {
                       </Link>
 
                       <button
-                        disabled={isLoading}
+                        disabled={isLoadingDelete}
                         onClick={() => handleDelete(brand.id || "")}
                       >
                         <VscTrash size={22} className="text-[#d9534f]" />
@@ -139,9 +167,9 @@ function BrandList() {
       </ListBody>
 
       <Pagination
-        totalPages={1}
-        currentPage={1}
-        limit={12}
+        totalPages={totalPages}
+        currentPage={currentPage}
+        limit={limit}
         totalItems={totalItems}
       />
     </>

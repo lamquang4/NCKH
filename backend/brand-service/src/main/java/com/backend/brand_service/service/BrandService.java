@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.backend.brand_service.client.ProductServiceClient;
 import com.backend.brand_service.dto.request.BrandRequest;
 import com.backend.brand_service.dto.response.BrandResponse;
-import com.backend.brand_service.dto.response.CategoryResponse;
 import com.backend.brand_service.dto.response.ProductResponse;
 import com.backend.brand_service.entity.Brand;
 import com.backend.brand_service.exception.ConflictException;

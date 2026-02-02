@@ -7,9 +7,13 @@ import Image from "../../Image";
 import Loading from "../../Loading";
 import InputSearch from "../InputSearch";
 import { Link } from "react-router-dom";
-import { mockUsers } from "../../../mocks/mockUsers";
 import ListHeader from "../list/ListHeader";
 import ListBody from "../list/ListBody";
+import useGetAdmins from "../../../hooks/admin/user/useGetAdmins";
+import useDeleteAdmin from "../../../hooks/admin/user/useDeleteAdmin";
+import toast from "react-hot-toast";
+import useUpdateStatusUser from "../../../hooks/useUpdateStatusUser";
+import useGetAccount from "../../../hooks/auth/useGetAccount";
 
 function AdminList() {
   const array = [
@@ -18,22 +22,37 @@ function AdminList() {
     { name: "Bị khóa", value: 0 },
   ];
 
-  const isLoading = false;
-
-  const admins = mockUsers;
-  const totalItems = admins.length;
+  const { account } = useGetAccount("admin");
+  const {
+    admins,
+    isLoading,
+    totalItems,
+    totalPages,
+    limit,
+    currentPage,
+    mutate,
+  } = useGetAdmins();
+  const { deleteAdmin, isLoading: isLoadingDelete } = useDeleteAdmin();
+  const { updateStatusUser, isLoading: isLoadingUpdate } =
+    useUpdateStatusUser();
 
   const handleDelete = async (id: string) => {
     if (!id) {
       return;
     }
 
-    /*
-    if (id === user?.id) {
+    if (id === account?.id) {
       toast.error("Bạn không thể xóa chính tài khoản của mình");
       return;
     }
-      */
+
+    try {
+      await deleteAdmin(id);
+      mutate();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message);
+      mutate();
+    }
   };
 
   const handleUpdateStatus = async (id: string, status: number) => {
@@ -41,12 +60,18 @@ function AdminList() {
       return;
     }
 
-    /*
-    if (id === user?.id) {
+    if (Number(status) === 0 && id === account?.id) {
       toast.error("Bạn không thể khóa chính tài khoản của mình");
       return;
     }
-      */
+
+    try {
+      await updateStatusUser(id, status);
+      mutate();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message);
+      mutate();
+    }
   };
 
   return (
@@ -100,7 +125,7 @@ function AdminList() {
                   <td className="p-[1rem]  ">
                     <div className="flex items-center gap-[15px]">
                       <button
-                        disabled={isLoading}
+                        disabled={isLoadingUpdate}
                         onClick={() =>
                           handleUpdateStatus(
                             admin.id || "",
@@ -120,7 +145,7 @@ function AdminList() {
                       </Link>
 
                       <button
-                        disabled={isLoading}
+                        disabled={isLoadingDelete}
                         onClick={() => handleDelete(admin.id || "")}
                       >
                         <VscTrash size={22} className="text-[#d9534f]" />
@@ -148,9 +173,9 @@ function AdminList() {
       </ListBody>
 
       <Pagination
-        totalPages={1}
-        currentPage={1}
-        limit={12}
+        totalPages={totalPages}
+        currentPage={currentPage}
+        limit={limit}
         totalItems={totalItems}
       />
     </>

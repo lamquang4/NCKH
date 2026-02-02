@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.cart_service.dto.request.CartItemRequest;
@@ -43,14 +42,13 @@ public class CartController {
                 cartService.addToCart(userId, request));
     }
 
-    @PutMapping("/{userId}/item/{productId}")
+    @PutMapping("/{userId}")
     public ResponseEntity<CartResponse> updateQuantity(
             @PathVariable String userId,
-            @PathVariable String productId,
-            @RequestParam int quantity) {
+            @RequestBody @Valid CartItemRequest request) {
 
         return ResponseEntity.ok(
-                cartService.updateQuantity(userId, productId, quantity));
+                cartService.updateQuantity(userId, request));
     }
 
     @DeleteMapping("/{userId}/item/{productId}")

@@ -3,16 +3,22 @@ import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import { useInputImage } from "../../../hooks/admin/useInputImage";
 import InputImage from "../InputImage";
+import useAddCategory from "../../../hooks/admin/category/useAddCategory";
 
 function AddCategory() {
   const [data, setData] = useState({
     name: "",
     status: "",
   });
-  const isLoading = false;
 
-  const { previewImages, handlePreviewImage, handleRemovePreviewImage } =
-    useInputImage(1);
+  const { addCategory, isLoading } = useAddCategory();
+
+  const {
+    previewImages,
+    selectedFiles,
+    handlePreviewImage,
+    handleRemovePreviewImage,
+  } = useInputImage(1);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -27,6 +33,12 @@ function AddCategory() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      await addCategory({
+        name: data.name.trim(),
+        image: selectedFiles[0],
+        status: Number(data.status),
+      });
+      
       setData({
         name: "",
         status: "",

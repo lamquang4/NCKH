@@ -102,10 +102,19 @@ public class ProductController {
                                                 "total", productPage.getTotalElements()));
         }
 
-        @GetMapping("/bestseller")
-        public ResponseEntity<List<ProductResponse>> getActiveBestSellerProducts() {
+        @GetMapping("/active/bestseller")
+        public ResponseEntity<List<ProductResponse>> getActiveBestSellerProducts(
+                        @RequestParam(required = false) Integer limit) {
                 return ResponseEntity.ok(
-                                productService.getActiveBestSellerProducts());
+                                productService.getActiveBestSellerProducts(limit));
+        }
+
+        @GetMapping("/active/limit")
+        public ResponseEntity<List<ProductResponse>> getActiveLimitProducts(
+                        @RequestParam(required = false) String q,
+                        @RequestParam(required = false) Integer limit) {
+                return ResponseEntity.ok(
+                                productService.getActiveLimitProducts(q, limit));
         }
 
         @GetMapping("/category/{categoryId}")
@@ -129,6 +138,13 @@ public class ProductController {
                         @PathVariable String id) {
 
                 return ResponseEntity.ok(productService.getProductById(id));
+        }
+
+        @GetMapping("/active/slug/{slug}")
+        public ResponseEntity<ProductResponse> getActiveProductBySlug(
+                        @PathVariable String slug) {
+
+                return ResponseEntity.ok(productService.getActiveProductBySlug(slug));
         }
 
         @GetMapping("/active/{id}")

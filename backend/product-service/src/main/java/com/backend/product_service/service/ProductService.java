@@ -198,15 +198,42 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    // lấy các sản phẩm bán chạy có status = 1
-    public List<ProductResponse> getActiveBestSellerProducts() {
+    // lấy x sản phẩm bán chạy nhất
+    public List<ProductResponse> getActiveBestSellerProducts(Integer limit) {
+
+        int size = limit == null
+                ? 10
+                : limit;
+
+        Pageable pageable = PageRequest.of(
+                0,
+                size,
+                Sort.by("totalSold").descending());
 
         return productRepository
-                .findByStatusAndTotalSoldGreaterThan(
-                        1,
-                        0,
-                        Sort.by("totalSold").descending())
+                .findByStatusAndTotalSoldGreaterThan(1, 0, pageable)
                 .stream()
+                .map(this::mapWithClient)
+                .collect(Collectors.toList());
+    }
+
+    // lấy x sản phẩm gợi ý
+    public List<ProductResponse> getActiveLimitProducts(String q, Integer limit) {
+
+        int size = (limit != null && limit > 0) ? limit : 10;
+
+        List<Product> products;
+
+        if (q != null && !q.isBlank()) {
+            products = productRepository
+                    .searchActiveProducts(q.toLowerCase(), PageRequest.of(0, size));
+        } else {
+            products = productRepository
+                    .findByStatus(1, PageRequest.of(0, size))
+                    .getContent();
+        }
+
+        return products.stream()
                 .map(this::mapWithClient)
                 .collect(Collectors.toList());
     }
@@ -238,6 +265,16 @@ public class ProductService {
     // lấy sản phẩm theo id
     public ProductResponse getProductById(String id) {
         Product product = productRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Sản phẩm không tìm thấy"));
+
+        return mapWithClient(product);
+    }
+
+    // lấy sản phẩm theo slug có status = 1
+    public ProductResponse getActiveProductBySlug(String slug) {
+
+        Product product = productRepository
+                .findBySlugAndStatus(slug, 1)
                 .orElseThrow(() -> new NotFoundException("Sản phẩm không tìm thấy"));
 
         return mapWithClient(product);

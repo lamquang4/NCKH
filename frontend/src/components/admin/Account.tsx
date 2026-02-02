@@ -1,7 +1,9 @@
-import { mockUsers } from "../../mocks/mockUsers";
+import useGetAccount from "../../hooks/auth/useGetAccount";
+import useGetUser from "../../hooks/useGetUser";
 
 function Account() {
-  const user = mockUsers[2];
+  const { account } = useGetAccount("admin");
+  const { user } = useGetUser(account?.id || "");
   return (
     <div className="py-[30px] sm:px-[25px] px-[15px] bg-[#F1F4F9] h-full">
       <form className="flex flex-col gap-7 w-full">

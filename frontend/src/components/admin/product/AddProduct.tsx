@@ -4,27 +4,13 @@ import toast from "react-hot-toast";
 import TextBoxEditor from "../textboxeditor/TextBoxEditor";
 import { Link } from "react-router-dom";
 import { useInputImage } from "../../../hooks/admin/useInputImage";
-import { mockCategories } from "../../../mocks/mockCategories";
-import { mockBrands } from "../../../mocks/mockBrands";
 import { useSpecification } from "../../../hooks/admin/useSpecification";
 import SpecificationEditor from "./SpecificationEditor";
+import useAddProduct from "../../../hooks/admin/product/useAddProduct";
+import useGetAllCategories from "../../../hooks/admin/category/useGetAllCategories";
+import useGetAllBrands from "../../../hooks/admin/brand/useGetAllBrands";
 
 function AddProduct() {
-  const isLoading = false;
-  const categories = mockCategories;
-  const brands = mockBrands;
-
-  const {
-    specifications,
-    setSpecifications,
-    addSpecification,
-    removeSpecification,
-    updateSpecification,
-    clearSpecifications,
-  } = useSpecification({
-    autoCreateEmpty: true,
-  });
-
   const [data, setData] = useState({
     name: "",
     price: 1,
@@ -36,7 +22,22 @@ function AddProduct() {
     status: "",
   });
 
+  const { addProduct, isLoading } = useAddProduct();
+  const { categories } = useGetAllCategories();
+  const { brands } = useGetAllBrands();
+
   const max = 10;
+
+  const {
+    specifications,
+    setSpecifications,
+    addSpecification,
+    removeSpecification,
+    updateSpecification,
+    clearSpecifications,
+  } = useSpecification({
+    autoCreateEmpty: true,
+  });
 
   const {
     previewImages,
@@ -90,26 +91,17 @@ function AddProduct() {
     }
 
     try {
-      const formData = new FormData();
-
-      const productData = {
+      await addProduct({
         name: data.name,
-        price: Number(data.price),
-        discount: Number(data.discount),
+        price: data.price,
+        discount: data.discount,
         description: data.description,
-        stock: Number(data.stock),
-        status: data.status,
-        category: { id: data.category },
-        brand: { id: data.brand },
-      };
-
-      formData.append(
-        "product",
-        new Blob([JSON.stringify(productData)], { type: "application/json" }),
-      );
-
-      selectedFiles.forEach((file) => {
-        formData.append("files", file);
+        status: Number(data.status),
+        stock: data.stock,
+        categoryId: data.category,
+        brandId: data.brand,
+        images: selectedFiles,
+        specifications: specifications,
       });
 
       setPreviewImages([]);

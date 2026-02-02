@@ -19,12 +19,12 @@ export interface OrderItemRequest {
 export interface UserRequest {
   email?: string;
   fullname: string;
-  phone?: string;
+  phone: string;
   birthDate?: string;
   gender?: number | null;
   password?: string;
-  role: "customer" | "admin";
-  status: number;
+  role?: "customer" | "admin";
+  status?: number;
   googleId?: string;
 }
 
@@ -35,12 +35,8 @@ export interface BrandRequest {
 
 export interface CategoryRequest {
   name: string;
-  image: string;
+  image: File;
   status: number;
-}
-
-export interface ImageProductRequest {
-  image: string;
 }
 
 export interface SpecificationRequest {
@@ -58,8 +54,8 @@ export interface ProductRequest {
   status: number;
   stock: number;
   categoryId: string;
-  brandId: BrandRequest;
-  images: ImageProductRequest[];
+  brandId: string;
+  images: File[];
   specifications: SpecificationRequest[];
 }
 

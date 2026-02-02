@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { Link, useNavigate } from "react-router-dom";
-import { mockCategories } from "../../../mocks/mockCategories";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useInputImage } from "../../../hooks/admin/useInputImage";
 import InputImage from "../InputImage";
 import Image from "../../Image";
 import ImageViewer from "../../ImageViewer";
+import useGetCategory from "../../../hooks/admin/category/useGetCategory";
+import useUpdateCategory from "../../../hooks/admin/category/useUpdateCategory";
 
 function EditCategory() {
   const navigate = useNavigate();
-  // const { id } = useParams();
+  const { id } = useParams();
 
   const [data, setData] = useState({
     name: "",
@@ -18,11 +19,15 @@ function EditCategory() {
   const [openViewer, setOpenViewer] = useState(false);
   const [viewerImage, setViewerImage] = useState<string>("");
 
-  const category = mockCategories[0];
-  const isLoading = false;
+  const { category } = useGetCategory(id as string);
+  const { updateCategory, isLoading } = useUpdateCategory(id as string);
 
-  const { previewImages, handlePreviewImage, handleRemovePreviewImage } =
-    useInputImage(1);
+  const {
+    previewImages,
+    selectedFiles,
+    handlePreviewImage,
+    handleRemovePreviewImage,
+  } = useInputImage(1);
 
   const handleOpenViewer = (image: string) => {
     setViewerImage(image);
@@ -57,6 +62,16 @@ function EditCategory() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    try {
+      await updateCategory({
+        name: data.name.trim(),
+        image: selectedFiles[0],
+        status: Number(data.status),
+      });
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message);
+    }
   };
 
   return (
@@ -82,10 +97,10 @@ function EditCategory() {
                     onClick={(e) => {
                       e.stopPropagation();
                       e.preventDefault();
-                      if (category.image) handleOpenViewer(category.image);
+                      if (category?.image) handleOpenViewer(category.image);
                     }}
                   >
-                    {category.image && (
+                    {category?.image && (
                       <Image
                         source={category.image}
                         alt={category.name}

@@ -125,7 +125,7 @@ public class UserService {
     public UserResponse updateUser(String id, UserRequest request) {
 
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("User không tồn tại"));
+                .orElseThrow(() -> new NotFoundException("Người dùng không tồn tại"));
 
         if (!ValidationUtils.validateEmail(request.getEmail())) {
             throw new BadRequestException("Email không hợp lệ");
@@ -139,6 +139,12 @@ public class UserService {
                 .filter(p -> !p.getId().equals(id))
                 .ifPresent(p -> {
                     throw new ConflictException("Số điện thoại đã được sử dụng");
+                });
+
+        userRepository.findByEmail(request.getEmail())
+                .filter(p -> !p.getId().equals(id))
+                .ifPresent(p -> {
+                    throw new ConflictException("Email đã được sử dụng");
                 });
 
         UserMapper.updateEntity(user, request);

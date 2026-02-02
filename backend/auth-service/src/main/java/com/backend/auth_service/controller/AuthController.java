@@ -2,17 +2,19 @@ package com.backend.auth_service.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.auth_service.dto.request.LoginRequest;
-import com.backend.auth_service.dto.request.UserRequest;
-import com.backend.auth_service.dto.request.VerifyOtpRequest;
+import com.backend.auth_service.dto.request.RegisterRequest;
 import com.backend.auth_service.dto.response.LoginResponse;
 import com.backend.auth_service.service.AuthService;
+import com.backend.auth_service.service.JwtService;
 
 import jakarta.validation.Valid;
 
@@ -20,9 +22,11 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/auth")
 public class AuthController {
     private final AuthService authService;
+    private final JwtService jwtService;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, JwtService jwtService) {
         this.authService = authService;
+        this.jwtService = jwtService;
     }
 
     @PostMapping("/otp")
@@ -33,12 +37,12 @@ public class AuthController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/verify/otp")
+    @PostMapping("/register")
     public ResponseEntity<Void> verifyOtpAndRegister(
-            @Valid @RequestBody VerifyOtpRequest otpRequest,
-            @Valid @RequestBody UserRequest userRequest) {
-
-        authService.verifyOtpAndRegister(otpRequest, userRequest);
+            @Valid @RequestBody RegisterRequest request) {
+        authService.verifyOtpAndRegister(
+                request.getOtp(),
+                request.getUser());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -49,4 +53,15 @@ public class AuthController {
         LoginResponse response = authService.login(request);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/me")
+    public ResponseEntity<LoginResponse> getCurrentUser(
+            @RequestHeader("Authorization") String authHeader) {
+
+        String token = authHeader.replace("Bearer ", "");
+        LoginResponse response = jwtService.getLoginResponseFromToken(token);
+
+        return ResponseEntity.ok(response);
+    }
+
 }

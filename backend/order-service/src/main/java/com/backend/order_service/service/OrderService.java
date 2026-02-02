@@ -192,6 +192,19 @@ public class OrderService {
                 return mapWithClient(order);
         }
 
+        // lấy 1 đơn hàng theo orderCode của user id
+        public OrderResponse getOrderByOrderCodeAndUser(
+                        String orderCode,
+                        String userId) {
+
+                Order order = orderRepository
+                                .findByOrderCodeAndUserId(orderCode, userId)
+                                .orElseThrow(() -> new NotFoundException(
+                                                "Đơn hàng không tồn tại hoặc không thuộc về bạn"));
+
+                return mapWithClient(order);
+        }
+
         // tạo đơn hàng
         @Transactional
         public OrderResponse createOrder(

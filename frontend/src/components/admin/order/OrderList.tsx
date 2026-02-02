@@ -10,20 +10,38 @@ import {
   useNavigate,
   useSearchParams,
 } from "react-router-dom";
-import { mockOrders } from "../../../mocks/mockOrders";
 import ListHeader from "../list/ListHeader";
 import ListBody from "../list/ListBody";
+import useGetOrders from "../../../hooks/admin/order/useGetOrders";
+import useUpdateStatusOrder from "../../../hooks/admin/order/useUpdateStatusOrder";
+import toast from "react-hot-toast";
 function OrderList() {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
-  const orders = mockOrders;
-  const isLoading = false;
-  const totalItems = orders.length;
+
+  const {
+    orders,
+    isLoading,
+    totalItems,
+    totalPages,
+    currentPage,
+    limit,
+    mutate,
+  } = useGetOrders();
+  const { updateStatusOrder, isLoading: isLoadingUpdate } =
+    useUpdateStatusOrder();
 
   const handleUpdateStatus = async (id: string, status: number) => {
     if (!id && !status) {
       return;
+    }
+    try {
+      await updateStatusOrder(id, status);
+      mutate();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message);
+      mutate();
     }
   };
 
@@ -150,7 +168,7 @@ function OrderList() {
                   <td className="p-[1rem]">
                     <select
                       name="status"
-                      disabled={isLoading}
+                      disabled={isLoadingUpdate}
                       onChange={(e) =>
                         handleUpdateStatus(order.id, parseInt(e.target.value))
                       }
@@ -224,9 +242,9 @@ function OrderList() {
       </ListBody>
 
       <Pagination
-        totalPages={1}
-        currentPage={1}
-        limit={12}
+        totalPages={totalPages}
+        currentPage={currentPage}
+        limit={limit}
         totalItems={totalItems}
       />
     </>
