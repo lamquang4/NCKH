@@ -28,6 +28,7 @@ public class CartService {
 
     public CartService(
             CartRepository cartRepository,
+            @Autowired(required = false)
             RedisTemplate<String, Object> redisTemplate,
             ProductServiceClient productServiceClient) {
         this.cartRepository = cartRepository;
