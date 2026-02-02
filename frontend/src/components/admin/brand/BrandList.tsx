@@ -72,7 +72,11 @@ function BrandList() {
   };
   return (
     <>
-      <ListHeader title="Danh mục" totalItems={totalItems} />
+      <ListHeader
+        title="Thương hiệu"
+        totalItems={totalItems}
+        addLink="/admin/add-brand"
+      />
 
       <ListBody>
         <div className="p-[1.2rem]">
