@@ -9,7 +9,7 @@ export function useSendRegisterOTP() {
     }
     setIsLoading(true);
     try {
-      const url = `/auth/otp?email=${email}`;
+      const url = `${import.meta.env.VITE_BACKEND_URL}/auth/otp?email=${email}`;
       await axios.post(url);
     } catch (err: any) {
       console.error("Lỗi:", err);

@@ -1,5 +1,7 @@
 import { HiOutlineEyeOff, HiOutlineEye } from "react-icons/hi";
 import { memo, useState } from "react";
+import useLogin from "../../../../hooks/auth/useLogin";
+import toast from "react-hot-toast";
 
 type Props = {
   onClose: () => void;
@@ -9,6 +11,8 @@ type Props = {
 function LoginModal({ onClose, onSwitchRegister }: Props) {
   const [data, setData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const { handleLogin, isLoading } = useLogin();
 
   const toggleShowPassword = () => {
     setShowPassword((prev) => !prev);
@@ -23,6 +27,20 @@ function LoginModal({ onClose, onSwitchRegister }: Props) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    try {
+      await handleLogin({
+        email: data.email,
+        password: data.password,
+      });
+
+      setData({
+        email: "",
+        password: "",
+      });
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message);
+    }
   };
   return (
     <div className="fixed inset-0 pointer-events-none z-99 flex items-center justify-center overflow-y-auto text-black">
@@ -102,6 +120,7 @@ function LoginModal({ onClose, onSwitchRegister }: Props) {
               </div>
 
               <button
+                disabled={isLoading}
                 type="submit"
                 className="w-full bg-blue-500 text-white focus:outline-none font-semibold rounded-sm text-[0.9rem] uppercase px-5 py-2.5 text-center"
               >
