@@ -2,6 +2,7 @@ import { memo } from "react";
 import { Link } from "react-router-dom";
 import useGetAccount from "../../../../hooks/auth/useGetAccount";
 import useGetUser from "../../../../hooks/useGetUser";
+import useLogout from "../../../../hooks/auth/useLogout";
 
 type Props = {
   onLogin: () => void;
@@ -12,6 +13,7 @@ type Props = {
 function ProfileMenu({ onLogin, onRegister, profileMenuOpen }: Props) {
   const { account } = useGetAccount("customer");
   const { user } = useGetUser(account?.id || "");
+  const { handleLogout } = useLogout();
 
   if (!profileMenuOpen) return null;
 
@@ -39,7 +41,10 @@ function ProfileMenu({ onLogin, onRegister, profileMenuOpen }: Props) {
                 Đơn hàng
               </Link>
 
-              <button className="hover:bg-gray-100 w-full block p-2.5 text-left">
+              <button
+                onClick={() => handleLogout("customer")}
+                className="hover:bg-gray-100 w-full block p-2.5 text-left"
+              >
                 Đăng xuất
               </button>
             </>

@@ -5,6 +5,7 @@ import { RiLogoutBoxLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import useGetUser from "../../../../hooks/useGetUser";
 import useGetAccount from "../../../../hooks/auth/useGetAccount";
+import useLogout from "../../../../hooks/auth/useLogout";
 
 type Props = {
   menuOpen: boolean;
@@ -14,6 +15,7 @@ type Props = {
 function ProfileMenu({ menuOpen, onToggleMenu }: Props) {
   const { account } = useGetAccount("admin");
   const { user } = useGetUser(account?.id || "");
+  const { handleLogout } = useLogout();
   return (
     <>
       {user && (
@@ -50,7 +52,10 @@ function ProfileMenu({ menuOpen, onToggleMenu }: Props) {
                 </div>
               </Link>
 
-              <button className="w-full block hover:bg-gray-100 px-3 py-3.5">
+              <button
+                className="w-full block hover:bg-gray-100 px-3 py-3.5"
+                onClick={() => handleLogout("admin")}
+              >
                 <div className="flex items-center gap-[8px] text-[#C62028] font-medium">
                   <RiLogoutBoxLine size={18} />
                   <p>Đăng xuất</p>

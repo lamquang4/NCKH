@@ -3,10 +3,13 @@ import { useState } from "react";
 import { HiOutlineEyeOff, HiOutlineEye } from "react-icons/hi";
 import Loading from "../Loading";
 import Overplay from "./Overplay";
+import useLogin from "../../hooks/auth/useLogin";
+import toast from "react-hot-toast";
 function LoginForm() {
   const [data, setData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const isLoading = false;
+
+  const { handleLogin, isLoading } = useLogin();
 
   const toggleShowPassword = () => {
     setShowPassword((prev) => !prev);
@@ -21,6 +24,20 @@ function LoginForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    try {
+      await handleLogin({
+        email: data.email,
+        password: data.password,
+      });
+
+      setData({
+        email: "",
+        password: "",
+      });
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message);
+    }
   };
 
   return (

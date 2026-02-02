@@ -27,6 +27,8 @@ export default function useRegister() {
       },
     };
 
+    setIsLoading(true);
+
     try {
       const url = `${import.meta.env.VITE_BACKEND_URL}/auth/register`;
       await axios.post(url, formData);

@@ -90,6 +90,7 @@ jobs:
           curl -X POST "${{ secrets.RENDER_PAYMENT_SERVICE_DEPLOY_HOOK }}"
           curl -X POST "${{ secrets.RENDER_CART_SERVICE_DEPLOY_HOOK }}"
           curl -X POST "${{ secrets.RENDER_CHAT_SERVICE_DEPLOY_HOOK }}"
+          curl -X POST "${{ secrets.RENDER_ASSISTANT_SERVICE_DEPLOY_HOOK }}"
           curl -X POST "${{ secrets.RENDER_BRAND_SERVICE_DEPLOY_HOOK }}"
           curl -X POST "${{ secrets.RENDER_CATEGORY_SERVICE_DEPLOY_HOOK }}"
 
