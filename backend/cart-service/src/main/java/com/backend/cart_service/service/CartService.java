@@ -23,15 +23,14 @@ import com.backend.cart_service.repository.CartRepository;
 public class CartService {
     private static final String CART_KEY_PREFIX = "cart:";
     private final CartRepository cartRepository;
-    private final RedisTemplate<String, Object> redisTemplate;
     private final ProductServiceClient productServiceClient;
+    @Autowired(required = false)
+    private RedisTemplate<String, Object> redisTemplate;
 
     public CartService(
             CartRepository cartRepository,
-            @Autowired(required = false) RedisTemplate<String, Object> redisTemplate,
             ProductServiceClient productServiceClient) {
         this.cartRepository = cartRepository;
-        this.redisTemplate = redisTemplate;
         this.productServiceClient = productServiceClient;
     }
 
