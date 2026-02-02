@@ -71,22 +71,47 @@ jobs:
         working-directory: backend/${{ matrix.service }}
         run: mvn clean verify
 
-  deploy:
+  deploy-backend:
     runs-on: ubuntu-latest
-    needs: [test-frontend, test-backend]
+    needs: test-backend
     if: ${{ github.ref == 'refs/heads/main' }}
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Trigger frontend deploy on Render
+      - name: Deploy backend services
+        run: |
+          curl -X POST "${{ secrets.RENDER_EUREKA_SERVER_DEPLOY_HOOK }}"
+          curl -X POST "${{ secrets.RENDER_API_GATEWAY_DEPLOY_HOOK }}"
+          curl -X POST "${{ secrets.RENDER_AUTH_SERVICE_DEPLOY_HOOK }}"
+          curl -X POST "${{ secrets.RENDER_USER_SERVICE_DEPLOY_HOOK }}"
+          curl -X POST "${{ secrets.RENDER_PRODUCT_SERVICE_DEPLOY_HOOK }}"
+          curl -X POST "${{ secrets.RENDER_ORDER_SERVICE_DEPLOY_HOOK }}"
+          curl -X POST "${{ secrets.RENDER_PAYMENT_SERVICE_DEPLOY_HOOK }}"
+          curl -X POST "${{ secrets.RENDER_CART_SERVICE_DEPLOY_HOOK }}"
+          curl -X POST "${{ secrets.RENDER_CHAT_SERVICE_DEPLOY_HOOK }}"
+          curl -X POST "${{ secrets.RENDER_BRAND_SERVICE_DEPLOY_HOOK }}"
+          curl -X POST "${{ secrets.RENDER_CATEGORY_SERVICE_DEPLOY_HOOK }}"
+
+  deploy-frontend:
+    runs-on: ubuntu-latest
+    needs: test-frontend
+    if: ${{ github.ref == 'refs/heads/main' }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy frontend
         run: |
           curl -X POST "${{ secrets.RENDER_FRONTEND_DEPLOY_HOOK }}"
 
   create_issue:
     runs-on: ubuntu-latest
-    needs: [test-frontend, test-backend, deploy]
+    needs:
+      - test-frontend
+      - test-backend
+      - deploy-backend
+      - deploy-frontend
     if: failure()
     permissions:
       issues: write
@@ -96,16 +121,21 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const title = `FAILURE: CI/CD Pipeline Failed on branch ${context.ref.replace('refs/heads/', '')}`;
+            const branch = context.ref.replace('refs/heads/', '');
+            const title = `FAILURE: CI/CD Pipeline Failed on branch ${branch}`;
+
             const body = `
             **CI/CD Pipeline Failed**
 
-            **Branch:** \`${context.ref.replace('refs/heads/', '')}\`
+            **Branch:** \`${branch}\`
             **Commit:** \`${context.sha}\`
 
-            **Test frontend:** ${{ needs.test-frontend.result }}
-            **Test backend:** ${{ needs.test-backend.result }}
-            **Deploy:** \`${{ needs.deploy.result || 'skipped' }}\`
+            | Job | Result |
+            |-----|--------|
+            | Test frontend | ${{ needs.test-frontend.result }} |
+            | Test backend | ${{ needs.test-backend.result }} |
+            | Deploy backend | ${{ needs.deploy-backend.result || 'skipped' }} |
+            | Deploy frontend | ${{ needs.deploy-frontend.result || 'skipped' }} |
 
             **Workflow Run:** ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}
 
@@ -156,8 +186,8 @@ jobs:
 
   close_issue_deploy:
     runs-on: ubuntu-latest
-    needs: deploy
-    if: needs.deploy.result == 'success'
+    needs: [deploy-backend, deploy-frontend]
+    if: needs.deploy-backend.result == 'success' && needs.deploy-frontend.result == 'success'
     permissions:
       issues: write
 
