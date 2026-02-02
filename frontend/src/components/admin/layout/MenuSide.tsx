@@ -76,8 +76,8 @@ function MenuSide({ menuOpen, onToggleMenu }: Props) {
           label: "Thương hiệu",
           key: "4a",
           children: [
-            { label: "Danh sách danh mục", path: "/admin/brands" },
-            { label: "Thêm danh mục", path: "/admin/add-brand" },
+            { label: "Danh sách thương hiệu", path: "/admin/brands" },
+            { label: "Thêm thương hiệu", path: "/admin/add-brand" },
           ],
         },
       ],
