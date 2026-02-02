@@ -11,7 +11,7 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 
 @Configuration
 @EnableCaching
-@ConditionalOnProperty(name = "spring.data.redis.enabled", havingValue = "true", matchIfMissing = false)
+@ConditionalOnProperty(name = "spring.data.redis.enabled", havingValue = "true")
 public class RedisConfig {
 
     @Bean
