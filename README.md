@@ -39,3 +39,4 @@ docker compose up --build
 | Backend    | Render                |
 | DB MySQL   | Aiven                 |
 | DB MongoDB | MongoDB Atlas         |
+| DB Redis   | Upstash               |
