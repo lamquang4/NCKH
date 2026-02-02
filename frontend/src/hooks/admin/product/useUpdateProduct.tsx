@@ -34,8 +34,8 @@ export default function useUpdateProduct(id: string) {
       );
 
       if (data.images && data.images.length > 0) {
-        data.images.forEach((img) => {
-          formData.append("images", img.image);
+        data.images.forEach((file) => {
+          formData.append("images", file);
         });
       }
 
