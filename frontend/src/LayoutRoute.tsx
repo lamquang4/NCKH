@@ -1,13 +1,13 @@
 import { Route, Routes } from "react-router-dom";
-import HomePage from "./pages/client/HomePage";
-import ProductListCategoryPage from "./pages/client/ProductListCategoryPage";
-import ProductDetailPage from "./pages/client/ProductDetailPage";
-import CartPage from "./pages/client/CartPage";
-import CheckoutPage from "./pages/client/CheckoutPage";
-import AccountPage from "./pages/client/AccountPage";
-import OrderHistoryPage from "./pages/client/OrderHistoryPage";
-import OrderDetailPage from "./pages/client/OrderDetailPage";
-import OrderResultPage from "./pages/client/OrderResultPage";
+import HomePage from "./pages/customer/HomePage";
+import ProductListCategoryPage from "./pages/customer/ProductListCategoryPage";
+import ProductDetailPage from "./pages/customer/ProductDetailPage";
+import CartPage from "./pages/customer/CartPage";
+import CheckoutPage from "./pages/customer/CheckoutPage";
+import AccountPage from "./pages/customer/AccountPage";
+import OrderHistoryPage from "./pages/customer/OrderHistoryPage";
+import OrderDetailPage from "./pages/customer/OrderDetailPage";
+import OrderResultPage from "./pages/customer/OrderResultPage";
 import LoginPage from "./pages/admin/LoginPage";
 import PaymentListPage from "./pages/admin/PaymentListPage";
 import AccountAdminPage from "./pages/admin/AccountPage";
@@ -26,11 +26,13 @@ import OrderDetailAdmin from "./pages/admin/OrderDetailPage";
 import ProductListPage from "./pages/admin/ProductListPage";
 import AddProductPage from "./pages/admin/AddProductPage";
 import EditProductPage from "./pages/admin/EditProductPage";
+import ProductListDiscountPage from "./pages/customer/ProductListDiscountPage";
 function LayoutRoute() {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/products/:slug" element={<ProductListCategoryPage />} />
+      <Route path="/products/sale" element={<ProductListDiscountPage />} />
       <Route path="/product/:slug" element={<ProductDetailPage />} />
       <Route path="/cart" element={<CartPage />} />
       <Route path="/checkout" element={<CheckoutPage />} />

@@ -22,6 +22,7 @@ public class UserRequest {
 
     @NotBlank(message = "Số điện thoại không được để trống")
     private String phone;
+    
     private LocalDate birthDate;
     private Integer gender;
 

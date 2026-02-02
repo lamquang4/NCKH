@@ -227,10 +227,11 @@ public class CategoryService {
         List<String> allowedTypes = List.of(
                 "image/jpeg",
                 "image/png",
-                "image/webp");
+                "image/webp",
+                "image/svg+xml");
 
         if (contentType == null || !allowedTypes.contains(contentType)) {
-            throw new BadRequestException("Hình chỉ cho phép JPG, PNG, WEBP");
+            throw new BadRequestException("Hình chỉ cho phép JPG, PNG, WEBP, SVG");
         }
 
         try {

@@ -1,13 +1,15 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
+import useAddBrand from "../../../hooks/admin/brand/useAddBrand";
 
 function AddBrand() {
   const [data, setData] = useState({
     name: "",
     status: "",
   });
-  const isLoading = false;
+
+  const { addBrand, isLoading } = useAddBrand();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -22,6 +24,11 @@ function AddBrand() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      await addBrand({
+        name: data.name.trim(),
+        status: Number(data.status),
+      });
+
       setData({
         name: "",
         status: "",

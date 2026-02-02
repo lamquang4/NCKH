@@ -8,13 +8,25 @@ import { Link } from "react-router-dom";
 import FilterDropDownMenu from "../FilterDropDownMenu";
 import { FaRegEyeSlash } from "react-icons/fa6";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
-import { mockCategories } from "../../../mocks/mockCategories";
 import ListBody from "../list/ListBody";
 import ListHeader from "../list/ListHeader";
+import useGetCategories from "../../../hooks/admin/category/useGetCategories";
+import useDeleteCategory from "../../../hooks/admin/category/useDeleteCategory";
+import useUpdateStatusCategory from "../../../hooks/admin/category/useUpdateStatusCategory";
+import toast from "react-hot-toast";
 function CategoryList() {
-  const categories = mockCategories;
-  const isLoading = false;
-  const totalItems = categories.length;
+  const {
+    categories,
+    isLoading,
+    totalItems,
+    totalPages,
+    currentPage,
+    limit,
+    mutate,
+  } = useGetCategories();
+  const { deleteCategory, isLoading: isLoadingDelete } = useDeleteCategory();
+  const { updateStatusCategory, isLoading: isLoadingUpdate } =
+    useUpdateStatusCategory();
 
   const array = [
     {
@@ -35,11 +47,27 @@ function CategoryList() {
     if (!id) {
       return;
     }
+
+    try {
+      await deleteCategory(id);
+      mutate();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message);
+      mutate();
+    }
   };
 
   const handleUpdateStatus = async (id: string, status: number) => {
     if (!id && !status) {
       return;
+    }
+
+    try {
+      await updateStatusCategory(id, status);
+      mutate();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message);
+      mutate();
     }
   };
   return (
@@ -103,7 +131,7 @@ function CategoryList() {
                   <td className="p-[1rem]  ">
                     <div className="flex items-center gap-[15px]">
                       <button
-                        disabled={isLoading}
+                        disabled={isLoadingUpdate}
                         onClick={() =>
                           handleUpdateStatus(
                             category.id || "",
@@ -126,7 +154,7 @@ function CategoryList() {
                       </Link>
 
                       <button
-                        disabled={isLoading}
+                        disabled={isLoadingDelete}
                         onClick={() => handleDelete(category.id || "")}
                       >
                         <VscTrash size={22} className="text-[#d9534f]" />
@@ -154,9 +182,9 @@ function CategoryList() {
       </ListBody>
 
       <Pagination
-        totalPages={1}
-        currentPage={1}
-        limit={12}
+        totalPages={totalPages}
+        currentPage={currentPage}
+        limit={limit}
         totalItems={totalItems}
       />
     </>

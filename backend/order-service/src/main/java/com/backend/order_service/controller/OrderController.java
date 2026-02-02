@@ -68,6 +68,14 @@ public class OrderController {
                                 orderService.getOrderByOrderCode(orderCode));
         }
 
+        @GetMapping("/user/{userId}/{orderCode}")
+        public ResponseEntity<OrderResponse> getOrderByOrderCodeAndUser(
+                        @PathVariable String orderCode, @PathVariable String userId) {
+
+                return ResponseEntity.ok(
+                                orderService.getOrderByOrderCodeAndUser(orderCode, userId));
+        }
+
         @PatchMapping("/status/{id}")
         public ResponseEntity<Void> updateOrderStatus(
                         @PathVariable String id,

@@ -73,6 +73,10 @@ public class AuthService {
             VerifyOtpRequest otpRequest,
             UserRequest userRequest) {
 
+        if (!otpRequest.getEmail().equals(userRequest.getEmail())) {
+            throw new BadRequestException("Email OTP và Email đăng ký không khớp");
+        }
+
         if (!ValidationUtils.validateEmail(userRequest.getEmail())) {
             throw new IllegalArgumentException("Email không hợp lệ");
         }

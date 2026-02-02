@@ -5,14 +5,31 @@ import { TbCancel } from "react-icons/tb";
 import Loading from "../../Loading";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
-import { Link, useNavigate } from "react-router-dom";
-import { mockOrders } from "../../../mocks/mockOrders";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import useGetOrder from "../../../hooks/admin/order/useGetOrder";
+import useUpdateStatusOrder from "../../../hooks/admin/order/useUpdateStatusOrder";
 
 function OrderDetail() {
   const navigate = useNavigate();
-  // const { id } = useParams();
-  const order = mockOrders[0];
-  const isLoading = false;
+  const { id } = useParams();
+
+  const { order, isLoading, mutate } = useGetOrder(id as string);
+  const { updateStatusOrder, isLoading: isLoadingUpdate } =
+    useUpdateStatusOrder();
+
+  const handleUpdateStatus = async (id: string, status: number) => {
+    if (!id && !status) {
+      return;
+    }
+    try {
+      await updateStatusOrder(id, status);
+      mutate();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message);
+      mutate();
+    }
+  };
+
   const steps = [
     { label: "Chờ xác nhận", icon: <LuArchive size={24} /> },
     { label: "Xác nhận", icon: <LuCheck size={24} /> },
@@ -70,11 +87,56 @@ function OrderDetail() {
                   </p>
                 </div>
 
-                <Link to={"/admin/orders"} className="text-center">
-                  <span className="flex items-center font-semibold text-gray-600">
-                    <RiArrowLeftSLine size={20} /> Trở về
-                  </span>
-                </Link>
+                <div className="flex flex-col gap-[8px]">
+                  <Link to={"/admin/orders"} className="text-center">
+                    <span className="flex items-center font-semibold text-gray-600">
+                      <RiArrowLeftSLine size={20} /> Trở về
+                    </span>
+                  </Link>
+
+                  <select
+                    name="status"
+                    disabled={isLoadingUpdate}
+                    onChange={(e) =>
+                      handleUpdateStatus(order!.id, parseInt(e.target.value))
+                    }
+                    value={order?.status}
+                    className="border border-gray-300 p-[6px_10px] text-[0.9rem] outline-none focus:border-gray-400  "
+                  >
+                    {order?.status === -1 && (
+                      <option value="-1">Chờ thanh toán</option>
+                    )}
+                    {order?.status === 0 && (
+                      <>
+                        <option value="0">Chờ xác nhận</option>
+                        <option value="1">Xác nhận</option>
+                        <option value="4">Hủy</option>
+                      </>
+                    )}
+                    {order?.status === 1 && (
+                      <>
+                        <option value="1">Xác nhận</option>
+                        <option value="2">Đang giao</option>
+                        <option value="4">Hủy</option>
+                      </>
+                    )}
+                    {order?.status === 2 && (
+                      <>
+                        <option value="2">Đang giao</option>
+                        <option value="3">Giao thành công</option>
+                        <option value="4">Hủy</option>
+                      </>
+                    )}
+                    {order?.status === 3 && (
+                      <>
+                        <option value="3">Giao thành công</option>
+                        <option value="5">Trả hàng</option>
+                      </>
+                    )}
+                    {order?.status === 4 && <option value="4">Hủy</option>}
+                    {order?.status === 5 && <option value="5">Trả hàng</option>}
+                  </select>
+                </div>
               </div>
 
               {order?.status === 4 ? (

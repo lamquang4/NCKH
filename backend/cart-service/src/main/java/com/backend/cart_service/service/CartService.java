@@ -115,10 +115,9 @@ public class CartService {
     // cập nhật số lượng sản phẩm trong giỏ hàng
     public CartResponse updateQuantity(
             String userId,
-            String productId,
-            int quantity) {
+            CartItemRequest request) {
 
-        if (quantity < 1) {
+        if (request.getQuantity() < 1) {
             throw new BadRequestException("Số lượng phải lớn hơn hoặc bằng 1");
         }
 
@@ -126,11 +125,11 @@ public class CartService {
                 .orElseThrow(() -> new NotFoundException("Giỏ hàng không tìm thấy"));
 
         CartItem item = cart.getItems().stream()
-                .filter(i -> i.getProductId().equals(productId))
+                .filter(i -> i.getProductId().equals(request.getProductId()))
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException("Sản phẩm không có trong giỏ"));
 
-        item.setQuantity(quantity);
+        item.setQuantity(request.getQuantity());
 
         cart = cartRepository.save(cart);
         saveCartToRedis(userId, cart);

@@ -22,7 +22,7 @@ function InputImage1({ InputId, onFileSelect, sizeIcon, imageIndex }: Props) {
       <input
         type="file"
         id={InputId}
-        accept=".png,.jpg,.webp"
+        accept="image/png,image/jpeg,image/webp,image/svg+xml"
         className="hidden"
         onChange={handleChange}
       />

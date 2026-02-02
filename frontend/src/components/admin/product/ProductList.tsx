@@ -9,13 +9,25 @@ import Loading from "../../Loading";
 import InputSearch from "../InputSearch";
 import { Link } from "react-router-dom";
 import ListHeader from "../list/ListHeader";
-import { mockProducts } from "../../../mocks/mockProducts";
 import ListBody from "../list/ListBody";
+import useGetProducts from "../../../hooks/admin/product/useGetProducts";
+import useDeleteProduct from "../../../hooks/admin/product/useDeleteProduct";
+import useUpdateStatusProduct from "../../../hooks/admin/product/useUpdateStatusProduct";
+import toast from "react-hot-toast";
 
 function ProductList() {
-  const products = mockProducts;
-  const totalItems = products.length;
-  const isLoading = false;
+  const {
+    products,
+    isLoading,
+    totalItems,
+    totalPages,
+    currentPage,
+    limit,
+    mutate,
+  } = useGetProducts();
+  const { deleteProduct, isLoading: isLoadingDelete } = useDeleteProduct();
+  const { updateStatusProduct, isLoading: isLoadingUpdate } =
+    useUpdateStatusProduct();
 
   const array = [
     {
@@ -36,11 +48,27 @@ function ProductList() {
     if (!id) {
       return;
     }
+
+    try {
+      await deleteProduct(id);
+      mutate();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message);
+      mutate();
+    }
   };
 
   const handleUpdateStatus = async (id: string, status: number) => {
     if (!id && !status) {
       return;
+    }
+
+    try {
+      await updateStatusProduct(id, status);
+      mutate();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message);
+      mutate();
     }
   };
 
@@ -148,7 +176,7 @@ function ProductList() {
                     <td className="p-[1rem]  ">
                       <div className="flex items-center gap-[15px]">
                         <button
-                          disabled={isLoading}
+                          disabled={isLoadingUpdate}
                           onClick={() =>
                             handleUpdateStatus(
                               product.id || "",
@@ -172,7 +200,7 @@ function ProductList() {
                           <LiaEdit size={22} className="text-[#076ffe]" />
                         </Link>
                         <button
-                          disabled={isLoading}
+                          disabled={isLoadingDelete}
                           onClick={() => handleDelete(product.id || "")}
                         >
                           <VscTrash size={22} className="text-[#d9534f]" />
@@ -201,9 +229,9 @@ function ProductList() {
       </ListBody>
 
       <Pagination
-        totalPages={2}
-        currentPage={1}
-        limit={12}
+        totalPages={totalPages}
+        currentPage={currentPage}
+        limit={limit}
         totalItems={totalItems}
       />
     </>

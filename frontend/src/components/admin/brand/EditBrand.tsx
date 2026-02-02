@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { Link, useNavigate } from "react-router-dom";
-import { mockBrands } from "../../../mocks/mockBrands";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import useGetBrand from "../../../hooks/admin/brand/useGetBrand";
+import useUpdateBrand from "../../../hooks/admin/brand/useUpdateBrand";
 
 function EditBrand() {
   const navigate = useNavigate();
-  // const { id } = useParams();
-
+  const { id } = useParams();
   const [data, setData] = useState({
     name: "",
     status: "",
   });
 
-  const brand = mockBrands[0];
-  const isLoading = false;
+  const { brand } = useGetBrand(id as string);
+  const { updateBrand, isLoading } = useUpdateBrand(id as string);
 
   useEffect(() => {
     if (isLoading) return;
@@ -43,6 +43,15 @@ function EditBrand() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    try {
+      await updateBrand({
+        name: data.name.trim(),
+        status: Number(data.status),
+      });
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message);
+    }
   };
 
   return (

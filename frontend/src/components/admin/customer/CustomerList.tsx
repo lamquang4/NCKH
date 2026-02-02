@@ -4,25 +4,42 @@ import FilterDropDownMenu from "../FilterDropDownMenu";
 import Image from "../../Image";
 import Loading from "../../Loading";
 import InputSearch from "../InputSearch";
-import { mockUsers } from "../../../mocks/mockUsers";
 import ListHeader from "../list/ListHeader";
 import ListBody from "../list/ListBody";
+import useGetCustomers from "../../../hooks/admin/user/useGetCustomers";
+import useUpdateStatusUser from "../../../hooks/useUpdateStatusUser";
+import toast from "react-hot-toast";
 
 function CustomerList() {
+  const {
+    customers,
+    isLoading,
+    totalItems,
+    totalPages,
+    currentPage,
+    limit,
+    mutate,
+  } = useGetCustomers();
+  const { updateStatusUser, isLoading: isLoadingUpdate } =
+    useUpdateStatusUser();
+
   const array = [
     { name: "Tất cả", value: null },
     { name: "Bình thường", value: 1 },
     { name: "Bị khóa", value: 0 },
   ];
 
-  const isLoading = false;
-
-  const customers = mockUsers;
-  const totalItems = customers.length;
-
   const handleUpdateStatus = async (id: string, status: number) => {
     if (!id && !status) {
       return;
+    }
+
+    try {
+      await updateStatusUser(id, status);
+      mutate();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message);
+      mutate();
     }
   };
 
@@ -65,10 +82,10 @@ function CustomerList() {
               customers.map((customer) => (
                 <tr key={customer.id} className="hover:bg-[#f2f3f8]">
                   <td className="p-[1rem] text-[0.9rem] font-semibold">
-                    {customer.fullname}
+                    {customer?.fullname}
                   </td>
-                  <td className="p-[1rem]">{customer.email}</td>
-                  <td className="p-[1rem]">{customer.phone}</td>
+                  <td className="p-[1rem]">{customer?.email}</td>
+                  <td className="p-[1rem]">{customer?.phone}</td>
                   <td className="p-[1rem]">
                     {customer.birthDate &&
                       new Date(customer.birthDate).toLocaleDateString("vi-VN", {
@@ -92,7 +109,7 @@ function CustomerList() {
                   <td className="p-[1rem]  ">
                     <div className="flex items-center gap-[15px]">
                       <button
-                        disabled={isLoading}
+                        disabled={isLoadingUpdate}
                         onClick={() =>
                           handleUpdateStatus(
                             customer.id || "",
@@ -129,9 +146,9 @@ function CustomerList() {
       </ListBody>
 
       <Pagination
-        totalPages={1}
-        currentPage={1}
-        limit={12}
+        totalPages={totalPages}
+        currentPage={currentPage}
+        limit={limit}
         totalItems={totalItems}
       />
     </>

@@ -1,23 +1,26 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { validateEmail } from "../../../utils/validateEmail";
-import { mockUsers } from "../../../mocks/mockUsers";
+import useGetUser from "../../../hooks/useGetUser";
+import useUpdateUser from "../../../hooks/useUpdateUser";
+import { validatePhone } from "../../../utils/validatePhone";
+import useGetAccount from "../../../hooks/auth/useGetAccount";
 
 function EditAdmin() {
   const navigate = useNavigate();
-  // const { id } = useParams();
-
-  const user = mockUsers[2];
-  const isLoading = false;
-
+  const { id } = useParams();
   const [data, setData] = useState({
     email: "",
     phone: "",
-    password: "",
     fullname: "",
+    password: "",
     status: "",
   });
+
+  const { account } = useGetAccount("admin");
+  const { user } = useGetUser(id as string);
+  const { updateUser, isLoading } = useUpdateUser(id as string);
 
   useEffect(() => {
     if (isLoading) return;
@@ -54,18 +57,30 @@ function EditAdmin() {
       return;
     }
 
+    if (!validatePhone(data.phone)) {
+      toast.error("Số điện thoại không hợp lệ");
+      return;
+    }
+
     if (data.password.trim().length < 6 && data.password) {
       toast.error("Mật khẩu phải có ít nhất 6 ký tự");
       return;
     }
 
-    /*
-    if (user?.id === admin?.id) {
+    if (Number(data.status) === 0 && user?.id === account?.id) {
       toast.error("Bạn không thể khóa chính tài khoản của mình");
       return;
-    */
+    }
 
     try {
+      await updateUser({
+        fullname: data.fullname.trim(),
+        phone: data.phone.trim(),
+        email: data.email.trim(),
+        password: data.password.trim(),
+        role: "admin",
+        status: Number(data.status),
+      });
       setData((prev) => ({
         ...prev,
         password: "",

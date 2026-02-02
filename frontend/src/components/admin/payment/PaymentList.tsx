@@ -3,14 +3,13 @@ import Loading from "../../Loading";
 import InputSearch from "../InputSearch";
 import Pagination from "../Pagination";
 import FilterDropDownMenu from "../FilterDropDownMenu";
-import { mockPayments } from "../../../mocks/mockPayments";
 import ListHeader from "../list/ListHeader";
 import ListBody from "../list/ListBody";
+import useGetPayments from "../../../hooks/admin/payment/useGetPayments";
 
 function PaymentList() {
-  const payments = mockPayments;
-  const isLoading = false;
-  const totalItems = payments.length;
+  const { payments, isLoading, totalItems, totalPages, currentPage, limit } =
+    useGetPayments();
 
   const array = [
     { name: "Tất cả", value: null },
@@ -101,9 +100,9 @@ function PaymentList() {
       </ListBody>
 
       <Pagination
-        totalPages={1}
-        currentPage={1}
-        limit={12}
+        totalPages={totalPages}
+        currentPage={currentPage}
+        limit={limit}
         totalItems={totalItems}
       />
     </>
