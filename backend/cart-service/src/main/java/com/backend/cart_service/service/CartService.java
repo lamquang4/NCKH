@@ -28,8 +28,7 @@ public class CartService {
 
     public CartService(
             CartRepository cartRepository,
-            @Autowired(required = false)
-            RedisTemplate<String, Object> redisTemplate,
+            @Autowired(required = false) RedisTemplate<String, Object> redisTemplate,
             ProductServiceClient productServiceClient) {
         this.cartRepository = cartRepository;
         this.redisTemplate = redisTemplate;
@@ -196,11 +195,17 @@ public class CartService {
     }
 
     private Cart getCartFromRedis(String userId) {
+        if (redisTemplate == null) {
+            return null;
+        }
         return (Cart) redisTemplate.opsForValue()
                 .get(CART_KEY_PREFIX + userId);
     }
 
     private void saveCartToRedis(String userId, Cart cart) {
+        if (redisTemplate == null) {
+            return;
+        }
         redisTemplate.opsForValue()
                 .set(CART_KEY_PREFIX + userId, cart);
     }
