@@ -3,6 +3,7 @@ package com.backend.cart_service.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -155,7 +156,10 @@ public class CartService {
             if (removed) {
                 cartRepository.save(cart);
 
-                redisTemplate.delete(CART_KEY_PREFIX + cart.getUserId());
+                if (redisTemplate != null) {
+                    redisTemplate.delete(CART_KEY_PREFIX + cart.getUserId());
+                }
+
             }
         }
     }
@@ -171,7 +175,10 @@ public class CartService {
         cart.getItems().clear();
         cartRepository.save(cart);
 
-        redisTemplate.delete(CART_KEY_PREFIX + userId);
+        if (redisTemplate != null) {
+            redisTemplate.delete(CART_KEY_PREFIX + userId);
+        }
+
     }
 
     private CartItemResponse mapWithClient(CartItem cartItem) {
