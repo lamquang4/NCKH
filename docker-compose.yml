@@ -60,39 +60,30 @@ services:
       - "8761:8761"
     networks:
       - app-network
-
     environment:
       JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8761/eureka/apps"]
       interval: 10s
-      retries: 5
+      timeout: 10s
+      retries: 10
+      start_period: 40s
 
   api-gateway:
     build: ./backend/api-gateway
     container_name: api-gateway
     ports:
-      - "8090:8080"
+      - "8090:8090"
     networks:
       - app-network
     environment:
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      EUREKA_URL: http://eureka-server:8761/eureka
+      JWT_ISSUER_URI: http://auth-service:8089/realms/my-realm
       JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
     depends_on:
       eureka-server:
         condition: service_healthy
-
-  assistant-service:
-    build: ./backend/assistant-service
-    container_name: assistant-service
-    networks:
-      - app-network
-    environment:
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
-      JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
-    depends_on:
-      eureka-server:
-        condition: service_healthy
+    restart: on-failure
 
   user-service:
     build: ./backend/user-service
@@ -100,17 +91,17 @@ services:
     networks:
       - app-network
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/userdb
-      SPRING_DATASOURCE_USERNAME: dev
-      SPRING_DATASOURCE_PASSWORD: dev123
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      EUREKA_URL: http://eureka-server:8761/eureka
+      DATASOURCE_URL: jdbc:mysql://mysql:3306/userdb
+      DATASOURCE_USERNAME: dev
+      DATASOURCE_PASSWORD: dev123
       JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
-
     depends_on:
       mysql:
         condition: service_healthy
       eureka-server:
         condition: service_healthy
+    restart: on-failure
 
   auth-service:
     build: ./backend/auth-service
@@ -118,17 +109,17 @@ services:
     networks:
       - app-network
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/authdb
-      SPRING_DATASOURCE_USERNAME: dev
-      SPRING_DATASOURCE_PASSWORD: dev123
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      EUREKA_URL: http://eureka-server:8761/eureka
+      DATASOURCE_URL: jdbc:mysql://mysql:3306/authdb
+      DATASOURCE_USERNAME: dev
+      DATASOURCE_PASSWORD: dev123
       JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
-
     depends_on:
       mysql:
         condition: service_healthy
       eureka-server:
         condition: service_healthy
+    restart: on-failure
 
   product-service:
     build: ./backend/product-service
@@ -136,16 +127,17 @@ services:
     networks:
       - app-network
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/productdb
-      SPRING_DATASOURCE_USERNAME: dev
-      SPRING_DATASOURCE_PASSWORD: dev123
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      EUREKA_URL: http://eureka-server:8761/eureka
+      DATASOURCE_URL: jdbc:mysql://mysql:3306/productdb
+      DATASOURCE_USERNAME: dev
+      DATASOURCE_PASSWORD: dev123
       JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
     depends_on:
       mysql:
         condition: service_healthy
       eureka-server:
         condition: service_healthy
+    restart: on-failure
 
   category-service:
     build: ./backend/category-service
@@ -153,17 +145,17 @@ services:
     networks:
       - app-network
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/categorydb
-      SPRING_DATASOURCE_USERNAME: dev
-      SPRING_DATASOURCE_PASSWORD: dev123
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      EUREKA_URL: http://eureka-server:8761/eureka
+      DATASOURCE_URL: jdbc:mysql://mysql:3306/categorydb
+      DATASOURCE_USERNAME: dev
+      DATASOURCE_PASSWORD: dev123
       JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
-
     depends_on:
       mysql:
         condition: service_healthy
       eureka-server:
         condition: service_healthy
+    restart: on-failure
 
   brand-service:
     build: ./backend/brand-service
@@ -171,17 +163,17 @@ services:
     networks:
       - app-network
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/branddb
-      SPRING_DATASOURCE_USERNAME: dev
-      SPRING_DATASOURCE_PASSWORD: dev123
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      EUREKA_URL: http://eureka-server:8761/eureka
+      DATASOURCE_URL: jdbc:mysql://mysql:3306/branddb
+      DATASOURCE_USERNAME: dev
+      DATASOURCE_PASSWORD: dev123
       JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
-
     depends_on:
       mysql:
         condition: service_healthy
       eureka-server:
         condition: service_healthy
+    restart: on-failure
 
   order-service:
     build: ./backend/order-service
@@ -189,17 +181,17 @@ services:
     networks:
       - app-network
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/orderdb
-      SPRING_DATASOURCE_USERNAME: dev
-      SPRING_DATASOURCE_PASSWORD: dev123
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      EUREKA_URL: http://eureka-server:8761/eureka
+      DATASOURCE_URL: jdbc:mysql://mysql:3306/orderdb
+      DATASOURCE_USERNAME: dev
+      DATASOURCE_PASSWORD: dev123
       JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
-
     depends_on:
       mysql:
         condition: service_healthy
       eureka-server:
         condition: service_healthy
+    restart: on-failure
 
   payment-service:
     build: ./backend/payment-service
@@ -207,17 +199,17 @@ services:
     networks:
       - app-network
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/paymentdb
-      SPRING_DATASOURCE_USERNAME: dev
-      SPRING_DATASOURCE_PASSWORD: dev123
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      EUREKA_URL: http://eureka-server:8761/eureka
+      DATASOURCE_URL: jdbc:mysql://mysql:3306/paymentdb
+      DATASOURCE_USERNAME: dev
+      DATASOURCE_PASSWORD: dev123
       JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
-
     depends_on:
       mysql:
         condition: service_healthy
       eureka-server:
         condition: service_healthy
+    restart: on-failure
 
   cart-service:
     build: ./backend/cart-service
@@ -225,12 +217,11 @@ services:
     networks:
       - app-network
     environment:
+      EUREKA_URL: http://eureka-server:8761/eureka
       SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/cartdb
       SPRING_DATA_REDIS_HOST: redis
       SPRING_DATA_REDIS_PORT: 6379
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
       JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
-
     depends_on:
       mongodb:
         condition: service_healthy
@@ -238,6 +229,7 @@ services:
         condition: service_healthy
       eureka-server:
         condition: service_healthy
+    restart: on-failure
 
   chat-service:
     build: ./backend/chat-service
@@ -245,15 +237,29 @@ services:
     networks:
       - app-network
     environment:
+      EUREKA_URL: http://eureka-server:8761/eureka
       SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/chatdb
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
       JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
     depends_on:
       mongodb:
         condition: service_healthy
       eureka-server:
         condition: service_healthy
-        
+    restart: on-failure
+
+  assistant-service:
+    build: ./backend/assistant-service
+    container_name: assistant-service
+    networks:
+      - app-network
+    environment:
+      EUREKA_URL: http://eureka-server:8761/eureka
+      JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    restart: on-failure
+
 volumes:
   mysql_data:
   mongo_data:
