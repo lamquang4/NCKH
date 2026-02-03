@@ -43,6 +43,8 @@ jobs:
       fail-fast: false
       matrix:
         service:
+          - eureka-server
+          - api-gateway
           - assistant-service
           - user-service
           - auth-service
@@ -53,8 +55,6 @@ jobs:
           - payment-service
           - cart-service
           - chat-service
-          - api-gateway
-          - eureka-server
 
     steps:
       - name: Checkout code
