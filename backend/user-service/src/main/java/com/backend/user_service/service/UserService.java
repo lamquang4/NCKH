@@ -92,11 +92,13 @@ public class UserService {
     // tạo user
     public UserResponse createUser(UserRequest request) {
 
-        if (!ValidationUtils.validateEmail(request.getEmail())) {
+        if (request.getEmail() != null &&
+                !ValidationUtils.validateEmail(request.getEmail())) {
             throw new BadRequestException("Email không hợp lệ");
         }
 
-        if (!ValidationUtils.validatePhone(request.getPhone())) {
+        if (request.getPhone() != null &&
+                !ValidationUtils.validatePhone(request.getPhone())) {
             throw new BadRequestException("Số điện thoại không hợp lệ");
         }
 
@@ -127,19 +129,23 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Người dùng không tồn tại"));
 
-        if (!ValidationUtils.validateEmail(request.getEmail())) {
+        if (request.getEmail() != null &&
+                !ValidationUtils.validateEmail(request.getEmail())) {
             throw new BadRequestException("Email không hợp lệ");
         }
 
-        if (!ValidationUtils.validatePhone(request.getPhone())) {
+        if (request.getPhone() != null &&
+                !ValidationUtils.validatePhone(request.getPhone())) {
             throw new BadRequestException("Số điện thoại không hợp lệ");
         }
 
-        userRepository.findByPhone(request.getPhone())
-                .filter(p -> !p.getId().equals(id))
-                .ifPresent(p -> {
-                    throw new ConflictException("Số điện thoại đã được sử dụng");
-                });
+        if (request.getPhone() != null) {
+            userRepository.findByPhone(request.getPhone())
+                    .filter(p -> !p.getId().equals(id))
+                    .ifPresent(p -> {
+                        throw new ConflictException("Số điện thoại đã được sử dụng");
+                    });
+        }
 
         userRepository.findByEmail(request.getEmail())
                 .filter(p -> !p.getId().equals(id))
@@ -169,6 +175,7 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("Người dùng không tìm thấy"));
 
         user.setStatus(status);
+        userRepository.save(user);
 
         return UserMapper.toResponse(user);
     }

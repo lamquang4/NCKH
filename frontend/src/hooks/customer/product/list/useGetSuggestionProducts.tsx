@@ -10,7 +10,7 @@ interface ResponseType {
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 export default function useGetSuggestionProducts(limit: number) {
-  const [keyword, setKeyword] = useState("");
+  const [keyword, setKeyword] = useState<string>("");
   const url = `${import.meta.env.VITE_BACKEND_URL}/product/active/limit?q=${keyword}&limit=${limit}`;
 
   const { data, error, isLoading, mutate } = useSWR<ResponseType>(

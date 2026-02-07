@@ -18,7 +18,10 @@ import org.springframework.data.domain.Page;
 import com.backend.order_service.dto.request.OrderRequest;
 import com.backend.order_service.dto.response.OrderResponse;
 import com.backend.order_service.service.OrderService;
+import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
 
+@Validated
 @RestController
 @RequestMapping("/api/order")
 public class OrderController {
@@ -28,6 +31,7 @@ public class OrderController {
                 this.orderService = orderService;
         }
 
+        // admin
         @GetMapping
         public ResponseEntity<?> getOrders(
                         @RequestParam(defaultValue = "1") int page,
@@ -60,22 +64,6 @@ public class OrderController {
                                 orderService.getOrderById(id));
         }
 
-        @GetMapping("/code/{orderCode}")
-        public ResponseEntity<OrderResponse> getOrderByOrderCode(
-                        @PathVariable String orderCode) {
-
-                return ResponseEntity.ok(
-                                orderService.getOrderByOrderCode(orderCode));
-        }
-
-        @GetMapping("/user/{userId}/{orderCode}")
-        public ResponseEntity<OrderResponse> getOrderByOrderCodeAndUser(
-                        @PathVariable String orderCode, @PathVariable String userId) {
-
-                return ResponseEntity.ok(
-                                orderService.getOrderByOrderCodeAndUser(orderCode, userId));
-        }
-
         @PatchMapping("/status/{id}")
         public ResponseEntity<Void> updateOrderStatus(
                         @PathVariable String id,
@@ -85,18 +73,27 @@ public class OrderController {
                 return ResponseEntity.noContent().build();
         }
 
-        @GetMapping("/user/{userId}")
+        // customer
+        @GetMapping("/user/{orderCode}")
+        public ResponseEntity<OrderResponse> getUserOrderByCode(
+                        Authentication auth,
+                        @PathVariable String orderCode) {
+
+                String userId = auth.getName();
+                return ResponseEntity.ok(
+                                orderService.getOrderByOrderCodeAndUser(orderCode, userId));
+        }
+
+        @GetMapping("/user")
         public ResponseEntity<?> getOrdersByUser(
-                        @PathVariable String userId,
+                        Authentication auth,
                         @RequestParam(defaultValue = "1") int page,
                         @RequestParam(defaultValue = "12") int limit,
                         @RequestParam(required = false) Integer status) {
 
-                Page<OrderResponse> orderPage = orderService.getOrdersByUser(
-                                userId,
-                                page,
-                                limit,
-                                status);
+                String userId = auth.getName();
+
+                Page<OrderResponse> orderPage = orderService.getOrdersByUser(userId, page, limit, status);
 
                 return ResponseEntity.ok(
                                 Map.of(
@@ -105,33 +102,52 @@ public class OrderController {
                                                 "total", orderPage.getTotalElements()));
         }
 
-        @PostMapping("/user/{userId}")
+        @PostMapping("/user")
         public ResponseEntity<OrderResponse> createOrder(
                         @RequestBody OrderRequest request,
-                        @PathVariable String userId) {
+                        Authentication auth) {
 
+                String userId = auth.getName();
                 return ResponseEntity.ok(
                                 orderService.createOrder(request, userId));
         }
 
-        @DeleteMapping("/{orderCode}")
-        public ResponseEntity<Void> deleteOrderByCode(
+        // Internal
+        @GetMapping("/internal/code/{orderCode}")
+        public ResponseEntity<OrderResponse> getOrderByOrderCodeInternal(
+                        @PathVariable String orderCode) {
+
+                return ResponseEntity.ok(
+                                orderService.getOrderByOrderCode(orderCode));
+        }
+
+        @PatchMapping("/internal/status/{id}")
+        public ResponseEntity<Void> updateOrderStatusInternal(
+                        @PathVariable String id,
+                        @RequestParam Integer status) {
+
+                orderService.updateOrderStatus(id, status);
+                return ResponseEntity.noContent().build();
+        }
+
+        @DeleteMapping("/internal/{orderCode}")
+        public ResponseEntity<Void> deleteOrderByCodeInternal(
                         @PathVariable String orderCode) {
 
                 orderService.deleteOrderByCode(orderCode);
                 return ResponseEntity.noContent().build();
         }
 
-        @PostMapping("/payment/{orderCode}")
-        public ResponseEntity<Void> confirmGatewayPayment(
+        @PostMapping("/internal/payment/{orderCode}")
+        public ResponseEntity<Void> confirmGatewayPaymentInternal(
                         @PathVariable String orderCode) {
 
                 orderService.confirmGatewayPayment(orderCode);
                 return ResponseEntity.ok().build();
         }
 
-        @GetMapping("/exists/{productId}")
-        public ResponseEntity<Boolean> existsProductInOrder(
+        @GetMapping("/internal/exists/{productId}")
+        public ResponseEntity<Boolean> existsProductInOrderInternal(
                         @PathVariable String productId) {
 
                 return ResponseEntity.ok(

@@ -10,7 +10,7 @@ export function useRemoveItemInCart() {
     }
     setIsLoading(true);
     try {
-      const url = `${import.meta.env.VITE_BACKEND_URL}/cart/${userId}item/${productId}`;
+      const url = `${import.meta.env.VITE_BACKEND_URL}/cart/${productId}`;
       await axios.delete(url);
     } catch (err: any) {
       console.error("Lỗi:", err);

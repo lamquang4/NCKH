@@ -26,9 +26,15 @@ export default function useUpdateCategory(id: string) {
         ),
       );
 
-      formData.append("image", data.image);
+      if (data.image) {
+        formData.append("image", data.image);
+      }
 
-      await axios.put(url, formData);
+      await axios.put(url, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       toast.dismiss(loadingToast);
       toast.success("Cập nhật thành công");
     } catch (err) {

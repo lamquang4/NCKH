@@ -9,21 +9,22 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.backend.payment_service.config.InternalFeignConfig;
 import com.backend.payment_service.dto.response.OrderResponse;
 
-@FeignClient(name = "order-service")
+@FeignClient(name = "order-service", configuration = InternalFeignConfig.class)
 public interface OrderServiceClient {
-    @GetMapping("/api/order/code/{orderCode}")
-    OrderResponse getOrderByOrderCode(@PathVariable String orderCode);
+    @GetMapping("/api/order/internal/code/{orderCode}")
+    OrderResponse getOrderByOrderCodeInternal(@PathVariable String orderCode);
 
-    @PatchMapping("/api/order/status/{id}")
-    void updateOrderStatus(
+    @PatchMapping("/api/order/internal/status/{id}")
+    void updateOrderStatusInternal(
             @PathVariable String id,
             @RequestParam Integer status);
 
-    @DeleteMapping("/api/order/{orderCode}")
-    ResponseEntity<Void> deleteOrderByCode(@PathVariable String orderCode);
+    @DeleteMapping("/api/order/internal/{orderCode}")
+    ResponseEntity<Void> deleteOrderByCodeInternal(@PathVariable String orderCode);
 
-    @PostMapping("/api/order/payment/{orderCode}")
-    ResponseEntity<Void> confirmGatewayPayment(@PathVariable String orderCode);
+    @PostMapping("/api/order/internal/payment/{orderCode}")
+    ResponseEntity<Void> confirmGatewayPaymentInternal(@PathVariable String orderCode);
 }

@@ -8,7 +8,7 @@ export default function useGetOrder(userId: string, orderCode: string) {
     userId && orderCode
       ? `${
           import.meta.env.VITE_BACKEND_URL
-        }/order/user/${userId}/${orderCode}`
+        }/order/user/${orderCode}`
       : null;
   const { data, error, isLoading, mutate } = useSWR<any>(url, fetcher, {
     shouldRetryOnError: false,

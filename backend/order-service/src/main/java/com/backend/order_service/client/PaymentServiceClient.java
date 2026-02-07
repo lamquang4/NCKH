@@ -5,8 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-@FeignClient(name = "payment-service")
+import com.backend.order_service.config.InternalFeignConfig;
+
+@FeignClient(name = "payment-service", configuration = InternalFeignConfig.class)
 public interface PaymentServiceClient {
-    @PostMapping("/api/payment/momo/refund/{orderCode}")
-    ResponseEntity<Void> refundMomoByOrderCode(@PathVariable String orderCode);
+    @PostMapping("/api/payment/internal/momo/refund/{orderCode}")
+    ResponseEntity<Void> refundMomoByOrderCodeInternal(@PathVariable String orderCode);
 }

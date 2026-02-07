@@ -55,6 +55,7 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
 
       try {
         await sendRegisterOTP(data.email.trim());
+        toast("Đang gửi email...");
         setStep(2);
       } catch (err: any) {
         toast.error(err?.response?.data?.msg);

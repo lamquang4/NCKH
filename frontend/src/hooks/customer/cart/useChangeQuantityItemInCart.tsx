@@ -11,7 +11,7 @@ export function useChangeQuantityItemInCart() {
     }
     setIsLoading(true);
     try {
-      const url = `${import.meta.env.VITE_BACKEND_URL}/cart/${userId}`;
+      const url = `${import.meta.env.VITE_BACKEND_URL}/cart`;
       await axios.put(url, data);
     } catch (err: any) {
       console.error("Lỗi:", err);

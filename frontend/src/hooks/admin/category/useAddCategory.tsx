@@ -30,9 +30,16 @@ export default function useAddCategory() {
         ),
       );
 
-      formData.append("image", data.image);
+      if (data.image) {
+        formData.append("image", data.image);
+      }
 
-      await axios.post(url, formData);
+      await axios.post(url, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
       toast.dismiss(loadingToast);
       toast.success("Thêm thành công");
     } catch (err) {

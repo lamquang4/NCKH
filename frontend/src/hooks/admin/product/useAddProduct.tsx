@@ -41,7 +41,11 @@ export default function useAddProduct() {
         });
       }
 
-      await axios.post(url, formData);
+      await axios.post(url, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       toast.dismiss(loadingToast);
       toast.success("Thêm thành công");
     } catch (err) {

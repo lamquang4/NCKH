@@ -9,7 +9,6 @@ import { useAddItemToCart } from "../../../../hooks/customer/cart/useAddItemToCa
 import useGetAccount from "../../../../hooks/auth/useGetAccount";
 import useGetCart from "../../../../hooks/customer/cart/useGetCart";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 
 type Props = {
   product: ProductResponse;
@@ -17,7 +16,6 @@ type Props = {
 
 function ProductDetail({ product }: Props) {
   const max = 15;
-  const navigate = useNavigate();
   const [quantity, setQuantity] = useState<number>(1);
 
   const { account } = useGetAccount("customer");
@@ -41,7 +39,6 @@ function ProductDetail({ product }: Props) {
 
     if (!account?.id) {
       toast.error("Bạn phải đăng nhập để mua sách");
-      navigate("/login");
       return;
     }
 
@@ -60,7 +57,7 @@ function ProductDetail({ product }: Props) {
     }
 
     try {
-      await addItem(account?.id, {
+      await addItem({
         productId: product.id,
         quantity,
       });

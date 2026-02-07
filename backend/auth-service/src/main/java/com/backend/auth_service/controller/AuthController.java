@@ -2,6 +2,7 @@ package com.backend.auth_service.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,11 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.backend.auth_service.dto.request.LoginRequest;
 import com.backend.auth_service.dto.request.RegisterRequest;
 import com.backend.auth_service.dto.response.LoginResponse;
+import com.backend.auth_service.exception.BadRequestException;
 import com.backend.auth_service.service.AuthService;
 import com.backend.auth_service.service.JwtService;
 
 import jakarta.validation.Valid;
 
+@Validated
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -59,6 +62,11 @@ public class AuthController {
             @RequestHeader("Authorization") String authHeader) {
 
         String token = authHeader.replace("Bearer ", "");
+
+        if (!jwtService.isTokenValid(token)) {
+            throw new BadRequestException("Token không hợp lệ hoặc đã hết hạn");
+        }
+
         LoginResponse response = jwtService.getLoginResponseFromToken(token);
 
         return ResponseEntity.ok(response);

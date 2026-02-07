@@ -10,7 +10,7 @@ export default function useAddOrder() {
     }
     setIsLoading(true);
     try {
-      const url = `${import.meta.env.VITE_BACKEND_URL}/order/user/${userId}`;
+      const url = `${import.meta.env.VITE_BACKEND_URL}/order/user`;
       const res = await axios.post(url, data);
       return res.data;
     } catch (err) {

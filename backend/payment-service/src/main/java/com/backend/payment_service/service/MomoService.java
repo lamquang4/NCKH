@@ -152,7 +152,7 @@ public class MomoService {
         String orderCode = (String) payload.get("orderId");
         String transId = String.valueOf(payload.get("transId"));
 
-        OrderResponse order = orderServiceClient.getOrderByOrderCode(orderCode);
+        OrderResponse order = orderServiceClient.getOrderByOrderCodeInternal(orderCode);
 
         if (order == null) {
             throw new NotFoundException("Đơn hàng không tìm thấy");
@@ -163,7 +163,7 @@ public class MomoService {
         }
 
         try {
-            orderServiceClient.confirmGatewayPayment(orderCode);
+            orderServiceClient.confirmGatewayPaymentInternal(orderCode);
 
             PaymentRequest paymentRequest = PaymentRequest.builder()
                     .orderId(order.getId())
@@ -176,7 +176,7 @@ public class MomoService {
 
             paymentService.createPayment(paymentRequest);
 
-            cartServiceClient.clearCart(order.getUserId());
+            cartServiceClient.clearCartInternal(order.getUserId());
 
             return true;
 
@@ -187,7 +187,7 @@ public class MomoService {
                     order.getTotal(),
                     order.getOrderCode());
 
-            orderServiceClient.deleteOrderByCode(orderCode);
+            orderServiceClient.deleteOrderByCodeInternal(orderCode);
 
             return false;
         }

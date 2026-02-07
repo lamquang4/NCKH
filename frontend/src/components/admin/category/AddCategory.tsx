@@ -16,6 +16,8 @@ function AddCategory() {
   const {
     previewImages,
     selectedFiles,
+    setPreviewImages,
+    setSelectedFiles,
     handlePreviewImage,
     handleRemovePreviewImage,
   } = useInputImage(1);
@@ -38,11 +40,13 @@ function AddCategory() {
         image: selectedFiles[0],
         status: Number(data.status),
       });
-      
+
       setData({
         name: "",
         status: "",
       });
+      setPreviewImages([]);
+      setSelectedFiles([]);
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
     }

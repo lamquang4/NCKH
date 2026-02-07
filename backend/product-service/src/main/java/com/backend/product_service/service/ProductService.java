@@ -3,12 +3,14 @@ package com.backend.product_service.service;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -74,22 +76,28 @@ public class ProductService {
             int limit,
             String q,
             Integer status) {
-        Pageable pageable = PageRequest.of(page - 1, limit, Sort.by("createdAt").descending());
+
+        Pageable pageable = PageRequest.of(
+                page - 1,
+                limit,
+                Sort.by("createdAt").descending());
 
         Page<Product> productPage;
 
         if (q != null && !q.isBlank() && status != null) {
-            productPage = productRepository.findByNameContainingIgnoreCaseAndStatus(
-                    q, status, pageable);
+            productPage = productRepository
+                    .findByNameContainingIgnoreCaseAndStatus(q, status, pageable);
         } else if (q != null && !q.isBlank()) {
-            productPage = productRepository.findByNameContainingIgnoreCase(q, pageable);
+            productPage = productRepository
+                    .findByNameContainingIgnoreCase(q, pageable);
         } else if (status != null) {
-            productPage = productRepository.findByStatus(status, pageable);
+            productPage = productRepository
+                    .findByStatus(status, pageable);
         } else {
             productPage = productRepository.findAll(pageable);
         }
 
-        return productPage.map(this::mapWithClient);
+        return mapPageWithClient(productPage);
     }
 
     // lấy các sản phẩm có status = 1 phân trang
@@ -99,23 +107,16 @@ public class ProductService {
             String q,
             String sort) {
 
-        Sort sortOption = buildSort(sort);
-
         Pageable pageable = PageRequest.of(
                 page - 1,
                 limit,
-                sortOption);
+                buildSort(sort));
 
-        Page<Product> productPage;
+        Page<Product> productPage = (q != null && !q.isBlank())
+                ? productRepository.findByStatusAndNameContainingIgnoreCase(1, q, pageable)
+                : productRepository.findByStatus(1, pageable);
 
-        if (q != null && !q.isBlank()) {
-            productPage = productRepository.findByStatusAndNameContainingIgnoreCase(
-                    1, q, pageable);
-        } else {
-            productPage = productRepository.findByStatus(1, pageable);
-        }
-
-        return productPage.map(this::mapWithClient);
+        return mapPageWithClient(productPage);
     }
 
     // lấy các sản phẩm dựa vào category slug và có status = 1 phân trang
@@ -126,33 +127,20 @@ public class ProductService {
             String sort,
             String slug) {
 
-        Sort sortOption = buildSort(sort);
+        CategoryResponse category = categoryServiceClient.getCategoryBySlugInternal(slug);
 
         Pageable pageable = PageRequest.of(
                 page - 1,
                 limit,
-                sortOption);
+                buildSort(sort));
 
-        CategoryResponse category = categoryServiceClient.getCategoryBySlug(slug);
+        Page<Product> productPage = (q != null && !q.isBlank())
+                ? productRepository.findByStatusAndCategoryIdAndNameContainingIgnoreCase(
+                        1, category.getId(), q, pageable)
+                : productRepository.findByStatusAndCategoryId(
+                        1, category.getId(), pageable);
 
-        Page<Product> productPage;
-
-        if (q != null && !q.isBlank()) {
-            productPage = productRepository
-                    .findByStatusAndCategoryIdAndNameContainingIgnoreCase(
-                            1,
-                            category.getId(),
-                            q,
-                            pageable);
-        } else {
-            productPage = productRepository
-                    .findByStatusAndCategoryId(
-                            1,
-                            category.getId(),
-                            pageable);
-        }
-
-        return productPage.map(this::mapWithClient);
+        return mapPageWithClient(productPage);
     }
 
     // lấy các sản phẩm giảm giá có status = 1
@@ -162,59 +150,45 @@ public class ProductService {
             String q,
             String sort) {
 
-        Sort sortOption = buildSort(sort);
-
         Pageable pageable = PageRequest.of(
                 page - 1,
                 limit,
-                sortOption);
+                buildSort(sort));
 
-        Page<Product> productPage;
+        Page<Product> productPage = (q != null && !q.isBlank())
+                ? productRepository
+                        .findByStatusAndDiscountGreaterThanAndNameContainingIgnoreCase(
+                                1, BigDecimal.ZERO, q, pageable)
+                : productRepository
+                        .findByStatusAndDiscountGreaterThan(
+                                1, BigDecimal.ZERO, pageable);
 
-        if (q != null && !q.isBlank()) {
-            productPage = productRepository
-                    .findByStatusAndDiscountGreaterThanAndNameContainingIgnoreCase(
-                            1,
-                            BigDecimal.ZERO,
-                            q,
-                            pageable);
-        } else {
-            productPage = productRepository
-                    .findByStatusAndDiscountGreaterThan(
-                            1,
-                            BigDecimal.ZERO,
-                            pageable);
-        }
-
-        return productPage.map(this::mapWithClient);
+        return mapPageWithClient(productPage);
     }
 
     // lấy các sản phẩm có status = 1
     public List<ProductResponse> getActiveProducts() {
-        return productRepository
-                .findByStatus(1, Sort.by("createdAt").descending())
-                .stream()
-                .map(this::mapWithClient)
-                .collect(Collectors.toList());
+
+        List<Product> products = productRepository.findByStatus(
+                1,
+                Sort.by("createdAt").descending());
+
+        return mapWithClient(products);
     }
 
     // lấy x sản phẩm bán chạy nhất
     public List<ProductResponse> getActiveBestSellerProducts(Integer limit) {
 
-        int size = limit == null
-                ? 10
-                : limit;
+        int size = (limit == null) ? 10 : limit;
 
-        Pageable pageable = PageRequest.of(
-                0,
-                size,
-                Sort.by("totalSold").descending());
+        List<Product> products = productRepository
+                .findByStatusAndTotalSoldGreaterThan(
+                        1,
+                        0,
+                        PageRequest.of(0, size, Sort.by("totalSold").descending()))
+                .getContent();
 
-        return productRepository
-                .findByStatusAndTotalSoldGreaterThan(1, 0, pageable)
-                .stream()
-                .map(this::mapWithClient)
-                .collect(Collectors.toList());
+        return mapWithClient(products);
     }
 
     // lấy x sản phẩm gợi ý
@@ -222,44 +196,37 @@ public class ProductService {
 
         int size = (limit != null && limit > 0) ? limit : 10;
 
-        List<Product> products;
+        List<Product> products = (q != null && !q.isBlank())
+                ? productRepository.searchActiveProducts(
+                        q.toLowerCase(),
+                        PageRequest.of(0, size))
+                : productRepository
+                        .findByStatus(1, PageRequest.of(0, size))
+                        .getContent();
 
-        if (q != null && !q.isBlank()) {
-            products = productRepository
-                    .searchActiveProducts(q.toLowerCase(), PageRequest.of(0, size));
-        } else {
-            products = productRepository
-                    .findByStatus(1, PageRequest.of(0, size))
-                    .getContent();
-        }
-
-        return products.stream()
-                .map(this::mapWithClient)
-                .collect(Collectors.toList());
+        return mapWithClient(products);
     }
 
     // lấy tất cả sản phẩm có status = 1 theo category id
     public List<ProductResponse> getAllActiveProductsByCategoryId(String categoryId) {
-        return productRepository
-                .findByStatusAndCategoryId(
-                        1,
-                        categoryId,
-                        Sort.by("createdAt").descending())
-                .stream()
-                .map(this::mapWithClient)
-                .collect(Collectors.toList());
+
+        List<Product> products = productRepository.findByStatusAndCategoryId(
+                1,
+                categoryId,
+                Sort.by("createdAt").descending());
+
+        return mapWithClient(products);
     }
 
     // lấy tất cả sản phẩm có status = 1 theo brand id
     public List<ProductResponse> getAllActiveProductsByBrandId(String brandId) {
-        return productRepository
-                .findByStatusAndBrandId(
-                        1,
-                        brandId,
-                        Sort.by("createdAt").descending())
-                .stream()
-                .map(this::mapWithClient)
-                .collect(Collectors.toList());
+
+        List<Product> products = productRepository.findByStatusAndBrandId(
+                1,
+                brandId,
+                Sort.by("createdAt").descending());
+
+        return mapWithClient(products);
     }
 
     // lấy sản phẩm theo id
@@ -267,7 +234,7 @@ public class ProductService {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Sản phẩm không tìm thấy"));
 
-        return mapWithClient(product);
+        return mapWithClient(List.of(product)).get(0);
     }
 
     // lấy sản phẩm theo slug có status = 1
@@ -277,16 +244,17 @@ public class ProductService {
                 .findBySlugAndStatus(slug, 1)
                 .orElseThrow(() -> new NotFoundException("Sản phẩm không tìm thấy"));
 
-        return mapWithClient(product);
+        return mapWithClient(List.of(product)).get(0);
     }
 
     // lấy sản phẩm có status = 1 theo id
     public ProductResponse getActiveProductById(String id) {
 
-        Product product = productRepository.findByIdAndStatus(id, 1)
+        Product product = productRepository
+                .findByIdAndStatus(id, 1)
                 .orElseThrow(() -> new NotFoundException("Sản phẩm không tìm thấy"));
 
-        return mapWithClient(product);
+        return mapWithClient(List.of(product)).get(0);
     }
 
     // cập nhật status sản phẩm
@@ -296,7 +264,7 @@ public class ProductService {
                 .orElseThrow(() -> new NotFoundException("Sản phẩm không tìm thấy"));
 
         product.setStatus(status);
-
+        productRepository.save(product);
         return ProductMapper.toResponse(product);
     }
 
@@ -305,13 +273,13 @@ public class ProductService {
     public ProductResponse createProduct(
             ProductRequest request,
             List<MultipartFile> files) {
+
         if (request.getPrice() == null
                 || request.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
             throw new BadRequestException("Giá bán phải lớn hơn 0");
         }
 
         if (request.getDiscount() != null) {
-
             if (request.getDiscount().compareTo(BigDecimal.ZERO) < 0) {
                 throw new BadRequestException("Số tiền giảm giá không được nhỏ hơn 0");
             }
@@ -322,8 +290,8 @@ public class ProductService {
         }
 
         if (request.getStock() == null
-                || request.getStock() > 0) {
-            throw new BadRequestException("Số lượng tồn kho phải lớn hơn 0");
+                || request.getStock() < 0) {
+            throw new BadRequestException("Số lượng tồn kho phải lớn hơn hoặc bằng 0");
         }
 
         if (productRepository.existsByName(request.getName())) {
@@ -333,20 +301,35 @@ public class ProductService {
         Product product = ProductMapper.toEntity(request);
         product.setSlug(SlugUtil.toSlug(request.getName()));
 
+        product.setDiscount(
+                request.getDiscount() != null ? request.getDiscount() : BigDecimal.ZERO);
+
         product.setFinalPrice(
                 calculateFinalPrice(request.getPrice(), request.getDiscount()));
 
-        if (product.getSpecifications() != null) {
-            product.getSpecifications().forEach(spec -> spec.setProduct(product));
+        if (product.getImages() == null) {
+            product.setImages(new HashSet<>());
         }
+
+        if (product.getSpecifications() == null) {
+            product.setSpecifications(new ArrayList<>());
+        }
+
+        product.getSpecifications()
+                .forEach(spec -> spec.setProduct(product));
 
         Product savedProduct = productRepository.save(product);
 
         if (files != null && !files.isEmpty()) {
-            List<ImageProduct> images = files.stream()
-                    .map(file -> uploadImageOnCloudinary(file, savedProduct))
-                    .collect(Collectors.toList());
-            savedProduct.setImages(images);
+            try {
+                for (MultipartFile file : files) {
+                    ImageProduct image = uploadImageOnCloudinary(file, savedProduct);
+                    savedProduct.getImages().add(image); // ✅ add, KHÔNG set
+                }
+            } catch (Exception e) {
+                deleteFolderOnCloudinary(savedProduct.getId());
+                throw e;
+            }
         }
 
         return ProductMapper.toResponse(savedProduct);
@@ -379,8 +362,8 @@ public class ProductService {
         }
 
         if (request.getStock() == null
-                || request.getStock() > 0) {
-            throw new BadRequestException("Số lượng tồn kho phải lớn hơn 0");
+                || request.getStock() < 0) {
+            throw new BadRequestException("Số lượng tồn kho phải lớn hơn hoặc bằng 0");
         }
 
         productRepository.findByName(request.getName())
@@ -395,18 +378,24 @@ public class ProductService {
         product.setFinalPrice(
                 calculateFinalPrice(request.getPrice(), request.getDiscount()));
 
+        if (product.getImages() == null) {
+            product.setImages(new HashSet<>());
+        }
+        if (product.getSpecifications() == null) {
+            product.setSpecifications(new ArrayList<>());
+        }
+
         syncSpecifications(product, request.getSpecifications());
 
         if (files != null && !files.isEmpty()) {
-
-            List<ImageProduct> newImages = files.stream()
-                    .map(file -> uploadImageOnCloudinary(file, product))
-                    .collect(Collectors.toList());
-
-            if (product.getImages() == null) {
-                product.setImages(newImages);
-            } else {
-                product.getImages().addAll(newImages);
+            try {
+                for (MultipartFile file : files) {
+                    ImageProduct image = uploadImageOnCloudinary(file, product);
+                    product.getImages().add(image); // ← ADD vào Set
+                }
+            } catch (Exception e) {
+                deleteFolderOnCloudinary(product.getId());
+                throw e;
             }
         }
 
@@ -420,7 +409,7 @@ public class ProductService {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Sản phẩm không tìm thấy"));
 
-        boolean existsInOrder = orderServiceClient.existsProductInOrder(id);
+        boolean existsInOrder = orderServiceClient.existsProductInOrderInternal(id);
 
         if (existsInOrder) {
             throw new BadRequestException(
@@ -429,7 +418,7 @@ public class ProductService {
 
         deleteFolderOnCloudinary(product.getId());
 
-        cartServiceClient.removeProductFromAllCarts(product.getId());
+        cartServiceClient.removeProductFromAllCartsInternal(product.getId());
 
         productRepository.delete(product);
     }
@@ -488,9 +477,7 @@ public class ProductService {
             throw new NotFoundException("Không tìm thấy sản phẩm");
         }
 
-        return products.stream()
-                .map(this::mapWithClient)
-                .toList();
+        return mapWithClient(products);
     }
 
     // trừ só lượng stock
@@ -532,6 +519,79 @@ public class ProductService {
                     Math.max(0, product.getTotalSold() - req.getQuantity()));
 
             productRepository.save(product);
+        }
+    }
+
+    // ẩn các sản phẩm có brand id đó
+    @Transactional
+    public void hideProductsByBrandId(String brandId) {
+        productRepository.updateStatusByBrandId(brandId, 0);
+    }
+
+    // ẩn các sản phẩm có category id đó
+    @Transactional
+    public void hideProductsByCategoryId(String categoryId) {
+        productRepository.updateStatusByCategoryId(categoryId, 0);
+    }
+
+    // cập nhật 1 hình của sản phẩm
+    @Transactional
+    public void updateProductImage(
+            String productId,
+            String imageId,
+            MultipartFile file) {
+
+        ImageProduct image = imageProductRepository.findById(imageId)
+                .orElseThrow(() -> new NotFoundException("Hình không tìm thấy"));
+
+        if (!image.getProduct().getId().equals(productId)) {
+            throw new ConflictException("Hình không thuộc sản phẩm");
+        }
+
+        if (file == null || file.isEmpty()) {
+            throw new BadRequestException("File hình không được để trống");
+        }
+
+        deleteImageOnCloudinary(productId, imageId);
+
+        String imageUrl = uploadImageOnCloudinaryWithId(file, productId, imageId);
+
+        image.setImage(imageUrl);
+        imageProductRepository.save(image);
+    }
+
+    private String uploadImageOnCloudinaryWithId(
+            MultipartFile file,
+            String productId,
+            String imageId) {
+
+        if (file.getSize() > 2 * 1024 * 1024) {
+            throw new BadRequestException("Dung lượng hình tối đa 2MB");
+        }
+
+        String contentType = file.getContentType();
+        List<String> allowedTypes = List.of(
+                "image/jpeg",
+                "image/png",
+                "image/webp");
+
+        if (contentType == null || !allowedTypes.contains(contentType)) {
+            throw new BadRequestException("Hình chỉ cho phép JPG, PNG, WEBP");
+        }
+
+        try {
+            String folderPath = "nckh/products/" + productId + "/" + imageId;
+
+            Map<?, ?> uploadResult = cloudinary.uploader().upload(
+                    file.getBytes(),
+                    ObjectUtils.asMap(
+                            "folder", folderPath,
+                            "public_id", imageId));
+
+            return uploadResult.get("secure_url").toString();
+
+        } catch (IOException e) {
+            throw new ExternalServiceException("Upload hình thất bại: " + e.getMessage());
         }
     }
 
@@ -591,21 +651,21 @@ public class ProductService {
         String imageId = UUID.randomUUID().toString();
 
         try {
-            String publicId = "nckh/products/"
-                    + product.getId()
+
+            String folderPath = "nckh/products/" + product.getId()
                     + "/"
                     + imageId;
 
             Map<?, ?> uploadResult = cloudinary.uploader().upload(
                     file.getBytes(),
                     ObjectUtils.asMap(
-                            "public_id", publicId,
-                            "overwrite", true,
-                            "resource_type", "image"));
+                            "folder", folderPath,
+                            "public_id", imageId));
+
+            String imageUrl = uploadResult.get("secure_url").toString();
 
             return ImageProduct.builder()
-                    .id(imageId)
-                    .image(uploadResult.get("secure_url").toString())
+                    .image(imageUrl)
                     .product(product)
                     .build();
 
@@ -671,26 +731,60 @@ public class ProductService {
             }
         }
 
+        if (product.getSpecifications() == null) {
+            product.setSpecifications(new ArrayList<>());
+        }
         // cái nào không có trong newList thì bị xóa
         product.getSpecifications().clear();
         product.getSpecifications().addAll(newList);
     }
 
-    private ProductResponse mapWithClient(Product product) {
+    private List<ProductResponse> mapWithClient(List<Product> products) {
 
-        CategoryResponse category = categoryServiceClient.getCategoryById(product.getCategoryId());
-
-        BrandResponse brand = brandServiceClient.getBrandById(product.getBrandId());
-
-        if (category == null) {
-            throw new NotFoundException("Danh mục không tìm thấy");
+        if (products == null || products.isEmpty()) {
+            return List.of();
         }
 
-        if (brand == null) {
-            throw new NotFoundException("Thương hiệu không tìm thấy");
-        }
+        List<String> categoryIds = products.stream()
+                .map(Product::getCategoryId)
+                .distinct()
+                .toList();
 
-        return ProductMapper.toResponse(product, category, brand);
+        List<String> brandIds = products.stream()
+                .map(Product::getBrandId)
+                .distinct()
+                .toList();
+
+        Map<String, CategoryResponse> categoryMap = categoryServiceClient.getCategoriesByIdsInternal(categoryIds);
+
+        Map<String, BrandResponse> brandMap = brandServiceClient.getBrandsByIdsInternal(brandIds);
+
+        return products.stream()
+                .map(product -> {
+
+                    CategoryResponse category = categoryMap.get(product.getCategoryId());
+
+                    BrandResponse brand = brandMap.get(product.getBrandId());
+
+                    if (category == null)
+                        throw new NotFoundException("Danh mục không tìm thấy");
+
+                    if (brand == null)
+                        throw new NotFoundException("Thương hiệu không tìm thấy");
+
+                    return ProductMapper.toResponse(product, category, brand);
+                })
+                .toList();
+    }
+
+    private Page<ProductResponse> mapPageWithClient(Page<Product> productPage) {
+
+        List<ProductResponse> responses = mapWithClient(productPage.getContent());
+
+        return new PageImpl<>(
+                responses,
+                productPage.getPageable(),
+                productPage.getTotalElements());
     }
 
     private BigDecimal calculateFinalPrice(BigDecimal price, BigDecimal discount) {

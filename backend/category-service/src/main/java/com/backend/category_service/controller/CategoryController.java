@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -23,6 +25,7 @@ import com.backend.category_service.service.CategoryService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
+@Validated
 @RestController
 @RequestMapping("/api/category")
 public class CategoryController {
@@ -53,23 +56,13 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.getAllCategories());
     }
 
-    @GetMapping("/active")
-    public ResponseEntity<List<CategoryResponse>> getActiveCategories() {
-        return ResponseEntity.ok(categoryService.getActiveCategories());
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<CategoryResponse> getCategoryById(@PathVariable String id) {
         return ResponseEntity.ok(categoryService.getCategoryById(id));
     }
 
-    @GetMapping("/slug/{id}")
-    public ResponseEntity<CategoryResponse> getCategoryBySlug(@PathVariable String slug) {
-        return ResponseEntity.ok(categoryService.getCategoryBySlug(slug));
-    }
-
     @PostMapping(consumes = "multipart/form-data")
-    public ResponseEntity<CategoryResponse> create(
+    public ResponseEntity<CategoryResponse> createCategory(
             @Valid @RequestPart("category") CategoryRequest request,
             @RequestPart(value = "image", required = false) MultipartFile image) {
 
@@ -77,7 +70,7 @@ public class CategoryController {
     }
 
     @PutMapping(value = "/{id}", consumes = "multipart/form-data")
-    public ResponseEntity<CategoryResponse> update(
+    public ResponseEntity<CategoryResponse> updateCategory(
             @PathVariable String id,
             @Valid @RequestPart("category") CategoryRequest request,
             @RequestPart(value = "image", required = false) MultipartFile image) {
@@ -86,7 +79,7 @@ public class CategoryController {
     }
 
     @PatchMapping("/status/{id}")
-    public ResponseEntity<?> updateStatus(
+    public ResponseEntity<?> updateStatusCategory(
             @PathVariable String id,
             @RequestParam @NotNull Integer status) {
 
@@ -95,8 +88,26 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String id) {
+    public ResponseEntity<Void> deleteCategory(@PathVariable String id) {
         categoryService.deleteCategory(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/active")
+    public ResponseEntity<List<CategoryResponse>> getActiveCategories() {
+        return ResponseEntity.ok(categoryService.getActiveCategories());
+    }
+
+    // internal
+    @GetMapping("/internal/slug/{slug}")
+    public ResponseEntity<CategoryResponse> getCategoryBySlugInternal(@PathVariable String slug) {
+        return ResponseEntity.ok(categoryService.getCategoryBySlug(slug));
+    }
+
+    @PostMapping("/internal/categories")
+    public Map<String, CategoryResponse> getCategoriesByIdsInternal(
+            @RequestBody List<String> ids) {
+
+        return categoryService.getCategoriesByIds(ids);
     }
 }

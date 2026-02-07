@@ -3,6 +3,7 @@ package com.backend.product_service.entity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -13,9 +14,13 @@ import jakarta.persistence.Index;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,6 +34,7 @@ import lombok.Setter;
         @Index(name = "idx_product_category", columnList = "categoryId"),
         @Index(name = "idx_product_brand", columnList = "brandId")
 })
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -75,10 +81,12 @@ public class Product {
     private String brandId;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ImageProduct> images;
+    @Builder.Default
+    private Set<ImageProduct> images = new HashSet<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Specification> specifications;
+    @Builder.Default
+    private List<Specification> specifications = new ArrayList<>();
 
     @CreatedDate
     @Column(updatable = false)

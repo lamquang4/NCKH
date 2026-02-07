@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
 
 import com.backend.cart_service.dto.request.CartItemRequest;
 import com.backend.cart_service.dto.response.CartResponse;
@@ -16,6 +18,7 @@ import com.backend.cart_service.service.CartService;
 
 import jakarta.validation.Valid;
 
+@Validated
 @RestController
 @RequestMapping("/api/cart")
 public class CartController {
@@ -25,49 +28,48 @@ public class CartController {
         this.cartService = cartService;
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<CartResponse> getCart(
-            @PathVariable String userId) {
-
-        return ResponseEntity.ok(
-                cartService.getCartByUserId(userId));
+    @GetMapping
+    public ResponseEntity<CartResponse> getCart(Authentication auth) {
+        String userId = auth.getName();
+        return ResponseEntity.ok(cartService.getCartByUserId(userId));
     }
 
-    @PostMapping("/{userId}")
+    @PostMapping
     public ResponseEntity<CartResponse> addToCart(
-            @PathVariable String userId,
+            Authentication auth,
             @RequestBody @Valid CartItemRequest request) {
 
-        return ResponseEntity.ok(
-                cartService.addToCart(userId, request));
+        String userId = auth.getName();
+        return ResponseEntity.ok(cartService.addToCart(userId, request));
     }
 
-    @PutMapping("/{userId}")
+    @PutMapping
     public ResponseEntity<CartResponse> updateQuantity(
-            @PathVariable String userId,
+            Authentication auth,
             @RequestBody @Valid CartItemRequest request) {
 
-        return ResponseEntity.ok(
-                cartService.updateQuantity(userId, request));
+        String userId = auth.getName();
+        return ResponseEntity.ok(cartService.updateQuantity(userId, request));
     }
 
-    @DeleteMapping("/{userId}/item/{productId}")
+    @DeleteMapping("/{productId}")
     public ResponseEntity<CartResponse> removeItem(
-            @PathVariable String userId,
+            Authentication auth,
             @PathVariable String productId) {
 
-        return ResponseEntity.ok(
-                cartService.removeItem(userId, productId));
+        String userId = auth.getName();
+        return ResponseEntity.ok(cartService.removeItem(userId, productId));
     }
 
-    @DeleteMapping("/all/{productId}")
-    public ResponseEntity<Void> removeProductFromAllCarts(@PathVariable String productId) {
+    // Internal
+    @DeleteMapping("/internal/all/{productId}")
+    public ResponseEntity<Void> removeProductFromAllCartsInternal(@PathVariable String productId) {
         cartService.removeProductFromAllCarts(productId);
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/clear/{userId}")
-    public ResponseEntity<Void> clearCart(@PathVariable String userId) {
+    @DeleteMapping("/internal/clear/{userId}")
+    public ResponseEntity<Void> clearCartInternal(@PathVariable String userId) {
         cartService.clearCartByUserId(userId);
         return ResponseEntity.noContent().build();
     }

@@ -5,8 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "cart-service")
+import com.backend.product_service.config.InternalFeignConfig;
+
+@FeignClient(name = "cart-service", configuration = InternalFeignConfig.class)
 public interface CartServiceClient {
-    @DeleteMapping("/api/cart/all/{productId}")
-    ResponseEntity<Void> removeProductFromAllCarts(@PathVariable String productId);
+    @DeleteMapping("/api/cart/internal/all/{productId}")
+    ResponseEntity<Void> removeProductFromAllCartsInternal(@PathVariable String productId);
 }
