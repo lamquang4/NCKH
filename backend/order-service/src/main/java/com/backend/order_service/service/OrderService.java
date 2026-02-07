@@ -229,7 +229,7 @@ public class OrderService {
                         Order savedOrder = orderRepository.save(order);
 
                         // trừ tồn kho ngay
-                        ProductServiceClient.decreaseStock(
+                        ProductServiceClient.decreaseStockInternal(
                                         buildStockRequests(savedOrder));
 
                         return OrderMapper.toResponse(savedOrder);
@@ -258,18 +258,18 @@ public class OrderService {
 
                         // hoàn tiền nếu là momo
                         if ("momo".equalsIgnoreCase(order.getPaymethod())) {
-                                paymentServiceClient.refundMomoByOrderCode(order.getOrderCode());
+                                paymentServiceClient.refundMomoByOrderCodeInternal(order.getOrderCode());
                         }
 
                         // trả tồn kho
-                        ProductServiceClient.increaseStock(
+                        ProductServiceClient.increaseStockInternal(
                                         buildStockRequests(order));
                 }
 
                 // hủy đơn
                 if (status == 4 && oldStatus != 4) {
                         if ("cod".equalsIgnoreCase(order.getPaymethod())) {
-                                ProductServiceClient.increaseStock(
+                                ProductServiceClient.increaseStockInternal(
                                                 buildStockRequests(order));
                         }
                 }
@@ -282,8 +282,9 @@ public class OrderService {
                 String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
                 Random random = new Random();
                 StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < 6; i++) {
-                        sb.append("ORD" + chars.charAt(random.nextInt(chars.length())));
+                sb.append("ORD");
+                for (int i = 0; i < 5; i++) {
+                        sb.append(chars.charAt(random.nextInt(chars.length())));
                 }
                 return sb.toString();
         }
@@ -296,7 +297,7 @@ public class OrderService {
                                 .distinct()
                                 .toList();
 
-                List<ProductResponse> products = ProductServiceClient.getProductsByIds(productIds);
+                List<ProductResponse> products = ProductServiceClient.getProductsByIdsInternal(productIds);
 
                 Map<String, ProductResponse> productMap = products.stream()
                                 .collect(Collectors.toMap(
@@ -334,7 +335,7 @@ public class OrderService {
                 }
 
                 // trừ tồn kho
-                ProductServiceClient.increaseStock(
+                ProductServiceClient.decreaseStockInternal(
                                 buildStockRequests(order));
 
                 order.setStatus(0);

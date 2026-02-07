@@ -104,6 +104,7 @@ function AddProduct() {
         specifications: specifications,
       });
 
+      clearSpecifications();
       setPreviewImages([]);
       setSelectedFiles([]);
       setData({

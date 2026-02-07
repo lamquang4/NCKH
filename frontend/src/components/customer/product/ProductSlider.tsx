@@ -4,50 +4,58 @@ import "swiper/css/free-mode";
 import { FreeMode } from "swiper/modules";
 import ProductCard from "./ProductCard";
 import type { ProductResponse } from "../../../types/type";
+import ProductCardSkeleton from "../skeleton/ProductCardSkeleton";
 
 interface Props {
   title: string;
+  isLoading?: boolean;
   products: ProductResponse[];
 }
 
-function ProductSlider({ title, products }: Props) {
+function ProductSlider({ title, isLoading, products }: Props) {
   return (
     <>
-      {products.length > 0 && (
-        <section className="mb-[40px] px-[15px] text-black">
-          <div className="mx-auto max-w-[1200px] w-full">
-            <h2 className="mb-[20px]">{title}</h2>
-            <Swiper
-              spaceBetween={10}
-              modules={[FreeMode]}
-              freeMode={true}
-              grabCursor={true}
-              breakpoints={{
-                0: {
-                  slidesPerView: 2,
-                },
-                768: {
-                  slidesPerView: 3,
-                },
-                1024: {
-                  slidesPerView: 4,
-                },
-                1640: {
-                  slidesPerView: 4,
-                },
-              }}
-            >
-              {products.map((product) => {
-                return (
-                  <SwiperSlide key={product.id}>
-                    <ProductCard product={product} />
-                  </SwiperSlide>
-                );
-              })}
-            </Swiper>
-          </div>
-        </section>
-      )}
+      <section className="mb-[40px] px-[15px] text-black">
+        <div className="mx-auto max-w-[1200px] w-full">
+          {isLoading ? (
+            <ProductCardSkeleton count={4} />
+          ) : (
+            products.length > 0 && (
+              <>
+                <h2 className="mb-[20px]">{title}</h2>
+                <Swiper
+                  spaceBetween={10}
+                  modules={[FreeMode]}
+                  freeMode={true}
+                  grabCursor={true}
+                  breakpoints={{
+                    0: {
+                      slidesPerView: 2,
+                    },
+                    768: {
+                      slidesPerView: 3,
+                    },
+                    1024: {
+                      slidesPerView: 4,
+                    },
+                    1640: {
+                      slidesPerView: 4,
+                    },
+                  }}
+                >
+                  {products.map((product) => {
+                    return (
+                      <SwiperSlide key={product.id}>
+                        <ProductCard product={product} />
+                      </SwiperSlide>
+                    );
+                  })}
+                </Swiper>
+              </>
+            )
+          )}
+        </div>
+      </section>
     </>
   );
 }

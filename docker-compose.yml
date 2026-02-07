@@ -19,22 +19,6 @@ services:
       retries: 10
       start_period: 40s
 
-  api-gateway:
-    build: ./backend/api-gateway
-    container_name: api-gateway
-    ports:
-      - "8090:8090"
-    networks:
-      - app-network
-    environment:
-      EUREKA_URL: http://eureka-server:8761/eureka
-      JWT_ISSUER_URI: http://auth-service:8089/realms/my-realm
-      JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
-    depends_on:
-      eureka-server:
-        condition: service_healthy
-    restart: on-failure
-
   user-service:
     build: ./backend/user-service
     container_name: user-service
@@ -45,12 +29,13 @@ services:
       DATASOURCE_URL: jdbc:mysql://mysql-44edd1f-lamdieuquang0105-f460.j.aivencloud.com:10104/userdb?ssl-mode=REQUIRED
       DATASOURCE_USERNAME: avnadmin
       DATASOURCE_PASSWORD: AVNS_YswmtLsflqLrvYnNU40
+      JWT_SECRET: d1b72a9c2f1b2cfd6eb0b9320491ec2f
       JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
     depends_on:
       eureka-server:
         condition: service_healthy
     restart: on-failure
-
+    
   auth-service:
     build: ./backend/auth-service
     container_name: auth-service
@@ -72,7 +57,6 @@ services:
       eureka-server:
         condition: service_healthy
     restart: on-failure
-
   product-service:
     build: ./backend/product-service
     container_name: product-service
@@ -86,12 +70,12 @@ services:
       CLOUDINARY_CLOUD_NAME: dpj5pgpio
       CLOUDINARY_API_KEY: 555918594727174
       CLOUDINARY_API_SECRET: c-6uF0zMMgFWgypBaHx5C0FxMmk
+      JWT_SECRET: d1b72a9c2f1b2cfd6eb0b9320491ec2f
       JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
     depends_on:
       eureka-server:
         condition: service_healthy
     restart: on-failure
-
   category-service:
     build: ./backend/category-service
     container_name: category-service
@@ -105,12 +89,12 @@ services:
       CLOUDINARY_CLOUD_NAME: dpj5pgpio
       CLOUDINARY_API_KEY: 555918594727174
       CLOUDINARY_API_SECRET: c-6uF0zMMgFWgypBaHx5C0FxMmk
+      JWT_SECRET: d1b72a9c2f1b2cfd6eb0b9320491ec2f
       JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
     depends_on:
       eureka-server:
         condition: service_healthy
     restart: on-failure
-
   brand-service:
     build: ./backend/brand-service
     container_name: brand-service
@@ -121,12 +105,12 @@ services:
       DATASOURCE_URL: jdbc:mysql://mysql-44edd1f-lamdieuquang0105-f460.j.aivencloud.com:10104/branddb?ssl-mode=REQUIRED
       DATASOURCE_USERNAME: avnadmin
       DATASOURCE_PASSWORD: AVNS_YswmtLsflqLrvYnNU40
+      JWT_SECRET: d1b72a9c2f1b2cfd6eb0b9320491ec2f
       JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
     depends_on:
       eureka-server:
         condition: service_healthy
     restart: on-failure
-
   order-service:
     build: ./backend/order-service
     container_name: order-service
@@ -137,12 +121,12 @@ services:
       DATASOURCE_URL: jdbc:mysql://mysql-44edd1f-lamdieuquang0105-f460.j.aivencloud.com:10104/orderdb?ssl-mode=REQUIRED
       DATASOURCE_USERNAME: avnadmin
       DATASOURCE_PASSWORD: AVNS_YswmtLsflqLrvYnNU40
+      JWT_SECRET: d1b72a9c2f1b2cfd6eb0b9320491ec2f
       JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
     depends_on:
       eureka-server:
         condition: service_healthy
     restart: on-failure
-
   payment-service:
     build: ./backend/payment-service
     container_name: payment-service
@@ -160,12 +144,12 @@ services:
       MOMO_SECRETKEY: K951B6PE1waDMi640xX08PD3vg6EkVlz
       MOMO_URL: https://test-payment.momo.vn/v2/gateway/api/create
       MOMO_REFUND_URL: https://test-payment.momo.vn/v2/gateway/api/refund
+      JWT_SECRET: d1b72a9c2f1b2cfd6eb0b9320491ec2f
       JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
     depends_on:
       eureka-server:
         condition: service_healthy
     restart: on-failure
-
   cart-service:
     build: ./backend/cart-service
     container_name: cart-service
@@ -177,12 +161,12 @@ services:
       SPRING_DATA_REDIS_HOST: fresh-ox-19894.upstash.io
       SPRING_DATA_REDIS_PORT: 6379
       SPRING_DATA_REDIS_PASSWORD: AU22AAIncDI1OWM4MzI3YjE3M2Y0NDVkODE5NWQ3YWI2NDkxMzExZnAyMTk4OTQ
+      JWT_SECRET: d1b72a9c2f1b2cfd6eb0b9320491ec2f
       JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
     depends_on:
       eureka-server:
         condition: service_healthy
     restart: on-failure
-
   chat-service:
     build: ./backend/chat-service
     container_name: chat-service
@@ -191,12 +175,12 @@ services:
     environment:
       EUREKA_URL: http://eureka-server:8761/eureka
       SPRING_DATA_MONGODB_URI: mongodb+srv://lamdieuquang0105_db_user:LaoWbM56gHxZvnsy@nckh.sshybvd.mongodb.net/chatdb?appName=nckh&retryWrites=true&w=majority
+      JWT_SECRET: d1b72a9c2f1b2cfd6eb0b9320491ec2f
       JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
     depends_on:
       eureka-server:
         condition: service_healthy
     restart: on-failure
-
   assistant-service:
     build: ./backend/assistant-service
     container_name: assistant-service
@@ -204,6 +188,22 @@ services:
       - app-network
     environment:
       EUREKA_URL: http://eureka-server:8761/eureka
+      JWT_SECRET: d1b72a9c2f1b2cfd6eb0b9320491ec2f
+      JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    restart: on-failure
+  api-gateway:
+    build: ./backend/api-gateway
+    container_name: api-gateway
+    ports:
+      - "8090:8090"
+    networks:
+      - app-network
+    environment:
+      EUREKA_URL: http://eureka-server:8761/eureka
+      FRONTEND_URL: http://localhost:5173
       JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"
     depends_on:
       eureka-server:

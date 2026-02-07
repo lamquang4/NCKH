@@ -4,15 +4,13 @@ import Loading from "../../Loading";
 import Pagination from "../Pagination";
 import OrderCard from "./OrderCard";
 import useGetOrders from "../../../hooks/customer/order/useGetOrders";
-import useGetAccount from "../../../hooks/auth/useGetAccount";
 
 function OrderList() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  const { account } = useGetAccount("customer");
   const { orders, isLoading, totalItems, totalPages, currentPage } =
-    useGetOrders(account?.id || "");
+    useGetOrders();
 
   const array = [
     { status: "", name: "Tất cả" },

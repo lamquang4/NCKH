@@ -1,4 +1,3 @@
-
 import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -10,7 +9,7 @@ export default function useUpdateStatusProduct() {
     const action = status === 1 ? "hiện" : "ẩn";
     const result = await Swal.fire({
       title: `Xác nhận ${action}?`,
-      text: `Bạn có chắc muốn ${action} danh mục này không?`,
+      text: `Bạn có chắc muốn ${action} sản phẩm này không?`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Đồng ý",
@@ -27,8 +26,8 @@ export default function useUpdateStatusProduct() {
     try {
       const url = `${
         import.meta.env.VITE_BACKEND_URL
-      }/Product/status/${id}`;
-      await axios.patch(url, { status });
+      }/product/status/${id}?status=${status}`;
+      await axios.patch(url);
 
       toast.dismiss(loadingToast);
       toast.success("Cập nhật thành công");

@@ -2,6 +2,8 @@ package com.backend.cart_service.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -40,19 +42,36 @@ public class CartService {
 
         if (cart == null) {
             cart = cartRepository.findByUserId(userId)
-                    .orElseGet(() -> {
-                        Cart newCart = Cart.builder()
-                                .userId(userId)
-                                .items(new ArrayList<>())
-                                .build();
-                        return cartRepository.save(newCart);
-                    });
-
+                    .orElseGet(() -> cartRepository.save(
+                            Cart.builder()
+                                    .userId(userId)
+                                    .items(new ArrayList<>())
+                                    .build()));
             saveCartToRedis(userId, cart);
         }
 
+        if (cart.getItems().isEmpty()) {
+            return CartMapper.toResponse(cart, List.of());
+        }
+
+        List<String> productIds = cart.getItems()
+                .stream()
+                .map(CartItem::getProductId)
+                .toList();
+
+        List<ProductResponse> products = productServiceClient.getProductsByIdsInternal(productIds);
+
+        Map<String, ProductResponse> productMap = products.stream()
+                .collect(Collectors.toMap(ProductResponse::getId, p -> p));
+
         List<CartItemResponse> items = cart.getItems().stream()
-                .map(this::mapWithClient)
+                .map(item -> {
+                    ProductResponse product = productMap.get(item.getProductId());
+                    if (product == null) {
+                        throw new NotFoundException("Sản phẩm không tồn tại");
+                    }
+                    return CartMapper.toItemResponse(item, product);
+                })
                 .toList();
 
         return CartMapper.toResponse(cart, items);
@@ -178,19 +197,6 @@ public class CartService {
             redisTemplate.delete(CART_KEY_PREFIX + userId);
         }
 
-    }
-
-    private CartItemResponse mapWithClient(CartItem cartItem) {
-
-        ProductResponse product = productServiceClient
-                .getProductById(cartItem.getProductId())
-                .getBody();
-
-        if (product == null) {
-            throw new NotFoundException("Sản phẩm không tìm thấy");
-        }
-
-        return CartMapper.toItemResponse(cartItem, product);
     }
 
     private Cart getCartFromRedis(String userId) {

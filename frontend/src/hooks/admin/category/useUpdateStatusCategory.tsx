@@ -1,4 +1,3 @@
-
 import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -27,8 +26,8 @@ export default function useUpdateStatusCategory() {
     try {
       const url = `${
         import.meta.env.VITE_BACKEND_URL
-      }/Category/status/${id}`;
-      await axios.patch(url, { status });
+      }/category/status/${id}?status=${status}`;
+      await axios.patch(url);
 
       toast.dismiss(loadingToast);
       toast.success("Cập nhật thành công");

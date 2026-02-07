@@ -3,6 +3,7 @@ package com.backend.brand_service.controller;
 import java.util.List;
 import java.util.Map;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -21,6 +22,7 @@ import com.backend.brand_service.service.BrandService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
+@Validated
 @RestController
 @RequestMapping("/api/brand")
 public class BrandController {
@@ -52,6 +54,7 @@ public class BrandController {
     }
 
     @GetMapping("/active")
+
     public ResponseEntity<List<BrandResponse>> getActiveBrands() {
         return ResponseEntity.ok(brandService.getActiveBrands());
     }
@@ -89,5 +92,13 @@ public class BrandController {
     public ResponseEntity<Void> deleteBrand(@PathVariable String id) {
         brandService.deleteBrand(id);
         return ResponseEntity.noContent().build();
+    }
+
+    // internal
+    @PostMapping("/internal/brands")
+    public Map<String, BrandResponse> getBrandsByIdsInternal(
+            @RequestBody List<String> ids) {
+
+        return brandService.getBrandsByIds(ids);
     }
 }

@@ -6,6 +6,7 @@ import InputImage from "../InputImage";
 import Image from "../../Image";
 import ImageViewer from "../../ImageViewer";
 import { HiMiniXMark } from "react-icons/hi2";
+import { SiTicktick } from "react-icons/si";
 import toast from "react-hot-toast";
 import TextBoxEditor from "../textboxeditor/TextBoxEditor";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -19,6 +20,8 @@ import useGetAllCategories from "../../../hooks/admin/category/useGetAllCategori
 import useGetAllBrands from "../../../hooks/admin/brand/useGetAllBrands";
 import useGetProduct from "../../../hooks/admin/product/useGetProduct";
 import useUpdateProduct from "../../../hooks/admin/product/useUpdateProduct";
+import useDeleteImageProduct from "../../../hooks/admin/product/useDeleteImageProduct";
+import useUpdateImageProduct from "../../../hooks/admin/product/useUpdateProductImage";
 
 function EditProduct() {
   const navigate = useNavigate();
@@ -40,8 +43,14 @@ function EditProduct() {
 
   const max = 10;
 
-  const { product } = useGetProduct(id as string);
-  const { updateProduct, isLoading } = useUpdateProduct(id as string);
+  const { product, isLoading, mutate } = useGetProduct(id as string);
+  const { updateProduct, isLoading: isLoadingUpdate } = useUpdateProduct(
+    id as string,
+  );
+  const { deleteImageProduct, isLoading: isLoadingDeleteImage } =
+    useDeleteImageProduct();
+  const { updateImageProduct, isLoading: isLoadingUpdateImage } =
+    useUpdateImageProduct();
   const { categories } = useGetAllCategories();
   const { brands } = useGetAllBrands();
 
@@ -49,6 +58,7 @@ function EditProduct() {
     specifications,
     setSpecifications,
     addSpecification,
+    clearSpecifications,
     removeSpecification,
     updateSpecification,
   } = useSpecification();
@@ -124,6 +134,20 @@ function EditProduct() {
       );
       return;
     }
+
+    try {
+      await deleteImageProduct(product!.id, imageId);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message);
+    }
+  };
+
+  const handleUpdateImage = async (imageId: string, file: File) => {
+    try {
+      await updateImageProduct(product!.id, imageId, file);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -176,6 +200,8 @@ function EditProduct() {
         }
       }
 
+      clearSpecifications();
+      mutate();
       setPreviewImages([]);
       setSelectedFiles([]);
       setPreviewImages1([]);
@@ -239,6 +265,7 @@ function EditProduct() {
                               <button
                                 className="bg-white rounded-full p-1 border border-gray-300"
                                 onClick={() => handleDeleteImage(image.id)}
+                                disabled={isLoadingDeleteImage}
                                 type="button"
                               >
                                 <VscTrash
@@ -254,13 +281,29 @@ function EditProduct() {
                               />
                             </>
                           ) : (
-                            <button
-                              type="button"
-                              className="p-2"
-                              onClick={() => handleClear(index)}
-                            >
-                              <HiMiniXMark size={26} />
-                            </button>
+                            <>
+                              <button
+                                type="button"
+                                className="p-2"
+                                disabled={isLoadingUpdateImage}
+                                onClick={() =>
+                                  handleUpdateImage(
+                                    image!.id,
+                                    selectedFiles1[index],
+                                  )
+                                }
+                              >
+                                <SiTicktick size={26} />
+                              </button>
+
+                              <button
+                                type="button"
+                                className="p-2"
+                                onClick={() => handleClear(index)}
+                              >
+                                <HiMiniXMark size={26} />
+                              </button>
+                            </>
                           )}
                         </div>
                       </div>
@@ -407,11 +450,11 @@ function EditProduct() {
 
           <div className="flex justify-center gap-6">
             <button
-              disabled={isLoading}
+              disabled={isLoadingUpdate}
               type="submit"
               className="p-[6px_10px] bg-teal-500 text-white text-[0.9rem] font-medium text-center hover:bg-teal-600 rounded-sm"
             >
-              {isLoading ? "Đang cập nhật..." : "Cập nhật"}
+              {isLoadingUpdate ? "Đang cập nhật..." : "Cập nhật"}
             </button>
             <Link
               to="/admin/products"

@@ -19,12 +19,16 @@ function EditCategory() {
   const [openViewer, setOpenViewer] = useState(false);
   const [viewerImage, setViewerImage] = useState<string>("");
 
-  const { category } = useGetCategory(id as string);
-  const { updateCategory, isLoading } = useUpdateCategory(id as string);
+  const { category, isLoading, mutate } = useGetCategory(id as string);
+  const { updateCategory, isLoading: isLoadingUpdate } = useUpdateCategory(
+    id as string,
+  );
 
   const {
     previewImages,
     selectedFiles,
+    setPreviewImages,
+    setSelectedFiles,
     handlePreviewImage,
     handleRemovePreviewImage,
   } = useInputImage(1);
@@ -69,6 +73,10 @@ function EditCategory() {
         image: selectedFiles[0],
         status: Number(data.status),
       });
+
+      mutate();
+      setPreviewImages([]);
+      setSelectedFiles([]);
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
     }
@@ -153,11 +161,11 @@ function EditCategory() {
 
           <div className="flex justify-center gap-6">
             <button
-              disabled={isLoading}
+              disabled={isLoadingUpdate}
               type="submit"
               className="p-[6px_10px] bg-teal-500 text-white text-[0.9rem] font-medium text-center hover:bg-teal-600 rounded-sm"
             >
-              {isLoading ? "Đang cập nhật..." : "Cập nhật"}
+              {isLoadingUpdate ? "Đang cập nhật..." : "Cập nhật"}
             </button>
             <Link
               to="/admin/categories"

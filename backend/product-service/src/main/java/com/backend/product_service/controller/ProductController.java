@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -26,6 +27,7 @@ import com.backend.product_service.service.ProductService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
+@Validated
 @RestController
 @RequestMapping("/api/product")
 public class ProductController {
@@ -50,6 +52,58 @@ public class ProductController {
                                                 "products", productPage.getContent(),
                                                 "totalPages", productPage.getTotalPages(),
                                                 "total", productPage.getTotalElements()));
+        }
+
+        @GetMapping("/{id}")
+        public ResponseEntity<ProductResponse> getProductById(
+                        @PathVariable String id) {
+
+                return ResponseEntity.ok(productService.getProductById(id));
+        }
+
+        @PostMapping(consumes = "multipart/form-data")
+        public ResponseEntity<ProductResponse> createProduct(
+                        @Valid @RequestPart("product") ProductRequest request,
+                        @RequestPart(value = "images", required = false) List<MultipartFile> images) {
+
+                return ResponseEntity.ok(
+                                productService.createProduct(request, images));
+        }
+
+        @PutMapping(value = "/{id}", consumes = "multipart/form-data")
+        public ResponseEntity<ProductResponse> updateProduct(
+                        @PathVariable String id,
+                        @Valid @RequestPart("product") ProductRequest request,
+                        @RequestPart(value = "images", required = false) List<MultipartFile> images) {
+
+                return ResponseEntity.ok(
+                                productService.updateProduct(id, request, images));
+        }
+
+        @PatchMapping("/status/{id}")
+        public ResponseEntity<ProductResponse> updateProductStatus(
+                        @PathVariable String id,
+                        @RequestParam @NotNull Integer status) {
+
+                return ResponseEntity.ok(
+                                productService.updateProductStatus(id, status));
+        }
+
+        @DeleteMapping("/{id}")
+        public ResponseEntity<Void> deleteProduct(
+                        @PathVariable String id) {
+
+                productService.deleteProduct(id);
+                return ResponseEntity.noContent().build();
+        }
+
+        @DeleteMapping("/{productId}/image/{imageId}")
+        public ResponseEntity<Void> deleteImage(
+                        @PathVariable String productId,
+                        @PathVariable String imageId) {
+
+                productService.deleteProductImage(productId, imageId);
+                return ResponseEntity.noContent().build();
         }
 
         @GetMapping("/active")
@@ -117,29 +171,6 @@ public class ProductController {
                                 productService.getActiveLimitProducts(q, limit));
         }
 
-        @GetMapping("/category/{categoryId}")
-        public ResponseEntity<List<ProductResponse>> getAllActiveProductsByCategoryId(
-                        @PathVariable String categoryId) {
-
-                return ResponseEntity.ok(
-                                productService.getAllActiveProductsByCategoryId(categoryId));
-        }
-
-        @GetMapping("/brand/{brandId}")
-        public ResponseEntity<List<ProductResponse>> getAllActiveProductsByBrandId(
-                        @PathVariable String brandId) {
-
-                return ResponseEntity.ok(
-                                productService.getAllActiveProductsByBrandId(brandId));
-        }
-
-        @GetMapping("/{id}")
-        public ResponseEntity<ProductResponse> getProductById(
-                        @PathVariable String id) {
-
-                return ResponseEntity.ok(productService.getProductById(id));
-        }
-
         @GetMapping("/active/slug/{slug}")
         public ResponseEntity<ProductResponse> getActiveProductBySlug(
                         @PathVariable String slug) {
@@ -147,103 +178,92 @@ public class ProductController {
                 return ResponseEntity.ok(productService.getActiveProductBySlug(slug));
         }
 
-        @GetMapping("/active/{id}")
+        @PatchMapping(value = "/{productId}/image/{imageId}", consumes = "multipart/form-data")
+        public ResponseEntity<Void> updateProductImage(
+                        @PathVariable String productId,
+                        @PathVariable String imageId,
+                        @RequestPart("file") MultipartFile file) {
+                productService.updateProductImage(productId, imageId, file);
+                return ResponseEntity.noContent().build();
+        }
+
+        // internal
+        @GetMapping("/internal/category/{categoryId}")
+        public ResponseEntity<List<ProductResponse>> getAllActiveProductsByCategoryIdInternal(
+                        @PathVariable String categoryId) {
+
+                return ResponseEntity.ok(
+                                productService.getAllActiveProductsByCategoryId(categoryId));
+        }
+
+        @GetMapping("/internal/brand/{brandId}")
+        public ResponseEntity<List<ProductResponse>> getAllActiveProductsByBrandIdInternal(
+                        @PathVariable String brandId) {
+
+                return ResponseEntity.ok(
+                                productService.getAllActiveProductsByBrandId(brandId));
+        }
+
+        @GetMapping("/internal/active/{id}")
         public ResponseEntity<ProductResponse> getActiveProductById(
                         @PathVariable String id) {
 
                 return ResponseEntity.ok(productService.getActiveProductById(id));
         }
 
-        @PostMapping(consumes = "multipart/form-data")
-        public ResponseEntity<ProductResponse> createProduct(
-                        @Valid @RequestPart("product") ProductRequest request,
-                        @RequestPart(value = "images", required = false) List<MultipartFile> images) {
-
-                return ResponseEntity.ok(
-                                productService.createProduct(request, images));
-        }
-
-        @PutMapping(value = "/{id}", consumes = "multipart/form-data")
-        public ResponseEntity<ProductResponse> updateProduct(
-                        @PathVariable String id,
-                        @Valid @RequestPart("product") ProductRequest request,
-                        @RequestPart(value = "images", required = false) List<MultipartFile> images) {
-
-                return ResponseEntity.ok(
-                                productService.updateProduct(id, request, images));
-        }
-
-        @PatchMapping("/status/{id}")
-        public ResponseEntity<ProductResponse> updateProductStatus(
-                        @PathVariable String id,
-                        @RequestParam @NotNull Integer status) {
-
-                return ResponseEntity.ok(
-                                productService.updateProductStatus(id, status));
-        }
-
-        @DeleteMapping("/{id}")
-        public ResponseEntity<Void> deleteProduct(
-                        @PathVariable String id) {
-
-                productService.deleteProduct(id);
-                return ResponseEntity.noContent().build();
-        }
-
-        @DeleteMapping("/{productId}/image/{imageId}")
-        public ResponseEntity<Void> deleteImage(
-                        @PathVariable String productId,
-                        @PathVariable String imageId) {
-
-                productService.deleteProductImage(productId, imageId);
-                return ResponseEntity.noContent().build();
-        }
-
-        @DeleteMapping("/{productId}/spec/{specId}")
-        public ResponseEntity<Void> deleteSpecification(
-                        @PathVariable String productId,
-                        @PathVariable String specId) {
-
-                productService.deleteSpecification(productId, specId);
-                return ResponseEntity.noContent().build();
-        }
-
-        @GetMapping("/exist/brand/{brandId}")
-        public ResponseEntity<Boolean> existsProductByBrandId(
+        @GetMapping("/internal/exist/brand/{brandId}")
+        public ResponseEntity<Boolean> existsProductByBrandIdInternal(
                         @PathVariable String brandId) {
 
                 return ResponseEntity.ok(
                                 productService.existsProductByBrandId(brandId));
         }
 
-        @GetMapping("/exist/category/{categoryId}")
-        public ResponseEntity<Boolean> existsProductByCategoryId(
+        @GetMapping("/internal/exist/category/{categoryId}")
+        public ResponseEntity<Boolean> existsProductByCategoryIdInternal(
                         @PathVariable String categoryId) {
 
                 return ResponseEntity.ok(
                                 productService.existsProductByCategoryId(categoryId));
         }
 
-        @PostMapping("/products")
-        public List<ProductResponse> getProductsByIds(
+        @PostMapping("/internal/products")
+        public List<ProductResponse> getProductsByIdsInternal(
                         @RequestBody List<String> ids) {
 
                 return productService.getProductsByIds(ids);
         }
 
-        @PostMapping("/decrease")
-        public ResponseEntity<Void> decreaseStock(
+        @PostMapping("/internal/decrease")
+        public ResponseEntity<Void> decreaseStockInternal(
                         @RequestBody List<StockRequest> requests) {
 
                 productService.decreaseStock(requests);
                 return ResponseEntity.ok().build();
         }
 
-        @PostMapping("/increase")
-        public ResponseEntity<Void> increaseStock(
+        @PostMapping("/internal/increase")
+        public ResponseEntity<Void> increaseStockInternal(
                         @RequestBody List<StockRequest> requests) {
 
                 productService.increaseStock(requests);
                 return ResponseEntity.ok().build();
         }
+
+        @PostMapping("/internal/status/brand/{brandId}")
+        public ResponseEntity<Void> hideProductsByBrandInternal(
+                        @PathVariable String brandId) {
+
+                productService.hideProductsByBrandId(brandId);
+                return ResponseEntity.noContent().build();
+        }
+
+        @PostMapping("/internal/status/category/{categoryId}")
+        public ResponseEntity<Void> hideProductsByCategoryInternal(
+                        @PathVariable String categoryId) {
+
+                productService.hideProductsByCategoryId(categoryId);
+                return ResponseEntity.noContent().build();
+        }
+
 }

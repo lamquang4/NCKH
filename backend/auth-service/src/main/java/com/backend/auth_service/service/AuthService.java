@@ -46,7 +46,7 @@ public class AuthService {
             throw new IllegalArgumentException("Email không hợp lệ");
         }
 
-        if (userServiceClient.existsUserByEmail(email)) {
+        if (userServiceClient.existsUserByEmailInternal(email)) {
             throw new ConflictException("Email đã được sử dụng");
         }
 
@@ -54,7 +54,12 @@ public class AuthService {
 
         String hashedOtp = passwordEncoder.encode(otp);
 
-        authRepository.deleteByEmail(email);
+        authRepository.findByEmail(email).ifPresent(existing -> {
+            if (existing.getExpiredAt().isAfter(LocalDateTime.now().minusMinutes(9))) {
+                throw new BadRequestException("Vui lòng đợi trước khi gửi lại OTP");
+            }
+            authRepository.delete(existing);
+        });
 
         Otp otpEntity = Otp.builder()
                 .email(email)
@@ -74,7 +79,7 @@ public class AuthService {
             UserRequest userRequest) {
 
         if (!otpRequest.getEmail().equals(userRequest.getEmail())) {
-            throw new BadRequestException("Email OTP và Email đăng ký không khớp");
+            throw new BadRequestException("OTP và email đăng ký không khớp");
         }
 
         if (!ValidationUtils.validateEmail(userRequest.getEmail())) {
@@ -89,10 +94,19 @@ public class AuthService {
         }
 
         if (!passwordEncoder.matches(otpRequest.getOtp(), otp.getOtp())) {
+
+            otp.setFailedAttempts(otp.getFailedAttempts() + 1);
+
+            if (otp.getFailedAttempts() >= 5) {
+                authRepository.delete(otp);
+                throw new BadRequestException("Bạn đã nhập sai OTP quá nhiều lần. Vui lòng gửi lại mã mới");
+            }
+
+            authRepository.save(otp);
             throw new BadRequestException("OTP không đúng");
         }
 
-        userServiceClient.createUser(userRequest);
+        userServiceClient.createUserInternal(userRequest);
 
         authRepository.deleteByEmail(otpRequest.getEmail());
     }
@@ -103,7 +117,8 @@ public class AuthService {
         if (!ValidationUtils.validateEmail(request.getEmail())) {
             throw new IllegalArgumentException("Email không hợp lệ");
         }
-        UserAuthResponse user = userServiceClient.getUserByEmail(request.getEmail());
+
+        UserAuthResponse user = userServiceClient.getUserByEmailInternal(request.getEmail());
 
         if (user == null) {
             throw new BadRequestException("Email hoặc mật khẩu không đúng");

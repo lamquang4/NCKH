@@ -12,8 +12,10 @@ function EditBrand() {
     status: "",
   });
 
-  const { brand } = useGetBrand(id as string);
-  const { updateBrand, isLoading } = useUpdateBrand(id as string);
+  const { brand, isLoading, mutate } = useGetBrand(id as string);
+  const { updateBrand, isLoading: isLoadingUpdate } = useUpdateBrand(
+    id as string,
+  );
 
   useEffect(() => {
     if (isLoading) return;
@@ -49,6 +51,8 @@ function EditBrand() {
         name: data.name.trim(),
         status: Number(data.status),
       });
+
+      mutate();
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
     }
@@ -101,11 +105,11 @@ function EditBrand() {
 
           <div className="flex justify-center gap-6">
             <button
-              disabled={isLoading}
+              disabled={isLoadingUpdate}
               type="submit"
               className="p-[6px_10px] bg-teal-500 text-white text-[0.9rem] font-medium text-center hover:bg-teal-600 rounded-sm"
             >
-              {isLoading ? "Đang cập nhật..." : "Cập nhật"}
+              {isLoadingUpdate ? "Đang cập nhật..." : "Cập nhật"}
             </button>
             <Link
               to="/admin/brands"

@@ -11,7 +11,7 @@ interface ResponseType {
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
-export default function useGetOrders(userId: string) {
+export default function useGetOrders() {
   const [searchParams] = useSearchParams();
 
   const page = parseInt(searchParams.get("page") || "1", 10);
@@ -23,7 +23,7 @@ export default function useGetOrders(userId: string) {
 
   const url = `${
     import.meta.env.VITE_BACKEND_URL
-  }/order/user/${userId}?${query.toString()}`;
+  }/order/user?${query.toString()}`;
 
   const { data, error, isLoading, mutate } = useSWR<ResponseType>(
     url,

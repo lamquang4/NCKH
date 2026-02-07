@@ -19,8 +19,10 @@ function EditAdmin() {
   });
 
   const { account } = useGetAccount("admin");
-  const { user } = useGetUser(id as string);
-  const { updateUser, isLoading } = useUpdateUser(id as string);
+  const { user, isLoading, mutate } = useGetUser(id as string);
+  const { updateUser, isLoading: isLoadingUpdate } = useUpdateUser(
+    id as string,
+  );
 
   useEffect(() => {
     if (isLoading) return;
@@ -38,6 +40,8 @@ function EditAdmin() {
       phone: user.phone || "",
       status: user.status?.toString() || "",
     });
+
+    mutate();
   }, [isLoading, user, navigate]);
 
   const handleChange = (
@@ -81,6 +85,9 @@ function EditAdmin() {
         role: "admin",
         status: Number(data.status),
       });
+
+      mutate();
+
       setData((prev) => ({
         ...prev,
         password: "",
@@ -128,7 +135,7 @@ function EditAdmin() {
             </div>
 
             <div className="flex flex-wrap md:flex-nowrap gap-[15px]">
-              <div className="flex flex-col gap-1">
+              <div className="flex flex-col gap-1 w-full">
                 <label htmlFor="" className="text-[0.9rem] font-medium">
                   Số điện thoại
                 </label>
@@ -177,10 +184,11 @@ function EditAdmin() {
 
         <div className="flex justify-center gap-6">
           <button
+            disabled={isLoadingUpdate}
             type="submit"
             className="p-[6px_10px] bg-teal-500 text-white text-[0.9rem] font-medium text-center hover:bg-teal-600 rounded-sm"
           >
-            {isLoading ? "Đang cập nhật..." : "Cập nhật"}
+            {isLoadingUpdate ? "Đang cập nhật..." : "Cập nhật"}
           </button>
           <Link
             to="/admin/admins"

@@ -6,13 +6,13 @@ import type { CartItemRequest } from "../../../types/type";
 export function useAddItemToCart() {
   const [isLoading, setIsLoading] = useState(false);
 
-  const addItem = async (userId: string, data: CartItemRequest) => {
+  const addItem = async (data: CartItemRequest) => {
     if (!data) {
       return;
     }
     setIsLoading(true);
     try {
-      const url = `${import.meta.env.VITE_BACKEND_URL}/cart?userId=${userId}`;
+      const url = `${import.meta.env.VITE_BACKEND_URL}/cart`;
       await axios.post(url, data);
       toast.success("Thêm vào giỏ hàng thành công");
     } catch (err: any) {

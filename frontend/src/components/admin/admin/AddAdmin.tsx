@@ -125,6 +125,7 @@ function AddAdmin() {
 
         <div className="flex justify-center gap-6">
           <button
+            disabled={isLoading}
             type="submit"
             className="p-[6px_10px] bg-teal-500 text-white text-[0.9rem] font-medium text-center hover:bg-teal-600 rounded-sm"
           >

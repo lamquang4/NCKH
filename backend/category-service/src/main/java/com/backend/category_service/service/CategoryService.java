@@ -3,13 +3,13 @@ package com.backend.category_service.service;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.backend.category_service.client.ProductServiceClient;
 import com.backend.category_service.dto.request.CategoryRequest;
 import com.backend.category_service.dto.response.CategoryResponse;
-import com.backend.category_service.dto.response.ProductResponse;
 import com.backend.category_service.entity.Category;
 import com.backend.category_service.exception.BadRequestException;
 import com.backend.category_service.exception.ConflictException;
@@ -103,25 +102,33 @@ public class CategoryService {
 
     // thêm category
     @Transactional
-    public CategoryResponse createCategory(
-            CategoryRequest request,
-            MultipartFile image) {
+    public CategoryResponse createCategory(CategoryRequest request, MultipartFile image) {
 
         if (categoryRepository.existsByName(request.getName())) {
             throw new ConflictException("Tên danh mục đã được sử dụng");
         }
 
+        if (image == null || image.isEmpty()) {
+            throw new BadRequestException("Hình ảnh không được để trống");
+        }
+
         Category category = CategoryMapper.toEntity(request);
         category.setSlug(SlugUtil.toSlug(request.getName()));
 
-        Category savedCategory = categoryRepository.save(category);
+        // set ảnh tạm
+        category.setImage("PENDING");
 
-        if (image != null && !image.isEmpty()) {
-            String imageUrl = uploadImageOnCloudinary(image, savedCategory.getId());
-            savedCategory.setImage(imageUrl);
-        }
+        Category saved = categoryRepository.save(category);
 
-        return CategoryMapper.toResponse(savedCategory);
+        // upload ảnh thật
+        String imageUrl = uploadImageOnCloudinary(image, saved.getId());
+
+        // update
+        saved.setImage(imageUrl);
+
+        categoryRepository.save(saved);
+
+        return CategoryMapper.toResponse(saved);
     }
 
     // cập nhật category
@@ -161,19 +168,9 @@ public class CategoryService {
         category.setStatus(status);
         categoryRepository.save(category);
 
-        // cập nhật status category ẩn thì các sản phẩm thuộc category đó sẽ ẩn theo
-        if (status == 0) {
-            ResponseEntity<List<ProductResponse>> response = productServiceClient.getAllActiveProductsByCategoryId(id);
-
-            List<ProductResponse> products = response.getBody();
-
-            if (products != null && !products.isEmpty()) {
-                for (ProductResponse product : products) {
-                    productServiceClient.updateProductStatus(
-                            product.getId(),
-                            0);
-                }
-            }
+        // category ẩn → product ẩn theo
+        if (Objects.equals(status, 0)) {
+            productServiceClient.hideProductsByCategoryInternal(id);
         }
 
         return CategoryMapper.toResponse(category);
@@ -186,7 +183,7 @@ public class CategoryService {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Danh mục không tìm thấy"));
 
-        Boolean isUsed = productServiceClient.existsProductByCategoryId(id);
+        Boolean isUsed = productServiceClient.existsProductByCategoryIdInternal(id);
 
         if (Boolean.TRUE.equals(isUsed)) {
             throw new ConflictException(
@@ -196,6 +193,15 @@ public class CategoryService {
         deleteFolderOnCloudinary(category.getId());
 
         categoryRepository.delete(category);
+    }
+
+    public Map<String, CategoryResponse> getCategoriesByIds(List<String> ids) {
+
+        return categoryRepository.findAllById(ids)
+                .stream()
+                .collect(Collectors.toMap(
+                        Category::getId,
+                        CategoryMapper::toResponse));
     }
 
     private void deleteFolderOnCloudinary(String categoryId) {
@@ -235,14 +241,13 @@ public class CategoryService {
         }
 
         try {
-            String publicId = "nckh/categories/" + categoryId;
+            String folderPath = "nckh/categories/" + categoryId;
 
             Map<?, ?> uploadResult = cloudinary.uploader().upload(
                     file.getBytes(),
                     ObjectUtils.asMap(
-                            "public_id", publicId,
-                            "overwrite", true,
-                            "resource_type", "image"));
+                            "folder", folderPath,
+                            "public_id", categoryId));
 
             return uploadResult.get("secure_url").toString();
 

@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import type { ProductResponse } from "../../../types/type";
 import Image from "../../Image";
 import ProductCard from "./ProductCard";
-import ProductCardSkeleton from "./ProductCardSkeleton";
+import ProductCardSkeleton from "../skeleton/ProductCardSkeleton";
 
 interface Props {
   title?: string;
@@ -52,7 +52,7 @@ function ProductList({ title, products, isLoading, total }: Props) {
 
   return (
     <>
-      <div className="mb-[50px] space-y-[15px]">
+      <div className="mb-[40px] space-y-[15px]">
         <div className="flex justify-between items-center flex-wrap gap-[15px]">
           {!isLoading && (title || search) && (
             <h2 className=" text-black capitalize">
@@ -74,11 +74,7 @@ function ProductList({ title, products, isLoading, total }: Props) {
         </div>
 
         {isLoading ? (
-          <div className="grid grid-cols-2 gap-x-[12px] gap-y-[35px] lg:grid-cols-3 2xl:grid-cols-4 sm:grid-cols-2">
-            {Array.from({ length: 8 }).map((_, index) => (
-              <ProductCardSkeleton key={index} />
-            ))}
-          </div>
+          <ProductCardSkeleton count={12} />
         ) : products.length > 0 ? (
           <div
             className={`grid grid-cols-2 gap-x-[10px] gap-y-[35px] lg:grid-cols-3 2xl:grid-cols-4 ${

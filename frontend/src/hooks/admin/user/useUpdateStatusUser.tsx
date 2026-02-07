@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 export default function useUpdateStatusUser() {
   const [isLoading, setIsLoading] = useState(false);
   const updateStatusUser = async (id: string, status: number) => {
-    const action = status === 1 ? "hiện" : "ẩn";
+    const action = status === 1 ? "chặn" : "bỏ chặn";
     const result = await Swal.fire({
       title: `Xác nhận ${action}?`,
       text: `Bạn có chắc muốn ${action} người dùng này không?`,
@@ -24,8 +24,10 @@ export default function useUpdateStatusUser() {
 
     setIsLoading(true);
     try {
-      const url = `${import.meta.env.VITE_BACKEND_URL}/user/status/${id}`;
-      await axios.patch(url, { status });
+      const url = `${
+        import.meta.env.VITE_BACKEND_URL
+      }/user/status/${id}?status=${status}`;
+      await axios.patch(url);
 
       toast.dismiss(loadingToast);
       toast.success("Cập nhật thành công");

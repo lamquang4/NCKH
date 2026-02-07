@@ -138,7 +138,7 @@ public class GlobalExceptionHandler {
                                 .internalServerError()
                                 .body(
                                                 ErrorResponse.builder()
-                                                                .message("Lỗi hệ thống không mong muốn")
+                                                                .message("Lỗi hệ thống không mong muốn " + ex)
                                                                 .errorCode("ERR_INTERNAL_SERVER")
                                                                 .timestamp(LocalDateTime.now())
                                                                 .build());

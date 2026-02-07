@@ -15,7 +15,7 @@ function ProductCard({ product }: Props) {
               <Image
                 source={product.images[0].image}
                 alt={product.name}
-                className="absolute inset-0 w-full h-full object-cover z-1 transition-opacity duration-300 group-hover:opacity-0"
+                className="absolute inset-0 w-full h-full z-1 transition-opacity duration-300 group-hover:opacity-0"
                 loading="lazy"
               />
 
@@ -23,7 +23,7 @@ function ProductCard({ product }: Props) {
                 <Image
                   source={product.images[1].image}
                   alt={product.name}
-                  className="absolute inset-0 w-full h-full object-cover z-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                  className="absolute inset-0 w-full h-full z-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                   loading="lazy"
                 />
               )}

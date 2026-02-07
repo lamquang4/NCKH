@@ -118,7 +118,7 @@ public class GlobalExceptionHandler {
 
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                                 ErrorResponse.builder()
-                                                .message("Lỗi hệ thống không mong muốn")
+                                                .message("Lỗi hệ thống không mong muốn " + ex)
                                                 .errorCode("ERR_INTERNAL_SERVER")
                                                 .timestamp(LocalDateTime.now())
                                                 .build());

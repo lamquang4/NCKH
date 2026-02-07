@@ -1,6 +1,7 @@
 package com.backend.payment_service.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,10 +21,13 @@ import com.backend.payment_service.dto.response.OrderResponse;
 import com.backend.payment_service.dto.response.PaymentResponse;
 import com.backend.payment_service.service.MomoService;
 import com.backend.payment_service.service.PaymentService;
+import org.springframework.beans.factory.annotation.Value;
 
+@Validated
 @RestController
 @RequestMapping("/api/payment")
 public class PaymentController {
+    @Value("${frontend.url}")
     private String frontendUrl;
 
     private final MomoService momoService;
@@ -53,28 +57,29 @@ public class PaymentController {
                         "total", paymentPage.getTotalElements()));
     }
 
-    @PostMapping
-    public ResponseEntity<PaymentResponse> createPayment(
-            @RequestBody PaymentRequest request) {
-
-        return ResponseEntity.ok(
-                paymentService.createPayment(request));
-    }
-
     // Momo
     @PostMapping("/momo/{orderCode}")
     public ResponseEntity<MomoResponse> createMomo(
             @PathVariable String orderCode) throws Exception {
 
-        OrderResponse order = orderServiceClient.getOrderByOrderCode(orderCode);
+        OrderResponse order = orderServiceClient.getOrderByOrderCodeInternal(orderCode);
 
         MomoResponse momoResponse = momoService.createMomo(order);
 
         return ResponseEntity.ok(momoResponse);
     }
 
-    @GetMapping("/momo/redirect")
-    public ResponseEntity<Void> handleRedirect(
+    // internal
+    @PostMapping("/internal")
+    public ResponseEntity<PaymentResponse> createPaymentInternal(
+            @RequestBody PaymentRequest request) {
+
+        return ResponseEntity.ok(
+                paymentService.createPayment(request));
+    }
+
+    @GetMapping("/internal/momo/redirect")
+    public ResponseEntity<Void> handleRedirectInternal(
             @RequestParam(required = false) String resultCode,
             @RequestParam(required = false) String orderId,
             @RequestParam(required = false) String transId,
@@ -103,8 +108,8 @@ public class PaymentController {
         return ResponseEntity.status(302).header("Location", redirectUrl).build();
     }
 
-    @PostMapping("/momo/refund/{orderCode}")
-    public ResponseEntity<Void> refundMomoByOrderCode(
+    @PostMapping("/internal/momo/refund/{orderCode}")
+    public ResponseEntity<Void> refundMomoByOrderCodeInternal(
             @PathVariable String orderCode) throws Exception {
 
         momoService.refundByOrderCode(orderCode);

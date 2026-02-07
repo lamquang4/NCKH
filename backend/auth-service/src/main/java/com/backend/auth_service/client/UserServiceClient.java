@@ -7,20 +7,21 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.backend.auth_service.config.InternalFeignConfig;
 import com.backend.auth_service.dto.request.UserRequest;
 import com.backend.auth_service.dto.response.UserAuthResponse;
 import com.backend.auth_service.dto.response.UserResponse;
 
 import jakarta.validation.Valid;
 
-@FeignClient(name = "user-service")
+@FeignClient(name = "user-service", configuration = InternalFeignConfig.class)
 public interface UserServiceClient {
-    @GetMapping("/api/user/exist/user/{email}")
-    Boolean existsUserByEmail(@PathVariable String email);
+    @GetMapping("/api/user/internal/exist/user/{email}")
+    Boolean existsUserByEmailInternal(@PathVariable String email);
 
-    @PostMapping("/api/user")
-    ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest request);
+    @PostMapping("/api/user/internal")
+    ResponseEntity<UserResponse> createUserInternal(@Valid @RequestBody UserRequest request);
 
-    @GetMapping("/api/user/email/{email}")
-    UserAuthResponse getUserByEmail(@PathVariable String email);
+    @GetMapping("/api/user/internal/email/{email}")
+    UserAuthResponse getUserByEmailInternal(@PathVariable String email);
 }

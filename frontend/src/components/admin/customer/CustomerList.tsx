@@ -7,8 +7,8 @@ import InputSearch from "../InputSearch";
 import ListHeader from "../list/ListHeader";
 import ListBody from "../list/ListBody";
 import useGetCustomers from "../../../hooks/admin/user/useGetCustomers";
-import useUpdateStatusUser from "../../../hooks/useUpdateStatusUser";
 import toast from "react-hot-toast";
+import useUpdateStatusUser from "../../../hooks/admin/user/useUpdateStatusUser";
 
 function CustomerList() {
   const {

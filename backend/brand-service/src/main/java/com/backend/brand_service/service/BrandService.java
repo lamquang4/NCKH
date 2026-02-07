@@ -3,19 +3,19 @@ package com.backend.brand_service.service;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.backend.brand_service.client.ProductServiceClient;
 import com.backend.brand_service.dto.request.BrandRequest;
 import com.backend.brand_service.dto.response.BrandResponse;
-import com.backend.brand_service.dto.response.ProductResponse;
 import com.backend.brand_service.entity.Brand;
 import com.backend.brand_service.exception.ConflictException;
 import com.backend.brand_service.exception.NotFoundException;
@@ -126,19 +126,9 @@ public class BrandService {
         brand.setStatus(status);
         brandRepository.save(brand);
 
-        // cập nhật status brand ẩn thì các sản phẩm thuộc brand đó sẽ ẩn theo
-        if (status == 0) {
-            ResponseEntity<List<ProductResponse>> response = productServiceClient.getAllActiveProductsByBrandId(id);
-
-            List<ProductResponse> products = response.getBody();
-
-            if (products != null && !products.isEmpty()) {
-                for (ProductResponse product : products) {
-                    productServiceClient.updateProductStatus(
-                            product.getId(),
-                            0);
-                }
-            }
+        // brand bị ẩn → toàn bộ product bị ẩn theo
+        if (Objects.equals(status, 0)) {
+            productServiceClient.hideProductsByBrandInternal(id);
         }
 
         return BrandMapper.toResponse(brand);
@@ -150,7 +140,7 @@ public class BrandService {
         Brand brand = brandRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Thương hiệu không tìm thấy"));
 
-        Boolean isUsed = productServiceClient.existsProductByBrandId(id);
+        Boolean isUsed = productServiceClient.existsProductByBrandIdInternal(id);
 
         if (Boolean.TRUE.equals(isUsed)) {
             throw new ConflictException(
@@ -158,5 +148,14 @@ public class BrandService {
         }
 
         brandRepository.delete(brand);
+    }
+
+    public Map<String, BrandResponse> getBrandsByIds(List<String> ids) {
+
+        return brandRepository.findAllById(ids)
+                .stream()
+                .collect(Collectors.toMap(
+                        Brand::getId,
+                        BrandMapper::toResponse));
     }
 }

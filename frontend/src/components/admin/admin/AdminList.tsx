@@ -12,8 +12,8 @@ import ListBody from "../list/ListBody";
 import useGetAdmins from "../../../hooks/admin/user/useGetAdmins";
 import useDeleteAdmin from "../../../hooks/admin/user/useDeleteAdmin";
 import toast from "react-hot-toast";
-import useUpdateStatusUser from "../../../hooks/useUpdateStatusUser";
 import useGetAccount from "../../../hooks/auth/useGetAccount";
+import useUpdateStatusUser from "../../../hooks/admin/user/useUpdateStatusUser";
 
 function AdminList() {
   const array = [
@@ -73,6 +73,8 @@ function AdminList() {
       mutate();
     }
   };
+
+  console.log(admins);
 
   return (
     <>
