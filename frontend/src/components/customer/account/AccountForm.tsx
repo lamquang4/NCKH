@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import useGetAccount from "../../../hooks/auth/useGetAccount";
-import useGetUser from "../../../hooks/useGetUser";
 import useUpdateUser from "../../../hooks/useUpdateUser";
 import { validatePhone } from "../../../utils/validatePhone";
 import toast from "react-hot-toast";
@@ -14,19 +13,18 @@ function AccountForm() {
   });
 
   const { account } = useGetAccount("customer");
-  const { user } = useGetUser(account?.id || "");
-  const { updateUser, isLoading } = useUpdateUser(account!.id);
+  const { updateUser, isLoading } = useUpdateUser(account?.id || "");
 
   useEffect(() => {
-    if (user) {
+    if (account) {
       setData({
-        fullname: user.fullname || "",
-        phone: user.phone || "",
-        birthDate: user.birthDate || "",
-        gender: user.gender ?? null,
+        fullname: account.fullname || "",
+        phone: account.phone || "",
+        birthDate: account.birthDate || "",
+        gender: account.gender ?? null,
       });
     }
-  }, [user]);
+  }, [account]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -81,7 +79,7 @@ function AccountForm() {
                 type="text"
                 name="fullname"
                 className="w-full rounded-sm p-[6px_10px] text-[0.9rem] border border-gray-300  focus:outline-0"
-                value={user?.fullname || ""}
+                value={account?.fullname || ""}
                 onChange={handleChange}
               />
             </div>
@@ -97,7 +95,7 @@ function AccountForm() {
                 type="text"
                 name="email"
                 className="w-full rounded-sm p-[6px_10px] text-[0.9rem] border border-gray-300  focus:outline-0"
-                value={user?.email || ""}
+                value={account?.email || ""}
                 readOnly
               />
             </div>
@@ -115,7 +113,7 @@ function AccountForm() {
                 type="date"
                 name="birthDate"
                 className="w-full rounded-sm p-[6px_10px] text-[0.9rem] border border-gray-300 focus:outline-0"
-                value={user?.birthDate || ""}
+                value={account?.birthDate || ""}
                 onChange={handleChange}
               />
             </div>
@@ -131,7 +129,7 @@ function AccountForm() {
                 type="text"
                 name="phone"
                 className="w-full rounded-sm p-[6px_10px] text-[0.9rem] border border-gray-300 focus:outline-0"
-                value={user?.phone || ""}
+                value={account?.phone || ""}
                 onChange={handleChange}
               />
             </div>

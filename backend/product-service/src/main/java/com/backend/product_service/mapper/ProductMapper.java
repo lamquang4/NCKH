@@ -85,8 +85,12 @@ public final class ProductMapper {
                                                 product.getImages() == null
                                                                 ? List.of()
                                                                 : product.getImages().stream()
-                                                                                .sorted(Comparator.comparing(
-                                                                                                ImageProduct::getCreatedAt))
+                                                                                .sorted(
+                                                                                                Comparator.comparing(
+                                                                                                                ImageProduct::getCreatedAt,
+                                                                                                                Comparator.nullsLast(
+                                                                                                                                Comparator.naturalOrder())))
+
                                                                                 .map(ImageProductMapper::toResponse)
                                                                                 .toList())
                                 .specifications(

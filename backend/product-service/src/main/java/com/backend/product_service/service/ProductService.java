@@ -166,17 +166,7 @@ public class ProductService {
         return mapPageWithClient(productPage);
     }
 
-    // lấy các sản phẩm có status = 1
-    public List<ProductResponse> getActiveProducts() {
-
-        List<Product> products = productRepository.findByStatus(
-                1,
-                Sort.by("createdAt").descending());
-
-        return mapWithClient(products);
-    }
-
-    // lấy x sản phẩm bán chạy nhất
+    // lấy x sản phẩm bán chạy nhất có status = 1
     public List<ProductResponse> getActiveBestSellerProducts(Integer limit) {
 
         int size = (limit == null) ? 10 : limit;
@@ -185,24 +175,35 @@ public class ProductService {
                 .findByStatusAndTotalSoldGreaterThan(
                         1,
                         0,
-                        PageRequest.of(0, size, Sort.by("totalSold").descending()))
-                .getContent();
+                        Sort.by("totalSold").descending());
+
+        if (products.size() > size) {
+            products = products.subList(0, size);
+        }
 
         return mapWithClient(products);
     }
 
-    // lấy x sản phẩm gợi ý
+    // lấy x sản phẩm status = 1
     public List<ProductResponse> getActiveLimitProducts(String q, Integer limit) {
 
         int size = (limit != null && limit > 0) ? limit : 10;
 
-        List<Product> products = (q != null && !q.isBlank())
-                ? productRepository.searchActiveProducts(
-                        q.toLowerCase(),
-                        PageRequest.of(0, size))
-                : productRepository
-                        .findByStatus(1, PageRequest.of(0, size))
-                        .getContent();
+        List<Product> products;
+
+        if (q != null && !q.isBlank()) {
+            products = productRepository.searchActiveProducts(
+                    q.toLowerCase(),
+                    PageRequest.of(0, size));
+        } else {
+            products = productRepository.findByStatus(
+                    1,
+                    Sort.by("createdAt").descending());
+
+            if (products.size() > size) {
+                products = products.subList(0, size);
+            }
+        }
 
         return mapWithClient(products);
     }
@@ -262,6 +263,22 @@ public class ProductService {
 
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Sản phẩm không tìm thấy"));
+
+        if (status == 1) {
+            CategoryResponse category = categoryServiceClient.getCategoryByIdInternal(product.getCategoryId());
+
+            if (category.getStatus() == 0) {
+                throw new BadRequestException(
+                        "Sản phẩm không thể hiện vì danh mục đang bị ẩn");
+            }
+
+            BrandResponse brand = brandServiceClient.getBrandByIdInternal(product.getBrandId());
+
+            if (brand.getStatus() == 0) {
+                throw new BadRequestException(
+                        "Sản phẩm không thể hiện vì thương hiệu đang bị ẩn");
+            }
+        }
 
         product.setStatus(status);
         productRepository.save(product);
@@ -324,7 +341,7 @@ public class ProductService {
             try {
                 for (MultipartFile file : files) {
                     ImageProduct image = uploadImageOnCloudinary(file, savedProduct);
-                    savedProduct.getImages().add(image); // ✅ add, KHÔNG set
+                    savedProduct.getImages().add(image);
                 }
             } catch (Exception e) {
                 deleteFolderOnCloudinary(savedProduct.getId());
@@ -391,7 +408,8 @@ public class ProductService {
             try {
                 for (MultipartFile file : files) {
                     ImageProduct image = uploadImageOnCloudinary(file, product);
-                    product.getImages().add(image); // ← ADD vào Set
+                    image.setProduct(product);
+                    product.getImages().add(image);
                 }
             } catch (Exception e) {
                 deleteFolderOnCloudinary(product.getId());
@@ -560,15 +578,18 @@ public class ProductService {
         imageProductRepository.save(image);
     }
 
-    private String uploadImageOnCloudinaryWithId(
+    // cloudinary
+    private String uploadImageCore(
             MultipartFile file,
             String productId,
             String imageId) {
 
+        // Validate size
         if (file.getSize() > 2 * 1024 * 1024) {
             throw new BadRequestException("Dung lượng hình tối đa 2MB");
         }
 
+        // Validate type
         String contentType = file.getContentType();
         List<String> allowedTypes = List.of(
                 "image/jpeg",
@@ -593,6 +614,31 @@ public class ProductService {
         } catch (IOException e) {
             throw new ExternalServiceException("Upload hình thất bại: " + e.getMessage());
         }
+    }
+
+    private ImageProduct uploadImageOnCloudinary(
+            MultipartFile file,
+            Product product) {
+
+        String imageId = UUID.randomUUID().toString();
+
+        String imageUrl = uploadImageCore(
+                file,
+                product.getId(),
+                imageId);
+
+        return ImageProduct.builder()
+                .image(imageUrl)
+                .product(product)
+                .build();
+    }
+
+    private String uploadImageOnCloudinaryWithId(
+            MultipartFile file,
+            String productId,
+            String imageId) {
+
+        return uploadImageCore(file, productId, imageId);
     }
 
     private void deleteImageOnCloudinary(String productId, String imageId) {
@@ -628,52 +674,6 @@ public class ProductService {
         }
     }
 
-    private ImageProduct uploadImageOnCloudinary(
-            MultipartFile file,
-            Product product) {
-
-        // Validate size
-        if (file.getSize() > 2 * 1024 * 1024) {
-            throw new BadRequestException("Dung lượng hình tối đa 2MB");
-        }
-
-        // Validate type
-        String contentType = file.getContentType();
-        List<String> allowedTypes = List.of(
-                "image/jpeg",
-                "image/png",
-                "image/webp");
-
-        if (contentType == null || !allowedTypes.contains(contentType)) {
-            throw new BadRequestException("Hình chỉ cho phép JPG, PNG, WEBP");
-        }
-
-        String imageId = UUID.randomUUID().toString();
-
-        try {
-
-            String folderPath = "nckh/products/" + product.getId()
-                    + "/"
-                    + imageId;
-
-            Map<?, ?> uploadResult = cloudinary.uploader().upload(
-                    file.getBytes(),
-                    ObjectUtils.asMap(
-                            "folder", folderPath,
-                            "public_id", imageId));
-
-            String imageUrl = uploadResult.get("secure_url").toString();
-
-            return ImageProduct.builder()
-                    .image(imageUrl)
-                    .product(product)
-                    .build();
-
-        } catch (IOException e) {
-            throw new ExternalServiceException("Upload hình thất bại" + e);
-        }
-    }
-
     // sắp xếp
     private Sort buildSort(String sort) {
 
@@ -702,6 +702,7 @@ public class ProductService {
             List<SpecificationRequest> requests) {
 
         Map<String, Specification> existingMap = product.getSpecifications().stream()
+                .filter(s -> s.getId() != null)
                 .collect(Collectors.toMap(
                         Specification::getId,
                         s -> s));
@@ -731,10 +732,6 @@ public class ProductService {
             }
         }
 
-        if (product.getSpecifications() == null) {
-            product.setSpecifications(new ArrayList<>());
-        }
-        // cái nào không có trong newList thì bị xóa
         product.getSpecifications().clear();
         product.getSpecifications().addAll(newList);
     }

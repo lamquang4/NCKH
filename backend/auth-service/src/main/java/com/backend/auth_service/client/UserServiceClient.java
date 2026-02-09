@@ -16,6 +16,9 @@ import jakarta.validation.Valid;
 
 @FeignClient(name = "user-service", configuration = InternalFeignConfig.class)
 public interface UserServiceClient {
+    @GetMapping("/api/user/internal/{id}")
+    UserResponse getUserByIdInternal(@PathVariable String id);
+
     @GetMapping("/api/user/internal/exist/user/{email}")
     Boolean existsUserByEmailInternal(@PathVariable String email);
 

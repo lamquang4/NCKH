@@ -54,7 +54,6 @@ public class BrandController {
     }
 
     @GetMapping("/active")
-
     public ResponseEntity<List<BrandResponse>> getActiveBrands() {
         return ResponseEntity.ok(brandService.getActiveBrands());
     }
@@ -95,6 +94,11 @@ public class BrandController {
     }
 
     // internal
+    @GetMapping("/internal/{id}")
+    public ResponseEntity<BrandResponse> getBrandByIdInternal(@PathVariable String id) {
+        return ResponseEntity.ok(brandService.getBrandById(id));
+    }
+
     @PostMapping("/internal/brands")
     public Map<String, BrandResponse> getBrandsByIdsInternal(
             @RequestBody List<String> ids) {

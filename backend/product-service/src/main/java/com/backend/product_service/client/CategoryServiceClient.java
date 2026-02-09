@@ -16,6 +16,9 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 @FeignClient(name = "category-service", configuration = InternalFeignConfig.class)
 public interface CategoryServiceClient {
 
+    @GetMapping("/api/category/internal/{id}")
+    CategoryResponse getCategoryByIdInternal(@PathVariable String id);
+
     @PostMapping("/api/category/internal/categories")
     Map<String, CategoryResponse> getCategoriesByIdsInternal(@RequestBody List<String> ids);
 

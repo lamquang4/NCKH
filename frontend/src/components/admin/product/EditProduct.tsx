@@ -137,6 +137,7 @@ function EditProduct() {
 
     try {
       await deleteImageProduct(product!.id, imageId);
+      mutate();
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
     }
@@ -145,6 +146,9 @@ function EditProduct() {
   const handleUpdateImage = async (imageId: string, file: File) => {
     try {
       await updateImageProduct(product!.id, imageId, file);
+      setPreviewImages1([]);
+      setSelectedFiles1([]);
+      mutate();
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
     }
@@ -273,6 +277,7 @@ function EditProduct() {
                                   className="text-[#d9534f]"
                                 />
                               </button>
+
                               <InputImage1
                                 InputId={`img-${index}`}
                                 sizeIcon={22}
@@ -284,7 +289,7 @@ function EditProduct() {
                             <>
                               <button
                                 type="button"
-                                className="p-2"
+                                className="bg-white rounded-full p-1 border border-gray-300 text-green-500"
                                 disabled={isLoadingUpdateImage}
                                 onClick={() =>
                                   handleUpdateImage(
@@ -293,15 +298,15 @@ function EditProduct() {
                                   )
                                 }
                               >
-                                <SiTicktick size={26} />
+                                <SiTicktick size={22} />
                               </button>
 
                               <button
                                 type="button"
-                                className="p-2"
+                                className="bg-white rounded-full p-1 border border-gray-300"
                                 onClick={() => handleClear(index)}
                               >
-                                <HiMiniXMark size={26} />
+                                <HiMiniXMark size={22} />
                               </button>
                             </>
                           )}

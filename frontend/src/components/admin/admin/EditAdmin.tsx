@@ -77,14 +77,19 @@ function EditAdmin() {
     }
 
     try {
-      await updateUser({
+      const payload: any = {
         fullname: data.fullname.trim(),
         phone: data.phone.trim(),
         email: data.email.trim(),
-        password: data.password.trim(),
         role: "admin",
         status: Number(data.status),
-      });
+      };
+
+      if (data.password.trim()) {
+        payload.password = data.password.trim();
+      }
+
+      await updateUser(payload);
 
       mutate();
 

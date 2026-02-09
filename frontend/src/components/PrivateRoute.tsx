@@ -4,13 +4,13 @@ import Cookies from "js-cookie";
 
 interface JwtPayload {
   id: string;
-  role: number;
+  role: "admin" | "customer";
   exp: number;
 }
 
 interface PrivateRouteProps {
   children: React.ReactNode;
-  allowedRoles: number[];
+  allowedRoles: string[];
   redirectPath: string;
   type: "admin" | "customer";
 }
@@ -22,7 +22,9 @@ const PrivateRoute = ({
   type,
 }: PrivateRouteProps) => {
   const token =
-    type === "admin" ? Cookies.get("token-admin") : Cookies.get("token-customer");
+    type === "admin"
+      ? Cookies.get("token-admin")
+      : Cookies.get("token-customer");
 
   if (!token) {
     return <Navigate to={redirectPath} replace />;
@@ -38,8 +40,7 @@ const PrivateRoute = ({
     }
 
     // kiểm tra quyền truy cập
-    const role = Number(decoded.role);
-    if (!allowedRoles.includes(role)) {
+    if (!allowedRoles.includes(decoded.role)) {
       return <Navigate to={redirectPath} replace />;
     }
 

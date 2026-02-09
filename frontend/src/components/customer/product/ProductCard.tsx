@@ -47,7 +47,7 @@ function ProductCard({ product }: Props) {
       </div>
 
       <div className="space-y-[6px]">
-        <p className="font-normal line-clamp-2">
+        <p className="font-medium line-clamp-2">
           {product.brand.name} - {product.category.name}
         </p>
 

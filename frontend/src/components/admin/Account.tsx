@@ -1,9 +1,7 @@
 import useGetAccount from "../../hooks/auth/useGetAccount";
-import useGetUser from "../../hooks/useGetUser";
 
 function Account() {
   const { account } = useGetAccount("admin");
-  const { user } = useGetUser(account?.id || "");
   return (
     <div className="py-[30px] sm:px-[25px] px-[15px] bg-[#F1F4F9] h-full">
       <form className="flex flex-col gap-7 w-full">
@@ -20,7 +18,7 @@ function Account() {
               <input
                 type="text"
                 name="fullname"
-                value={user?.fullname}
+                value={account?.fullname}
                 readOnly
                 className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
               />
@@ -33,7 +31,7 @@ function Account() {
               <input
                 type="text"
                 name="email"
-                value={user?.email}
+                value={account?.email}
                 readOnly
                 className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
               />
@@ -46,7 +44,7 @@ function Account() {
               <input
                 type="text"
                 name="phone"
-                value={user?.phone}
+                value={account?.phone}
                 readOnly
                 className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
               />
@@ -59,7 +57,7 @@ function Account() {
               <input
                 type="text"
                 name="role"
-                value={user?.role === "admin" ? "Quản trị viên" : ""}
+                value={account?.role === "admin" ? "Quản trị viên" : ""}
                 readOnly
                 className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
               />

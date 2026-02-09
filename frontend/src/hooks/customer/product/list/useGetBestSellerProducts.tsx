@@ -2,16 +2,12 @@ import axios from "axios";
 import useSWR from "swr";
 import type { ProductResponse } from "../../../../types/type";
 
-interface ResponseType {
-  products: ProductResponse[];
-}
-
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 export default function useGetBestsellerProducts(limit: number) {
   const url = `${import.meta.env.VITE_BACKEND_URL}/product/active/bestseller?limit=${limit}`;
 
-  const { data, error, isLoading, mutate } = useSWR<ResponseType>(
+  const { data, error, isLoading, mutate } = useSWR<ProductResponse[]>(
     url,
     fetcher,
     {
@@ -21,7 +17,7 @@ export default function useGetBestsellerProducts(limit: number) {
   );
 
   return {
-    products: data?.products ?? [],
+    products: data ?? [],
     isLoading,
     error,
     mutate,

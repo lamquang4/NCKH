@@ -144,7 +144,7 @@ function CheckoutForm() {
 
         mutateCart({ items: [] }, false);
       } catch (err: any) {
-        toast.error(err?.response?.data?.msg);
+        toast.error(err?.response?.data?.message);
       }
     } else if (paymethod === "momo") {
       try {

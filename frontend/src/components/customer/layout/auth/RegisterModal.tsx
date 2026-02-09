@@ -55,10 +55,9 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
 
       try {
         await sendRegisterOTP(data.email.trim());
-        toast("Đang gửi email...");
         setStep(2);
       } catch (err: any) {
-        toast.error(err?.response?.data?.msg);
+        toast.error(err?.response?.data?.message);
       }
     } else {
       if (!validatePhone(data.phone)) {
@@ -78,7 +77,7 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
             phone: data.phone.trim(),
             password: data.password.trim(),
           },
-          Number(data.otp.trim()),
+          data.otp.trim(),
         );
         toast.success("Đăng kí thành công!");
         setData({
@@ -90,13 +89,22 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
         });
         navigate("/login");
       } catch (err: any) {
-        toast.error(err?.response?.data?.msg);
+        toast.error(err?.response?.data?.message);
       }
     }
   };
 
   const handleSendOTP = async () => {
-    await sendRegisterOTP(data.email.trim());
+    if (!validateEmail(data.email)) {
+      toast.error("Email không hợp lệ");
+      return;
+    }
+
+    try {
+      await sendRegisterOTP(data.email.trim());
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message);
+    }
   };
 
   return (
@@ -296,7 +304,7 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
       </div>
 
       {(isLoading || isLoadingSendResetOTP) && (
-        <Overplay IndexForZ={50}>
+        <Overplay IndexForZ={99}>
           <Loading height={0} size={55} color="white" thickness={8} />
           <h4 className="text-white">Vui lòng chờ trong giây lát...</h4>
         </Overplay>

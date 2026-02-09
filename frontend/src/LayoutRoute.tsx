@@ -27,6 +27,8 @@ import ProductListPage from "./pages/admin/ProductListPage";
 import AddProductPage from "./pages/admin/AddProductPage";
 import EditProductPage from "./pages/admin/EditProductPage";
 import ProductListDiscountPage from "./pages/customer/ProductListDiscountPage";
+import PrivateRoute from "./components/PrivateRoute";
+import PublicRoute from "./components/PublicRoute";
 function LayoutRoute() {
   return (
     <Routes>
@@ -35,36 +37,277 @@ function LayoutRoute() {
       <Route path="/products/sale" element={<ProductListDiscountPage />} />
       <Route path="/product/:slug" element={<ProductDetailPage />} />
       <Route path="/cart" element={<CartPage />} />
-      <Route path="/checkout" element={<CheckoutPage />} />
-      <Route path="/account/profile" element={<AccountPage />} />
-      <Route path="/order/history" element={<OrderHistoryPage />} />
-      <Route path="/order/history/:code" element={<OrderDetailPage />} />
+
+      <Route
+        path="/account/profile"
+        element={
+          <PrivateRoute
+            type="customer"
+            allowedRoles={["customer"]}
+            redirectPath="/"
+          >
+            <AccountPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/order/history"
+        element={
+          <PrivateRoute
+            type="customer"
+            allowedRoles={["customer"]}
+            redirectPath="/"
+          >
+            <OrderHistoryPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/order/history/:code"
+        element={
+          <PrivateRoute
+            type="customer"
+            allowedRoles={["customer"]}
+            redirectPath="/"
+          >
+            <OrderDetailPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/checkout"
+        element={
+          <PrivateRoute
+            type="customer"
+            allowedRoles={["customer"]}
+            redirectPath="/"
+          >
+            <CheckoutPage />
+          </PrivateRoute>
+        }
+      />
+
       <Route path="/order/result" element={<OrderResultPage />} />
 
-      <Route path="/admin/login" element={<LoginPage />} />
-      <Route path="/admin/account/profile" element={<AccountAdminPage />} />
-      <Route path="/admin/payments" element={<PaymentListPage />} />
+      <Route
+        path="/admin/login"
+        element={
+          <PublicRoute type="admin" redirectPath="/admin/account/profile">
+            <LoginPage />
+          </PublicRoute>
+        }
+      />
 
-      <Route path="/admin/admins" element={<AdminListPage />} />
-      <Route path="/admin/add-admin" element={<AddAdminPage />} />
-      <Route path="/admin/edit-admin/:id" element={<EditAdminPage />} />
+      <Route
+        path="/admin/account/profile"
+        element={
+          <PrivateRoute
+            type="admin"
+            allowedRoles={["admin"]}
+            redirectPath="/admin/login"
+          >
+            <AccountAdminPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/admin/payments"
+        element={
+          <PrivateRoute
+            type="admin"
+            allowedRoles={["admin"]}
+            redirectPath="/admin/login"
+          >
+            <PaymentListPage />
+          </PrivateRoute>
+        }
+      />
 
-      <Route path="/admin/customers" element={<CustomerListPage />} />
+      <Route
+        path="/admin/admins"
+        element={
+          <PrivateRoute
+            type="admin"
+            allowedRoles={["admin"]}
+            redirectPath="/admin/login"
+          >
+            <AdminListPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/admin/add-admin"
+        element={
+          <PrivateRoute
+            type="admin"
+            allowedRoles={["admin"]}
+            redirectPath="/admin/login"
+          >
+            <AddAdminPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/admin/edit-admin/:id"
+        element={
+          <PrivateRoute
+            type="admin"
+            allowedRoles={["admin"]}
+            redirectPath="/admin/login"
+          >
+            <EditAdminPage />
+          </PrivateRoute>
+        }
+      />
 
-      <Route path="/admin/products" element={<ProductListPage />} />
-      <Route path="/admin/add-product" element={<AddProductPage />} />
-      <Route path="/admin/edit-product/:id" element={<EditProductPage />} />
+      <Route
+        path="/admin/customers"
+        element={
+          <PrivateRoute
+            type="admin"
+            allowedRoles={["admin"]}
+            redirectPath="/admin/login"
+          >
+            <CustomerListPage />
+          </PrivateRoute>
+        }
+      />
 
-      <Route path="/admin/brands" element={<BrandListPage />} />
-      <Route path="/admin/add-brand" element={<AddBrandPage />} />
-      <Route path="/admin/edit-brand/:id" element={<EditBrandPage />} />
+      <Route
+        path="/admin/products"
+        element={
+          <PrivateRoute
+            type="admin"
+            allowedRoles={["admin"]}
+            redirectPath="/admin/login"
+          >
+            <ProductListPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/admin/add-product"
+        element={
+          <PrivateRoute
+            type="admin"
+            allowedRoles={["admin"]}
+            redirectPath="/admin/login"
+          >
+            <AddProductPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/admin/edit-product/:id"
+        element={
+          <PrivateRoute
+            type="admin"
+            allowedRoles={["admin"]}
+            redirectPath="/admin/login"
+          >
+            <EditProductPage />
+          </PrivateRoute>
+        }
+      />
 
-      <Route path="/admin/categories" element={<CategoryListPage />} />
-      <Route path="/admin/add-category" element={<AddCategoryPage />} />
-      <Route path="/admin/edit-category/:id" element={<EditCategoryPage />} />
+      <Route
+        path="/admin/brands"
+        element={
+          <PrivateRoute
+            type="admin"
+            allowedRoles={["admin"]}
+            redirectPath="/admin/login"
+          >
+            <BrandListPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/admin/add-brand"
+        element={
+          <PrivateRoute
+            type="admin"
+            allowedRoles={["admin"]}
+            redirectPath="/admin/login"
+          >
+            <AddBrandPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/admin/edit-brand/:id"
+        element={
+          <PrivateRoute
+            type="admin"
+            allowedRoles={["admin"]}
+            redirectPath="/admin/login"
+          >
+            <EditBrandPage />
+          </PrivateRoute>
+        }
+      />
 
-      <Route path="/admin/orders" element={<OrderListPage />} />
-      <Route path="/admin/order/:id" element={<OrderDetailAdmin />} />
+      <Route
+        path="/admin/categories"
+        element={
+          <PrivateRoute
+            type="admin"
+            allowedRoles={["admin"]}
+            redirectPath="/admin/login"
+          >
+            <CategoryListPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/admin/add-category"
+        element={
+          <PrivateRoute
+            type="admin"
+            allowedRoles={["admin"]}
+            redirectPath="/admin/login"
+          >
+            <AddCategoryPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/admin/edit-category/:id"
+        element={
+          <PrivateRoute
+            type="admin"
+            allowedRoles={["admin"]}
+            redirectPath="/admin/login"
+          >
+            <EditCategoryPage />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/admin/orders"
+        element={
+          <PrivateRoute
+            type="admin"
+            allowedRoles={["admin"]}
+            redirectPath="/admin/login"
+          >
+            <OrderListPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/admin/order/:id"
+        element={
+          <PrivateRoute
+            type="admin"
+            allowedRoles={["admin"]}
+            redirectPath="/admin/login"
+          >
+            <OrderDetailAdmin />
+          </PrivateRoute>
+        }
+      />
     </Routes>
   );
 }

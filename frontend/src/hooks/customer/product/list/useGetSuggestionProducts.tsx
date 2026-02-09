@@ -3,17 +3,13 @@ import useSWR from "swr";
 import { useState } from "react";
 import type { ProductResponse } from "../../../../types/type";
 
-interface ResponseType {
-  products: ProductResponse[];
-}
-
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 export default function useGetSuggestionProducts(limit: number) {
   const [keyword, setKeyword] = useState<string>("");
   const url = `${import.meta.env.VITE_BACKEND_URL}/product/active/limit?q=${keyword}&limit=${limit}`;
 
-  const { data, error, isLoading, mutate } = useSWR<ResponseType>(
+  const { data, error, isLoading, mutate } = useSWR<ProductResponse[]>(
     url,
     fetcher,
     {
@@ -23,7 +19,7 @@ export default function useGetSuggestionProducts(limit: number) {
   );
 
   return {
-    products: data?.products ?? [],
+    products: data ?? [],
     setKeyword,
     isLoading,
     error,

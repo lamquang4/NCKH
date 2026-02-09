@@ -3,6 +3,7 @@ package com.backend.auth_service.service;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,9 @@ import com.backend.auth_service.exception.ExternalServiceException;
 @Service
 public class EmailService {
 
+    @Value("${spring.mail.username}")
+    private String emailSender;
+
     private final JavaMailSender mailSender;
 
     public EmailService(JavaMailSender mailSender) {
@@ -19,6 +23,10 @@ public class EmailService {
     }
 
     public void sendOtp(String email, String otp) {
+
+        if (email.equals(emailSender)) {
+            throw new IllegalArgumentException("Không thể gửi OTP đến email này");
+        }
 
         try {
             MimeMessage message = mailSender.createMimeMessage();
@@ -28,7 +36,7 @@ public class EmailService {
                     true,
                     "UTF-8");
 
-            helper.setFrom("NCKH");
+            helper.setFrom(emailSender);
             helper.setTo(email);
             helper.setSubject("Mã xác minh của bạn là " + otp);
             helper.setText(buildOtpHtml(otp), true);
@@ -36,17 +44,17 @@ public class EmailService {
             mailSender.send(message);
 
         } catch (MessagingException e) {
-            throw new ExternalServiceException("Không thể gửi OTP đến email");
+            throw new ExternalServiceException("Không thể gửi OTP đến email" + e);
         }
     }
 
     private String buildOtpHtml(String otp) {
-        return """
+        return String.format("""
                 <div style="
                     padding-bottom: 20px;
                     padding-top: 20px;
                     max-width: 480px;
-                    width: 100%;
+                    width: 100%%;
                     margin: 0 auto;
                 ">
                   <div style="
@@ -78,6 +86,6 @@ public class EmailService {
                     </div>
                   </div>
                 </div>
-                """.formatted(otp);
+                """, otp);
     }
 }
