@@ -35,7 +35,7 @@ services:
       eureka-server:
         condition: service_healthy
     restart: on-failure
-    
+
   auth-service:
     build: ./backend/auth-service
     container_name: auth-service
@@ -49,7 +49,7 @@ services:
       SPRING_MAIL_HOST: smtp.gmail.com
       SPRING_MAIL_PORT: 587
       SPRING_MAIL_USERNAME: lamdieuquang0105@gmail.com
-      SPRING_MAIL_PASSWORD: nfvl soak xndk busr
+      SPRING_MAIL_PASSWORD: nfvlsoakxndkbusr
       JWT_SECRET: d1b72a9c2f1b2cfd6eb0b9320491ec2f
       JWT_EXPIRATION: 86400000
       JAVA_TOOL_OPTIONS: "-Xms128m -Xmx256m"

@@ -55,8 +55,8 @@ public class AuthService {
         String hashedOtp = passwordEncoder.encode(otp);
 
         authRepository.findByEmail(email).ifPresent(existing -> {
-            if (existing.getExpiredAt().isAfter(LocalDateTime.now().minusMinutes(9))) {
-                throw new BadRequestException("Vui lòng đợi trước khi gửi lại OTP");
+            if (existing.getExpiredAt().isAfter(LocalDateTime.now().minusMinutes(5))) {
+                throw new BadRequestException("Vui lòng đợi 5 phút trước khi gửi lại OTP");
             }
             authRepository.delete(existing);
         });
@@ -99,7 +99,7 @@ public class AuthService {
 
             if (otp.getFailedAttempts() >= 5) {
                 authRepository.delete(otp);
-                throw new BadRequestException("Bạn đã nhập sai OTP quá nhiều lần. Vui lòng gửi lại mã mới");
+                throw new BadRequestException("Bạn đã nhập sai OTP quá 5 lần. Vui lòng gửi lại mã mới");
             }
 
             authRepository.save(otp);
@@ -112,15 +112,12 @@ public class AuthService {
     }
 
     // đăng nhập thủ công
-    public LoginResponse login(LoginRequest request) {
-
-        if (!ValidationUtils.validateEmail(request.getEmail())) {
-            throw new IllegalArgumentException("Email không hợp lệ");
-        }
+    public LoginResponse handleLogin(LoginRequest request) {
 
         UserAuthResponse user = userServiceClient.getUserByEmailInternal(request.getEmail());
 
-        if (user == null) {
+        if (user == null ||
+                !passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new BadRequestException("Email hoặc mật khẩu không đúng");
         }
 
@@ -128,11 +125,12 @@ public class AuthService {
             throw new ForbiddenException("Tài khoản đã bị khóa");
         }
 
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new BadRequestException("Email hoặc mật khẩu không đúng");
-        }
+        String token = jwtService.generateAccessToken(user);
 
-        return jwtService.generateLoginResponse(user);
+        return LoginResponse.builder()
+                .token(token)
+                .role(user.getRole())
+                .build();
     }
 
     // đăng nhập google (tạm bỏ)

@@ -102,6 +102,11 @@ public class UserService {
             throw new BadRequestException("Số điện thoại không hợp lệ");
         }
 
+           if (request.getGoogleId() == null && (request.getPassword() == null || request.getPassword().isBlank())) {
+        throw new BadRequestException("Mật khẩu không được để trống");
+    }
+
+
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new ConflictException("Email đã được sử dụng");
         }
@@ -111,7 +116,9 @@ public class UserService {
         }
 
         User user = UserMapper.toEntity(request);
+         if (request.getPassword() != null && !request.getPassword().isBlank()) {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+    }
         user.setRole(
                 request.getRole() == null ? "customer" : request.getRole());
         user.setStatus(

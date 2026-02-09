@@ -19,7 +19,7 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "otp")
-@EntityListeners(AuditingEntityListener.class) 
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -33,12 +33,13 @@ public class Otp {
     @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false, length = 6)
+    @Column(nullable = false, length = 255)
     private String otp; // hash
 
     @Column(nullable = false)
     private LocalDateTime expiredAt;
 
+      @Column(nullable = false)
     private int failedAttempts;
 
     @CreatedDate

@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.backend.auth_service.client.UserServiceClient;
 import com.backend.auth_service.dto.request.LoginRequest;
 import com.backend.auth_service.dto.request.RegisterRequest;
 import com.backend.auth_service.dto.response.LoginResponse;
+import com.backend.auth_service.dto.response.UserResponse;
 import com.backend.auth_service.exception.BadRequestException;
 import com.backend.auth_service.service.AuthService;
 import com.backend.auth_service.service.JwtService;
@@ -26,10 +28,12 @@ import jakarta.validation.Valid;
 public class AuthController {
     private final AuthService authService;
     private final JwtService jwtService;
+    private final UserServiceClient userServiceClient;
 
-    public AuthController(AuthService authService, JwtService jwtService) {
+    public AuthController(AuthService authService, JwtService jwtService, UserServiceClient userServiceClient) {
         this.authService = authService;
         this.jwtService = jwtService;
+        this.userServiceClient = userServiceClient;
     }
 
     @PostMapping("/otp")
@@ -53,23 +57,25 @@ public class AuthController {
     public ResponseEntity<LoginResponse> login(
             @Valid @RequestBody LoginRequest request) {
 
-        LoginResponse response = authService.login(request);
+        LoginResponse response = authService.handleLogin(request);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/me")
-    public ResponseEntity<LoginResponse> getCurrentUser(
+    public ResponseEntity<UserResponse> getCurrentUser(
             @RequestHeader("Authorization") String authHeader) {
 
         String token = authHeader.replace("Bearer ", "");
 
         if (!jwtService.isTokenValid(token)) {
-            throw new BadRequestException("Token không hợp lệ hoặc đã hết hạn");
+            throw new BadRequestException("Token không hợp lệ");
         }
 
-        LoginResponse response = jwtService.getLoginResponseFromToken(token);
+        String userId = jwtService.extractUserId(token);
 
-        return ResponseEntity.ok(response);
+        UserResponse user = userServiceClient.getUserByIdInternal(userId);
+
+        return ResponseEntity.ok(user);
     }
 
 }

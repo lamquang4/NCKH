@@ -3,7 +3,6 @@ import Image from "../../../Image";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
-import useGetUser from "../../../../hooks/useGetUser";
 import useGetAccount from "../../../../hooks/auth/useGetAccount";
 import useLogout from "../../../../hooks/auth/useLogout";
 
@@ -14,11 +13,10 @@ type Props = {
 
 function ProfileMenu({ menuOpen, onToggleMenu }: Props) {
   const { account } = useGetAccount("admin");
-  const { user } = useGetUser(account?.id || "");
   const { handleLogout } = useLogout();
   return (
     <>
-      {user && (
+      {account && (
         <div
           className="text-[0.9rem] relative group"
           onMouseOver={onToggleMenu}
@@ -33,13 +31,13 @@ function ProfileMenu({ menuOpen, onToggleMenu }: Props) {
                 loading="eager"
               />
             </div>
-            <p>{user.fullname}</p>
+            <p>{account.fullname}</p>
           </div>
 
           {menuOpen && (
             <div className="absolute top-full right-0 w-[185px] z-20 bg-white shadow-md rounded-md border border-gray-200">
               <p className="border-b p-2.5 border-gray-300 max-w-[210px] overflow-hidden text-ellipsis whitespace-nowrap text-center">
-                Xin chào, {user.fullname}
+                Xin chào, {account.fullname}
               </p>
 
               <Link

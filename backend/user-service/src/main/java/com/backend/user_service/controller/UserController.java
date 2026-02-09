@@ -103,6 +103,13 @@ public class UserController {
         }
 
         // internal
+        @GetMapping("/internal/{id}")
+        public ResponseEntity<UserResponse> getUserByIdInternal(
+                        @PathVariable String id) {
+
+                return ResponseEntity.ok(userService.getUserById(id));
+        }
+
         @GetMapping("/internal/exist/user/{email}")
         public ResponseEntity<Boolean> existsUserByEmailInternal(
                         @PathVariable String email) {

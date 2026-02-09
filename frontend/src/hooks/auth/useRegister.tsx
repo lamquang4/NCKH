@@ -5,7 +5,7 @@ import type { UserRequest } from "../../types/type";
 
 export default function useRegister() {
   const [isLoading, setIsLoading] = useState(false);
-  const handleRegister = async (data: UserRequest, otp: number) => {
+  const handleRegister = async (data: UserRequest, otp: string) => {
     if (!data || !otp) {
       return;
     }

@@ -104,6 +104,11 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.getCategoryBySlug(slug));
     }
 
+    @GetMapping("/internal/{id}")
+    public ResponseEntity<CategoryResponse> getCategoryByIdInternal(@PathVariable String id) {
+        return ResponseEntity.ok(categoryService.getCategoryById(id));
+    }
+
     @PostMapping("/internal/categories")
     public Map<String, CategoryResponse> getCategoriesByIdsInternal(
             @RequestBody List<String> ids) {
