@@ -11,7 +11,6 @@ import SearchMobile from "./SearchMobile";
 import Overplay from "../../../Overplay";
 import MenuMobile from "./MenuMobile";
 import AuthModal from "../auth/AuthModal";
-import useGetAccount from "../../../../hooks/auth/useGetAccount";
 import useGetCart from "../../../../hooks/customer/cart/useGetCart";
 
 function Header() {
@@ -20,8 +19,7 @@ function Header() {
   const [menuMobileOpen, setMenuMobileOpen] = useState<boolean>(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState<boolean>(false);
 
-  const { account } = useGetAccount("customer");
-  const { cart } = useGetCart(account?.id || "");
+  const { cart } = useGetCart();
 
   const toggleProfileMenu = useCallback(() => {
     setProfileMenuOpen((prev) => !prev);
