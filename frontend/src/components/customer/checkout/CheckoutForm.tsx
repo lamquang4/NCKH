@@ -28,11 +28,7 @@ function CheckoutForm() {
 
   const { provinces } = useGetProvinces();
   const { account } = useGetAccount("customer");
-  const {
-    cart,
-    isLoading: isLoadingCart,
-    mutate: mutateCart,
-  } = useGetCart(account?.id || "");
+  const { cart, isLoading: isLoadingCart, mutate: mutateCart } = useGetCart();
   const { addOrder, isLoading: isLoadingOrder } = useAddOrder();
   const { createPaymentMomo, isLoading: isLoadingPaymentMomo } =
     usePaymentMomo();

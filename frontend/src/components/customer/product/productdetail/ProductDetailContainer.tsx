@@ -20,7 +20,7 @@ function ProductDetailContainer() {
     if (isLoading) return;
 
     if (!product) {
-      toast.error("Sách không tìm thấy");
+      toast.error("Sản phẩm không tìm thấy");
       navigate("/", { replace: true });
     }
   }, [product, isLoading, navigate]);
