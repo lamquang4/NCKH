@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export function useSendRegisterOTP() {
   const [isLoading, setIsLoading] = useState(false);
@@ -11,6 +12,7 @@ export function useSendRegisterOTP() {
     try {
       const url = `${import.meta.env.VITE_BACKEND_URL}/auth/otp?email=${email}`;
       await axios.post(url);
+      toast.success("Gửi mã OTP thành công. Vui lòng kiểm tra email của bạn");
     } catch (err: any) {
       console.error("Lỗi:", err);
       throw err;

@@ -3,7 +3,6 @@ import { HiOutlineEyeOff, HiOutlineEye } from "react-icons/hi";
 import useRegister from "../../../../hooks/auth/useRegister";
 import { useSendRegisterOTP } from "../../../../hooks/auth/useSendRegisterOtp";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import { validateEmail } from "../../../../utils/validateEmail";
 import { validatePhone } from "../../../../utils/validatePhone";
 import Overplay from "../../../Overplay";
@@ -15,7 +14,6 @@ type Props = {
 };
 
 function RegisterModal({ onClose, onSwitchLogin }: Props) {
-  const navigate = useNavigate();
   const [data, setData] = useState({
     fullname: "",
     email: "",
@@ -79,7 +77,7 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
           },
           data.otp.trim(),
         );
-        toast.success("Đăng kí thành công!");
+
         setData({
           fullname: "",
           email: "",
@@ -87,7 +85,6 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
           phone: "",
           otp: "",
         });
-        navigate("/login");
       } catch (err: any) {
         toast.error(err?.response?.data?.message);
       }

@@ -19,7 +19,7 @@ function ProductDetail({ product }: Props) {
   const [quantity, setQuantity] = useState<number>(1);
 
   const { account } = useGetAccount("customer");
-  const { cart, mutate } = useGetCart(account?.id || "");
+  const { cart, mutate } = useGetCart();
   const { addItem, isLoading } = useAddItemToCart();
 
   const HandleIncrement = () => {
@@ -33,12 +33,12 @@ function ProductDetail({ product }: Props) {
 
   const handleAddItemToCart = async () => {
     if (product.stock === 0) {
-      toast.error(`Sách đã hết hàng`);
+      toast.error(`Sản phẩm đã hết hàng`);
       return;
     }
 
     if (!account?.id) {
-      toast.error("Bạn phải đăng nhập để mua sách");
+      toast.error("Bạn phải đăng nhập để mua hàng");
       return;
     }
 
@@ -52,7 +52,7 @@ function ProductDetail({ product }: Props) {
     const maxQuantity = Math.min(product.stock, max);
 
     if (newQuantity > maxQuantity) {
-      toast(`Cuốn sách này bạn chỉ có thể mua tối đa ${maxQuantity}`);
+      toast(`Sản phẩm này bạn chỉ có thể mua tối đa ${maxQuantity}`);
       return;
     }
 

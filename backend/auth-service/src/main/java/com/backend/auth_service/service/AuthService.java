@@ -20,6 +20,7 @@ import com.backend.auth_service.repository.AuthRepository;
 import com.backend.auth_service.util.OtpUtil;
 import com.backend.auth_service.util.ValidationUtils;
 
+import feign.FeignException;
 import jakarta.ws.rs.ForbiddenException;
 
 @Service
@@ -40,6 +41,7 @@ public class AuthService {
     }
 
     // Gửi otp đến email
+    @Transactional
     public void sendRegisterOtp(String email) {
 
         if (!ValidationUtils.validateEmail(email)) {
@@ -74,6 +76,7 @@ public class AuthService {
     }
 
     // Xác thực otp để đăng ký
+    @Transactional
     public void verifyOtpAndRegister(
             VerifyOtpRequest otpRequest,
             UserRequest userRequest) {
@@ -114,10 +117,15 @@ public class AuthService {
     // đăng nhập thủ công
     public LoginResponse handleLogin(LoginRequest request) {
 
-        UserAuthResponse user = userServiceClient.getUserByEmailInternal(request.getEmail());
+        UserAuthResponse user;
 
-        if (user == null ||
-                !passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+        try {
+            user = userServiceClient.getUserByEmailInternal(request.getEmail());
+        } catch (FeignException.NotFound e) {
+            throw new BadRequestException("Email hoặc mật khẩu không đúng");
+        }
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new BadRequestException("Email hoặc mật khẩu không đúng");
         }
 

@@ -12,7 +12,7 @@ export default function useLogout() {
         window.location.href = "/admin/login";
       } else if (type === "customer") {
         Cookies.remove("token-customer");
-        window.location.href = "/login";
+        window.location.href = "/";
       }
     } catch (err) {
       console.error("Lỗi:", err);

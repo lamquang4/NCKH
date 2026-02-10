@@ -2,7 +2,6 @@ package com.backend.auth_service.dto.request;
 
 import java.time.LocalDate;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,14 +21,12 @@ public class UserRequest {
 
     @NotBlank(message = "Số điện thoại không được để trống")
     private String phone;
-    
     private LocalDate birthDate;
     private Integer gender;
 
     @Size(min = 6, message = "Mật khẩu phải có ít nhất 6 ký tự")
     private String password;
     private String role; // customer | admin
-    @NotNull(message = "Tình trạng không được để trống")
     private Integer status;
     private String googleId;
 }

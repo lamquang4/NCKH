@@ -29,7 +29,6 @@ public class InternalAuthFilter extends OncePerRequestFilter {
 
         // chỉ chặn internal api
         if (uri.contains("/internal/")) {
-
             String internalHeader = request.getHeader("X-Internal-Call");
 
             if (!"true".equals(internalHeader)) {

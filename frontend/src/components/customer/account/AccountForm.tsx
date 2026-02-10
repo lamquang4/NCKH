@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 function AccountForm() {
   const [data, setData] = useState({
     fullname: "",
+    email: "",
     phone: "",
     birthDate: "",
     gender: null as number | null,
@@ -19,6 +20,7 @@ function AccountForm() {
     if (account) {
       setData({
         fullname: account.fullname || "",
+        email: account.email || "",
         phone: account.phone || "",
         birthDate: account.birthDate || "",
         gender: account.gender ?? null,
@@ -48,6 +50,7 @@ function AccountForm() {
     try {
       await updateUser({
         fullname: data.fullname.trim(),
+        email: data.email.trim(),
         phone: data.phone.trim(),
         gender: data.gender,
         birthDate: data.birthDate,
@@ -79,7 +82,7 @@ function AccountForm() {
                 type="text"
                 name="fullname"
                 className="w-full rounded-sm p-[6px_10px] text-[0.9rem] border border-gray-300  focus:outline-0"
-                value={account?.fullname || ""}
+                value={account?.fullname}
                 onChange={handleChange}
               />
             </div>
@@ -95,7 +98,7 @@ function AccountForm() {
                 type="text"
                 name="email"
                 className="w-full rounded-sm p-[6px_10px] text-[0.9rem] border border-gray-300  focus:outline-0"
-                value={account?.email || ""}
+                value={account?.email}
                 readOnly
               />
             </div>
@@ -113,7 +116,7 @@ function AccountForm() {
                 type="date"
                 name="birthDate"
                 className="w-full rounded-sm p-[6px_10px] text-[0.9rem] border border-gray-300 focus:outline-0"
-                value={account?.birthDate || ""}
+                value={data.birthDate}
                 onChange={handleChange}
               />
             </div>
@@ -129,7 +132,7 @@ function AccountForm() {
                 type="text"
                 name="phone"
                 className="w-full rounded-sm p-[6px_10px] text-[0.9rem] border border-gray-300 focus:outline-0"
-                value={account?.phone || ""}
+                value={account?.phone}
                 onChange={handleChange}
               />
             </div>

@@ -43,6 +43,12 @@
         <artifactId>spring-boot-starter-security</artifactId>
     </dependency>
 
+        <!-- Load balancer -->
+    <dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+</dependency>
+
 	<!-- MongoDB -->
 	<dependency>
 		<groupId>org.springframework.boot</groupId>
@@ -113,10 +119,10 @@
         <artifactId>spring-cloud-starter-openfeign</artifactId>
     </dependency>
 
-        <dependency>
-    <groupId>io.github.openfeign</groupId>
-    <artifactId>feign-httpclient</artifactId>
-</dependency>
+	<dependency>
+			<groupId>io.github.openfeign</groupId>
+			<artifactId>feign-httpclient</artifactId>
+		</dependency>
 
     <!-- Lombok -->
     <dependency>

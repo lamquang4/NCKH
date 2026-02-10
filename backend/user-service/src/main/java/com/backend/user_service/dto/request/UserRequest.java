@@ -2,7 +2,6 @@ package com.backend.user_service.dto.request;
 
 import java.time.LocalDate;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,7 +27,6 @@ public class UserRequest {
     @Size(min = 6, message = "Mật khẩu phải có ít nhất 6 ký tự")
     private String password;
     private String role; // customer | admin
-    @NotNull(message = "Tình trạng không được để trống")
     private Integer status;
     private String googleId;
 }
