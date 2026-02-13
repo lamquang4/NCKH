@@ -5,13 +5,11 @@ import { useEffect } from "react";
 import toast from "react-hot-toast";
 import SideBar from "../../SideBar";
 import useGetOrder from "../../../../hooks/customer/order/useGetOrder";
-import useGetAccount from "../../../../hooks/auth/useGetAccount";
 function OrderDetailContainer() {
   const navigate = useNavigate();
   const { code } = useParams();
 
-  const { account } = useGetAccount("customer");
-  const { order, isLoading } = useGetOrder(account?.id || "", code || "");
+  const { order, isLoading } = useGetOrder(code || "");
 
   const array = [
     {

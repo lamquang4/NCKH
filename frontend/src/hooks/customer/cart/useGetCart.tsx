@@ -1,11 +1,25 @@
 import axios from "axios";
 import useSWR from "swr";
 import type { CartResponse } from "../../../types/type";
-
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+import { getCookie } from "../../../utils/cookieUtil";
 
 export default function useGetCart() {
+  const token = getCookie("token-customer");
+
+  if (!token) {
+    throw new Error("Vui lòng đăng nhập");
+  }
+
   const url = `${import.meta.env.VITE_BACKEND_URL}/cart`;
+
+  const fetcher = (url: string) =>
+    axios
+      .get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => res.data);
 
   const { data, error, isLoading, mutate } = useSWR<CartResponse>(
     url,

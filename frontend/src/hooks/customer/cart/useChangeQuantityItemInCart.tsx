@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import type { CartItemRequest } from "../../../types/type";
+import { getCookie } from "../../../utils/cookieUtil";
 
 export function useChangeQuantityItemInCart() {
   const [isLoading, setIsLoading] = useState(false);
@@ -11,8 +12,19 @@ export function useChangeQuantityItemInCart() {
     }
     setIsLoading(true);
     try {
+      const token = getCookie("token-customer");
+
+      if (!token) {
+        throw new Error("Vui lòng đăng nhập");
+      }
+
       const url = `${import.meta.env.VITE_BACKEND_URL}/cart`;
-      await axios.put(url, data);
+
+      await axios.put(url, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
     } catch (err: any) {
       console.error("Lỗi:", err);
       throw err;

@@ -8,7 +8,6 @@ import ProductBuyList from "./ProductBuyList";
 import PaymentMethod from "./PaymentMethod";
 import ShippingInfoForm from "./ShippingInfoForm";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
-import useGetAccount from "../../../hooks/auth/useGetAccount";
 import useGetCart from "../../../hooks/customer/cart/useGetCart";
 import useAddOrder from "../../../hooks/customer/order/useAddOrder";
 import usePaymentMomo from "../../../hooks/customer/payment/usePaymentMomo";
@@ -27,7 +26,6 @@ function CheckoutForm() {
   const [isOrderPlaced, setIsOrderPlaced] = useState<boolean>(false);
 
   const { provinces } = useGetProvinces();
-  const { account } = useGetAccount("customer");
   const { cart, isLoading: isLoadingCart, mutate: mutateCart } = useGetCart();
   const { addOrder, isLoading: isLoadingOrder } = useAddOrder();
   const { createPaymentMomo, isLoading: isLoadingPaymentMomo } =
@@ -125,7 +123,7 @@ function CheckoutForm() {
 
     if (paymethod === "cod") {
       try {
-        await addOrder(account?.id || "", {
+        await addOrder({
           fullname: data.fullname,
           phone: data.phone,
           speaddress: data.speaddress,
@@ -144,7 +142,7 @@ function CheckoutForm() {
       }
     } else if (paymethod === "momo") {
       try {
-        const res = await addOrder(account?.id || "", {
+        const res = await addOrder({
           fullname: data.fullname,
           phone: data.phone,
           speaddress: data.speaddress,
