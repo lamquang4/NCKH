@@ -27,7 +27,6 @@ export function useAddItemToCart() {
         },
       });
 
-      await axios.post(url, data);
       toast.success("Thêm vào giỏ hàng thành công");
     } catch (err: any) {
       console.error("Lỗi:", err);
