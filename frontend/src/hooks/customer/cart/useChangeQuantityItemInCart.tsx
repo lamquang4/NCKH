@@ -14,10 +14,6 @@ export function useChangeQuantityItemInCart() {
     try {
       const token = getCookie("token-customer");
 
-      if (!token) {
-        throw new Error("Vui lòng đăng nhập");
-      }
-
       const url = `${import.meta.env.VITE_BACKEND_URL}/cart`;
 
       await axios.put(url, data, {

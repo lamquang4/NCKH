@@ -1,9 +1,9 @@
-import BreadCrumb from "../../BreadCrumb";
+import BreadCrumb from "../../ui/BreadCrumb";
 import OrderInfo from "./OrderInfo";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
-import SideBar from "../../SideBar";
+import SideBar from "../../ui/SideBar";
 import useGetOrder from "../../../../hooks/customer/order/useGetOrder";
 function OrderDetailContainer() {
   const navigate = useNavigate();

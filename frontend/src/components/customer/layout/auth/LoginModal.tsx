@@ -122,7 +122,7 @@ function LoginModal({ onClose, onSwitchRegister }: Props) {
               <button
                 disabled={isLoading}
                 type="submit"
-                className="w-full bg-blue-500 text-white focus:outline-none font-semibold rounded-sm text-[0.9rem] uppercase px-5 py-2.5 text-center"
+                className="w-full bg-primary text-white focus:outline-none font-semibold rounded-sm text-[0.9rem] uppercase px-5 py-2.5 text-center"
               >
                 Đăng nhập
               </button>
@@ -132,7 +132,7 @@ function LoginModal({ onClose, onSwitchRegister }: Props) {
                 <button
                   onClick={onSwitchRegister}
                   type="button"
-                  className="text-blue-500 font-medium"
+                  className="text-primary font-medium"
                 >
                   Đăng kí
                 </button>

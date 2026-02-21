@@ -5,10 +5,6 @@ import { getCookie } from "../../../utils/cookieUtil";
 export default function useGetOrder(orderCode: string) {
   const token = getCookie("token-customer");
 
-  if (!token) {
-    throw new Error("Vui lòng đăng nhập");
-  }
-
   const url = orderCode
     ? `${import.meta.env.VITE_BACKEND_URL}/order/user/${orderCode}`
     : null;

@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { validatePhone } from "../../../utils/validatePhone";
 import useGetProvinces from "../../../hooks/customer/useGetProvincesVN";
-import Image from "../../Image";
+import Image from "../../ui/Image";
 import ProductBuyList from "./ProductBuyList";
 import PaymentMethod from "./PaymentMethod";
 import ShippingInfoForm from "./ShippingInfoForm";
@@ -11,8 +11,8 @@ import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import useGetCart from "../../../hooks/customer/cart/useGetCart";
 import useAddOrder from "../../../hooks/customer/order/useAddOrder";
 import usePaymentMomo from "../../../hooks/customer/payment/usePaymentMomo";
-import Overplay from "../../Overplay";
-import Loading from "../../Loading";
+import Overplay from "../ui/Overplay";
+import Loading from "../../ui/Loading";
 function CheckoutForm() {
   const navigate = useNavigate();
   const [data, setData] = useState({
@@ -192,13 +192,13 @@ function CheckoutForm() {
                 />
 
                 <div className="flex justify-between items-center">
-                  <button className="text-[0.9rem] rounded-md bg-[#FF4C58] px-4 py-2 font-medium text-white">
+                  <button className="text-[0.9rem] rounded-md bg-accent px-4 py-2 font-medium text-white">
                     Đặt hàng
                   </button>
 
                   <Link
                     to={"/cart"}
-                    className="text-[0.95rem] rounded-md bg-transparent px-4 py-2 font-medium text-[#FF4C58] border border-[#FF4C58]"
+                    className="text-[0.95rem] rounded-md bg-transparent px-4 py-2 font-medium text-accent"
                   >
                     <div className="flex gap-[5px] items-center">
                       <MdOutlineKeyboardBackspace size={25} /> Giỏ hàng

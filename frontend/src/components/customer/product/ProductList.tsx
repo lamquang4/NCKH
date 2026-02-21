@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import type { ProductResponse } from "../../../types/type";
-import Image from "../../Image";
+import Image from "../../ui/Image";
 import ProductCard from "./ProductCard";
 import ProductCardSkeleton from "../skeleton/ProductCardSkeleton";
 

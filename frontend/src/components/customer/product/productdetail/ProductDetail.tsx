@@ -88,19 +88,19 @@ function ProductDetail({ product }: Props) {
                       {product?.price.toLocaleString("vi-VN")}₫
                     </del>
 
-                    <h3 className="text-[#FF4C58] font-medium">
+                    <h3 className="text-accent font-medium">
                       {(product?.price - product?.discount).toLocaleString(
                         "vi-VN",
                       )}
                       ₫
                     </h3>
 
-                    <p className="text-[#FF4C58] p-1.5 border border-[#FF4C58] rounded-sm font-semibold">
+                    <p className="text-accent p-1.5 border border-accent rounded-sm font-semibold">
                       -{Math.floor((product.discount / product.price) * 100)}%
                     </p>
                   </>
                 ) : (
-                  <h3 className="font-medium text-[#FF4C58]">
+                  <h3 className="font-medium text-accent">
                     {product?.price.toLocaleString("vi-VN")}₫
                   </h3>
                 )}
@@ -149,7 +149,7 @@ function ProductDetail({ product }: Props) {
                       disabled={isLoading}
                       onClick={handleAddItemToCart}
                       data-testid="btn-add-to-cart"
-                      className="p-[10px] w-full uppercase text-[0.9rem] font-semibold border border-blue-500 text-blue-500"
+                      className="p-[10px] w-full uppercase text-[0.9rem] font-semibold bg-primary text-white"
                     >
                       Thêm vào giỏ
                     </button>
@@ -157,7 +157,7 @@ function ProductDetail({ product }: Props) {
                 ) : (
                   <button
                     type="button"
-                    className="p-[10px] w-full uppercase text-[0.9rem] font-semibold border bg-transparent border-[#FF4C58] text-[#FF4C58]"
+                    className="p-[10px] w-full uppercase text-[0.9rem] font-semibold border bg-transparent border-accent text-accent"
                   >
                     Hết hàng
                   </button>

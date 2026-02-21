@@ -1,14 +1,14 @@
 import { memo, useState } from "react";
-import Image from "../Image";
+import Image from "../../ui/Image";
 import { HiMiniXMark } from "react-icons/hi2";
-import ImageViewer from "../ImageViewer";
+import ImageViewer from "../../ui/ImageViewer";
 
 type Props = {
   InputId: string;
   previewImages: string[];
   onPreviewImage: (
     e: React.ChangeEvent<HTMLInputElement>,
-    blockIndex: number
+    blockIndex: number,
   ) => void;
   onRemovePreviewImage: (index: number, blockIndex: number) => void;
   blockIndex: number;

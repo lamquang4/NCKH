@@ -1,6 +1,6 @@
 import useGetCart from "../../../hooks/customer/cart/useGetCart";
 import useGetSuggestionProducts from "../../../hooks/customer/product/list/useActiveProducts";
-import Loading from "../../Loading";
+import Loading from "../../ui/Loading";
 import ProductSlider from "../product/ProductSlider";
 import CartItemList from "./CartItemList";
 

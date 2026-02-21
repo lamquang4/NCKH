@@ -1,5 +1,5 @@
 import { memo } from "react";
-import Image from "../../../Image";
+import Image from "../../../ui/Image";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { Link } from "react-router-dom";

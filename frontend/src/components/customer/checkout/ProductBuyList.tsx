@@ -1,5 +1,5 @@
 import { memo } from "react";
-import Image from "../../Image";
+import Image from "../../ui/Image";
 import type { CartItemResponse } from "../../../types/type";
 
 type Props = {
@@ -26,7 +26,7 @@ function ProductBuyList({ items }: Props) {
               />
             </div>
 
-            <small className="text-[0.8rem] absolute flex items-center justify-center top-[-7px] right-[-9px] bg-[#FF4C58] text-white font-medium rounded-full w-[25px] h-[25px]">
+            <small className="text-[0.8rem] absolute flex items-center justify-center top-[-7px] right-[-9px] bg-accent text-white font-medium rounded-full w-[25px] h-[25px]">
               {item.quantity}
             </small>
           </div>
@@ -39,18 +39,18 @@ function ProductBuyList({ items }: Props) {
                 <del className="text-[#707072]">
                   {item.price.toLocaleString("vi-VN")}₫
                 </del>
-                <p className="font-medium text-[#FF4C58]">
+                <p className="font-medium text-accent">
                   {(item.price - item.discount).toLocaleString("vi-VN")}₫
                 </p>
               </div>
             ) : (
-              <p className="font-medium text-[#FF4C58]">
+              <p className="font-medium text-accent">
                 {item.price.toLocaleString("vi-VN")}₫
               </p>
             )}
           </div>
 
-          <h5 className="font-medium text-[#FF4C58] my-auto">
+          <h5 className="font-medium text-accent my-auto">
             {item.discount > 0
               ? ((item.price - item.discount) * item.quantity).toLocaleString(
                   "vi-VN",

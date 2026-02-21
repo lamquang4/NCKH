@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import Image from "../Image";
+import Image from "../ui/Image";
 import { useEffect } from "react";
 function OrderResult() {
   const location = useLocation();

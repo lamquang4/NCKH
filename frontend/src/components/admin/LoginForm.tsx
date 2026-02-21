@@ -1,8 +1,8 @@
-import Image from "../Image";
+import Image from "../ui/Image";
 import { useState } from "react";
 import { HiOutlineEyeOff, HiOutlineEye } from "react-icons/hi";
-import Loading from "../Loading";
-import Overplay from "./Overplay";
+import Loading from "../ui/Loading";
+import Overplay from "./ui/Overplay";
 import useLogin from "../../hooks/auth/useLogin";
 import toast from "react-hot-toast";
 function LoginForm() {
@@ -106,7 +106,7 @@ function LoginForm() {
                   <button
                     disabled={isLoading}
                     type="submit"
-                    className="w-full bg-blue-500 text-[0.9rem] text-white focus:outline-none font-semibold rounded-sm px-5 py-2.5 text-center mt-6"
+                    className="w-full bg-primary text-[0.9rem] text-white focus:outline-none font-semibold rounded-sm px-5 py-2.5 text-center mt-6"
                   >
                     Đăng nhập
                   </button>

@@ -1,7 +1,7 @@
 import { memo, useMemo } from "react";
 import type { CartResponse } from "../../../types/type";
 import { Link, useNavigate } from "react-router-dom";
-import Image from "../../Image";
+import Image from "../../ui/Image";
 import toast from "react-hot-toast";
 import CartItem from "./CartItem";
 
@@ -125,7 +125,7 @@ function CartItemList({ cart, mutate }: Props) {
 
               <Link
                 to={"/books/all"}
-                className="text-[0.9rem] border-2 uppercase border-blue-500 rounded-md font-semibold px-3 py-2 hover:bg-blue-500 text-blue-500 hover:text-white"
+                className="text-[0.9rem] border-2 uppercase border-primary rounded-md font-semibold px-3 py-2 hover:bg-primary text-primary hover:text-white"
               >
                 Mua hàng ngay
               </Link>

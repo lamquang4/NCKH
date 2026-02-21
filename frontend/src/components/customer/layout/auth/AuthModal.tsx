@@ -1,5 +1,5 @@
 import { memo } from "react";
-import Overplay from "../../../Overplay";
+import Overplay from "../../ui/Overplay";
 import LoginModal from "./LoginModal";
 import RegisterModal from "./RegisterModal";
 

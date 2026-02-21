@@ -1,8 +1,8 @@
-import Image from "../../Image";
+import Image from "../../ui/Image";
 import { LuArchive, LuCheck, LuStar, LuTruck } from "react-icons/lu";
 import { RiArrowLeftSLine } from "react-icons/ri";
 import { TbCancel } from "react-icons/tb";
-import Loading from "../../Loading";
+import Loading from "../../ui/Loading";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate, useParams } from "react-router-dom";

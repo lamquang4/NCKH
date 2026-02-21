@@ -1,7 +1,7 @@
 import { memo } from "react";
 
 type Props = {
-  array: { title: string; number: number | string; icon1: React.ReactNode }[];
+  array: { title: string; number: number | string; icon1?: React.ReactNode }[];
 };
 function StaticCard({ array }: Props) {
   return (
@@ -16,9 +16,11 @@ function StaticCard({ array }: Props) {
             <h4 className="font-semibold">{item.number}</h4>
           </div>
 
-          <div className="w-14 h-14 bg-[#F1F4F9] flex justify-center items-center rounded-full">
-            {item.icon1}
-          </div>
+          {item.icon1 && (
+            <div className="w-14 h-14 bg-[#F1F4F9] flex justify-center items-center rounded-full">
+              {item.icon1}
+            </div>
+          )}
         </div>
       ))}
     </div>

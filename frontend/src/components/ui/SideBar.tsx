@@ -35,7 +35,7 @@ function SideBar() {
           to="/account/profile"
           className={` py-3 px-3.5 ${
             pathname === "/account/profile"
-              ? "bg-gray-100 border-l-4 border-blue-500"
+              ? "bg-gray-100 border-l-4 border-primary"
               : "hover:bg-gray-100"
           }`}
         >
@@ -62,7 +62,7 @@ function SideBar() {
           className={` py-3 px-3.5  ${
             pathname === "/order/history" ||
             pathname.startsWith("/order/history")
-              ? "bg-gray-100 border-l-4 border-blue-500"
+              ? "bg-gray-100 border-l-4 border-primary"
               : "hover:bg-gray-100"
           }`}
         >

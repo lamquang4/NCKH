@@ -6,10 +6,6 @@ import { getCookie } from "../../../utils/cookieUtil";
 export default function useGetCart() {
   const token = getCookie("token-customer");
 
-  if (!token) {
-    throw new Error("Vui lòng đăng nhập");
-  }
-
   const url = `${import.meta.env.VITE_BACKEND_URL}/cart`;
 
   const fetcher = (url: string) =>
