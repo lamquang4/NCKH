@@ -1,7 +1,7 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
-import Image from "../../Image";
-import Loading from "../../Loading";
-import Pagination from "../Pagination";
+import Image from "../../ui/Image";
+import Loading from "../../ui/Loading";
+import Pagination from "../ui/Pagination";
 import OrderCard from "./OrderCard";
 import useGetOrders from "../../../hooks/customer/order/useGetOrders";
 

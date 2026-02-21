@@ -2,6 +2,7 @@ package com.backend.product_service.service;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -306,6 +307,19 @@ public class ProductService {
             }
         }
 
+        BigDecimal percent = request.getDiscount()
+                .divide(request.getPrice(), 4, RoundingMode.DOWN)
+                .multiply(BigDecimal.valueOf(100))
+                .setScale(0, RoundingMode.DOWN);
+
+        if (request.getDiscount() != null
+                && request.getDiscount().compareTo(BigDecimal.ZERO) > 0) {
+
+            if (percent.compareTo(BigDecimal.ONE) < 0) {
+                throw new IllegalArgumentException("Phần trăm giảm giá phải >= 1%");
+            }
+        }
+
         if (request.getStock() == null
                 || request.getStock() < 0) {
             throw new BadRequestException("Số lượng tồn kho phải lớn hơn hoặc bằng 0");
@@ -375,6 +389,19 @@ public class ProductService {
 
             if (request.getDiscount().compareTo(request.getPrice()) >= 0) {
                 throw new BadRequestException("Số tiền giảm giá phải nhỏ hơn giá bán");
+            }
+        }
+
+        BigDecimal percent = request.getDiscount()
+                .divide(request.getPrice(), 4, RoundingMode.DOWN)
+                .multiply(BigDecimal.valueOf(100))
+                .setScale(0, RoundingMode.DOWN);
+
+        if (request.getDiscount() != null
+                && request.getDiscount().compareTo(BigDecimal.ZERO) > 0) {
+
+            if (percent.compareTo(BigDecimal.ONE) < 0) {
+                throw new IllegalArgumentException("Phần trăm giảm giá phải >= 1%");
             }
         }
 

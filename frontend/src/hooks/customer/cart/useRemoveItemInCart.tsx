@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import { getCookie } from "../../../utils/cookieUtil";
 
 export function useRemoveItemInCart() {
   const [isLoading, setIsLoading] = useState(false);
@@ -10,8 +11,15 @@ export function useRemoveItemInCart() {
     }
     setIsLoading(true);
     try {
+      const token = getCookie("token-customer");
+
       const url = `${import.meta.env.VITE_BACKEND_URL}/cart/${productId}`;
-      await axios.delete(url);
+
+      await axios.delete(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
     } catch (err: any) {
       console.error("Lỗi:", err);
       throw err;

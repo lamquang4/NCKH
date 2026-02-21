@@ -1,8 +1,8 @@
-import Loading from "../Loading";
-import Image from "../Image";
+import Loading from "../../ui/Loading";
+import Image from "../../ui/Image";
 import { memo, useEffect } from "react";
 import { Link } from "react-router-dom";
-import useGetSuggestionProducts from "../../hooks/customer/product/list/useGetSuggestionProducts";
+import useGetSuggestionProducts from "../../../hooks/customer/product/list/useGetSuggestionProducts";
 type Props = {
   search: string;
 };

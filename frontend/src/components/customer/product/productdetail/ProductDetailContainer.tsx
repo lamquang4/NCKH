@@ -1,10 +1,10 @@
 import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
-import Loading from "../../../Loading";
+import Loading from "../../../ui/Loading";
 import ProductDetail from "./ProductDetail";
 import ProductSlider from "../ProductSlider";
-import BreadCrumb from "../../BreadCrumb";
+import BreadCrumb from "../../ui/BreadCrumb";
 import useGetProduct from "../../../../hooks/customer/product/useGetProduct";
 import useGetSuggestionProducts from "../../../../hooks/customer/product/list/useActiveProducts";
 

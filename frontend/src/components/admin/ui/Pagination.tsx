@@ -59,7 +59,7 @@ function Pagination({ totalPages, currentPage, limit, totalItems }: Props) {
   return (
     <>
       {totalItems > 0 && (
-        <div className="flex items-center justify-center bg-white px-[15px] py-3 w-full my-[20px] flex-wrap gap-5 sm:gap-3 text-[0.9rem]">
+        <div className="flex items-center justify-center bg-white px-[15px] py-3 w-full flex-wrap gap-5 sm:gap-3 text-[0.9rem]">
           <div className="flex gap-2 items-center">
             Số dòng mỗi trang
             <select
@@ -116,7 +116,7 @@ function Pagination({ totalPages, currentPage, limit, totalItems }: Props) {
                     onClick={() => goToPage(page as number)}
                     className={`h-8.5 w-8.5 flex justify-center items-center font-medium text-[0.9rem] border border-gray-300 ${
                       currentPage === page
-                        ? "bg-blue-500 text-white"
+                        ? "bg-primary text-white"
                         : "hover:bg-gray-100"
                     }`}
                   >
