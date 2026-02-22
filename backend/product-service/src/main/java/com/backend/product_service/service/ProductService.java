@@ -3,12 +3,11 @@ package com.backend.product_service.service;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -343,7 +342,7 @@ public class ProductService {
         }
 
         if (product.getSpecifications() == null) {
-            product.setSpecifications(new ArrayList<>());
+            product.setSpecifications(new HashSet<>());
         }
 
         product.getSpecifications()
@@ -426,7 +425,7 @@ public class ProductService {
             product.setImages(new HashSet<>());
         }
         if (product.getSpecifications() == null) {
-            product.setSpecifications(new ArrayList<>());
+            product.setSpecifications(new HashSet<>());
         }
 
         syncSpecifications(product, request.getSpecifications());
@@ -728,39 +727,34 @@ public class ProductService {
             Product product,
             List<SpecificationRequest> requests) {
 
-        Map<String, Specification> existingMap = product.getSpecifications().stream()
-                .filter(s -> s.getId() != null)
-                .collect(Collectors.toMap(
-                        Specification::getId,
-                        s -> s));
-
-        List<Specification> newList = new ArrayList<>();
+        Set<Specification> newSet = new HashSet<>();
 
         if (requests != null) {
             for (SpecificationRequest req : requests) {
 
-                if (req.getId() != null && existingMap.containsKey(req.getId())) {
-                    // Cập nhật
-                    Specification spec = existingMap.get(req.getId());
-                    spec.setSpecKey(req.getSpecKey());
-                    spec.setSpecValue(req.getSpecValue());
-                    spec.setDisplayOrder(req.getDisplayOrder());
-                    newList.add(spec);
+                Specification spec;
+
+                if (req.getId() != null) {
+                    spec = product.getSpecifications().stream()
+                            .filter(s -> s.getId() != null &&
+                                    s.getId().equals(req.getId()))
+                            .findFirst()
+                            .orElse(new Specification());
                 } else {
-                    // Thêm
-                    newList.add(
-                            Specification.builder()
-                                    .specKey(req.getSpecKey())
-                                    .specValue(req.getSpecValue())
-                                    .displayOrder(req.getDisplayOrder())
-                                    .product(product)
-                                    .build());
+                    spec = new Specification();
                 }
+
+                spec.setSpecKey(req.getSpecKey());
+                spec.setSpecValue(req.getSpecValue());
+                spec.setDisplayOrder(req.getDisplayOrder());
+                spec.setProduct(product);
+
+                newSet.add(spec);
             }
         }
 
         product.getSpecifications().clear();
-        product.getSpecifications().addAll(newList);
+        product.getSpecifications().addAll(newSet);
     }
 
     private List<ProductResponse> mapWithClient(List<Product> products) {

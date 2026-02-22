@@ -11,6 +11,7 @@ export function useAddItemToCart() {
     if (!data) {
       return;
     }
+    const loadingToast = toast.loading("Đang thêm...");
     setIsLoading(true);
     try {
       const token = getCookie("token-customer");
@@ -26,12 +27,13 @@ export function useAddItemToCart() {
           Authorization: `Bearer ${token}`,
         },
       });
-
+      toast.dismiss(loadingToast);
       toast.success("Thêm vào giỏ hàng thành công");
     } catch (err: any) {
       console.error("Lỗi:", err);
       throw err;
     } finally {
+      toast.dismiss(loadingToast);
       setIsLoading(false);
     }
   };
