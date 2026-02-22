@@ -107,6 +107,16 @@ function AddProduct() {
       return;
     }
 
+    if (!data.category) {
+      toast.error("Vui lòng chọn danh mục");
+      return;
+    }
+
+    if (!data.brand) {
+      toast.error("Vui lòng chọn thương hiệu");
+      return;
+    }
+
     if (!selectedFiles) {
       toast.error("Vui lòng thêm ít nhất một hình sản phẩm");
       return;
@@ -211,6 +221,23 @@ function AddProduct() {
                     }
                     placeholder="Chọn thương hiệu"
                   />
+                </div>
+
+                <div className="flex flex-col gap-1 w-full">
+                  <label htmlFor="" className="text-[0.9rem] font-medium">
+                    Tình trạng
+                  </label>
+                  <select
+                    name="status"
+                    required
+                    onChange={handleChange}
+                    value={data.status}
+                    className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
+                  >
+                    <option value="">Chọn tình trạng</option>
+                    <option value="0">Ẩn</option>
+                    <option value="1">Hiện</option>
+                  </select>
                 </div>
               </div>
 

@@ -6,20 +6,19 @@ function OrderResult() {
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
 
-  const status = searchParams.get("status");
+  const result = searchParams.get("result");
 
   useEffect(() => {
-    if (!status) {
+    if (!result) {
       navigate("/", { replace: true });
     }
-  }, [status, navigate]);
+  }, [result, navigate]);
 
-  if (!status) return null;
   return (
     <section className="my-[40px] px-[15px]">
       <div className="mx-auto max-w-[1200px] w-full">
         <div className="flex justify-center items-center h-[40vh] text-center">
-          {status === "successful" ? (
+          {result === "successful" ? (
             <div className="flex flex-col justify-center items-center gap-[15px]">
               <Image
                 source={"/assets/successful.png"}
@@ -36,7 +35,7 @@ function OrderResult() {
                 với bạn trong thời gian sớm nhất
               </p>
             </div>
-          ) : status === "fail" ? (
+          ) : result === "fail" ? (
             <div className="flex flex-col justify-center items-center gap-[15px]">
               <Image
                 source={"/assets/fail.png"}

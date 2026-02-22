@@ -13,16 +13,13 @@ export default function useAddOrder() {
     try {
       const token = getCookie("token-customer");
 
-      if (!token) {
-        throw new Error("Vui lòng đăng nhập");
-      }
-
       const url = `${import.meta.env.VITE_BACKEND_URL}/order/user`;
       const res = await axios.post(url, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+
       return res.data;
     } catch (err) {
       console.error("Lỗi:", err);

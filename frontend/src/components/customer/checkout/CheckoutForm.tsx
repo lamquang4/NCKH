@@ -13,6 +13,7 @@ import useAddOrder from "../../../hooks/customer/order/useAddOrder";
 import usePaymentMomo from "../../../hooks/customer/payment/usePaymentMomo";
 import Overplay from "../ui/Overplay";
 import Loading from "../../ui/Loading";
+
 function CheckoutForm() {
   const navigate = useNavigate();
   const [data, setData] = useState({
@@ -99,7 +100,7 @@ function CheckoutForm() {
       return;
     }
 
-    if (cart?.items.length === 0) {
+    if (!cart?.items.length) {
       toast.error("Không có gì trong giỏ hết");
       navigate("/cart");
       return;
@@ -110,54 +111,32 @@ function CheckoutForm() {
       return;
     }
 
+    const items = cart.items.map(
+      ({ productId, quantity, price, discount }) => ({
+        productId,
+        quantity,
+        price,
+        discount,
+      }),
+    );
+
+    const orderPayload = { ...data, paymethod, items };
+
     setIsOrderPlaced(true);
 
-    const items = cart?.items.map((item) => {
-      return {
-        productId: item.productId,
-        quantity: item.quantity,
-        price: item.price,
-        discount: item.discount,
-      };
-    });
+    try {
+      const res = await addOrder(orderPayload);
 
-    if (paymethod === "cod") {
-      try {
-        await addOrder({
-          fullname: data.fullname,
-          phone: data.phone,
-          speaddress: data.speaddress,
-          city: data.city,
-          ward: data.ward,
-          paymethod: paymethod,
-          items: items!,
-        });
-
-        setIsOrderPlaced(true);
+      if (paymethod === "cod") {
         navigate("/order-result?result=successful");
-
         mutateCart({ items: [] }, false);
-      } catch (err: any) {
-        toast.error(err?.response?.data?.message);
-      }
-    } else if (paymethod === "momo") {
-      try {
-        const res = await addOrder({
-          fullname: data.fullname,
-          phone: data.phone,
-          speaddress: data.speaddress,
-          city: data.city,
-          ward: data.ward,
-          paymethod: paymethod,
-          items: items!,
-        });
-
-        setIsOrderPlaced(true);
+      } else {
         const momoResponse = await createPaymentMomo(res.orderCode);
         window.location.href = momoResponse.payUrl;
-      } catch (err: any) {
-        toast.error(err?.response?.data?.message);
       }
+    } catch (err: any) {
+      setIsOrderPlaced(false);
+      toast.error(err?.response?.data?.message);
     }
   };
 
