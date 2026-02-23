@@ -54,11 +54,14 @@ function ProductList({ title, products, isLoading, total }: Props) {
     <>
       <div className="mb-[40px] space-y-[15px]">
         <div className="flex justify-between items-center flex-wrap gap-[15px]">
-          {!isLoading && (title || search) && (
-            <h2 className=" text-black capitalize">
-              {search ? search : title} ({total})
-            </h2>
-          )}
+          <h2 className="text-black">
+            {isLoading
+              ? "Đang tải sản phẩm..."
+              : search
+                ? `Kết quả cho "${search}"`
+                : title}
+            {!isLoading && ` (${total})`}
+          </h2>
 
           <select
             onChange={handleSortChange}

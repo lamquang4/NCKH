@@ -28,7 +28,7 @@ function AuthModal({ type, onClose, onSwitch }: Props) {
           onSwitchLogin={() => onSwitch("login")}
         />
       )}
-      <Overplay onClose={onClose} IndexForZ={98} />
+      <Overplay onClose={onClose} IndexForZ={97} />
     </>
   );
 }

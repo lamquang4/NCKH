@@ -1,11 +1,14 @@
 import { Link, useLocation } from "react-router-dom";
 import useGetAccount from "../../../hooks/auth/useGetAccount";
 import useGetUser from "../../../hooks/useGetUser";
+import useLogout from "../../../hooks/auth/useLogout";
+import { LuDoorOpen } from "react-icons/lu";
 
 function SideBar() {
   const location = useLocation();
   const pathname = location.pathname;
-  const { account } = useGetAccount("customer");
+  const { handleLogout } = useLogout();
+  const { account, mutate } = useGetAccount("customer");
   const { user } = useGetUser(account?.id || "");
   return (
     <div className="w-full max-w-full lg:max-w-[300px] self-start lg:sticky lg:top-[5rem] bg-white ">
@@ -31,12 +34,13 @@ function SideBar() {
             <p className="font-normal">{user?.fullname}</p>
           </div>
         </div>
+
         <Link
           to="/account/profile"
-          className={` py-3 px-3.5 ${
+          className={`border-l-4 py-3 px-3.5 ${
             pathname === "/account/profile"
-              ? "bg-gray-100 border-l-4 border-primary"
-              : "hover:bg-gray-100"
+              ? "bg-gray-100 border-primary"
+              : "hover:bg-gray-100 border-transparent"
           }`}
         >
           <div className="flex items-center gap-5">
@@ -59,11 +63,11 @@ function SideBar() {
 
         <Link
           to="/order/history"
-          className={` py-3 px-3.5  ${
+          className={`border-l-4 py-3 px-3.5  ${
             pathname === "/order/history" ||
             pathname.startsWith("/order/history")
-              ? "bg-gray-100 border-l-4 border-primary"
-              : "hover:bg-gray-100"
+              ? "bg-gray-100 border-primary"
+              : "hover:bg-gray-100 border-transparent"
           }`}
         >
           <div className="flex items-center gap-5">
@@ -84,6 +88,21 @@ function SideBar() {
             <span>Đơn hàng</span>
           </div>
         </Link>
+
+        <button
+          type="button"
+          onClick={() => {
+            handleLogout("customer");
+            mutate(undefined);
+          }}
+          className="border-l-4 border-transparent py-3 px-3.5 text-left text-accent font-medium hover:bg-gray-100 w-full"
+        >
+          <div className="flex items-center gap-5">
+            <LuDoorOpen size={20} />
+
+            <span>Đăng xuất</span>
+          </div>
+        </button>
       </div>
     </div>
   );

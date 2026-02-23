@@ -5,11 +5,14 @@ import Loading from "../ui/Loading";
 import Overplay from "./ui/Overplay";
 import useLogin from "../../hooks/auth/useLogin";
 import toast from "react-hot-toast";
+import useGetAccount from "../../hooks/auth/useGetAccount";
 function LoginForm() {
   const [data, setData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const { handleLogin, isLoading } = useLogin();
+
+  const { isLoading: isLoadingAccount, mutate } = useGetAccount("customer");
 
   const toggleShowPassword = () => {
     setShowPassword((prev) => !prev);
@@ -30,6 +33,10 @@ function LoginForm() {
         email: data.email,
         password: data.password,
       });
+
+      await mutate();
+
+      toast.success("Đăng nhập thành công");
 
       setData({
         email: "",
@@ -126,7 +133,7 @@ function LoginForm() {
         </div>
       </section>
 
-      {isLoading && (
+      {(isLoading || isLoadingAccount) && (
         <Overplay>
           <Loading height={0} size={55} color="white" thickness={8} />
           <h4 className="text-white">Vui lòng chờ trong giây lát ...</h4>

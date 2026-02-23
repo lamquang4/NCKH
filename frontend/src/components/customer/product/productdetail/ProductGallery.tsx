@@ -71,7 +71,7 @@ function ProductGallery({ images }: Props) {
           {images.map((image, index) => (
             <SwiperSlide
               key={index}
-              className="!w-[70px] !h-[90px] cursor-pointer flex-shrink-0"
+              className="!w-[70px] !h-[70px] cursor-pointer flex-shrink-0"
               onMouseEnter={() => {
                 setMainImage(image.image);
                 setCurrentImageIndex(index);
