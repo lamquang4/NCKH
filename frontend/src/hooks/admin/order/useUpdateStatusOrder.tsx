@@ -26,7 +26,7 @@ export default function useUpdateStatusOrder() {
       const url = `${
         import.meta.env.VITE_BACKEND_URL
       }/order/${id}?status=${status}`;
-      await axios.put(url);
+      await axios.patch(url);
 
       toast.dismiss(loadingToast);
       toast.success("Cập nhật thành công");

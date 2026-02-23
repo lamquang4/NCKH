@@ -9,7 +9,7 @@ function OrderResult() {
   const result = searchParams.get("result");
 
   useEffect(() => {
-    if (!result) {
+   if (result !== "successful" && result !== "fail") {
       navigate("/", { replace: true });
     }
   }, [result, navigate]);

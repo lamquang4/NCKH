@@ -28,20 +28,23 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import com.backend.order_service.client.CartServiceClient;
 import com.backend.order_service.client.PaymentServiceClient;
 import com.backend.order_service.client.ProductServiceClient;
 
 @Service
 public class OrderService {
         private final OrderRepository orderRepository;
-        private final ProductServiceClient ProductServiceClient;
+        private final ProductServiceClient productServiceClient;
         private final PaymentServiceClient paymentServiceClient;
+        private final CartServiceClient cartServiceClient;
 
         public OrderService(OrderRepository orderRepository, ProductServiceClient ProductServiceClient,
-                        PaymentServiceClient paymentServiceClient) {
+                        PaymentServiceClient paymentServiceClient, CartServiceClient cartServiceClient) {
                 this.orderRepository = orderRepository;
-                this.ProductServiceClient = ProductServiceClient;
+                this.productServiceClient = ProductServiceClient;
                 this.paymentServiceClient = paymentServiceClient;
+                this.cartServiceClient = cartServiceClient;
         }
 
         // lấy tất cả đơn hàng phân trang
@@ -229,8 +232,10 @@ public class OrderService {
                         Order savedOrder = orderRepository.save(order);
 
                         // trừ tồn kho ngay
-                        ProductServiceClient.decreaseStockInternal(
+                        productServiceClient.decreaseStockInternal(
                                         buildStockRequests(savedOrder));
+
+                        cartServiceClient.clearCartInternal(userId);
 
                         return OrderMapper.toResponse(savedOrder);
                 }
@@ -262,14 +267,14 @@ public class OrderService {
                         }
 
                         // trả tồn kho
-                        ProductServiceClient.increaseStockInternal(
+                        productServiceClient.increaseStockInternal(
                                         buildStockRequests(order));
                 }
 
                 // hủy đơn
                 if (status == 4 && oldStatus != 4) {
                         if ("cod".equalsIgnoreCase(order.getPaymethod())) {
-                                ProductServiceClient.increaseStockInternal(
+                                productServiceClient.increaseStockInternal(
                                                 buildStockRequests(order));
                         }
                 }
@@ -297,7 +302,7 @@ public class OrderService {
                                 .distinct()
                                 .toList();
 
-                List<ProductResponse> products = ProductServiceClient.getProductsByIdsInternal(productIds);
+                List<ProductResponse> products = productServiceClient.getProductsByIdsInternal(productIds);
 
                 Map<String, ProductResponse> productMap = products.stream()
                                 .collect(Collectors.toMap(
@@ -335,7 +340,7 @@ public class OrderService {
                 }
 
                 // trừ tồn kho
-                ProductServiceClient.decreaseStockInternal(
+                productServiceClient.decreaseStockInternal(
                                 buildStockRequests(order));
 
                 order.setStatus(0);
