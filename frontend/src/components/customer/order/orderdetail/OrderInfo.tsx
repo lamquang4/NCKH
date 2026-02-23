@@ -53,7 +53,7 @@ function OrderInfo({ order, isLoading }: Props) {
             </div>
 
             <Link to={"/order/history"} className="text-center">
-              <span className="flex items-center font-semibold text-gray-600">
+              <span className="flex items-center font-semibold text-gray-400">
                 <RiArrowLeftSLine size={20} /> Trở về
               </span>
             </Link>

@@ -69,15 +69,15 @@ function OrderList() {
               <th className="p-[1rem]  ">Người đặt</th>
               <th className="p-[1rem]  ">Thanh toán</th>
               <th className="p-[1rem]  ">Tổng tiền</th>
-              <th className="p-[1rem]  ">Ngày tạo</th>
-              <th className="p-[1rem]   relative">
+              <th className="p-[1rem]">Ngày tạo</th>
+              <th className="p-[1rem] relative">
                 <FilterDropDownMenu
                   title="Tình trạng"
                   array={array}
                   paramName="status"
                 />
               </th>
-              <th className="p-[1rem]  ">Action</th>
+              <th className="p-[1rem]">Hành động</th>
             </tr>
           </thead>
           <tbody>

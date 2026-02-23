@@ -27,6 +27,7 @@ import com.backend.order_service.utils.ValidationUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import com.backend.order_service.client.CartServiceClient;
 import com.backend.order_service.client.PaymentServiceClient;
@@ -349,5 +350,25 @@ public class OrderService {
 
         public boolean existsOrderByProductId(String productId) {
                 return orderRepository.existsByItems_ProductId(productId);
+        }
+
+        @Service
+        public class OrderCleanupScheduler {
+
+                private final OrderRepository orderRepository;
+
+                public OrderCleanupScheduler(OrderRepository orderRepository) {
+                        this.orderRepository = orderRepository;
+                }
+
+                // Dọn dẹp các đơn hàng có status -1 quá 1 tiếng kể từ lúc createdAt
+                @Scheduled(fixedRate = 600000) // chạy mỗi 10 phút
+                @Transactional
+                public void deleteExpiredPendingOrders() {
+
+                        LocalDateTime expireTime = LocalDateTime.now().minusHours(1);
+
+                        orderRepository.deleteByStatusAndCreatedAtBefore(-1, expireTime);
+                }
         }
 }

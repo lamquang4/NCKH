@@ -88,7 +88,7 @@ function OrderDetail() {
                 </div>
 
                 <Link to={"/admin/orders"} className="text-center">
-                  <span className="flex items-center font-semibold text-gray-600">
+                  <span className="flex items-center font-semibold text-gray-400">
                     <RiArrowLeftSLine size={20} /> Trở về
                   </span>
                 </Link>
