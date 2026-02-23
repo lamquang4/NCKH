@@ -46,6 +46,8 @@ function CheckoutForm() {
   useEffect(() => {
     if (isOrderPlaced) return;
 
+    if (isLoadingCart) return;
+
     if (!cart?.items.length || !cart) {
       toast.error("Không có gì trong giỏ hết");
       navigate("/cart");
@@ -63,7 +65,14 @@ function CheckoutForm() {
       toast.error("Một số sản phẩm đang tạm ngừng bán trong giỏ hàng");
       navigate("/cart");
     }
-  }, [cart, outOfStockItems, navigate, isOrderPlaced]);
+  }, [
+    cart,
+    outOfStockItems,
+    unavailableItems,
+    navigate,
+    isOrderPlaced,
+    isLoadingCart,
+  ]);
 
   const totalPrice = useMemo(() => {
     return (
