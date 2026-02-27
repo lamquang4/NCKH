@@ -74,7 +74,7 @@ function CartItemList({ cart, isLoading = false, mutate }: Props) {
       <div className="max-w-[1200px] mx-auto">
         <h2 className="mb-[20px]">Giỏ hàng ({totalQuantity})</h2>
         {isLoading ? (
-          <CartItemListSkeleton />
+          <CartItemListSkeleton count={2} />
         ) : cart?.items && cart.items.length > 0 ? (
           <div className="flex w-full gap-4 lg:flex-row flex-col">
             <div className="space-y-8 py-6 bg-white basis-[60%] h-full">

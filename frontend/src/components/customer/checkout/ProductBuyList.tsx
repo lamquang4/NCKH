@@ -14,7 +14,7 @@ function ProductBuyList({ items, isLoading = false }: Props) {
       <h4>Đơn hàng</h4>
 
       {isLoading ? (
-        <ProductBuyListSkeleton />
+        <ProductBuyListSkeleton count={2} />
       ) : (
         items.map((item, index) => (
           <div

@@ -1,5 +1,3 @@
-import { memo } from "react";
-
 function CartItemSkeleton() {
   return (
     <>
@@ -35,4 +33,4 @@ function CartItemSkeleton() {
   );
 }
 
-export default memo(CartItemSkeleton);
+export default CartItemSkeleton;

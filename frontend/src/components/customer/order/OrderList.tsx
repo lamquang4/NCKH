@@ -3,7 +3,7 @@ import Image from "../../ui/Image";
 import Pagination from "../ui/Pagination";
 import OrderCard from "./OrderCard";
 import useGetOrders from "../../../hooks/customer/order/useGetOrders";
-import OrderCardSkeleton from "../skeleton/OrderCardSkeleton";
+import OrderListSkeleton from "../skeleton/OrderListSkeleton";
 
 function OrderList() {
   const [searchParams] = useSearchParams();
@@ -56,9 +56,7 @@ function OrderList() {
 
       <div className="flex gap-5 flex-col">
         {isLoading ? (
-          Array.from({ length: 2 }).map((_, index) => (
-            <OrderCardSkeleton key={index} />
-          ))
+          <OrderListSkeleton count={2} />
         ) : orders.length > 0 ? (
           orders.map((order) => <OrderCard order={order} />)
         ) : (

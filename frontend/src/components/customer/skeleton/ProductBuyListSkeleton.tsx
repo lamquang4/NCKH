@@ -1,9 +1,13 @@
 import { memo } from "react";
 
-function ProductBuyListSkeleton() {
+type Props = {
+  count: number;
+};
+
+function ProductBuyListSkeleton({ count }: Props) {
   return (
     <div className="space-y-[15px] bg-white animate-pulse">
-      {Array.from({ length: 2 }).map((_, index) => (
+      {Array.from({ length: count }).map((_, index) => (
         <div
           key={index}
           className="flex justify-between rounded-lg bg-white gap-[15px]"
