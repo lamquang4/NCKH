@@ -36,7 +36,7 @@ function ProductDetailContainer() {
   return (
     <>
       <BreadCrumb items={array} />
-      <ProductDetail product={product!} isLoading={isLoading} />
+      <ProductDetail product={product!} />
 
       <ProductSlider
         products={products}

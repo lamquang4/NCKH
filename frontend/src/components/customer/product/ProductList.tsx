@@ -2,7 +2,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import type { ProductResponse } from "../../../types/type";
 import Image from "../../ui/Image";
 import ProductCard from "./ProductCard";
-import ProductCardSkeleton from "../skeleton/ProductCardSkeleton";
+import { memo } from "react";
+import ProductListSkeleton from "../skeleton/ProductListSkeleton";
 
 interface Props {
   title?: string;
@@ -11,7 +12,7 @@ interface Props {
   total: number;
 }
 
-function ProductList({ title, products, isLoading, total }: Props) {
+function ProductList({ title, products, isLoading = false, total }: Props) {
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -77,7 +78,7 @@ function ProductList({ title, products, isLoading, total }: Props) {
         </div>
 
         {isLoading ? (
-          <ProductCardSkeleton count={12} />
+          <ProductListSkeleton count={12} />
         ) : products.length > 0 ? (
           <div
             className={`grid grid-cols-2 gap-x-[10px] gap-y-[35px] lg:grid-cols-3 2xl:grid-cols-4 ${
@@ -107,4 +108,4 @@ function ProductList({ title, products, isLoading, total }: Props) {
   );
 }
 
-export default ProductList;
+export default memo(ProductList);

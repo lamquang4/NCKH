@@ -1,10 +1,10 @@
 import Image from "../../../ui/Image";
-import Loading from "../../../ui/Loading";
 import { LuArchive, LuCheck, LuStar, LuTruck } from "react-icons/lu";
 import { RiArrowLeftSLine } from "react-icons/ri";
 import { TbCancel } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import type { OrderResponse } from "../../../../types/type";
+import OrderInfoSkeleton from "../../skeleton/OrderInfoSkeleton";
 
 type Props = {
   order: OrderResponse;
@@ -21,7 +21,7 @@ function OrderInfo({ order, isLoading }: Props) {
   return (
     <div className="w-full flex-1 border border-gray-300 text-black">
       {isLoading ? (
-        <Loading height={70} size={50} color="black" thickness={3} />
+        <OrderInfoSkeleton />
       ) : (
         <div className=" pb-[20px]">
           <div className="flex justify-between px-[20px] py-[20px] border-b border-gray-300">

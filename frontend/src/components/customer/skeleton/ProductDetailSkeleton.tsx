@@ -1,5 +1,3 @@
-import { memo } from "react";
-
 function ProductDetailSkeleton() {
   return (
     <section className="w-full mb-[40px] px-[15px] animate-pulse">
@@ -50,4 +48,4 @@ function ProductDetailSkeleton() {
   );
 }
 
-export default memo(ProductDetailSkeleton);
+export default ProductDetailSkeleton;
