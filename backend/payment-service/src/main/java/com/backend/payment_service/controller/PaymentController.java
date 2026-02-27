@@ -97,9 +97,9 @@ public class PaymentController {
             boolean success = momoService.handleSuccessfulPayment(payload);
 
             if (success) {
-                redirectUrl = frontendUrl + "/order-result?status=successful&&orderCode=" + orderId;
+                redirectUrl = frontendUrl + "/order-result?result=successful";
             } else {
-                redirectUrl = frontendUrl + "/order-result?status=fail";
+                redirectUrl = frontendUrl + "/order-result?result=fail";
             }
         } else {
             redirectUrl = frontendUrl + "/";

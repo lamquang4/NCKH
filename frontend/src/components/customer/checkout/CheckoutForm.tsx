@@ -197,7 +197,10 @@ function CheckoutForm() {
             </div>
 
             <div className="order-first lg:order-last space-y-[15px] lg:sticky lg:top-0 lg:self-start">
-              <ProductBuyList items={cart?.items ?? []} />
+              <ProductBuyList
+                items={cart?.items ?? []}
+                isLoading={isLoadingCart}
+              />
 
               <hr className="border-gray-300" />
 
