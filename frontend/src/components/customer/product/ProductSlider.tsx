@@ -5,7 +5,7 @@ import { FreeMode } from "swiper/modules";
 import ProductCard from "./ProductCard";
 import type { ProductResponse } from "../../../types/type";
 import { memo } from "react";
-import ProductListSkeleton from "../skeleton/ProductListSkeleton";
+import ProductSliderSkeleton from "../skeleton/ProductSliderSkeleton";
 
 interface Props {
   title: string;
@@ -20,7 +20,7 @@ function ProductSlider({ title, isLoading = false, products }: Props) {
         <div className="mx-auto max-w-[1200px] w-full">
           <h2 className="mb-[20px]">{title}</h2>
           {isLoading ? (
-            <ProductListSkeleton count={4} />
+            <ProductSliderSkeleton count={4} />
           ) : (
             products.length > 0 && (
               <Swiper
