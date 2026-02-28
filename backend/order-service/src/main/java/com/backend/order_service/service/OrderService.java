@@ -259,25 +259,35 @@ public class OrderService {
 
                 Integer oldStatus = order.getStatus();
 
-                // trả hàng
-                if (status == 5 && oldStatus != 5) {
+                // Hủy đơn
+                if (status == 4) {
 
-                        // hoàn tiền nếu là momo
-                        if ("momo".equalsIgnoreCase(order.getPaymethod())) {
+                        // Hoàn tiền Momo
+                        if ("momo".equalsIgnoreCase(order.getPaymethod()) && oldStatus != -1) {
                                 paymentServiceClient.refundMomoByOrderCodeInternal(order.getOrderCode());
                         }
 
-                        // trả tồn kho
+                        // Trả lại tồn kho
                         productServiceClient.increaseStockInternal(
                                         buildStockRequests(order));
                 }
 
-                // hủy đơn
-                if (status == 4 && oldStatus != 4) {
-                        if ("cod".equalsIgnoreCase(order.getPaymethod())) {
-                                productServiceClient.increaseStockInternal(
-                                                buildStockRequests(order));
+                // Trả hàng
+                if (status == 5) {
+
+                        // Chỉ cho trả hàng khi đã giao thành công
+                        if (oldStatus != 3) {
+                                throw new IllegalStateException("Chỉ có thể trả hàng khi đơn đã giao thành công");
                         }
+
+                        // Hoàn tiền Momo
+                        if ("momo".equalsIgnoreCase(order.getPaymethod())) {
+                                paymentServiceClient.refundMomoByOrderCodeInternal(order.getOrderCode());
+                        }
+
+                        // Trả lại tồn kho
+                        productServiceClient.increaseStockInternal(
+                                        buildStockRequests(order));
                 }
 
                 order.setStatus(status);
