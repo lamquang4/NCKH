@@ -25,7 +25,6 @@ export interface UserRequest {
   password?: string;
   role?: "customer" | "admin";
   status?: number;
-  googleId?: string;
 }
 
 export interface BrandRequest {
