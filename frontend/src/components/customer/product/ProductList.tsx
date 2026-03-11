@@ -99,7 +99,7 @@ function ProductList({ title, products, isLoading = false, total }: Props) {
                 loading="eager"
               />
 
-              <h4>Không tìm thấy sách nào</h4>
+              <h4>Không tìm thấy sản phẩm nào</h4>
             </div>
           </div>
         )}
