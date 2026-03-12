@@ -3,6 +3,33 @@ networks:
     driver: bridge
 
 services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_BACKEND_URL=http://api-gateway:8090
+    ports:
+      - "5173:5173"
+    networks:
+      - app-network
+
+  n8n:
+    image: n8nio/n8n
+    container_name: n8n
+    ports:
+      - "5678:5678"
+    networks:
+      - app-network
+    environment:
+      - N8N_HOST=localhost
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - WEBHOOK_URL=http://localhost:5678
+    volumes:
+      - ./n8n:/home/node/.n8n
+    restart: always
+
   eureka-server:
     build: ./backend/eureka-server
     container_name: eureka-server
@@ -143,7 +170,7 @@ services:
       DATASOURCE_USERNAME: avnadmin
       DATASOURCE_PASSWORD: AVNS_YswmtLsflqLrvYnNU40
       FRONTEND_URL: http://localhost:5173
-      BACKEND_URL: http://localhost:8090
+      BACKEND_URL: http://api-gateway:8090
       MOMO_PARTNERCODE: MOMO
       MOMO_ACCESSKEY: F8BBA842ECF85
       MOMO_SECRETKEY: K951B6PE1waDMi640xX08PD3vg6EkVlz
