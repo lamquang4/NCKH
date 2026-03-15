@@ -13,7 +13,7 @@ services:
       - "5173:5173"
     networks:
       - app-network
-
+      
   n8n:
     image: n8nio/n8n
     container_name: n8n
@@ -224,6 +224,7 @@ services:
     environment:
       EUREKA_URL: http://eureka-server:8761/eureka
       JWT_SECRET: d1b72a9c2f1b2cfd6eb0b9320491ec2f
+      N8N_URL: http://localhost:5678
       JAVA_TOOL_OPTIONS: "-Xms64m -Xmx192m"
     depends_on:
       eureka-server:

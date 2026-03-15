@@ -80,11 +80,11 @@ function EditProduct() {
 
   const {
     previewImages,
-    setPreviewImages,
-    selectedFiles,
-    setSelectedFiles,
     handlePreviewImage,
     handleRemovePreviewImage,
+    handleReorder,
+    getOrderedFiles,
+    clearImages,
   } = useInputImage(max);
 
   const {
@@ -209,19 +209,29 @@ function EditProduct() {
       return;
     }
 
+    const normalizedSpecifications = specifications.map((s) => ({
+      ...s,
+      specKey: s.specKey.trim(),
+      specValue: s.specValue.trim(),
+    }));
+
+    const orderedFiles = getOrderedFiles();
+
     try {
-      await updateProduct({
-        name: data.name,
-        price: data.price,
-        discount: data.discount,
-        description: data.description,
-        status: Number(data.status),
-        stock: data.stock,
-        categoryId: data.category,
-        brandId: data.brand,
-        images: selectedFiles,
-        specifications: specifications,
-      });
+      await updateProduct(
+        {
+          name: data.name,
+          price: data.price,
+          discount: data.discount,
+          description: data.description,
+          status: Number(data.status),
+          stock: data.stock,
+          categoryId: data.category,
+          brandId: data.brand,
+          specifications: normalizedSpecifications,
+        },
+        orderedFiles,
+      );
 
       if (selectedFiles1.length > 0) {
         const newFiles = selectedFiles1.filter((f) => f !== null);
@@ -236,10 +246,9 @@ function EditProduct() {
         }
       }
 
-      clearSpecifications();
       mutate();
-      setPreviewImages([]);
-      setSelectedFiles([]);
+      clearSpecifications();
+      clearImages();
       setPreviewImages1([]);
       setSelectedFiles1([]);
     } catch (err: any) {
@@ -260,6 +269,7 @@ function EditProduct() {
                 previewImages={previewImages}
                 onPreviewImage={handlePreviewImage}
                 onRemovePreviewImage={handleRemovePreviewImage}
+                onReorderImages={handleReorder}
                 blockIndex={0}
               />
 

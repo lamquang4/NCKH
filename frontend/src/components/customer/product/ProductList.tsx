@@ -56,12 +56,9 @@ function ProductList({ title, products, isLoading = false, total }: Props) {
       <div className="mb-[40px] space-y-[15px]">
         <div className="flex justify-between items-center flex-wrap gap-[15px]">
           <h2 className="text-black">
-            {isLoading
-              ? "Đang tải sản phẩm..."
-              : search
-                ? `Kết quả cho "${search}"`
-                : title}
-            {!isLoading && ` (${total})`}
+            {isLoading && "Đang tải sản phẩm..."}
+            {!isLoading && search && `Kết quả cho "${search}"`}
+            {!isLoading && !search && `${title ?? "Không tìm thấy"} (${total})`}
           </h2>
 
           <select

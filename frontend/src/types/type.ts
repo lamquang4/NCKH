@@ -34,12 +34,10 @@ export interface BrandRequest {
 
 export interface CategoryRequest {
   name: string;
-  image: File;
   status: number;
 }
 
 export interface SpecificationRequest {
-  id?: string;
   specKey: string;
   specValue: string;
   displayOrder: number;
@@ -54,7 +52,6 @@ export interface ProductRequest {
   stock: number;
   categoryId: string;
   brandId: string;
-  images: File[];
   specifications: SpecificationRequest[];
 }
 
@@ -98,6 +95,7 @@ export interface CategoryResponse {
 export interface ImageProductResponse {
   id: string;
   image: string;
+  displayOrder: number;
 }
 
 export interface SpecificationResponse {

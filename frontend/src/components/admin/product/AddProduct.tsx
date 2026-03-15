@@ -56,11 +56,11 @@ function AddProduct() {
 
   const {
     previewImages,
-    setPreviewImages,
-    selectedFiles,
-    setSelectedFiles,
     handlePreviewImage,
     handleRemovePreviewImage,
+    handleReorder,
+    getOrderedFiles,
+    clearImages,
   } = useInputImage(max);
 
   const handleChange = (
@@ -117,28 +117,42 @@ function AddProduct() {
       return;
     }
 
-    if (!selectedFiles) {
+    if (!specifications.length) {
+      toast.error("Vui lòng thêm ít nhất một thông tin chi tiết");
+      return;
+    }
+
+    const orderedFiles = getOrderedFiles();
+
+    if (!orderedFiles.length) {
       toast.error("Vui lòng thêm ít nhất một hình sản phẩm");
       return;
     }
 
+    const normalizedSpecifications = specifications.map((s) => ({
+      ...s,
+      specKey: s.specKey.trim(),
+      specValue: s.specValue.trim(),
+    }));
+
     try {
-      await addProduct({
-        name: data.name,
-        price: data.price,
-        discount: data.discount,
-        description: data.description,
-        status: Number(data.status),
-        stock: data.stock,
-        categoryId: data.category,
-        brandId: data.brand,
-        images: selectedFiles,
-        specifications: specifications,
-      });
+      await addProduct(
+        {
+          name: data.name,
+          price: data.price,
+          discount: data.discount,
+          description: data.description,
+          status: Number(data.status),
+          stock: data.stock,
+          categoryId: data.category,
+          brandId: data.brand,
+          specifications: normalizedSpecifications,
+        },
+        orderedFiles,
+      );
 
       clearSpecifications();
-      setPreviewImages([]);
-      setSelectedFiles([]);
+      clearImages();
       setData({
         name: "",
         price: 1,
@@ -167,6 +181,7 @@ function AddProduct() {
                 previewImages={previewImages}
                 onPreviewImage={handlePreviewImage}
                 onRemovePreviewImage={handleRemovePreviewImage}
+                onReorderImages={handleReorder}
                 blockIndex={0}
               />
             </div>

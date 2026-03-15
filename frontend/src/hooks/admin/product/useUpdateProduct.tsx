@@ -5,7 +5,7 @@ import type { ProductRequest } from "../../../types/type";
 
 export default function useUpdateProduct(id: string) {
   const [isLoading, setIsLoading] = useState(false);
-  const updateProduct = async (data: ProductRequest) => {
+  const updateProduct = async (data: ProductRequest, files: File[]) => {
     if (!id) return;
     const loadingToast = toast.loading("Đang cập nhật...");
     setIsLoading(true);
@@ -33,11 +33,9 @@ export default function useUpdateProduct(id: string) {
         ),
       );
 
-      if (data.images && data.images.length > 0) {
-        data.images.forEach((file) => {
-          formData.append("images", file);
-        });
-      }
+      files.forEach((file) => {
+        formData.append("images", file);
+      });
 
       await axios.put(url, formData, {
         headers: {
