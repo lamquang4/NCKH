@@ -9,6 +9,8 @@ import com.backend.product_service.dto.response.CategoryResponse;
 import com.backend.product_service.dto.response.ProductResponse;
 import com.backend.product_service.entity.ImageProduct;
 import com.backend.product_service.entity.Product;
+import com.backend.product_service.entity.Specification;
+
 import java.util.Comparator;
 
 public final class ProductMapper {
@@ -30,13 +32,6 @@ public final class ProductMapper {
                                 .categoryId(request.getCategoryId())
                                 .brandId(request.getBrandId())
                                 .build();
-
-                if (request.getImages() != null) {
-                        product.setImages(
-                                        request.getImages().stream()
-                                                        .map(ImageProductMapper::toEntity)
-                                                        .collect(Collectors.toSet()));
-                }
 
                 if (request.getSpecifications() != null) {
                         product.setSpecifications(
@@ -79,16 +74,19 @@ public final class ProductMapper {
                                                                 : product.getImages().stream()
                                                                                 .sorted(
                                                                                                 Comparator.comparing(
-                                                                                                                ImageProduct::getCreatedAt,
+                                                                                                                ImageProduct::getDisplayOrder,
                                                                                                                 Comparator.nullsLast(
                                                                                                                                 Comparator.naturalOrder())))
-
                                                                                 .map(ImageProductMapper::toResponse)
                                                                                 .toList())
                                 .specifications(
                                                 product.getSpecifications() == null
                                                                 ? List.of()
                                                                 : product.getSpecifications().stream()
+                                                                                .sorted(Comparator.comparing(
+                                                                                                Specification::getDisplayOrder,
+                                                                                                Comparator.nullsLast(
+                                                                                                                Comparator.naturalOrder())))
                                                                                 .map(SpecificationMapper::toResponse)
                                                                                 .toList())
                                 .build();

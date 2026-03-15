@@ -6,7 +6,7 @@ import type { CategoryRequest } from "../../../types/type";
 export default function useAddCategory() {
   const [isLoading, setIsLoading] = useState(false);
 
-  const addCategory = async (data: CategoryRequest) => {
+  const addCategory = async (data: CategoryRequest, file: File) => {
     if (!data) return;
 
     const loadingToast = toast.loading("Đang thêm...");
@@ -30,8 +30,8 @@ export default function useAddCategory() {
         ),
       );
 
-      if (data.image) {
-        formData.append("image", data.image);
+      if (file) {
+        formData.append("image", file);
       }
 
       await axios.post(url, formData, {

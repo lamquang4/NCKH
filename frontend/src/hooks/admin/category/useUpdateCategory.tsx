@@ -5,7 +5,7 @@ import type { CategoryRequest } from "../../../types/type";
 
 export default function useUpdateCategory(id: string) {
   const [isLoading, setIsLoading] = useState(false);
-  const updateCategory = async (data: CategoryRequest) => {
+  const updateCategory = async (data: CategoryRequest, file: File) => {
     if (!id) return;
     const loadingToast = toast.loading("Đang cập nhật...");
     setIsLoading(true);
@@ -26,8 +26,8 @@ export default function useUpdateCategory(id: string) {
         ),
       );
 
-      if (data.image) {
-        formData.append("image", data.image);
+      if (file) {
+        formData.append("image", file);
       }
 
       await axios.put(url, formData, {

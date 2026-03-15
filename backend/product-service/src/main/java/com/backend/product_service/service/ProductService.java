@@ -324,6 +324,14 @@ public class ProductService {
             throw new BadRequestException("Số lượng tồn kho phải lớn hơn hoặc bằng 0");
         }
 
+        if (files == null || files.isEmpty()) {
+            throw new BadRequestException("Vui lòng thêm ít nhất một hình sản phẩm");
+        }
+
+        if (request.getSpecifications() == null || request.getSpecifications().isEmpty()) {
+            throw new BadRequestException("Vui lòng thêm ít nhất một thông tin chi tiết");
+        }
+
         if (productRepository.existsByName(request.getName())) {
             throw new ConflictException("Tên sản phẩm đã được sử dụng");
         }
@@ -337,14 +345,6 @@ public class ProductService {
         product.setFinalPrice(
                 calculateFinalPrice(request.getPrice(), request.getDiscount()));
 
-        if (product.getImages() == null) {
-            product.setImages(new HashSet<>());
-        }
-
-        if (product.getSpecifications() == null) {
-            product.setSpecifications(new HashSet<>());
-        }
-
         product.getSpecifications()
                 .forEach(spec -> spec.setProduct(product));
 
@@ -352,8 +352,9 @@ public class ProductService {
 
         if (files != null && !files.isEmpty()) {
             try {
-                for (MultipartFile file : files) {
-                    ImageProduct image = uploadImageOnCloudinary(file, savedProduct);
+                for (int i = 0; i < files.size(); i++) {
+                    ImageProduct image = uploadImageOnCloudinary(files.get(i), savedProduct);
+                    image.setDisplayOrder(i);
                     savedProduct.getImages().add(image);
                 }
             } catch (Exception e) {
@@ -421,20 +422,19 @@ public class ProductService {
         product.setFinalPrice(
                 calculateFinalPrice(request.getPrice(), request.getDiscount()));
 
-        if (product.getImages() == null) {
-            product.setImages(new HashSet<>());
-        }
-        if (product.getSpecifications() == null) {
-            product.setSpecifications(new HashSet<>());
-        }
-
         syncSpecifications(product, request.getSpecifications());
 
         if (files != null && !files.isEmpty()) {
             try {
-                for (MultipartFile file : files) {
-                    ImageProduct image = uploadImageOnCloudinary(file, product);
+                int nextOrder = product.getImages().stream()
+                        .mapToInt(img -> img.getDisplayOrder() != null ? img.getDisplayOrder() : -1)
+                        .max()
+                        .orElse(-1) + 1;
+
+                for (int i = 0; i < files.size(); i++) {
+                    ImageProduct image = uploadImageOnCloudinary(files.get(i), product);
                     image.setProduct(product);
+                    image.setDisplayOrder(nextOrder + i);
                     product.getImages().add(image);
                 }
             } catch (Exception e) {
@@ -479,8 +479,17 @@ public class ProductService {
         }
 
         deleteImageOnCloudinary(productId, imageId);
-
         imageProductRepository.delete(image);
+        imageProductRepository.flush();
+
+        List<ImageProduct> remaining = imageProductRepository
+                .findByProductIdOrderByDisplayOrderAsc(productId);
+
+        for (int i = 0; i < remaining.size(); i++) {
+            remaining.get(i).setDisplayOrder(i);
+        }
+
+        imageProductRepository.saveAll(remaining);
     }
 
     // xóa 1 thông tin chi tiết của sản phẩm

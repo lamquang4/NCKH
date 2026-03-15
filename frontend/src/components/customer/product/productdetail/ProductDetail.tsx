@@ -167,7 +167,8 @@ function ProductDetail({ product }: Props) {
                 )}
 
                 <ProductInformation
-                  category={product.category}
+                  categoryName={product.category.name}
+                  brandName={product.brand.name}
                   specifications={product.specifications}
                 />
 

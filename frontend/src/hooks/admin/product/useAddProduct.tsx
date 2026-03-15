@@ -5,7 +5,7 @@ import type { ProductRequest } from "../../../types/type";
 
 export default function useAddProduct() {
   const [isLoading, setIsLoading] = useState(false);
-  const addProduct = async (data: ProductRequest) => {
+  const addProduct = async (data: ProductRequest, files: File[]) => {
     if (!data) {
       return;
     }
@@ -35,11 +35,9 @@ export default function useAddProduct() {
         ),
       );
 
-      if (data.images && data.images.length > 0) {
-        data.images.forEach((file) => {
-          formData.append("images", file);
-        });
-      }
+      files.forEach((file) => {
+        formData.append("images", file);
+      });
 
       await axios.post(url, formData, {
         headers: {
