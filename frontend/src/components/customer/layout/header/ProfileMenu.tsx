@@ -13,10 +13,15 @@ function ProfileMenu({ onLogin, onRegister, profileMenuOpen }: Props) {
   const { account, isLoading, mutate } = useGetAccount("customer");
   const { handleLogout } = useLogout();
 
-  if (!profileMenuOpen) return null;
-
   return (
-    <div className="text-[0.9rem] absolute top-full right-0 z-20 bg-white shadow-md rounded-sm overflow-hidden min-w-[125px] font-normal">
+    <div
+      className={`text-[0.9rem] font-medium absolute top-full right-0 z-20 bg-white shadow-md rounded-sm overflow-hidden w-max transition-all duration-100 origin-top
+      ${
+        profileMenuOpen
+          ? "opacity-100 scale-100 translate-y-1"
+          : "opacity-0 scale-95 -translate-y-1 pointer-events-none"
+      }`}
+    >
       {isLoading ? null : account ? (
         <>
           <p className="border-b p-2.5 border-gray-200 max-w-[210px] overflow-hidden text-ellipsis whitespace-nowrap text-center">

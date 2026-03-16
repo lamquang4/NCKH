@@ -12,14 +12,20 @@ import Overplay from "../../ui/Overplay";
 import MenuMobile from "./MenuMobile";
 import AuthModal from "../auth/AuthModal";
 import useGetCart from "../../../../hooks/customer/cart/useGetCart";
+import { TbCategoryPlus } from "react-icons/tb";
+import MenuDropDown from "./CategoryDropDown";
+import useGetActiveCategories from "../../../../hooks/customer/category/useGetActiveCategories";
 
 function Header() {
   const [authType, setAuthType] = useState<"login" | "register" | null>(null);
   const [searchOpen, setSearchOpen] = useState<boolean>(false);
   const [menuMobileOpen, setMenuMobileOpen] = useState<boolean>(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState<boolean>(false);
+  const [categoryDropDownOpen, setCategoryDropDownOpen] =
+    useState<boolean>(false);
 
   const { cart } = useGetCart();
+  const { categories } = useGetActiveCategories();
 
   const totalQuantity = useMemo(() => {
     return (
@@ -29,20 +35,29 @@ function Header() {
     );
   }, [cart?.items]);
 
+  const toggleCategoryDropDown = useCallback(() => {
+    setCategoryDropDownOpen((prev) => !prev);
+    setMenuMobileOpen(false);
+    setSearchOpen(false);
+  }, []);
+
   const toggleProfileMenu = useCallback(() => {
     setProfileMenuOpen((prev) => !prev);
     setMenuMobileOpen(false);
     setSearchOpen(false);
+    setCategoryDropDownOpen(false);
   }, []);
 
   const toggleSearch = useCallback(() => {
     setSearchOpen((prev) => !prev);
     setMenuMobileOpen(false);
+    setCategoryDropDownOpen(false);
   }, []);
 
   const toggleMobileMenu = useCallback(() => {
     setMenuMobileOpen((prev) => !prev);
     setSearchOpen(false);
+    setCategoryDropDownOpen(false);
   }, []);
 
   useEffect(() => {
@@ -70,11 +85,30 @@ function Header() {
               />
             </Link>
 
+            {/* Desktop */}
+            <div
+              className="hidden lg:block relative cursor-pointer transition-colors group"
+              onMouseEnter={toggleCategoryDropDown}
+              onMouseLeave={toggleCategoryDropDown}
+            >
+              <div
+                className={`flex items-center gap-1 hover:text-white hover:bg-primary px-2 py-1.5 rounded-md group-hover:bg-primary group-hover:text-white`}
+              >
+                <TbCategoryPlus size={24} />
+                <span className="font-medium">Danh mục</span>
+              </div>
+
+              <MenuDropDown
+                categories={categories}
+                categoryDropDownOpen={categoryDropDownOpen}
+              />
+            </div>
+
             <div className="hidden lg:flex w-[50%]">
               <SearchDesktop />
             </div>
 
-            <div className="hidden lg:flex items-center gap-[15px] font-medium">
+            <div className="hidden lg:flex items-center gap-[15px]">
               <div
                 className="relative cursor-pointer transition-colors group"
                 onMouseEnter={toggleProfileMenu}
@@ -84,7 +118,7 @@ function Header() {
                   className={`flex items-center gap-1 hover:text-white hover:bg-primary px-2 py-1.5 rounded-md group-hover:bg-primary group-hover:text-white`}
                 >
                   <AiOutlineUser size={24} />
-                  <span>Tài khoản</span>
+                  <span className="font-medium">Tài khoản</span>
                 </div>
 
                 <ProfileMenu
@@ -104,7 +138,7 @@ function Header() {
                     </small>
                   </div>
 
-                  <span>Giỏ hàng</span>
+                  <span className="font-medium">Giỏ hàng</span>
                 </div>
               </Link>
             </div>
@@ -156,7 +190,7 @@ function Header() {
         />
       )}
 
-      {searchOpen && <Overplay onClose={toggleSearch} IndexForZ={12} />}
+      {searchOpen && <Overplay onClose={toggleSearch} IndexForZ={14} />}
     </>
   );
 }
