@@ -14,6 +14,9 @@ interface Props {
 }
 
 function ProductSlider({ title, isLoading = false, products }: Props) {
+  if (!isLoading && products.length === 0) {
+    return null;
+  }
   return (
     <>
       <section className="mb-[40px] px-[15px] text-black">

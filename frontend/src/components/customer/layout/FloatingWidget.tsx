@@ -14,7 +14,7 @@ function FloatingWidget() {
     <>
       {isOpen && <ChatContainer onClose={toggleChat} />}
 
-      <div className="fixed bottom-[15px] right-[15px] z-97">
+      <div className="fixed bottom-[15px] right-[15px] z-13">
         <button
           onClick={toggleChat}
           className="w-14 h-14 rounded-full shadow-lg bg-primary flex items-center justify-center"
@@ -28,7 +28,7 @@ function FloatingWidget() {
         </button>
       </div>
 
-      {isOpen && <Overplay onClose={toggleChat} IndexForZ={96} />}
+      {isOpen && <Overplay onClose={toggleChat} IndexForZ={15} />}
     </>
   );
 }
