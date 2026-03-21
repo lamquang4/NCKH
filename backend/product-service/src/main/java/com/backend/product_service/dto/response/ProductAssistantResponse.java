@@ -1,4 +1,4 @@
-package com.backend.assistant_service.dto.response;
+package com.backend.product_service.dto.response;
 
 import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
@@ -10,13 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProductSuggestionResponse {
+public class ProductAssistantResponse {
     private String id;
     private String name;
-    private String slug;
-    private BigDecimal price;
-    private BigDecimal discount;
     private BigDecimal finalPrice;
-    private String image;
-    private Integer stock;
+    private String brandName;
+    private String categoryName;
 }

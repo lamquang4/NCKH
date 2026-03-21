@@ -162,8 +162,8 @@ function ProductList() {
                       </div>
                     </td>
 
-                    <td className="p-[1rem]  ">{product.category.name}</td>
-                    <td className="p-[1rem]  ">{product.brand.name}</td>
+                    <td className="p-[1rem]  ">{product.categoryName}</td>
+                    <td className="p-[1rem]  ">{product.brandName}</td>
 
                     <td className="p-[1rem]  ">
                       {product.status === 1

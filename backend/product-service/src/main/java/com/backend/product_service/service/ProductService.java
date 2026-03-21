@@ -21,12 +21,15 @@ import com.backend.product_service.client.BrandServiceClient;
 import com.backend.product_service.client.CartServiceClient;
 import com.backend.product_service.client.CategoryServiceClient;
 import com.backend.product_service.client.OrderServiceClient;
+import com.backend.product_service.dto.request.ProductQueryRequest;
 import com.backend.product_service.dto.request.ProductRequest;
 import com.backend.product_service.dto.request.SpecificationRequest;
 import com.backend.product_service.dto.request.StockRequest;
 import com.backend.product_service.dto.response.BrandResponse;
 import com.backend.product_service.dto.response.CategoryResponse;
-import com.backend.product_service.dto.response.ProductResponse;
+import com.backend.product_service.dto.response.ProductAssistantResponse;
+import com.backend.product_service.dto.response.ProductDetailResponse;
+import com.backend.product_service.dto.response.ProductListItemResponse;
 import com.backend.product_service.entity.ImageProduct;
 import com.backend.product_service.entity.Product;
 import com.backend.product_service.entity.Specification;
@@ -41,6 +44,7 @@ import com.backend.product_service.repository.SpecificationRepository;
 import com.backend.product_service.utils.SlugUtil;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import java.util.Comparator;
 
 @Service
 public class ProductService {
@@ -71,7 +75,7 @@ public class ProductService {
     }
 
     // lấy tất cả sản phẩm có phân trang
-    public Page<ProductResponse> getAllProducts(
+    public Page<ProductListItemResponse> getAllProducts(
             int page,
             int limit,
             String q,
@@ -101,7 +105,7 @@ public class ProductService {
     }
 
     // lấy các sản phẩm có status = 1 phân trang
-    public Page<ProductResponse> getActiveProducts(
+    public Page<ProductListItemResponse> getActiveProducts(
             int page,
             int limit,
             String q,
@@ -120,7 +124,7 @@ public class ProductService {
     }
 
     // lấy các sản phẩm dựa vào category slug và có status = 1 phân trang
-    public Page<ProductResponse> getActiveProductsByCategory(
+    public Page<ProductListItemResponse> getActiveProductsByCategory(
             int page,
             int limit,
             String q,
@@ -144,7 +148,7 @@ public class ProductService {
     }
 
     // lấy các sản phẩm giảm giá có status = 1
-    public Page<ProductResponse> getActiveDiscountProducts(
+    public Page<ProductListItemResponse> getActiveDiscountProducts(
             int page,
             int limit,
             String q,
@@ -167,7 +171,7 @@ public class ProductService {
     }
 
     // lấy x sản phẩm bán chạy nhất có status = 1
-    public List<ProductResponse> getActiveBestSellerProducts(Integer limit) {
+    public List<ProductListItemResponse> getActiveBestSellerProducts(Integer limit) {
 
         int size = (limit == null) ? 10 : limit;
 
@@ -185,7 +189,7 @@ public class ProductService {
     }
 
     // lấy x sản phẩm status = 1
-    public List<ProductResponse> getActiveLimitProducts(String q, Integer limit) {
+    public List<ProductListItemResponse> getActiveLimitProducts(String q, Integer limit) {
 
         int size = (limit != null && limit > 0) ? limit : 10;
 
@@ -209,7 +213,7 @@ public class ProductService {
     }
 
     // lấy tất cả sản phẩm có status = 1 theo category id
-    public List<ProductResponse> getAllActiveProductsByCategoryId(String categoryId) {
+    public List<ProductListItemResponse> getAllActiveProductsByCategoryId(String categoryId) {
 
         List<Product> products = productRepository.findByStatusAndCategoryId(
                 1,
@@ -220,7 +224,7 @@ public class ProductService {
     }
 
     // lấy tất cả sản phẩm có status = 1 theo brand id
-    public List<ProductResponse> getAllActiveProductsByBrandId(String brandId) {
+    public List<ProductListItemResponse> getAllActiveProductsByBrandId(String brandId) {
 
         List<Product> products = productRepository.findByStatusAndBrandId(
                 1,
@@ -231,35 +235,125 @@ public class ProductService {
     }
 
     // lấy sản phẩm theo id
-    public ProductResponse getProductById(String id) {
+    public ProductDetailResponse getProductById(String id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Sản phẩm không tìm thấy"));
 
-        return mapWithClient(List.of(product)).get(0);
+        return mapSingleWithClient(product);
     }
 
     // lấy sản phẩm theo slug có status = 1
-    public ProductResponse getActiveProductBySlug(String slug) {
+    public ProductDetailResponse getActiveProductBySlug(String slug) {
 
         Product product = productRepository
                 .findBySlugAndStatus(slug, 1)
                 .orElseThrow(() -> new NotFoundException("Sản phẩm không tìm thấy"));
 
-        return mapWithClient(List.of(product)).get(0);
+        return mapSingleWithClient(product);
     }
 
     // lấy sản phẩm có status = 1 theo id
-    public ProductResponse getActiveProductById(String id) {
+    public ProductDetailResponse getActiveProductById(String id) {
 
         Product product = productRepository
                 .findByIdAndStatus(id, 1)
                 .orElseThrow(() -> new NotFoundException("Sản phẩm không tìm thấy"));
 
-        return mapWithClient(List.of(product)).get(0);
+        return mapSingleWithClient(product);
+    }
+
+    // assistant
+    public List<ProductAssistantResponse> queryProductsForAssistant(ProductQueryRequest request) {
+
+        String categoryId = null;
+        if (request.getCategory() != null && !request.getCategory().isBlank()) {
+            try {
+                CategoryResponse category = categoryServiceClient
+                        .getCategoryBySlugInternal(request.getCategory());
+                categoryId = category.getId();
+            } catch (Exception e) {
+                return List.of();
+            }
+        }
+
+        String brandId = null;
+        if (request.getBrand() != null && !request.getBrand().isBlank()) {
+            try {
+                BrandResponse brand = brandServiceClient
+                        .getBrandBySlugInternal(request.getBrand());
+                brandId = brand.getId();
+            } catch (Exception e) {
+                return List.of();
+            }
+        }
+
+        Sort sort = buildSort(request.getSortBy());
+        List<Product> products = productRepository.findByStatus(1, sort);
+
+        if (categoryId != null) {
+            final String cId = categoryId;
+            products = products.stream()
+                    .filter(p -> cId.equals(p.getCategoryId()))
+                    .toList();
+        }
+
+        if (brandId != null) {
+            final String bId = brandId;
+            products = products.stream()
+                    .filter(p -> bId.equals(p.getBrandId()))
+                    .toList();
+        }
+
+        if (request.getKeyword() != null && !request.getKeyword().isBlank()) {
+            String kw = request.getKeyword().toLowerCase();
+            products = products.stream()
+                    .filter(p -> p.getName().toLowerCase().contains(kw))
+                    .toList();
+        }
+
+        if (request.getMinPrice() != null) {
+            products = products.stream()
+                    .filter(p -> p.getFinalPrice().compareTo(request.getMinPrice()) >= 0)
+                    .toList();
+        }
+        if (request.getMaxPrice() != null) {
+            products = products.stream()
+                    .filter(p -> p.getFinalPrice().compareTo(request.getMaxPrice()) <= 0)
+                    .toList();
+        }
+
+        if (Boolean.TRUE.equals(request.getIsDiscount())) {
+            products = products.stream()
+                    .filter(p -> p.getDiscount() != null
+                            && p.getDiscount().compareTo(BigDecimal.ZERO) > 0)
+                    .toList();
+        }
+
+        if (Boolean.TRUE.equals(request.getInStock())) {
+            products = products.stream()
+                    .filter(p -> p.getStock() != null && p.getStock() > 0)
+                    .toList();
+        }
+
+        if (Boolean.TRUE.equals(request.getIsBestseller())) {
+            products = products.stream()
+                    .filter(p -> p.getTotalSold() != null && p.getTotalSold() > 0)
+                    .sorted(Comparator.comparingInt(Product::getTotalSold).reversed())
+                    .toList();
+        }
+
+        int limit = (request.getLimit() != null && request.getLimit() > 0)
+                ? request.getLimit()
+                : 12;
+        if (products.size() > limit) {
+            products = products.subList(0, limit);
+        }
+
+        return mapAssistantWithClient(products);
     }
 
     // cập nhật status sản phẩm
-    public ProductResponse updateProductStatus(String id, Integer status) {
+    public void updateProductStatus(String id, Integer status) {
 
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Sản phẩm không tìm thấy"));
@@ -282,12 +376,11 @@ public class ProductService {
 
         product.setStatus(status);
         productRepository.save(product);
-        return ProductMapper.toResponse(product);
     }
 
     // thêm sản phẩm
     @Transactional
-    public ProductResponse createProduct(
+    public void createProduct(
             ProductRequest request,
             List<MultipartFile> files) {
 
@@ -362,13 +455,11 @@ public class ProductService {
                 throw e;
             }
         }
-
-        return ProductMapper.toResponse(savedProduct);
     }
 
     // cập nhật sản phẩm
     @Transactional
-    public ProductResponse updateProduct(
+    public void updateProduct(
             String id,
             ProductRequest request,
             List<MultipartFile> files) {
@@ -443,7 +534,6 @@ public class ProductService {
             }
         }
 
-        return ProductMapper.toResponse(product);
     }
 
     // xóa sản phẩm
@@ -518,13 +608,13 @@ public class ProductService {
         return productRepository.existsByCategoryId(categoryId);
     }
 
-    public List<ProductResponse> getProductsByIds(List<String> ids) {
+    public List<ProductListItemResponse> getProductsByIds(List<String> ids) {
 
         if (ids == null || ids.isEmpty()) {
             return List.of();
         }
 
-        List<Product> products = productRepository.findByIdInAndStatus(ids, 1);
+        List<Product> products = productRepository.findByIdIn(ids);
 
         if (products.isEmpty()) {
             throw new NotFoundException("Không tìm thấy sản phẩm");
@@ -766,52 +856,43 @@ public class ProductService {
         product.getSpecifications().addAll(newSet);
     }
 
-    private List<ProductResponse> mapWithClient(List<Product> products) {
+    private List<ProductListItemResponse> mapWithClient(List<Product> products) {
 
-        if (products == null || products.isEmpty()) {
+        if (products == null || products.isEmpty())
             return List.of();
-        }
 
-        List<String> categoryIds = products.stream()
-                .map(Product::getCategoryId)
-                .distinct()
-                .toList();
-
-        List<String> brandIds = products.stream()
-                .map(Product::getBrandId)
-                .distinct()
-                .toList();
+        List<String> categoryIds = products.stream().map(Product::getCategoryId).distinct().toList();
+        List<String> brandIds = products.stream().map(Product::getBrandId).distinct().toList();
 
         Map<String, CategoryResponse> categoryMap = categoryServiceClient.getCategoriesByIdsInternal(categoryIds);
-
         Map<String, BrandResponse> brandMap = brandServiceClient.getBrandsByIdsInternal(brandIds);
 
         return products.stream()
                 .map(product -> {
-
                     CategoryResponse category = categoryMap.get(product.getCategoryId());
-
                     BrandResponse brand = brandMap.get(product.getBrandId());
-
                     if (category == null)
                         throw new NotFoundException("Danh mục không tìm thấy");
-
                     if (brand == null)
                         throw new NotFoundException("Thương hiệu không tìm thấy");
-
-                    return ProductMapper.toResponse(product, category, brand);
+                    return ProductMapper.toListItemResponse(product, category, brand); // ← đổi
                 })
                 .toList();
     }
 
-    private Page<ProductResponse> mapPageWithClient(Page<Product> productPage) {
+    private Page<ProductListItemResponse> mapPageWithClient(Page<Product> productPage) {
+        List<ProductListItemResponse> responses = mapWithClient(productPage.getContent());
+        return new PageImpl<>(responses, productPage.getPageable(), productPage.getTotalElements());
+    }
 
-        List<ProductResponse> responses = mapWithClient(productPage.getContent());
-
-        return new PageImpl<>(
-                responses,
-                productPage.getPageable(),
-                productPage.getTotalElements());
+    private ProductDetailResponse mapSingleWithClient(Product product) {
+        CategoryResponse category = categoryServiceClient.getCategoryByIdInternal(product.getCategoryId());
+        BrandResponse brand = brandServiceClient.getBrandByIdInternal(product.getBrandId());
+        if (category == null)
+            throw new NotFoundException("Danh mục không tìm thấy");
+        if (brand == null)
+            throw new NotFoundException("Thương hiệu không tìm thấy");
+        return ProductMapper.toDetailResponse(product, category, brand);
     }
 
     private BigDecimal calculateFinalPrice(BigDecimal price, BigDecimal discount) {
@@ -819,6 +900,25 @@ public class ProductService {
             return price;
         }
         return price.subtract(discount);
+    }
+
+    private List<ProductAssistantResponse> mapAssistantWithClient(List<Product> products) {
+        if (products == null || products.isEmpty())
+            return List.of();
+
+        List<String> categoryIds = products.stream().map(Product::getCategoryId).distinct().toList();
+        List<String> brandIds = products.stream().map(Product::getBrandId).distinct().toList();
+
+        Map<String, CategoryResponse> categoryMap = categoryServiceClient.getCategoriesByIdsInternal(categoryIds);
+        Map<String, BrandResponse> brandMap = brandServiceClient.getBrandsByIdsInternal(brandIds);
+
+        return products.stream()
+                .map(product -> {
+                    CategoryResponse category = categoryMap.get(product.getCategoryId());
+                    BrandResponse brand = brandMap.get(product.getBrandId());
+                    return ProductMapper.toAssistantResponse(product, category, brand);
+                })
+                .toList();
     }
 
 }

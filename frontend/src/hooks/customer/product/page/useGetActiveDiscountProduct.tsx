@@ -1,10 +1,10 @@
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import useSWR from "swr";
-import type { ProductResponse } from "../../../../types/type";
+import type { ProductListItemResponse } from "../../../../types/type";
 
 interface ResponseType {
-  products: ProductResponse[];
+  products: ProductListItemResponse[];
   totalPages: number;
   total: number;
 }

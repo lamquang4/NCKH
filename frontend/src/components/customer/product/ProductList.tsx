@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import type { ProductResponse } from "../../../types/type";
+import type { ProductListItemResponse } from "../../../types/type";
 import Image from "../../ui/Image";
 import ProductCard from "./ProductCard";
 import { memo } from "react";
@@ -7,7 +7,7 @@ import ProductListSkeleton from "../skeleton/ProductListSkeleton";
 
 interface Props {
   title?: string;
-  products: ProductResponse[];
+  products: ProductListItemResponse[];
   isLoading: boolean;
   total: number;
 }

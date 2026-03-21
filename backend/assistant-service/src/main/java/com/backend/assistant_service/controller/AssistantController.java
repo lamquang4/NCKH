@@ -1,11 +1,17 @@
 package com.backend.assistant_service.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.assistant_service.dto.request.MessageRequest;
-import com.backend.assistant_service.dto.response.MessageResponse;
 import com.backend.assistant_service.service.AssistantService;
+
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/api/assistant")
@@ -18,13 +24,13 @@ public class AssistantController {
     }
 
     @PostMapping("/chat")
-    public ResponseEntity<MessageResponse> chat(
+    public ResponseEntity<Void> handleChat(
             @RequestHeader("Authorization") String token,
-            @RequestBody MessageRequest request) {
+            @Valid @RequestBody MessageRequest request) {
 
-        MessageResponse response =
-                assistantService.handleChat(token, request);
+        assistantService.handleChat(token, request);
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
 }

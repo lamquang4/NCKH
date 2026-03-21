@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.backend.chat_service.dto.request.MessageRequest;
 import com.backend.chat_service.dto.response.ChatResponse;
-import com.backend.chat_service.dto.response.MessageResponse;
 import com.backend.chat_service.exception.BadRequestException;
 import com.backend.chat_service.service.ChatService;
 import com.backend.chat_service.utils.JwtUtil;
@@ -14,6 +13,7 @@ import com.backend.chat_service.utils.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.ForbiddenException;
+import org.springframework.http.HttpStatus;
 
 @Validated
 @RestController
@@ -35,14 +35,22 @@ public class ChatController {
     }
 
     @PostMapping("/user/message")
-    public ResponseEntity<MessageResponse> sendMessage(
+    public ResponseEntity<Void> sendUserMessage(
             @Valid @RequestBody MessageRequest messageRequest,
             HttpServletRequest request) {
         String userId = extractUserIdFromHeader(request);
-        return ResponseEntity.ok(chatService.sendMessage(userId, messageRequest));
+        chatService.saveMessage(messageRequest, userId, "USER");
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     // internal
+    @PostMapping("/internal/assistant/message")
+    public ResponseEntity<Void> saveAssistantMessage(
+            @Valid @RequestBody MessageRequest messageRequest) {
+        chatService.saveMessage(messageRequest, null, "ASSISTANT");
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
     @GetMapping("/internal/{chatId}")
     public ResponseEntity<ChatResponse> getChatByIdInternal(
             @PathVariable String chatId) {

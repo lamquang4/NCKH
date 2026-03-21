@@ -2,9 +2,12 @@ import { useCallback, useState } from "react";
 import Image from "../../ui/Image";
 import ChatContainer from "../chatbox/ChatContainer";
 import Overplay from "../ui/Overplay";
+import useGetChat from "../../../hooks/customer/chat/useGetChat";
 
 function FloatingWidget() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const { chat, isLoading } = useGetChat();
 
   const toggleChat = useCallback(() => {
     setIsOpen((prev) => !prev);
@@ -12,7 +15,9 @@ function FloatingWidget() {
 
   return (
     <>
-      {isOpen && <ChatContainer onClose={toggleChat} />}
+      {isOpen && !isLoading && (
+        <ChatContainer onClose={toggleChat} chat={chat} />
+      )}
 
       <div className="fixed bottom-[15px] right-[15px] z-13">
         <button
@@ -28,7 +33,7 @@ function FloatingWidget() {
         </button>
       </div>
 
-      {isOpen && <Overplay onClose={toggleChat} IndexForZ={15} />}
+      {isOpen && !isLoading && <Overplay onClose={toggleChat} IndexForZ={15} />}
     </>
   );
 }

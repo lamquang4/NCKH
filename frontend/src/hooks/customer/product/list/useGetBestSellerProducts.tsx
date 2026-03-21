@@ -1,13 +1,13 @@
 import axios from "axios";
 import useSWR from "swr";
-import type { ProductResponse } from "../../../../types/type";
+import type { ProductListItemResponse } from "../../../../types/type";
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 export default function useGetBestsellerProducts(limit: number) {
   const url = `${import.meta.env.VITE_BACKEND_URL}/product/active/bestseller?limit=${limit}`;
 
-  const { data, error, isLoading, mutate } = useSWR<ProductResponse[]>(
+  const { data, error, isLoading, mutate } = useSWR<ProductListItemResponse[]>(
     url,
     fetcher,
     {

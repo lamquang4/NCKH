@@ -21,6 +21,7 @@ import com.backend.brand_service.service.BrandService;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.http.HttpStatus;
 
 @Validated
 @RestController
@@ -64,27 +65,26 @@ public class BrandController {
     }
 
     @PostMapping
-    public ResponseEntity<BrandResponse> createBrand(
+    public ResponseEntity<Void> createBrand(
             @Valid @RequestBody BrandRequest request) {
-
-        return ResponseEntity.ok(brandService.createBrand(request));
+        brandService.createBrand(request);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BrandResponse> updateBrand(
+    public ResponseEntity<Void> updateBrand(
             @PathVariable String id,
             @Valid @RequestBody BrandRequest request) {
-
-        return ResponseEntity.ok(brandService.updateBrand(id, request));
+        brandService.updateBrand(id, request);
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/status/{id}")
-    public ResponseEntity<BrandResponse> updateBrandStatus(
+    public ResponseEntity<Void> updateBrandStatus(
             @PathVariable String id,
             @RequestParam @NotNull Integer status) {
-
-        return ResponseEntity.ok(
-                brandService.updateBrandStatus(id, status));
+        brandService.updateBrandStatus(id, status);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
@@ -94,6 +94,11 @@ public class BrandController {
     }
 
     // internal
+    @GetMapping("/internal/slug/{slug}")
+    public ResponseEntity<BrandResponse> getBrandBySlugInternal(@PathVariable String slug) {
+        return ResponseEntity.ok(brandService.getBrandBySlug(slug));
+    }
+
     @GetMapping("/internal/{id}")
     public ResponseEntity<BrandResponse> getBrandByIdInternal(@PathVariable String id) {
         return ResponseEntity.ok(brandService.getBrandById(id));

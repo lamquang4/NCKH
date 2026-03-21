@@ -5,6 +5,7 @@ import java.util.List;
 import com.backend.chat_service.dto.request.MessageRequest;
 import com.backend.chat_service.dto.response.ChatResponse;
 import com.backend.chat_service.dto.response.MessageResponse;
+import com.backend.chat_service.dto.response.ProductListItemResponse;
 import com.backend.chat_service.model.Chat;
 import com.backend.chat_service.model.Message;
 
@@ -26,14 +27,13 @@ public final class ChatMapper {
                 .build();
     }
 
-    public static MessageResponse toMessageResponse(Message message) {
-
+    public static MessageResponse toMessageResponse(Message message, List<ProductListItemResponse> products) {
         return MessageResponse.builder()
                 .id(message.getId())
                 .chatId(message.getChatId())
                 .role(message.getRole())
                 .content(message.getContent())
-                .extraData(message.getExtraData())
+                .products(products)
                 .createdAt(message.getCreatedAt())
                 .build();
     }
@@ -43,6 +43,7 @@ public final class ChatMapper {
                 .chatId(chatId)
                 .role(role)
                 .content(request.getContent())
+                .productIds(request.getProductIds())
                 .build();
     }
 }

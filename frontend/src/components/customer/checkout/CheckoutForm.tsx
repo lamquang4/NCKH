@@ -138,7 +138,7 @@ function CheckoutForm() {
 
       if (paymethod === "cod") {
         navigate("/order-result?result=successful");
-        mutateCart({ items: [] }, false);
+        mutateCart();
       } else {
         const momoResponse = await createPaymentMomo(res.orderCode);
         window.location.href = momoResponse.payUrl;

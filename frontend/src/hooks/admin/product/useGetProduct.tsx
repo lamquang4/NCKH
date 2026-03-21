@@ -1,12 +1,12 @@
 import axios from "axios";
 import useSWR from "swr";
-import type { ProductResponse } from "../../../types/type";
+import type { ProductDetailResponse } from "../../../types/type";
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 export default function useGetProduct(id: string) {
   const url = id ? `${import.meta.env.VITE_BACKEND_URL}/product/${id}` : null;
-  const { data, error, isLoading, mutate } = useSWR<ProductResponse>(
+  const { data, error, isLoading, mutate } = useSWR<ProductDetailResponse>(
     url,
     fetcher,
     {
