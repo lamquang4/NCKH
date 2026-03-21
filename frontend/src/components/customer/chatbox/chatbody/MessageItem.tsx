@@ -3,11 +3,12 @@ import Image from "../../../ui/Image";
 import MessageAction from "./MessageAction";
 import { memo, useCallback } from "react";
 import MessageProductList from "./MessageProductList";
+import type { ProductListItemResponse } from "../../../../types/type";
 
 type props = {
-  type: "user" | "ai";
+  type: "ASSISTANT" | "USER";
   text: string;
-  products?: any[];
+  products?: ProductListItemResponse[];
 };
 
 function MessageItem({ type, text, products }: props) {
@@ -19,10 +20,10 @@ function MessageItem({ type, text, products }: props) {
   return (
     <div
       className={`flex gap-2 ${
-        type === "ai" ? "justify-start" : "justify-end"
+        type === "ASSISTANT" ? "justify-start" : "justify-end"
       }`}
     >
-      {type === "ai" && (
+      {type === "ASSISTANT" && (
         <Image
           className="w-10 h-10 rounded-full self-start"
           source="/assets/troly.png"
@@ -33,23 +34,25 @@ function MessageItem({ type, text, products }: props) {
 
       <div
         className={`flex flex-col max-w-[75%] gap-2 ${
-          type === "ai" ? "items-start" : "items-end"
+          type === "ASSISTANT" ? "items-start" : "items-end"
         }`}
       >
         <div
           className={`inline-block px-4 py-2 rounded-xl break-anywhere whitespace-pre-wrap   ${
-            type === "ai" ? "bg-gray-100 text-black" : "bg-primary text-white"
+            type === "ASSISTANT"
+              ? "bg-gray-100 text-black"
+              : "bg-primary text-white"
           }
       `}
         >
           {text}
         </div>
 
-        {type === "ai" && products && (
+        {type === "ASSISTANT" && products && (
           <MessageProductList products={products} />
         )}
 
-        {type === "ai" && <MessageAction onCopy={handleCopy} />}
+        <MessageAction onCopy={handleCopy} />
       </div>
     </div>
   );

@@ -21,6 +21,7 @@ import com.backend.user_service.mapper.UserMapper;
 import com.backend.user_service.service.UserService;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 
 @Validated
 @RestController
@@ -72,20 +73,19 @@ public class UserController {
         }
 
         @PutMapping("/{id}")
-        public ResponseEntity<UserResponse> updateUser(
+        public ResponseEntity<Void> updateUser(
                         @PathVariable String id,
                         @Valid @RequestBody UserRequest request) {
-
-                return ResponseEntity.ok(userService.updateUser(id, request));
+                userService.updateUser(id, request);
+                return ResponseEntity.noContent().build();
         }
 
         @PatchMapping("/status/{id}")
-        public ResponseEntity<UserResponse> updateUserStatus(
+        public ResponseEntity<Void> updateUserStatus(
                         @PathVariable String id,
                         @RequestParam @NotNull Integer status) {
-
-                return ResponseEntity.ok(
-                                userService.updateUserStatus(id, status));
+                userService.updateUserStatus(id, status);
+                return ResponseEntity.noContent().build();
         }
 
         @DeleteMapping("/{id}")
@@ -95,11 +95,11 @@ public class UserController {
         }
 
         @PostMapping
-        public ResponseEntity<UserResponse> createUser(
+        public ResponseEntity<Void> createUser(
                         @Valid @RequestBody UserRequest request) {
 
-                return ResponseEntity.ok(
-                                userService.createUser(request));
+                userService.createUser(request);
+                return ResponseEntity.status(HttpStatus.CREATED).build();
         }
 
         // internal
@@ -125,10 +125,10 @@ public class UserController {
         }
 
         @PostMapping("/internal")
-        public ResponseEntity<UserResponse> createUserInternal(
+        public ResponseEntity<Void> createUserInternal(
                         @Valid @RequestBody UserRequest request) {
 
-                return ResponseEntity.ok(
-                                userService.createUser(request));
+                userService.createUser(request);
+                return ResponseEntity.status(HttpStatus.CREATED).build();
         }
 }

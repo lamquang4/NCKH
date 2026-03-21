@@ -24,6 +24,7 @@ import com.backend.category_service.service.CategoryService;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.http.HttpStatus;
 
 @Validated
 @RestController
@@ -62,29 +63,28 @@ public class CategoryController {
     }
 
     @PostMapping(consumes = "multipart/form-data")
-    public ResponseEntity<CategoryResponse> createCategory(
+    public ResponseEntity<Void> createCategory(
             @Valid @RequestPart("category") CategoryRequest request,
             @RequestPart(value = "image", required = false) MultipartFile image) {
-
-        return ResponseEntity.ok(categoryService.createCategory(request, image));
+        categoryService.createCategory(request, image);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping(value = "/{id}", consumes = "multipart/form-data")
-    public ResponseEntity<CategoryResponse> updateCategory(
+    public ResponseEntity<Void> updateCategory(
             @PathVariable String id,
             @Valid @RequestPart("category") CategoryRequest request,
             @RequestPart(value = "image", required = false) MultipartFile image) {
-
-        return ResponseEntity.ok(categoryService.updateCategory(id, request, image));
+        categoryService.updateCategory(id, request, image);
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/status/{id}")
-    public ResponseEntity<?> updateStatusCategory(
+    public ResponseEntity<Void> updateStatusCategory(
             @PathVariable String id,
             @RequestParam @NotNull Integer status) {
-
-        return ResponseEntity.ok(
-                categoryService.updateCategoryStatus(id, status));
+        categoryService.updateCategoryStatus(id, status);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")

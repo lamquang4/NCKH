@@ -1,4 +1,4 @@
-package com.backend.brand_service.dto.response;
+package com.backend.assistant_service.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

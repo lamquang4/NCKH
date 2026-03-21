@@ -41,30 +41,33 @@ public class CartController {
     }
 
     @PostMapping
-    public ResponseEntity<CartResponse> addToCart(
+    public ResponseEntity<Void> addToCart(
             HttpServletRequest request,
             @RequestBody @Valid CartItemRequest itemRequest) {
 
         String userId = extractUserIdFromHeader(request);
-        return ResponseEntity.ok(cartService.addToCart(userId, itemRequest));
+        cartService.addToCart(userId, itemRequest);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping
-    public ResponseEntity<CartResponse> updateQuantity(
+    public ResponseEntity<Void> updateQuantity(
             HttpServletRequest request,
             @RequestBody @Valid CartItemRequest itemRequest) {
 
         String userId = extractUserIdFromHeader(request);
-        return ResponseEntity.ok(cartService.updateQuantity(userId, itemRequest));
+        cartService.updateQuantity(userId, itemRequest);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{productId}")
-    public ResponseEntity<CartResponse> removeItem(
+    public ResponseEntity<Void> removeItem(
             HttpServletRequest request,
             @PathVariable String productId) {
 
         String userId = extractUserIdFromHeader(request);
-        return ResponseEntity.ok(cartService.removeItem(userId, productId));
+        cartService.removeItem(userId, productId);
+        return ResponseEntity.noContent().build();
     }
 
     // Helper

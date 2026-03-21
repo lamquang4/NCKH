@@ -11,19 +11,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProductResponse {
+public class ProductListItemResponse {
     private String id;
     private String name;
     private String slug;
     private BigDecimal price;
     private BigDecimal discount;
     private BigDecimal finalPrice;
-    private String description;
-    private Integer status;
     private Integer stock;
+    private Integer status;
     private Integer totalSold;
-    private CategoryResponse category;
-    private BrandResponse brand;
+    private String categoryName;
+    private String brandName;
     private List<ImageProductResponse> images;
-    private List<SpecificationResponse> specifications;
 }

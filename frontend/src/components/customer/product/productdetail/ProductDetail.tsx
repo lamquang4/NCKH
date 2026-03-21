@@ -1,7 +1,7 @@
 import { memo, useState } from "react";
 import { HiOutlineMinusSmall } from "react-icons/hi2";
 import { HiOutlinePlusSmall } from "react-icons/hi2";
-import type { ProductResponse } from "../../../../types/type";
+import type { ProductDetailResponse } from "../../../../types/type";
 import ProductGallery from "./ProductGallery";
 import ProductInformation from "./ProductInformation";
 import ProductDescription from "./ProductDescription";
@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 import ProductDetailSkeleton from "../../skeleton/ProductDetailSkeleton";
 
 type Props = {
-  product: ProductResponse;
+  product: ProductDetailResponse;
 };
 
 function ProductDetail({ product }: Props) {

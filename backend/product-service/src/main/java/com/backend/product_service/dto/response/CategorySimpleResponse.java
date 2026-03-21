@@ -1,4 +1,4 @@
-package com.backend.category_service.dto.response;
+package com.backend.product_service.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ImageProductResponse {
+public class CategorySimpleResponse {
     private String id;
-    private String image;
-    private Integer displayOrder;
+    private String name;
+    private String slug;
 }

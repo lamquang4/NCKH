@@ -1,4 +1,9 @@
 // Request
+export interface MessageRequest {
+  chatId: string;
+  content: string;
+}
+
 export interface OrderRequest {
   fullname: string;
   phone: string;
@@ -67,7 +72,7 @@ export interface MessageRequest {
 
 // Response
 export interface UserResponse {
-  id?: string;
+  id: string;
   email: string;
   fullname: string;
   phone?: string;
@@ -78,18 +83,30 @@ export interface UserResponse {
 }
 
 export interface BrandResponse {
-  id?: string;
+  id: string;
   name: string;
   slug: string;
   status: number;
 }
 
 export interface CategoryResponse {
-  id?: string;
+  id: string;
   name: string;
   slug: string;
   image?: string;
   status: number;
+}
+
+export interface BrandSimpleResponse {
+  id: string;
+  name: string;
+  slug: string;
+}
+
+export interface CategorySimpleResponse {
+  id: string;
+  name: string;
+  slug: string;
 }
 
 export interface ImageProductResponse {
@@ -105,7 +122,7 @@ export interface SpecificationResponse {
   displayOrder: number;
 }
 
-export interface ProductResponse {
+export interface ProductDetailResponse {
   id: string;
   name: string;
   slug: string;
@@ -115,11 +132,25 @@ export interface ProductResponse {
   description: string;
   status: number;
   stock: number;
-  totalSold: number;
-  category: CategoryResponse;
-  brand: BrandResponse;
+  category: CategorySimpleResponse;
+  brand: BrandSimpleResponse;
   images: ImageProductResponse[];
   specifications: SpecificationResponse[];
+}
+
+export interface ProductListItemResponse {
+  id: string;
+  name: string;
+  slug: string;
+  price: number;
+  discount: number;
+  finalPrice: number;
+  stock: number;
+  totalSold: number;
+  status: number;
+  categoryName: string;
+  brandName: string;
+  images: ImageProductResponse[];
 }
 
 export interface CartItemResponse {
@@ -135,8 +166,8 @@ export interface CartItemResponse {
 }
 
 export interface CartResponse {
-  id?: string;
-  userId?: string;
+  id: string;
+  userId: string;
   items: CartItemResponse[];
 }
 
@@ -168,31 +199,13 @@ export interface OrderResponse {
 }
 
 export interface PaymentResponse {
-  id?: string;
+  id: string;
   orderId: string;
   orderCode: string;
   paymethod: string;
   amount: number;
-  transactionId?: string;
+  transactionId: string;
   status: number; // 1 success, 0 refund
-  createdAt: string;
-}
-
-export interface ChatResponse {
-  id: string;
-  userId: string;
-  sessionData: Record<string, any>;
-  messages: MessageResponse[];
-  createdAt: string;
-}
-
-export interface MessageResponse {
-  id: string;
-  chatId: string;
-  isBot: boolean;
-  content: string;
-  products: string[];
-  extraData: Record<string, any>;
   createdAt: string;
 }
 
@@ -206,3 +219,21 @@ export type Province = {
   province: string;
   wards: Ward[];
 };
+
+export interface MessageResponse {
+  id: string;
+  chatId: string;
+  role: string;
+  content: string;
+  products?: ProductListItemResponse[];
+  extraData?: Record<string, any>;
+  createdAt: string;
+}
+
+export interface ChatResponse {
+  id: string;
+  userId: string;
+  sessionData?: Record<string, any>;
+  messages: MessageResponse[];
+  createdAt: string;
+}

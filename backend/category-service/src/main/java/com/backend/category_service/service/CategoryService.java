@@ -102,7 +102,7 @@ public class CategoryService {
 
     // thêm category
     @Transactional
-    public CategoryResponse createCategory(CategoryRequest request, MultipartFile image) {
+    public void createCategory(CategoryRequest request, MultipartFile image) {
 
         if (categoryRepository.existsByName(request.getName())) {
             throw new ConflictException("Tên danh mục đã được sử dụng");
@@ -127,13 +127,11 @@ public class CategoryService {
         saved.setImage(imageUrl);
 
         categoryRepository.save(saved);
-
-        return CategoryMapper.toResponse(saved);
     }
 
     // cập nhật category
     @Transactional
-    public CategoryResponse updateCategory(
+    public void updateCategory(
             String id,
             CategoryRequest request,
             MultipartFile image) {
@@ -154,13 +152,11 @@ public class CategoryService {
             String imageUrl = uploadImageOnCloudinary(image, category.getId());
             category.setImage(imageUrl);
         }
-
-        return CategoryMapper.toResponse(category);
     }
 
     // cập nhật status
     @Transactional
-    public CategoryResponse updateCategoryStatus(String id, Integer status) {
+    public void updateCategoryStatus(String id, Integer status) {
 
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Danh mục không tìm thấy"));
@@ -172,8 +168,6 @@ public class CategoryService {
         if (Objects.equals(status, 0)) {
             productServiceClient.hideProductsByCategoryInternal(id);
         }
-
-        return CategoryMapper.toResponse(category);
     }
 
     // xóa category

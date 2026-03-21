@@ -90,7 +90,7 @@ public class UserService {
     }
 
     // tạo user
-    public UserResponse createUser(UserRequest request) {
+    public void createUser(UserRequest request) {
 
         if (request.getEmail() != null &&
                 !ValidationUtils.validateEmail(request.getEmail())) {
@@ -124,13 +124,11 @@ public class UserService {
                 request.getStatus() == null ? 1 : request.getStatus());
 
         userRepository.save(user);
-
-        return UserMapper.toResponse(user);
     }
 
     // cập nhật user
     @Transactional
-    public UserResponse updateUser(String id, UserRequest request) {
+    public void updateUser(String id, UserRequest request) {
 
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Người dùng không tồn tại"));
@@ -171,19 +169,16 @@ public class UserService {
             user.setPassword(passwordEncoder.encode(request.getPassword()));
         }
 
-        return UserMapper.toResponse(user);
     }
 
     // cập nhật status
-    public UserResponse updateUserStatus(String id, Integer status) {
+    public void updateUserStatus(String id, Integer status) {
 
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Người dùng không tìm thấy"));
 
         user.setStatus(status);
         userRepository.save(user);
-
-        return UserMapper.toResponse(user);
     }
 
     // xóa user

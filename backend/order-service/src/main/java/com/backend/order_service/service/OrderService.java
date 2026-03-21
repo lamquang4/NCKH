@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.backend.order_service.dto.request.OrderRequest;
 import com.backend.order_service.dto.request.StockRequest;
 import com.backend.order_service.dto.response.OrderResponse;
-import com.backend.order_service.dto.response.ProductResponse;
+import com.backend.order_service.dto.response.ProductListItemResponse;
 import com.backend.order_service.entity.Order;
 import com.backend.order_service.entity.OrderItem;
 import com.backend.order_service.exception.BadRequestException;
@@ -313,11 +313,11 @@ public class OrderService {
                                 .distinct()
                                 .toList();
 
-                List<ProductResponse> products = productServiceClient.getProductsByIdsInternal(productIds);
+                List<ProductListItemResponse> products = productServiceClient.getProductsByIdsInternal(productIds);
 
-                Map<String, ProductResponse> productMap = products.stream()
+                Map<String, ProductListItemResponse> productMap = products.stream()
                                 .collect(Collectors.toMap(
-                                                ProductResponse::getId,
+                                                ProductListItemResponse::getId,
                                                 p -> p));
 
                 return OrderMapper.toResponse(order, productMap);

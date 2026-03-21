@@ -83,8 +83,16 @@ public class BrandService {
         return BrandMapper.toResponse(brand);
     }
 
+    // lấy 1 brand theo slug
+    public BrandResponse getBrandBySlug(String slug) {
+        Brand brand = brandRepository.findBySlug(slug)
+                .orElseThrow(() -> new NotFoundException("Thương hiệu không tìm thấy"));
+
+        return BrandMapper.toResponse(brand);
+    }
+
     // tạo brand
-    public BrandResponse createBrand(BrandRequest request) {
+    public void createBrand(BrandRequest request) {
 
         if (brandRepository.existsByName(request.getName())) {
             throw new ConflictException("Tên thương hiệu đã được sử dụng");
@@ -94,12 +102,10 @@ public class BrandService {
         brand.setSlug(SlugUtil.toSlug(request.getName()));
 
         brandRepository.save(brand);
-
-        return BrandMapper.toResponse(brand);
     }
 
     // cập nhật brand
-    public BrandResponse updateBrand(String id, BrandRequest request) {
+    public void updateBrand(String id, BrandRequest request) {
 
         Brand brand = brandRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Thương hiệu không tìm thấy"));
@@ -114,13 +120,11 @@ public class BrandService {
         brand.setSlug(SlugUtil.toSlug(brand.getName()));
 
         brand = brandRepository.save(brand);
-
-        return BrandMapper.toResponse(brand);
     }
 
     // cập nhật status
     @Transactional
-    public BrandResponse updateBrandStatus(String id, Integer status) {
+    public void updateBrandStatus(String id, Integer status) {
 
         Brand brand = brandRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Thương hiệu không tìm thấy"));
@@ -132,8 +136,6 @@ public class BrandService {
         if (Objects.equals(status, 0)) {
             productServiceClient.hideProductsByBrandInternal(id);
         }
-
-        return BrandMapper.toResponse(brand);
     }
 
     // xóa brand

@@ -30,13 +30,3 @@ docker compose up --build
 | Database         | MySQL, MongoDB, Redis     |
 | Media Storage    | Cloudinary                |
 | CI/CD            | GitHub Actions            |
-
-## Triển khai môi tường thực tế
-
-| Hạng mục   | Môi trường / Nền tảng |
-| ---------- | --------------------- |
-| Frontend   | Render                |
-| Backend    | Render                |
-| DB MySQL   | Aiven                 |
-| DB MongoDB | MongoDB Atlas         |
-| DB Redis   | Upstash               |
