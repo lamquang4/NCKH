@@ -21,9 +21,7 @@ function ChatContainer({ onClose, chat }: Props) {
     <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-16">
       <div
         className={`bg-white pointer-events-auto shadow-xl flex flex-col transition-all duration-300 w-full h-full
-    ${
-      isExpanded ? "rounded-none" : "md:w-[600px] md:h-[580px] md:rounded-2xl"
-    }`}
+    ${isExpanded ? "rounded-none" : "md:w-[600px] md:h-[580px] md:rounded-xl"}`}
       >
         <ChatHeader
           onClose={onClose}

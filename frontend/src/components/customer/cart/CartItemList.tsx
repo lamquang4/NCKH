@@ -129,7 +129,7 @@ function CartItemList({ cart, isLoading = false, mutate }: Props) {
               <h4>Không có gì trong giỏ hết</h4>
 
               <Link
-                to={"/books/all"}
+                to={"/products/all"}
                 className="text-[0.9rem] border-2 uppercase border-primary rounded-md font-semibold px-3 py-2 hover:bg-primary text-primary hover:text-white"
               >
                 Mua hàng ngay

@@ -38,7 +38,7 @@ public class AssistantService {
 
                 chatServiceClient.sendUserMessage(token, request);
 
-                AssistantResponse aiResponse = callAI(chat, request.getContent());
+                AssistantResponse aiResponse = callAI(chat, request.getContent(), token);
 
                 if (aiResponse == null || aiResponse.getContent() == null) {
                         aiResponse = AssistantResponse.builder()
@@ -56,7 +56,7 @@ public class AssistantService {
                 chatServiceClient.saveAssistantMessage(aiMessage);
         }
 
-        private AssistantResponse callAI(ChatResponse chat, String currentMessage) {
+        private AssistantResponse callAI(ChatResponse chat, String currentMessage, String token) {
                 List<Map<String, String>> messages = chat.getMessages().stream()
                                 .map(m -> Map.of(
                                                 "role", mapRole(m.getRole()),
@@ -67,7 +67,8 @@ public class AssistantService {
                                 "chatId", chat.getId(),
                                 "userId", chat.getUserId(),
                                 "chatInput", currentMessage,
-                                "messages", messages);
+                                "messages", messages,
+                                "token", token);
 
                 String rawResponse = webClient.post()
                                 .uri(webhookPath)

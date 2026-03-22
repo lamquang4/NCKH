@@ -48,6 +48,7 @@ function ChatFooter({ chatId }: Props) {
       content: message,
       chatId: chatId,
     });
+
     mutate();
 
     inputRef.current!.value = "";

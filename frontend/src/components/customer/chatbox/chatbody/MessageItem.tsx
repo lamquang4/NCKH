@@ -38,14 +38,20 @@ function MessageItem({ type, text, products }: props) {
         }`}
       >
         <div
-          className={`inline-block px-4 py-2 rounded-xl break-anywhere whitespace-pre-wrap   ${
+          className={`inline-block px-4 py-2 rounded-xl break-anywhere whitespace-pre-wrap ${
             type === "ASSISTANT"
               ? "bg-gray-100 text-black"
               : "bg-primary text-white"
-          }
-      `}
+          }`}
         >
-          {text}
+          {type === "ASSISTANT" ? (
+            <span
+              dangerouslySetInnerHTML={{ __html: text }}
+              className="[&_a]:text-primary [&_a]:underline"
+            />
+          ) : (
+            text
+          )}
         </div>
 
         {type === "ASSISTANT" && products && (
