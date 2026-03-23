@@ -9,14 +9,10 @@ type Props = {
 };
 
 function CategoryDropDown({ categories, categoryDropDownOpen }: Props) {
+  if (!categoryDropDownOpen) return null;
   return (
     <ul
-      className={`text-[0.9rem] absolute top-full right-0 z-20 bg-white shadow-md rounded-sm overflow-hidden w-max transition-all duration-100 origin-top
-  ${
-    categoryDropDownOpen
-      ? "opacity-100 scale-100 translate-y-1"
-      : "opacity-0 scale-95 -translate-y-1 pointer-events-none"
-  }`}
+      className={`text-[0.9rem] absolute top-full right-0 z-20 bg-white shadow-md rounded-sm overflow-hidden w-max transition-all duration-100 origin-top`}
     >
       <div className="block w-full text-black">
         <ul className="space-y-2">

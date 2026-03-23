@@ -22,11 +22,11 @@ docker compose up --build
 
 ## Công nghệ sử dụng
 
-| Hạng mục         | Công nghệ / Công cụ       |
-| ---------------- | ------------------------- |
-| Frontend         | Vite, TypeScript, ReactJS |
-| Backend          | Spring Boot               |
-| Containerization | Docker                    |
-| Database         | MySQL, MongoDB, Redis     |
-| Media Storage    | Cloudinary                |
-| CI/CD            | GitHub Actions            |
+| Hạng mục         | Công nghệ / Công cụ              |
+| ---------------- | -------------------------------- |
+| Frontend         | Vite, TypeScript, ReactJS, Redux |
+| Backend          | Spring Boot                      |
+| Containerization | Docker                           |
+| Database         | MySQL, MongoDB, Redis            |
+| Media Storage    | Cloudinary                       |
+| CI/CD            | GitHub Actions                   |

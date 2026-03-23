@@ -6,19 +6,20 @@ import useSendMessage from "../../../../hooks/customer/chat/useSendMessage";
 import useGetAccount from "../../../../hooks/auth/useGetAccount";
 import toast from "react-hot-toast";
 import ChatVoice from "./ChatVoice";
-import useGetChat from "../../../../hooks/customer/chat/useGetChat";
+import { openAuthModal } from "../../../../redux/slices/AuthModalSlice";
+import { useDispatch } from "react-redux";
 
 type Props = {
   chatId: string;
 };
 
 function ChatFooter({ chatId }: Props) {
+  const dispatch = useDispatch();
   const [textLength, setTextLength] = useState<number>(0);
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
 
   const { sendMessage, isLoading } = useSendMessage();
   const { account } = useGetAccount("customer");
-  const { mutate } = useGetChat();
 
   const handleInput = useCallback(() => {
     const el = inputRef.current;
@@ -40,20 +41,29 @@ function ChatFooter({ chatId }: Props) {
     }
 
     if (!account?.id) {
+      dispatch(openAuthModal("login"));
       toast.error("Bạn phải đăng nhập để nhắn tin với trợ lý ảo");
       return;
     }
 
-    await sendMessage({
+    const optimisticMessage = {
+      id: `temp-${Date.now()}`,
       content: message,
-      chatId: chatId,
-    });
-
-    mutate();
+      role: "user",
+      createdAt: new Date().toISOString(),
+    };
 
     inputRef.current!.value = "";
     inputRef.current!.style.height = "auto";
     setTextLength(0);
+
+    await sendMessage(
+      {
+        content: message,
+        chatId: chatId,
+      },
+      optimisticMessage,
+    );
   };
 
   return (

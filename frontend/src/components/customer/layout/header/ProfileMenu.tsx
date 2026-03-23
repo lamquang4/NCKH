@@ -2,25 +2,22 @@ import { memo } from "react";
 import { Link } from "react-router-dom";
 import useGetAccount from "../../../../hooks/auth/useGetAccount";
 import useLogout from "../../../../hooks/auth/useLogout";
-
+import { openAuthModal } from "../../../../redux/slices/AuthModalSlice";
+import { useDispatch } from "react-redux";
 type Props = {
-  onLogin: () => void;
-  onRegister: () => void;
   profileMenuOpen: boolean;
 };
 
-function ProfileMenu({ onLogin, onRegister, profileMenuOpen }: Props) {
+function ProfileMenu({ profileMenuOpen }: Props) {
   const { account, isLoading, mutate } = useGetAccount("customer");
   const { handleLogout } = useLogout();
+  const dispatch = useDispatch();
+
+  if (!profileMenuOpen) return null;
 
   return (
     <div
-      className={`text-[0.9rem] font-medium absolute top-full right-0 z-20 bg-white shadow-md rounded-sm overflow-hidden w-max transition-all duration-100 origin-top
-      ${
-        profileMenuOpen
-          ? "opacity-100 scale-100 translate-y-1"
-          : "opacity-0 scale-95 -translate-y-1 pointer-events-none"
-      }`}
+      className={`text-[0.9rem] font-medium absolute top-full right-0 z-20 bg-white shadow-md rounded-sm overflow-hidden w-max transition-all duration-100 origin-top`}
     >
       {isLoading ? null : account ? (
         <>
@@ -55,14 +52,14 @@ function ProfileMenu({ onLogin, onRegister, profileMenuOpen }: Props) {
       ) : (
         <>
           <button
-            onClick={onLogin}
+            onClick={() => dispatch(openAuthModal("login"))}
             className="hover:bg-gray-100 w-full block p-2.5 text-left"
           >
             Đăng nhập
           </button>
 
           <button
-            onClick={onRegister}
+            onClick={() => dispatch(openAuthModal("register"))}
             className="hover:bg-gray-100 w-full block p-2.5 text-left"
           >
             Đăng ký

@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Image from "../../ui/Image";
 import ChatContainer from "../chatbox/ChatContainer";
 import Overplay from "../ui/Overplay";
@@ -12,6 +12,18 @@ function FloatingWidget() {
   const toggleChat = useCallback(() => {
     setIsOpen((prev) => !prev);
   }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
 
   return (
     <>

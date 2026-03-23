@@ -28,6 +28,7 @@ function SearchMobile({ onToggleSearch, searchOpen }: Props) {
     navigate(target);
     setSearch("");
   };
+
   useEffect(() => {
     if (searchOpen) {
       document.body.style.overflow = "hidden";
