@@ -17,7 +17,6 @@ import MenuDropDown from "./CategoryDropDown";
 import useGetActiveCategories from "../../../../hooks/customer/category/useGetActiveCategories";
 
 function Header() {
-  const [authType, setAuthType] = useState<"login" | "register" | null>(null);
   const [searchOpen, setSearchOpen] = useState<boolean>(false);
   const [menuMobileOpen, setMenuMobileOpen] = useState<boolean>(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState<boolean>(false);
@@ -121,11 +120,7 @@ function Header() {
                   <span className="font-medium">Tài khoản</span>
                 </div>
 
-                <ProfileMenu
-                  profileMenuOpen={profileMenuOpen}
-                  onLogin={() => setAuthType("login")}
-                  onRegister={() => setAuthType("register")}
-                />
+                <ProfileMenu profileMenuOpen={profileMenuOpen} />
               </div>
 
               <Link to={"/cart"} className="relative">
@@ -155,11 +150,7 @@ function Header() {
                 onMouseLeave={toggleProfileMenu}
               >
                 <AiOutlineUser size={24} />
-                <ProfileMenu
-                  profileMenuOpen={profileMenuOpen}
-                  onLogin={() => setAuthType("login")}
-                  onRegister={() => setAuthType("register")}
-                />
+                <ProfileMenu profileMenuOpen={profileMenuOpen} />
               </div>
 
               <Link to={"/cart"} className="relative">
@@ -182,13 +173,7 @@ function Header() {
         </div>
       </header>
 
-      {authType && (
-        <AuthModal
-          type={authType}
-          onClose={() => setAuthType(null)}
-          onSwitch={(type) => setAuthType(type)}
-        />
-      )}
+      <AuthModal />
 
       {searchOpen && <Overplay onClose={toggleSearch} IndexForZ={14} />}
     </>

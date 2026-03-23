@@ -10,13 +10,15 @@ import useGetAccount from "../../../../hooks/auth/useGetAccount";
 import useGetCart from "../../../../hooks/customer/cart/useGetCart";
 import toast from "react-hot-toast";
 import ProductDetailSkeleton from "../../skeleton/ProductDetailSkeleton";
-
+import { openAuthModal } from "../../../../redux/slices/AuthModalSlice";
+import { useDispatch } from "react-redux";
 type Props = {
   product: ProductDetailResponse;
 };
 
 function ProductDetail({ product }: Props) {
   const max = 15;
+  const dispatch = useDispatch();
   const [quantity, setQuantity] = useState<number>(1);
 
   const { account } = useGetAccount("customer");
@@ -39,12 +41,13 @@ function ProductDetail({ product }: Props) {
     }
 
     if (!account?.id) {
+      dispatch(openAuthModal("login"));
       toast.error("Bạn phải đăng nhập để mua hàng");
       return;
     }
 
     const existingItem = cart?.items?.find(
-      (item: any) => item.bookId === product.id,
+      (item) => item.productId === product.id,
     );
 
     const currentQuantity = existingItem ? existingItem.quantity : 0;

@@ -58,7 +58,11 @@ function LoginForm() {
                   Đăng nhập
                 </h1>
 
-                <form className="space-y-[15px]" onSubmit={handleSubmit}>
+                <form
+                  className="space-y-[15px]"
+                  onSubmit={handleSubmit}
+                  autoComplete="off"
+                >
                   <div className="space-y-[5px]">
                     <label
                       htmlFor=""
@@ -92,6 +96,7 @@ function LoginForm() {
                         value={data.password}
                         onChange={handleChange}
                         placeholder="Nhập mật khẩu"
+                        autoComplete="new-password"
                         className="text-[0.9rem] block w-full px-3 pr-12 py-2 outline-none border border-gray-300"
                         required
                       />
