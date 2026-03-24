@@ -2,7 +2,6 @@ import { HiOutlineEyeOff, HiOutlineEye } from "react-icons/hi";
 import { memo, useState } from "react";
 import useLogin from "../../../../hooks/auth/useLogin";
 import toast from "react-hot-toast";
-import useGetAccount from "../../../../hooks/auth/useGetAccount";
 import Overplay from "../../ui/Overplay";
 import Loading from "../../../ui/Loading";
 
@@ -16,7 +15,6 @@ function LoginModal({ onClose, onSwitchRegister }: Props) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const { handleLogin, isLoading } = useLogin();
-  const { isLoading: isLoadingAccount, mutate } = useGetAccount("customer");
 
   const toggleShowPassword = () => {
     setShowPassword((prev) => !prev);
@@ -37,10 +35,6 @@ function LoginModal({ onClose, onSwitchRegister }: Props) {
         email: data.email,
         password: data.password,
       });
-
-      await mutate();
-
-      toast.success("Đăng nhập thành công");
 
       setData({
         email: "",
@@ -85,16 +79,9 @@ function LoginModal({ onClose, onSwitchRegister }: Props) {
 
               <hr className="border-gray-300" />
 
-              <form
-                className="space-y-[15px]"
-                autoComplete="off"
-                onSubmit={handleSubmit}
-              >
+              <form className="space-y-[15px]" onSubmit={handleSubmit}>
                 <div className="space-y-[5px]">
-                  <label
-                    htmlFor=""
-                    className="block   text-[0.9rem] font-medium"
-                  >
+                  <label htmlFor="" className="block text-[0.9rem] font-medium">
                     Email
                   </label>
                   <input
@@ -120,7 +107,6 @@ function LoginModal({ onClose, onSwitchRegister }: Props) {
                       value={data.password}
                       onChange={handleChange}
                       placeholder="Nhập mật khẩu"
-                      autoComplete="new-password"
                       className="text-[0.9rem] block w-full  px-3 pr-12 py-2 border border-gray-200"
                       required
                     />
@@ -163,7 +149,7 @@ function LoginModal({ onClose, onSwitchRegister }: Props) {
         </div>
       </div>
 
-      {(isLoading || isLoadingAccount) && (
+      {isLoading && (
         <Overplay IndexForZ={99}>
           <Loading height={0} size={55} color="white" thickness={8} />
           <h4 className="text-white">Vui lòng chờ trong giây lát ...</h4>

@@ -2,9 +2,11 @@ import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import type { ProductRequest } from "../../../types/type";
+import useGetProducts from "./useGetProducts";
 
 export default function useAddProduct() {
   const [isLoading, setIsLoading] = useState(false);
+  const { mutate } = useGetProducts();
   const addProduct = async (data: ProductRequest, files: File[]) => {
     if (!data) {
       return;
@@ -44,6 +46,7 @@ export default function useAddProduct() {
           "Content-Type": "multipart/form-data",
         },
       });
+      await mutate();
       toast.dismiss(loadingToast);
       toast.success("Thêm thành công");
     } catch (err) {

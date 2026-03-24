@@ -2,9 +2,11 @@ import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import type { UserRequest } from "../../../types/type";
+import useGetAdmins from "./useGetAdmins";
 
 export default function useAddAdmin() {
   const [isLoading, setIsLoading] = useState(false);
+  const { mutate } = useGetAdmins();
   const addAdmin = async (data: UserRequest) => {
     if (!data) {
       return;
@@ -14,6 +16,7 @@ export default function useAddAdmin() {
     try {
       const url = `${import.meta.env.VITE_BACKEND_URL}/user`;
       await axios.post(url, data);
+      await mutate();
       toast.dismiss(loadingToast);
       toast.success("Thêm thành công");
     } catch (err) {

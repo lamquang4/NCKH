@@ -2,9 +2,11 @@ import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import type { CategoryRequest } from "../../../types/type";
+import useGetCategories from "./useGetCategories";
 
 export default function useAddCategory() {
   const [isLoading, setIsLoading] = useState(false);
+  const { mutate } = useGetCategories();
 
   const addCategory = async (data: CategoryRequest, file: File) => {
     if (!data) return;
@@ -39,7 +41,7 @@ export default function useAddCategory() {
           "Content-Type": "multipart/form-data",
         },
       });
-
+      await mutate();
       toast.dismiss(loadingToast);
       toast.success("Thêm thành công");
     } catch (err) {

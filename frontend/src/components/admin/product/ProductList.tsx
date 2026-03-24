@@ -16,15 +16,8 @@ import useUpdateStatusProduct from "../../../hooks/admin/product/useUpdateStatus
 import toast from "react-hot-toast";
 
 function ProductList() {
-  const {
-    products,
-    isLoading,
-    totalItems,
-    totalPages,
-    currentPage,
-    limit,
-    mutate,
-  } = useGetProducts();
+  const { products, isLoading, totalItems, totalPages, currentPage, limit } =
+    useGetProducts();
   const { deleteProduct, isLoading: isLoadingDelete } = useDeleteProduct();
   const { updateStatusProduct, isLoading: isLoadingUpdate } =
     useUpdateStatusProduct();
@@ -51,10 +44,8 @@ function ProductList() {
 
     try {
       await deleteProduct(id);
-      mutate();
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
-      mutate();
     }
   };
 
@@ -65,10 +56,8 @@ function ProductList() {
 
     try {
       await updateStatusProduct(id, status);
-      mutate();
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
-      mutate();
     }
   };
 

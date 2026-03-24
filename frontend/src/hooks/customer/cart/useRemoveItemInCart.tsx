@@ -2,10 +2,11 @@ import axios from "axios";
 import { useState } from "react";
 import { getCookie } from "../../../utils/cookieUtil";
 import { toast } from "react-hot-toast";
+import useGetCart from "./useGetCart";
 
 export function useRemoveItemInCart() {
   const [isLoading, setIsLoading] = useState(false);
-
+  const { mutate } = useGetCart();
   const removeItem = async (userId: string, productId: string) => {
     if (!userId || !productId) {
       return;
@@ -22,6 +23,7 @@ export function useRemoveItemInCart() {
           Authorization: `Bearer ${token}`,
         },
       });
+      await mutate();
       toast.dismiss(loadingToast);
       toast.success("Xóa khỏi giỏ hàng thành công");
     } catch (err: any) {

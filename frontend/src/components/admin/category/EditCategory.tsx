@@ -19,7 +19,7 @@ function EditCategory() {
   const [openViewer, setOpenViewer] = useState(false);
   const [viewerImage, setViewerImage] = useState<string>("");
 
-  const { category, isLoading, mutate } = useGetCategory(id as string);
+  const { category, isLoading } = useGetCategory(id as string);
   const { updateCategory, isLoading: isLoadingUpdate } = useUpdateCategory(
     id as string,
   );
@@ -77,7 +77,6 @@ function EditCategory() {
         orderedFiles[0],
       );
 
-      mutate();
       clearImages();
     } catch (err: any) {
       toast.error(err?.response?.data?.message);

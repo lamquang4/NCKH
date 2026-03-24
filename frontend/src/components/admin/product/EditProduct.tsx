@@ -44,7 +44,7 @@ function EditProduct() {
 
   const max = 10;
 
-  const { product, isLoading, mutate } = useGetProduct(id as string);
+  const { product, isLoading } = useGetProduct(id as string);
   const { updateProduct, isLoading: isLoadingUpdate } = useUpdateProduct(
     id as string,
   );
@@ -73,7 +73,6 @@ function EditProduct() {
     specifications,
     setSpecifications,
     addSpecification,
-    clearSpecifications,
     removeSpecification,
     updateSpecification,
   } = useSpecification();
@@ -152,7 +151,6 @@ function EditProduct() {
 
     try {
       await deleteImageProduct(product!.id, imageId);
-      mutate();
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
     }
@@ -163,7 +161,6 @@ function EditProduct() {
       await updateImageProduct(product!.id, imageId, file);
       setPreviewImages1([]);
       setSelectedFiles1([]);
-      mutate();
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
     }
@@ -246,8 +243,6 @@ function EditProduct() {
         }
       }
 
-      mutate();
-      clearSpecifications();
       clearImages();
       setPreviewImages1([]);
       setSelectedFiles1([]);

@@ -22,7 +22,6 @@ function CategoryList() {
     totalPages,
     currentPage,
     limit,
-    mutate,
   } = useGetCategories();
   const { deleteCategory, isLoading: isLoadingDelete } = useDeleteCategory();
   const { updateStatusCategory, isLoading: isLoadingUpdate } =
@@ -50,10 +49,8 @@ function CategoryList() {
 
     try {
       await deleteCategory(id);
-      mutate();
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
-      mutate();
     }
   };
 
@@ -64,10 +61,8 @@ function CategoryList() {
 
     try {
       await updateStatusCategory(id, status);
-      mutate();
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
-      mutate();
     }
   };
   return (

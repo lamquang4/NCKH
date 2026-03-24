@@ -23,10 +23,9 @@ function OrderDetail() {
     }
     try {
       await updateStatusOrder(id, status);
-      mutate();
+      await mutate();
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
-      mutate();
     }
   };
 

@@ -1,9 +1,12 @@
 import Cookies from "js-cookie";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useGetAccount from "./useGetAccount";
 
 export default function useLogout() {
   const [isLoading, setIsLoading] = useState(false);
+  const { mutate: mutateAccountCustomer } = useGetAccount("customer");
+  const { mutate: mutateAccountAdmin } = useGetAccount("admin");
   const navigate = useNavigate();
 
   const handleLogout = async (type: "admin" | "customer") => {
@@ -12,9 +15,11 @@ export default function useLogout() {
     try {
       if (type === "admin") {
         Cookies.remove("token-admin");
+        await mutateAccountAdmin();
         navigate("/admin/login", { replace: true });
       } else {
         Cookies.remove("token-customer");
+        await mutateAccountCustomer();
         navigate("/", { replace: true });
       }
     } catch (err) {
