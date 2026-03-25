@@ -11,15 +11,8 @@ import useGetOrders from "../../../hooks/admin/order/useGetOrders";
 import useUpdateStatusOrder from "../../../hooks/admin/order/useUpdateStatusOrder";
 import toast from "react-hot-toast";
 function OrderList() {
-  const {
-    orders,
-    isLoading,
-    totalItems,
-    totalPages,
-    currentPage,
-    limit,
-    mutate,
-  } = useGetOrders();
+  const { orders, isLoading, totalItems, totalPages, currentPage, limit } =
+    useGetOrders();
   const { updateStatusOrder, isLoading: isLoadingUpdate } =
     useUpdateStatusOrder();
 
@@ -29,10 +22,8 @@ function OrderList() {
     }
     try {
       await updateStatusOrder(id, status);
-      mutate();
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
-      mutate();
     }
   };
 

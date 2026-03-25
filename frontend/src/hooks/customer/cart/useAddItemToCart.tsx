@@ -3,9 +3,11 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import type { CartItemRequest } from "../../../types/type";
 import { getCookie } from "../../../utils/cookieUtil";
+import useGetCart from "./useGetCart";
 
 export function useAddItemToCart() {
   const [isLoading, setIsLoading] = useState(false);
+  const { mutate } = useGetCart();
 
   const addItem = async (data: CartItemRequest) => {
     if (!data) {
@@ -27,6 +29,8 @@ export function useAddItemToCart() {
           Authorization: `Bearer ${token}`,
         },
       });
+
+      await mutate();
       toast.dismiss(loadingToast);
       toast.success("Thêm vào giỏ hàng thành công");
     } catch (err: any) {

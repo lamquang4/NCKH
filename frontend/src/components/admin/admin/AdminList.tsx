@@ -23,15 +23,8 @@ function AdminList() {
   ];
 
   const { account } = useGetAccount("admin");
-  const {
-    admins,
-    isLoading,
-    totalItems,
-    totalPages,
-    limit,
-    currentPage,
-    mutate,
-  } = useGetAdmins();
+  const { admins, isLoading, totalItems, totalPages, limit, currentPage } =
+    useGetAdmins();
   const { deleteAdmin, isLoading: isLoadingDelete } = useDeleteAdmin();
   const { updateStatusUser, isLoading: isLoadingUpdate } =
     useUpdateStatusUser();
@@ -48,10 +41,8 @@ function AdminList() {
 
     try {
       await deleteAdmin(id);
-      mutate();
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
-      mutate();
     }
   };
 
@@ -67,14 +58,12 @@ function AdminList() {
 
     try {
       await updateStatusUser(id, status);
-      mutate();
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
-      mutate();
     }
   };
 
-  console.log(admins);
+
 
   return (
     <>

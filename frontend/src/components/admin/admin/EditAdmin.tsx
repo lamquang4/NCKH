@@ -19,7 +19,7 @@ function EditAdmin() {
   });
 
   const { account } = useGetAccount("admin");
-  const { user, isLoading, mutate } = useGetUser(id as string);
+  const { user, isLoading } = useGetUser(id as string);
   const { updateUser, isLoading: isLoadingUpdate } = useUpdateUser(
     id as string,
   );
@@ -40,8 +40,6 @@ function EditAdmin() {
       phone: user.phone || "",
       status: user.status?.toString() || "",
     });
-
-    mutate();
   }, [isLoading, user, navigate]);
 
   const handleChange = (
@@ -90,8 +88,6 @@ function EditAdmin() {
       }
 
       await updateUser(payload);
-
-      mutate();
 
       setData((prev) => ({
         ...prev,

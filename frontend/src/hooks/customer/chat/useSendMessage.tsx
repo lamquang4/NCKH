@@ -5,8 +5,8 @@ import { getCookie } from "../../../utils/cookieUtil";
 import useGetChat from "./useGetChat";
 
 export default function useSendMessage() {
-  const { mutate } = useGetChat();
   const [isLoading, setIsLoading] = useState(false);
+  const { mutate } = useGetChat();
   const sendMessage = async (data: MessageRequest, optimisticMessage: any) => {
     if (!data) {
       return;
@@ -31,7 +31,7 @@ export default function useSendMessage() {
         },
       });
 
-      mutate();
+      await mutate();
     } catch (err) {
       mutate(
         (current: any) => ({

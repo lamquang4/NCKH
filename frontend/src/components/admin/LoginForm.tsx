@@ -5,14 +5,11 @@ import Loading from "../ui/Loading";
 import Overplay from "./ui/Overplay";
 import useLogin from "../../hooks/auth/useLogin";
 import toast from "react-hot-toast";
-import useGetAccount from "../../hooks/auth/useGetAccount";
 function LoginForm() {
   const [data, setData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const { handleLogin, isLoading } = useLogin();
-
-  const { isLoading: isLoadingAccount, mutate } = useGetAccount("customer");
 
   const toggleShowPassword = () => {
     setShowPassword((prev) => !prev);
@@ -34,10 +31,6 @@ function LoginForm() {
         password: data.password,
       });
 
-      await mutate();
-
-      toast.success("Đăng nhập thành công");
-
       setData({
         email: "",
         password: "",
@@ -58,11 +51,7 @@ function LoginForm() {
                   Đăng nhập
                 </h1>
 
-                <form
-                  className="space-y-[15px]"
-                  onSubmit={handleSubmit}
-                  autoComplete="off"
-                >
+                <form className="space-y-[15px]" onSubmit={handleSubmit}>
                   <div className="space-y-[5px]">
                     <label
                       htmlFor=""
@@ -96,8 +85,7 @@ function LoginForm() {
                         value={data.password}
                         onChange={handleChange}
                         placeholder="Nhập mật khẩu"
-                        autoComplete="new-password"
-                        className="text-[0.9rem] block w-full px-3 pr-12 py-2 outline-none border border-gray-300"
+                    className="text-[0.9rem] block w-full px-3 pr-12 py-2 outline-none border border-gray-300"
                         required
                       />
 
@@ -138,7 +126,7 @@ function LoginForm() {
         </div>
       </section>
 
-      {(isLoading || isLoadingAccount) && (
+      {isLoading && (
         <Overplay>
           <Loading height={0} size={55} color="white" thickness={8} />
           <h4 className="text-white">Vui lòng chờ trong giây lát ...</h4>

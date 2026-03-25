@@ -44,14 +44,14 @@ function EditProduct() {
 
   const max = 10;
 
-  const { product, isLoading, mutate } = useGetProduct(id as string);
+  const { product, isLoading } = useGetProduct(id as string);
   const { updateProduct, isLoading: isLoadingUpdate } = useUpdateProduct(
     id as string,
   );
   const { deleteImageProduct, isLoading: isLoadingDeleteImage } =
-    useDeleteImageProduct();
+    useDeleteImageProduct(product?.id || "");
   const { updateImageProduct, isLoading: isLoadingUpdateImage } =
-    useUpdateImageProduct();
+    useUpdateImageProduct(product?.id || "");
   const { categories } = useGetAllCategories();
   const { brands } = useGetAllBrands();
 
@@ -73,7 +73,6 @@ function EditProduct() {
     specifications,
     setSpecifications,
     addSpecification,
-    clearSpecifications,
     removeSpecification,
     updateSpecification,
   } = useSpecification();
@@ -151,8 +150,7 @@ function EditProduct() {
     }
 
     try {
-      await deleteImageProduct(product!.id, imageId);
-      mutate();
+      await deleteImageProduct(imageId);
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
     }
@@ -160,10 +158,9 @@ function EditProduct() {
 
   const handleUpdateImage = async (imageId: string, file: File) => {
     try {
-      await updateImageProduct(product!.id, imageId, file);
+      await updateImageProduct(imageId, file);
       setPreviewImages1([]);
       setSelectedFiles1([]);
-      mutate();
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
     }
@@ -246,8 +243,6 @@ function EditProduct() {
         }
       }
 
-      mutate();
-      clearSpecifications();
       clearImages();
       setPreviewImages1([]);
       setSelectedFiles1([]);

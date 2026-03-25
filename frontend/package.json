@@ -24,6 +24,7 @@
     "@tiptap/react": "^3.7.2",
     "@tiptap/starter-kit": "^3.7.2",
     "axios": "^1.12.2",
+    "babel-plugin-react-compiler": "^19.0.0-beta-af1b7da-20250417",
     "browser-router": "^0.2.0",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",

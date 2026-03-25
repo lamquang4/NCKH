@@ -13,9 +13,9 @@ function OrderDetail() {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { order, isLoading, mutate } = useGetOrder(id as string);
+  const { order, isLoading } = useGetOrder(id as string);
   const { updateStatusOrder, isLoading: isLoadingUpdate } =
-    useUpdateStatusOrder();
+    useUpdateStatusOrder(id as string);
 
   const handleUpdateStatus = async (id: string, status: number) => {
     if (!id && !status) {
@@ -23,10 +23,8 @@ function OrderDetail() {
     }
     try {
       await updateStatusOrder(id, status);
-      mutate();
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
-      mutate();
     }
   };
 

@@ -11,15 +11,8 @@ import toast from "react-hot-toast";
 import useUpdateStatusUser from "../../../hooks/admin/user/useUpdateStatusUser";
 
 function CustomerList() {
-  const {
-    customers,
-    isLoading,
-    totalItems,
-    totalPages,
-    currentPage,
-    limit,
-    mutate,
-  } = useGetCustomers();
+  const { customers, isLoading, totalItems, totalPages, currentPage, limit } =
+    useGetCustomers();
   const { updateStatusUser, isLoading: isLoadingUpdate } =
     useUpdateStatusUser();
 
@@ -36,10 +29,8 @@ function CustomerList() {
 
     try {
       await updateStatusUser(id, status);
-      mutate();
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
-      mutate();
     }
   };
 

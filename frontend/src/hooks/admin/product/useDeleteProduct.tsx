@@ -2,9 +2,11 @@ import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
+import useGetProducts from "./useGetProducts";
 
 export default function useDeleteProduct() {
   const [isLoading, setIsLoading] = useState(false);
+  const { mutate } = useGetProducts();
   const deleteProduct = async (id: string) => {
     const result = await Swal.fire({
       title: `Xác nhận xóa?`,
@@ -24,6 +26,7 @@ export default function useDeleteProduct() {
     try {
       const url = `${import.meta.env.VITE_BACKEND_URL}/product/${id}`;
       await axios.delete(url);
+      await mutate();
       toast.dismiss(loadingToast);
       toast.success("Xóa thành công");
     } catch (err) {

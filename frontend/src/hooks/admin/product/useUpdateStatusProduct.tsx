@@ -2,9 +2,11 @@ import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
+import useGetProducts from "./useGetProducts";
 
 export default function useUpdateStatusProduct() {
   const [isLoading, setIsLoading] = useState(false);
+  const { mutate } = useGetProducts();
   const updateStatusProduct = async (id: string, status: number) => {
     const action = status === 1 ? "hiện" : "ẩn";
     const result = await Swal.fire({
@@ -28,7 +30,7 @@ export default function useUpdateStatusProduct() {
         import.meta.env.VITE_BACKEND_URL
       }/product/status/${id}?status=${status}`;
       await axios.patch(url);
-
+      await mutate();
       toast.dismiss(loadingToast);
       toast.success("Cập nhật thành công");
     } catch (err) {

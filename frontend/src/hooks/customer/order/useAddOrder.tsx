@@ -2,9 +2,11 @@ import axios from "axios";
 import { useState } from "react";
 import type { OrderRequest } from "../../../types/type";
 import { getCookie } from "../../../utils/cookieUtil";
+import useGetCart from "../cart/useGetCart";
 
 export default function useAddOrder() {
   const [isLoading, setIsLoading] = useState(false);
+  const { mutate } = useGetCart();
   const addOrder = async (data: OrderRequest) => {
     if (!data) {
       return;
@@ -13,12 +15,20 @@ export default function useAddOrder() {
     try {
       const token = getCookie("token-customer");
 
+      if (!token) {
+        throw new Error("Vui lòng đăng nhập");
+      }
+
       const url = `${import.meta.env.VITE_BACKEND_URL}/order/user`;
       const res = await axios.post(url, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+
+      if (data.paymethod === "cod") {
+        await mutate();
+      }
 
       return res.data;
     } catch (err) {

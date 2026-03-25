@@ -27,7 +27,7 @@ function CheckoutForm() {
   const [isOrderPlaced, setIsOrderPlaced] = useState<boolean>(false);
 
   const { provinces } = useGetProvinces();
-  const { cart, isLoading: isLoadingCart, mutate: mutateCart } = useGetCart();
+  const { cart, isLoading: isLoadingCart } = useGetCart();
   const { addOrder, isLoading: isLoadingOrder } = useAddOrder();
   const { createPaymentMomo, isLoading: isLoadingPaymentMomo } =
     usePaymentMomo();
@@ -138,7 +138,6 @@ function CheckoutForm() {
 
       if (paymethod === "cod") {
         navigate("/order-result?result=successful");
-        mutateCart();
       } else {
         const momoResponse = await createPaymentMomo(res.orderCode);
         window.location.href = momoResponse.payUrl;
