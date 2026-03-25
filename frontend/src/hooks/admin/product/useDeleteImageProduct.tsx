@@ -4,11 +4,10 @@ import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import useGetProduct from "./useGetProduct";
 
-export default function useDeleteImageProduct() {
+export default function useDeleteImageProduct(productId: string) {
   const [isLoading, setIsLoading] = useState(false);
-
-  const deleteImageProduct = async (productId: string, imageId: string) => {
-    const { mutate } = useGetProduct(productId);
+ const { mutate } = useGetProduct(productId);
+  const deleteImageProduct = async (imageId: string) => {
     const result = await Swal.fire({
       title: `Xác nhận xóa?`,
       text: `Bạn có chắc muốn xóa hình sản phẩm này không?`,

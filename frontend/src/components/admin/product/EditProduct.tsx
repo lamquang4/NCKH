@@ -49,9 +49,9 @@ function EditProduct() {
     id as string,
   );
   const { deleteImageProduct, isLoading: isLoadingDeleteImage } =
-    useDeleteImageProduct();
+    useDeleteImageProduct(product?.id || "");
   const { updateImageProduct, isLoading: isLoadingUpdateImage } =
-    useUpdateImageProduct();
+    useUpdateImageProduct(product?.id || "");
   const { categories } = useGetAllCategories();
   const { brands } = useGetAllBrands();
 
@@ -150,7 +150,7 @@ function EditProduct() {
     }
 
     try {
-      await deleteImageProduct(product!.id, imageId);
+      await deleteImageProduct(imageId);
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
     }
@@ -158,7 +158,7 @@ function EditProduct() {
 
   const handleUpdateImage = async (imageId: string, file: File) => {
     try {
-      await updateImageProduct(product!.id, imageId, file);
+      await updateImageProduct(imageId, file);
       setPreviewImages1([]);
       setSelectedFiles1([]);
     } catch (err: any) {

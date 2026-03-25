@@ -3,19 +3,13 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import useGetProduct from "./useGetProduct";
 
-export default function useUpdateImageProduct() {
+export default function useUpdateImageProduct(productId: string) {
   const [isLoading, setIsLoading] = useState(false);
-
-  const updateImageProduct = async (
-    productId: string,
-    imageId: string,
-    file: File,
-  ) => {
+  const { mutate } = useGetProduct(productId);
+  const updateImageProduct = async (imageId: string, file: File) => {
     if (!productId || !imageId || !file) {
       return;
     }
-
-    const { mutate } = useGetProduct(productId);
 
     const loadingToast = toast.loading("Đang cập nhật hình...");
     setIsLoading(true);

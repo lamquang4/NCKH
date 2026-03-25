@@ -3,9 +3,11 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import useGetOrders from "./useGetOrders";
+import useGetOrder from "./useGetOrder";
 
-export default function useUpdateStatusOrder() {
+export default function useUpdateStatusOrder(id?: string) {
   const [isLoading, setIsLoading] = useState(false);
+  const { mutate: mutateOrder } = useGetOrder(id || "");
   const { mutate: mutateOrders } = useGetOrders();
   const updateStatusOrder = async (id: string, status: number) => {
     const result = await Swal.fire({
@@ -29,7 +31,9 @@ export default function useUpdateStatusOrder() {
         import.meta.env.VITE_BACKEND_URL
       }/order/status/${id}?status=${status}`;
       await axios.patch(url);
-      await mutateOrders();
+      await mutateOrder?.();
+      await mutateOrders?.();
+
       toast.dismiss(loadingToast);
       toast.success("Cập nhật thành công");
     } catch (err) {
