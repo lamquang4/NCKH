@@ -46,14 +46,10 @@ function EditBrand() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    try {
-      await updateBrand({
-        name: data.name.trim(),
-        status: Number(data.status),
-      });
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message);
-    }
+    await updateBrand({
+      name: data.name.trim(),
+      status: Number(data.status),
+    });
   };
 
   return (

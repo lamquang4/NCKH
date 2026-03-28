@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.backend.product_service.dto.request.ProductQueryRequest;
 import com.backend.product_service.dto.request.ProductRequest;
 import com.backend.product_service.dto.request.StockRequest;
+import com.backend.product_service.dto.response.ApiResponse;
 import com.backend.product_service.dto.response.ProductAssistantResponse;
 import com.backend.product_service.dto.response.ProductDetailResponse;
 import com.backend.product_service.dto.response.ProductListItemResponse;
@@ -43,7 +44,7 @@ public class ProductController {
         }
 
         @GetMapping
-        public ResponseEntity<?> getAllProducts(
+        public ResponseEntity<ApiResponse<List<ProductListItemResponse>>> getAllProducts(
                         @RequestParam(defaultValue = "1") int page,
                         @RequestParam(defaultValue = "12") int limit,
                         @RequestParam(required = false) String q,
@@ -51,66 +52,90 @@ public class ProductController {
 
                 Page<ProductListItemResponse> productPage = productService.getAllProducts(page, limit, q, status);
 
-                return ResponseEntity.ok(
-                                Map.of(
-                                                "products", productPage.getContent(),
-                                                "totalPages", productPage.getTotalPages(),
-                                                "total", productPage.getTotalElements()));
+                return ResponseEntity.ok(ApiResponse.<List<ProductListItemResponse>>builder()
+                                .data(productPage.getContent())
+                                .totalPages(productPage.getTotalPages())
+                                .total(productPage.getTotalElements())
+                                .build());
         }
 
         @GetMapping("/{id}")
-        public ResponseEntity<ProductDetailResponse> getProductById(
+        public ResponseEntity<ApiResponse<ProductDetailResponse>> getProductById(
                         @PathVariable String id) {
 
-                return ResponseEntity.ok(productService.getProductById(id));
+                return ResponseEntity.ok(ApiResponse.<ProductDetailResponse>builder()
+                                .data(productService.getProductById(id))
+                                .build());
         }
 
         @PostMapping(consumes = "multipart/form-data")
-        public ResponseEntity<Void> createProduct(
+        public ResponseEntity<ApiResponse<Void>> createProduct(
                         @Valid @RequestPart("product") ProductRequest request,
                         @RequestPart(value = "images", required = false) List<MultipartFile> images) {
 
                 productService.createProduct(request, images);
-                return ResponseEntity.status(HttpStatus.CREATED).build();
+                return ResponseEntity.status(HttpStatus.CREATED)
+                                .body(ApiResponse.<Void>builder()
+                                                .message("Tạo sản phẩm thành công")
+                                                .build());
         }
 
         @PutMapping(value = "/{id}", consumes = "multipart/form-data")
-        public ResponseEntity<Void> updateProduct(
+        public ResponseEntity<ApiResponse<Void>> updateProduct(
                         @PathVariable String id,
                         @Valid @RequestPart("product") ProductRequest request,
                         @RequestPart(value = "images", required = false) List<MultipartFile> images) {
 
                 productService.updateProduct(id, request, images);
-                return ResponseEntity.noContent().build();
+                return ResponseEntity.ok(ApiResponse.<Void>builder()
+                                .message("Cập nhật sản phẩm thành công")
+                                .build());
         }
 
         @PatchMapping("/status/{id}")
-        public ResponseEntity<Void> updateProductStatus(
+        public ResponseEntity<ApiResponse<Void>> updateProductStatus(
                         @PathVariable String id,
                         @RequestParam @NotNull Integer status) {
                 productService.updateProductStatus(id, status);
-                return ResponseEntity.noContent().build();
+                return ResponseEntity.ok(ApiResponse.<Void>builder()
+                                .message("Cập nhật trạng thái sản phẩm thành công")
+                                .build());
         }
 
         @DeleteMapping("/{id}")
-        public ResponseEntity<Void> deleteProduct(
+        public ResponseEntity<ApiResponse<Void>> deleteProduct(
                         @PathVariable String id) {
 
                 productService.deleteProduct(id);
-                return ResponseEntity.noContent().build();
+                return ResponseEntity.ok(ApiResponse.<Void>builder()
+                                .message("Xóa sản phẩm thành công")
+                                .build());
         }
 
         @DeleteMapping("/{productId}/image/{imageId}")
-        public ResponseEntity<Void> deleteImage(
+        public ResponseEntity<ApiResponse<Void>> deleteImage(
                         @PathVariable String productId,
                         @PathVariable String imageId) {
 
                 productService.deleteProductImage(productId, imageId);
-                return ResponseEntity.noContent().build();
+                return ResponseEntity.ok(ApiResponse.<Void>builder()
+                                .message("Xóa hình thành công")
+                                .build());
+        }
+
+        @PatchMapping(value = "/{productId}/image/{imageId}", consumes = "multipart/form-data")
+        public ResponseEntity<ApiResponse<Void>> updateProductImage(
+                        @PathVariable String productId,
+                        @PathVariable String imageId,
+                        @RequestPart("file") MultipartFile file) {
+                productService.updateProductImage(productId, imageId, file);
+                return ResponseEntity.ok(ApiResponse.<Void>builder()
+                                .message("Cập nhật hình thành công")
+                                .build());
         }
 
         @GetMapping("/active")
-        public ResponseEntity<?> getActiveProducts(
+        public ResponseEntity<ApiResponse<List<ProductListItemResponse>>> getActiveProducts(
                         @RequestParam(defaultValue = "1") int page,
                         @RequestParam(defaultValue = "12") int limit,
                         @RequestParam(required = false) String q,
@@ -118,15 +143,15 @@ public class ProductController {
 
                 Page<ProductListItemResponse> productPage = productService.getActiveProducts(page, limit, q, sort);
 
-                return ResponseEntity.ok(
-                                Map.of(
-                                                "products", productPage.getContent(),
-                                                "totalPages", productPage.getTotalPages(),
-                                                "total", productPage.getTotalElements()));
+                return ResponseEntity.ok(ApiResponse.<List<ProductListItemResponse>>builder()
+                                .data(productPage.getContent())
+                                .totalPages(productPage.getTotalPages())
+                                .total(productPage.getTotalElements())
+                                .build());
         }
 
         @GetMapping("/active/category/{slug}")
-        public ResponseEntity<?> getActiveProductsByCategory(
+        public ResponseEntity<ApiResponse<List<ProductListItemResponse>>> getActiveProductsByCategory(
                         @PathVariable String slug,
                         @RequestParam(defaultValue = "1") int page,
                         @RequestParam(defaultValue = "12") int limit,
@@ -137,15 +162,15 @@ public class ProductController {
                                 sort,
                                 slug);
 
-                return ResponseEntity.ok(
-                                Map.of(
-                                                "products", productPage.getContent(),
-                                                "totalPages", productPage.getTotalPages(),
-                                                "total", productPage.getTotalElements()));
+                return ResponseEntity.ok(ApiResponse.<List<ProductListItemResponse>>builder()
+                                .data(productPage.getContent())
+                                .totalPages(productPage.getTotalPages())
+                                .total(productPage.getTotalElements())
+                                .build());
         }
 
         @GetMapping("/active/discount")
-        public ResponseEntity<?> getActiveDiscountProducts(
+        public ResponseEntity<ApiResponse<List<ProductListItemResponse>>> getActiveDiscountProducts(
                         @RequestParam(defaultValue = "1") int page,
                         @RequestParam(defaultValue = "12") int limit,
                         @RequestParam(required = false) String q,
@@ -154,42 +179,38 @@ public class ProductController {
                 Page<ProductListItemResponse> productPage = productService.getActiveDiscountProducts(page, limit, q,
                                 sort);
 
-                return ResponseEntity.ok(
-                                Map.of(
-                                                "products", productPage.getContent(),
-                                                "totalPages", productPage.getTotalPages(),
-                                                "total", productPage.getTotalElements()));
+                return ResponseEntity.ok(ApiResponse.<List<ProductListItemResponse>>builder()
+                                .data(productPage.getContent())
+                                .totalPages(productPage.getTotalPages())
+                                .total(productPage.getTotalElements())
+                                .build());
         }
 
         @GetMapping("/active/bestseller")
-        public ResponseEntity<List<ProductListItemResponse>> getActiveBestSellerProducts(
+        public ResponseEntity<ApiResponse<List<ProductListItemResponse>>> getActiveBestSellerProducts(
                         @RequestParam(required = false) Integer limit) {
-                return ResponseEntity.ok(
-                                productService.getActiveBestSellerProducts(limit));
+                return ResponseEntity.ok(ApiResponse.<List<ProductListItemResponse>>builder()
+                                .data(productService.getActiveBestSellerProducts(limit))
+                                .build());
         }
 
         @GetMapping("/active/limit")
-        public ResponseEntity<List<ProductListItemResponse>> getActiveLimitProducts(
+        public ResponseEntity<ApiResponse<List<ProductListItemResponse>>> getActiveLimitProducts(
                         @RequestParam(required = false) String q,
                         @RequestParam(required = false) Integer limit) {
-                return ResponseEntity.ok(
-                                productService.getActiveLimitProducts(q, limit));
+
+                return ResponseEntity.ok(ApiResponse.<List<ProductListItemResponse>>builder()
+                                .data(productService.getActiveLimitProducts(q, limit))
+                                .build());
         }
 
         @GetMapping("/active/slug/{slug}")
-        public ResponseEntity<ProductDetailResponse> getActiveProductBySlug(
+        public ResponseEntity<ApiResponse<ProductDetailResponse>> getActiveProductBySlug(
                         @PathVariable String slug) {
 
-                return ResponseEntity.ok(productService.getActiveProductBySlug(slug));
-        }
-
-        @PatchMapping(value = "/{productId}/image/{imageId}", consumes = "multipart/form-data")
-        public ResponseEntity<Void> updateProductImage(
-                        @PathVariable String productId,
-                        @PathVariable String imageId,
-                        @RequestPart("file") MultipartFile file) {
-                productService.updateProductImage(productId, imageId, file);
-                return ResponseEntity.noContent().build();
+                return ResponseEntity.ok(ApiResponse.<ProductDetailResponse>builder()
+                                .data(productService.getActiveProductBySlug(slug))
+                                .build());
         }
 
         // assistant

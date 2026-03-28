@@ -68,19 +68,15 @@ function EditCategory() {
     e.preventDefault();
     const orderedFiles = getOrderedFiles();
 
-    try {
-      await updateCategory(
-        {
-          name: data.name.trim(),
-          status: Number(data.status),
-        },
-        orderedFiles[0],
-      );
+    await updateCategory(
+      {
+        name: data.name.trim(),
+        status: Number(data.status),
+      },
+      orderedFiles[0],
+    );
 
-      clearImages();
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message);
-    }
+    clearImages();
   };
 
   return (

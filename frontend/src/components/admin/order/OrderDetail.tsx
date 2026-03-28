@@ -21,11 +21,8 @@ function OrderDetail() {
     if (!id && !status) {
       return;
     }
-    try {
-      await updateStatusOrder(id, status);
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message);
-    }
+
+    await updateStatusOrder(id, status);
   };
 
   const steps = [
@@ -217,18 +214,18 @@ function OrderDetail() {
                 <table className="w-[200%] border-collapse text-[0.9rem] sm:w-full">
                   <thead>
                     <tr className="text-left bg-[#F1F2F4]">
-                      <th className="p-[20px]  ">Tiêu đề</th>
-                      <th className="p-[20px]  ">Giá</th>
-                      <th className="p-[20px]  ">Số lượng</th>
-                      <th className="p-[20px]  ">Thành tiền</th>
+                      <th className="p-[15px]  ">Tiêu đề</th>
+                      <th className="p-[15px]  ">Giá</th>
+                      <th className="p-[15px]  ">Số lượng</th>
+                      <th className="p-[15px]  ">Thành tiền</th>
                     </tr>
                   </thead>
                   <tbody>
                     {order?.items.map((item, index) => (
                       <tr key={index}>
-                        <td className="p-[20px]  ">
+                        <td className="p-[15px]  ">
                           <div className="flex items-center gap-[10px]">
-                            <div className="w-[75px] h-[75px] overflow-hidden">
+                            <div className="w-[80px] h-[80px] overflow-hidden">
                               <Image
                                 source={`${item.images[0]}`}
                                 alt={""}
@@ -242,7 +239,7 @@ function OrderDetail() {
                             </div>
                           </div>
                         </td>
-                        <td className="p-[20px]  ">
+                        <td className="p-[15px]  ">
                           {item.discount > 0 ? (
                             <div className="flex gap-[12px]  ">
                               <del className="text-[#707072] text-[1rem]">
@@ -262,8 +259,8 @@ function OrderDetail() {
                             </p>
                           )}
                         </td>
-                        <td className="p-[20px]  ">x{item.quantity}</td>
-                        <td className="p-[20px]  ">
+                        <td className="p-[15px]  ">x{item.quantity}</td>
+                        <td className="p-[15px]  ">
                           {item.discount > 0
                             ? (
                                 (item.price - item.discount) *
@@ -284,8 +281,8 @@ function OrderDetail() {
                     </tr>
 
                     <tr className="text-[1rem] font-semibold">
-                      <td className="p-[20px]  ">Tổng cộng:</td>
-                      <td className="p-[20px]  ">
+                      <td className="p-[15px]  ">Tổng cộng:</td>
+                      <td className="p-[15px]  ">
                         {order?.total.toLocaleString("vi-VN")}₫
                       </td>
                     </tr>

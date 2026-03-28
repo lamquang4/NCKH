@@ -1,6 +1,7 @@
 import axios from "axios";
 import useSWR from "swr";
 import { getCookie } from "../../../utils/cookieUtil";
+import type { ApiResponse, ChatResponse } from "../../../types/type";
 
 export default function useGetChat() {
   const token = getCookie("token-customer");
@@ -16,15 +17,19 @@ export default function useGetChat() {
       })
       .then((res) => res.data);
 
-  const { data, error, isLoading, mutate } = useSWR<any>(url, fetcher, {
-    shouldRetryOnError: false,
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-    dedupingInterval: 60000,
-  });
+  const { data, error, isLoading, mutate } = useSWR<ApiResponse<ChatResponse>>(
+    url,
+    fetcher,
+    {
+      shouldRetryOnError: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      dedupingInterval: 60000,
+    },
+  );
 
   return {
-    chat: data,
+    chat: data?.data,
     isLoading,
     error,
     mutate,

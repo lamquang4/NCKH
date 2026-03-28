@@ -24,7 +24,7 @@ export function useAddItemToCart() {
 
       const url = `${import.meta.env.VITE_BACKEND_URL}/cart`;
 
-      await axios.post(url, data, {
+      const res = await axios.post(url, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -32,9 +32,9 @@ export function useAddItemToCart() {
 
       await mutate();
       toast.dismiss(loadingToast);
-      toast.success("Thêm vào giỏ hàng thành công");
+      toast.success(res.data?.message);
     } catch (err: any) {
-      console.error("Lỗi:", err);
+      toast.error(err?.response?.data?.message);
       throw err;
     } finally {
       toast.dismiss(loadingToast);

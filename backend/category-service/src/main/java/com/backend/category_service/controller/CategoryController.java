@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.backend.category_service.dto.request.CategoryRequest;
+import com.backend.category_service.dto.response.ApiResponse;
 import com.backend.category_service.dto.response.CategoryResponse;
 import com.backend.category_service.service.CategoryService;
 
@@ -37,7 +38,7 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getCategories(
+    public ResponseEntity<ApiResponse<List<CategoryResponse>>> getCategories(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "12") int limit,
             @RequestParam(required = false) String q,
@@ -46,56 +47,83 @@ public class CategoryController {
         Page<CategoryResponse> categoryPage = categoryService.getCategories(page, limit, q, status);
 
         return ResponseEntity.ok(
-                Map.of(
-                        "categories", categoryPage.getContent(),
-                        "totalPages", categoryPage.getTotalPages(),
-                        "total", categoryPage.getTotalElements()));
+                ApiResponse.<List<CategoryResponse>>builder()
+                        .message("Lấy danh sách danh mục thành công")
+                        .data(categoryPage.getContent())
+                        .totalPages(categoryPage.getTotalPages())
+                        .total(categoryPage.getTotalElements())
+                        .build());
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<CategoryResponse>> getAllCategories() {
-        return ResponseEntity.ok(categoryService.getAllCategories());
+    public ResponseEntity<ApiResponse<List<CategoryResponse>>> getAllCategories() {
+        return ResponseEntity.ok(
+                ApiResponse.<List<CategoryResponse>>builder()
+                        .message("Lấy tất cả danh mục thành công")
+                        .data(categoryService.getAllCategories())
+                        .build());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryResponse> getCategoryById(@PathVariable String id) {
-        return ResponseEntity.ok(categoryService.getCategoryById(id));
+    public ResponseEntity<ApiResponse<CategoryResponse>> getCategoryById(
+            @PathVariable String id) {
+        return ResponseEntity.ok(
+                ApiResponse.<CategoryResponse>builder()
+                        .message("Lấy chi tiết danh mục thành công")
+                        .data(categoryService.getCategoryById(id))
+                        .build());
     }
 
     @PostMapping(consumes = "multipart/form-data")
-    public ResponseEntity<Void> createCategory(
+    public ResponseEntity<ApiResponse<Void>> createCategory(
             @Valid @RequestPart("category") CategoryRequest request,
             @RequestPart(value = "image", required = false) MultipartFile image) {
         categoryService.createCategory(request, image);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.<Void>builder()
+                        .message("Tạo danh mục thành công")
+                        .build());
     }
 
     @PutMapping(value = "/{id}", consumes = "multipart/form-data")
-    public ResponseEntity<Void> updateCategory(
+    public ResponseEntity<ApiResponse<Void>> updateCategory(
             @PathVariable String id,
             @Valid @RequestPart("category") CategoryRequest request,
             @RequestPart(value = "image", required = false) MultipartFile image) {
         categoryService.updateCategory(id, request, image);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(
+                ApiResponse.<Void>builder()
+                        .message("Cập nhật danh mục thành công")
+                        .build());
     }
 
     @PatchMapping("/status/{id}")
-    public ResponseEntity<Void> updateStatusCategory(
+    public ResponseEntity<ApiResponse<Void>> updateStatusCategory(
             @PathVariable String id,
             @RequestParam @NotNull Integer status) {
         categoryService.updateCategoryStatus(id, status);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(
+                ApiResponse.<Void>builder()
+                        .message("Cập nhật trạng thái thành công")
+                        .build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<Void>> deleteCategory(@PathVariable String id) {
         categoryService.deleteCategory(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(
+                ApiResponse.<Void>builder()
+                        .message("Xóa danh mục thành công")
+                        .build());
     }
 
     @GetMapping("/active")
-    public ResponseEntity<List<CategoryResponse>> getActiveCategories() {
-        return ResponseEntity.ok(categoryService.getActiveCategories());
+    public ResponseEntity<ApiResponse<List<CategoryResponse>>> getActiveCategories() {
+        return ResponseEntity.ok(
+                ApiResponse.<List<CategoryResponse>>builder()
+                        .message("Lấy danh mục active thành công")
+                        .data(categoryService.getActiveCategories())
+                        .build());
     }
 
     // internal

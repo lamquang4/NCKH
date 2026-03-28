@@ -12,13 +12,12 @@ import com.backend.assistant_service.dto.response.ChatResponse;
 
 @FeignClient(name = "chat-service")
 public interface ChatServiceClient {
+        @GetMapping("/api/chat/internal/user/{userId}")
+        ChatResponse getOrCreateChat(@PathVariable("userId") String userId);
 
-        @GetMapping("/api/chat/user")
-        ChatResponse getOrCreateChat(@RequestHeader("Authorization") String token);
-
-        @PostMapping("/api/chat/user/message")
+        @PostMapping("/api/chat/internal/user/message/{userId}")
         void sendUserMessage(
-                        @RequestHeader("Authorization") String token,
+                        @PathVariable("userId") String userId,
                         @RequestBody MessageRequest request);
 
         @PostMapping("/api/chat/internal/assistant/message")

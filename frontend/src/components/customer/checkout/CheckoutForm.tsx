@@ -131,20 +131,20 @@ function CheckoutForm() {
 
     const orderPayload = { ...data, paymethod, items };
 
+    const res = await addOrder(orderPayload);
+
     setIsOrderPlaced(true);
 
-    try {
-      const res = await addOrder(orderPayload);
-
-      if (paymethod === "cod") {
-        navigate("/order-result?result=successful");
-      } else {
-        const momoResponse = await createPaymentMomo(res.orderCode);
-        window.location.href = momoResponse.payUrl;
+    if (paymethod === "cod") {
+      navigate("/order-result?result=successful");
+    } else {
+      const momoResponse = await createPaymentMomo(res?.orderCode!);
+      console.log("Momo response:", momoResponse);
+      if (!momoResponse?.payUrl) {
+        toast.error("Không lấy được link thanh toán Momo");
+        return;
       }
-    } catch (err: any) {
-      setIsOrderPlaced(false);
-      toast.error(err?.response?.data?.message);
+      window.location.href = momoResponse.payUrl;
     }
   };
 

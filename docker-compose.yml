@@ -3,17 +3,6 @@ networks:
     driver: bridge
 
 services:
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-      args:
-        - VITE_BACKEND_URL=http://localhost:8090
-    ports:
-      - "5173:5173"
-    networks:
-      - app-network
-
   n8n:
     image: n8nio/n8n
     container_name: n8n

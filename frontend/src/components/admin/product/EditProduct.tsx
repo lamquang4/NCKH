@@ -149,21 +149,13 @@ function EditProduct() {
       return;
     }
 
-    try {
-      await deleteImageProduct(imageId);
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message);
-    }
+    await deleteImageProduct(imageId);
   };
 
   const handleUpdateImage = async (imageId: string, file: File) => {
-    try {
-      await updateImageProduct(imageId, file);
-      setPreviewImages1([]);
-      setSelectedFiles1([]);
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message);
-    }
+    await updateImageProduct(imageId, file);
+    setPreviewImages1([]);
+    setSelectedFiles1([]);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -214,41 +206,37 @@ function EditProduct() {
 
     const orderedFiles = getOrderedFiles();
 
-    try {
-      await updateProduct(
-        {
-          name: data.name,
-          price: data.price,
-          discount: data.discount,
-          description: data.description,
-          status: Number(data.status),
-          stock: data.stock,
-          categoryId: data.category,
-          brandId: data.brand,
-          specifications: normalizedSpecifications,
-        },
-        orderedFiles,
-      );
+    await updateProduct(
+      {
+        name: data.name,
+        price: data.price,
+        discount: data.discount,
+        description: data.description,
+        status: Number(data.status),
+        stock: data.stock,
+        categoryId: data.category,
+        brandId: data.brand,
+        specifications: normalizedSpecifications,
+      },
+      orderedFiles,
+    );
 
-      if (selectedFiles1.length > 0) {
-        const newFiles = selectedFiles1.filter((f) => f !== null);
-        if (newFiles.length > 0) {
-          const oldImageIds = product?.images
-            .map((img, index) => (selectedFiles1[index] ? img.id : null))
-            .filter((id) => id !== null);
+    if (selectedFiles1.length > 0) {
+      const newFiles = selectedFiles1.filter((f) => f !== null);
+      if (newFiles.length > 0) {
+        const oldImageIds = product?.images
+          .map((img, index) => (selectedFiles1[index] ? img.id : null))
+          .filter((id) => id !== null);
 
-          const formData = new FormData();
-          selectedFiles1.forEach((file) => formData.append("files", file));
-          oldImageIds?.forEach((id) => formData.append("oldImageIds", id));
-        }
+        const formData = new FormData();
+        selectedFiles1.forEach((file) => formData.append("files", file));
+        oldImageIds?.forEach((id) => formData.append("oldImageIds", id));
       }
-
-      clearImages();
-      setPreviewImages1([]);
-      setSelectedFiles1([]);
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message);
     }
+
+    clearImages();
+    setPreviewImages1([]);
+    setSelectedFiles1([]);
   };
 
   return (

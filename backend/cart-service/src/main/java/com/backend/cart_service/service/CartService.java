@@ -14,8 +14,8 @@ import com.backend.cart_service.dto.request.CartItemRequest;
 import com.backend.cart_service.dto.response.CartItemResponse;
 import com.backend.cart_service.dto.response.CartResponse;
 import com.backend.cart_service.dto.response.ProductListItemResponse;
-import com.backend.cart_service.exception.BadRequestException;
-import com.backend.cart_service.exception.NotFoundException;
+import com.backend.cart_service.exception.AppException;
+import com.backend.cart_service.exception.ErrorCode;
 import com.backend.cart_service.mapper.CartMapper;
 import com.backend.cart_service.model.Cart;
 import com.backend.cart_service.model.CartItem;
@@ -58,7 +58,7 @@ public class CartService {
                 .map(item -> {
                     ProductListItemResponse product = productMap.get(item.getProductId());
                     if (product == null) {
-                        throw new NotFoundException("Sản phẩm không tồn tại");
+                        throw new AppException(ErrorCode.PRODUCT_NOT_FOUND);
                     }
                     return CartMapper.toItemResponse(item, product);
                 })
@@ -71,7 +71,7 @@ public class CartService {
     public void addToCart(String userId, CartItemRequest request) {
 
         if (request.getQuantity() < 1) {
-            throw new BadRequestException("Số lượng phải lớn hơn hoặc bằng 1");
+            throw new AppException(ErrorCode.INVALID_QUANTITY);
         }
 
         Cart cart = getOrCreateCart(userId);
@@ -100,7 +100,7 @@ public class CartService {
                 .removeIf(item -> item.getProductId().equals(productId));
 
         if (!removed) {
-            throw new NotFoundException("Sản phẩm không có trong giỏ hàng");
+            throw new AppException(ErrorCode.CART_ITEM_NOT_FOUND);
         }
 
         cart = cartRepository.save(cart);
@@ -111,7 +111,7 @@ public class CartService {
     public void updateQuantity(String userId, CartItemRequest request) {
 
         if (request.getQuantity() < 1) {
-            throw new BadRequestException("Số lượng phải lớn hơn hoặc bằng 1");
+            throw new AppException(ErrorCode.INVALID_QUANTITY);
         }
 
         Cart cart = getOrCreateCart(userId);
@@ -119,7 +119,7 @@ public class CartService {
         CartItem item = cart.getItems().stream()
                 .filter(i -> i.getProductId().equals(request.getProductId()))
                 .findFirst()
-                .orElseThrow(() -> new NotFoundException("Sản phẩm không có trong giỏ"));
+                .orElseThrow(() -> new AppException(ErrorCode.CART_ITEM_NOT_FOUND));
 
         item.setQuantity(request.getQuantity());
 

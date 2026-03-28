@@ -2,18 +2,22 @@ package com.backend.chat_service.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.chat_service.dto.request.MessageRequest;
+import com.backend.chat_service.dto.response.ApiResponse;
 import com.backend.chat_service.dto.response.ChatResponse;
-import com.backend.chat_service.exception.BadRequestException;
 import com.backend.chat_service.service.ChatService;
-import com.backend.chat_service.utils.JwtUtil;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import jakarta.ws.rs.ForbiddenException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 @Validated
 @RestController
@@ -21,29 +25,40 @@ import org.springframework.http.HttpStatus;
 public class ChatController {
 
     private final ChatService chatService;
-    private final JwtUtil jwtUtil;
 
-    public ChatController(ChatService chatService, JwtUtil jwtUtil) {
+    public ChatController(ChatService chatService) {
         this.chatService = chatService;
-        this.jwtUtil = jwtUtil;
     }
 
     @GetMapping("/user")
-    public ResponseEntity<ChatResponse> getOrCreateChat(HttpServletRequest request) {
-        String userId = extractUserIdFromHeader(request);
-        return ResponseEntity.ok(chatService.getOrCreateChat(userId));
+    public ResponseEntity<ApiResponse<ChatResponse>> getOrCreateChat(
+            @AuthenticationPrincipal String userId) {
+
+        return ResponseEntity.ok(
+                ApiResponse.<ChatResponse>builder()
+                        .message("Lấy cuộc hội thoại thành công")
+                        .data(chatService.getOrCreateChat(userId))
+                        .build());
     }
 
-    @PostMapping("/user/message")
+    // internal
+    @GetMapping("/internal/user/{userId}")
+    public ResponseEntity<ChatResponse> getOrCreateChatInternal(
+            @PathVariable String userId) {
+
+        return ResponseEntity.ok(
+                chatService.getOrCreateChat(userId));
+    }
+
+    @PostMapping("/internal/user/message/{userId}")
     public ResponseEntity<Void> sendUserMessage(
-            @Valid @RequestBody MessageRequest messageRequest,
-            HttpServletRequest request) {
-        String userId = extractUserIdFromHeader(request);
+            @PathVariable String userId,
+            @Valid @RequestBody MessageRequest messageRequest) {
+
         chatService.saveMessage(messageRequest, userId, "USER");
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    // internal
     @PostMapping("/internal/assistant/message")
     public ResponseEntity<Void> saveAssistantMessage(
             @Valid @RequestBody MessageRequest messageRequest) {
@@ -57,24 +72,4 @@ public class ChatController {
         return ResponseEntity.ok(chatService.getChatById(chatId));
     }
 
-    private String extractUserIdFromHeader(HttpServletRequest request) {
-        String authHeader = request.getHeader("Authorization");
-
-        if (authHeader == null || authHeader.isEmpty()) {
-            throw new BadRequestException("Authorization header không được để trống");
-        }
-
-        String token = authHeader.replace("Bearer ", "");
-
-        if (!jwtUtil.isTokenValid(token)) {
-            throw new BadRequestException("Token không hợp lệ");
-        }
-
-        String role = jwtUtil.extractRole(token);
-        if (!"customer".equals(role)) {
-            throw new ForbiddenException("Chỉ customer mới có thể truy cập");
-        }
-
-        return jwtUtil.extractUserId(token);
-    }
 }

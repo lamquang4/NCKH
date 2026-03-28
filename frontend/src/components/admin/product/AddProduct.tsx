@@ -135,7 +135,7 @@ function AddProduct() {
       specValue: s.specValue.trim(),
     }));
 
-    try {
+
       await addProduct(
         {
           name: data.name,
@@ -163,9 +163,7 @@ function AddProduct() {
         brand: "",
         status: "",
       });
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message);
-    }
+  
   };
 
   return (

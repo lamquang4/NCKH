@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.data.domain.Page;
 import com.backend.brand_service.dto.request.BrandRequest;
+import com.backend.brand_service.dto.response.ApiResponse;
 import com.backend.brand_service.dto.response.BrandResponse;
 import com.backend.brand_service.service.BrandService;
 
@@ -34,7 +35,7 @@ public class BrandController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getBrands(
+    public ResponseEntity<ApiResponse<List<BrandResponse>>> getBrands(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "12") int limit,
             @RequestParam(required = false) String q,
@@ -43,54 +44,80 @@ public class BrandController {
         Page<BrandResponse> brandPage = brandService.getBrands(page, limit, q, status);
 
         return ResponseEntity.ok(
-                Map.of(
-                        "brands", brandPage.getContent(),
-                        "totalPages", brandPage.getTotalPages(),
-                        "total", brandPage.getTotalElements()));
+                ApiResponse.<List<BrandResponse>>builder()
+                        .message("Lấy danh sách thương hiệu thành công")
+                        .data(brandPage.getContent())
+                        .totalPages(brandPage.getTotalPages())
+                        .total(brandPage.getTotalElements())
+                        .build());
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<BrandResponse>> getAllBrands() {
-        return ResponseEntity.ok(brandService.getAllBrands());
+    public ResponseEntity<ApiResponse<List<BrandResponse>>> getAllBrands() {
+        return ResponseEntity.ok(
+                ApiResponse.<List<BrandResponse>>builder()
+                        .message("Lấy tất cả thương hiệu thành công")
+                        .data(brandService.getAllBrands())
+                        .build());
     }
 
     @GetMapping("/active")
-    public ResponseEntity<List<BrandResponse>> getActiveBrands() {
-        return ResponseEntity.ok(brandService.getActiveBrands());
+    public ResponseEntity<ApiResponse<List<BrandResponse>>> getActiveBrands() {
+        return ResponseEntity.ok(
+                ApiResponse.<List<BrandResponse>>builder()
+                        .message("Lấy thương hiệu active thành công")
+                        .data(brandService.getActiveBrands())
+                        .build());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BrandResponse> getBrandById(@PathVariable String id) {
-        return ResponseEntity.ok(brandService.getBrandById(id));
+    public ResponseEntity<ApiResponse<BrandResponse>> getBrandById(@PathVariable String id) {
+        return ResponseEntity.ok(
+                ApiResponse.<BrandResponse>builder()
+                        .message("Lấy chi tiết thương hiệu thành công")
+                        .data(brandService.getBrandById(id))
+                        .build());
     }
 
     @PostMapping
-    public ResponseEntity<Void> createBrand(
+    public ResponseEntity<ApiResponse<Void>> createBrand(
             @Valid @RequestBody BrandRequest request) {
         brandService.createBrand(request);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.<Void>builder()
+                        .message("Tạo thương hiệu thành công")
+                        .build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateBrand(
+    public ResponseEntity<ApiResponse<Void>> updateBrand(
             @PathVariable String id,
             @Valid @RequestBody BrandRequest request) {
         brandService.updateBrand(id, request);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(
+                ApiResponse.<Void>builder()
+                        .message("Cập nhật thương hiệu thành công")
+                        .build());
     }
 
     @PatchMapping("/status/{id}")
-    public ResponseEntity<Void> updateBrandStatus(
+    public ResponseEntity<ApiResponse<Void>> updateBrandStatus(
             @PathVariable String id,
             @RequestParam @NotNull Integer status) {
         brandService.updateBrandStatus(id, status);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(
+                ApiResponse.<Void>builder()
+                        .message("Cập nhật trạng thái thành công")
+                        .build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBrand(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<Void>> deleteBrand(@PathVariable String id) {
         brandService.deleteBrand(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(
+                ApiResponse.<Void>builder()
+                        .message("Xóa thương hiệu thành công")
+                        .build());
     }
 
     // internal

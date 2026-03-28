@@ -1,8 +1,13 @@
 import axios from "axios";
 import { useState } from "react";
-import type { OrderRequest } from "../../../types/type";
+import type {
+  ApiResponse,
+  OrderRequest,
+  OrderResponse,
+} from "../../../types/type";
 import { getCookie } from "../../../utils/cookieUtil";
 import useGetCart from "../cart/useGetCart";
+import toast from "react-hot-toast";
 
 export default function useAddOrder() {
   const [isLoading, setIsLoading] = useState(false);
@@ -20,7 +25,7 @@ export default function useAddOrder() {
       }
 
       const url = `${import.meta.env.VITE_BACKEND_URL}/order/user`;
-      const res = await axios.post(url, data, {
+      const res = await axios.post<ApiResponse<OrderResponse>>(url, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -30,9 +35,9 @@ export default function useAddOrder() {
         await mutate();
       }
 
-      return res.data;
-    } catch (err) {
-      console.error("Lỗi:", err);
+      return res.data.data;
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message);
       throw err;
     } finally {
       setIsLoading(false);

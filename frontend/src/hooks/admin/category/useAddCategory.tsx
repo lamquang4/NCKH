@@ -36,16 +36,16 @@ export default function useAddCategory() {
         formData.append("image", file);
       }
 
-      await axios.post(url, formData, {
+      const res = await axios.post(url, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
       await mutate();
       toast.dismiss(loadingToast);
-      toast.success("Thêm thành công");
-    } catch (err) {
-      console.error("Lỗi:", err);
+      toast.success(res.data?.message);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message);
       throw err;
     } finally {
       toast.dismiss(loadingToast);

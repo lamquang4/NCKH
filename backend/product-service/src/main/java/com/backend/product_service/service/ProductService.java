@@ -33,10 +33,8 @@ import com.backend.product_service.dto.response.ProductListItemResponse;
 import com.backend.product_service.entity.ImageProduct;
 import com.backend.product_service.entity.Product;
 import com.backend.product_service.entity.Specification;
-import com.backend.product_service.exception.BadRequestException;
-import com.backend.product_service.exception.ConflictException;
-import com.backend.product_service.exception.ExternalServiceException;
-import com.backend.product_service.exception.NotFoundException;
+import com.backend.product_service.exception.AppException;
+import com.backend.product_service.exception.ErrorCode;
 import com.backend.product_service.mapper.ProductMapper;
 import com.backend.product_service.repository.ImageProductRepository;
 import com.backend.product_service.repository.ProductRepository;
@@ -237,7 +235,7 @@ public class ProductService {
     // lấy sản phẩm theo id
     public ProductDetailResponse getProductById(String id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Sản phẩm không tìm thấy"));
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
 
         return mapSingleWithClient(product);
     }
@@ -247,7 +245,7 @@ public class ProductService {
 
         Product product = productRepository
                 .findBySlugAndStatus(slug, 1)
-                .orElseThrow(() -> new NotFoundException("Sản phẩm không tìm thấy"));
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
 
         return mapSingleWithClient(product);
     }
@@ -257,7 +255,7 @@ public class ProductService {
 
         Product product = productRepository
                 .findByIdAndStatus(id, 1)
-                .orElseThrow(() -> new NotFoundException("Sản phẩm không tìm thấy"));
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
 
         return mapSingleWithClient(product);
     }
@@ -356,21 +354,21 @@ public class ProductService {
     public void updateProductStatus(String id, Integer status) {
 
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Sản phẩm không tìm thấy"));
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
 
         if (status == 1) {
             CategoryResponse category = categoryServiceClient.getCategoryByIdInternal(product.getCategoryId());
 
             if (category.getStatus() == 0) {
-                throw new BadRequestException(
-                        "Sản phẩm không thể hiện vì danh mục đang bị ẩn");
+                throw new AppException(
+                        ErrorCode.CATEGORY_INACTIVE_CANNOT_ACTIVATE_PRODUCT);
             }
 
             BrandResponse brand = brandServiceClient.getBrandByIdInternal(product.getBrandId());
 
             if (brand.getStatus() == 0) {
-                throw new BadRequestException(
-                        "Sản phẩm không thể hiện vì thương hiệu đang bị ẩn");
+                throw new AppException(
+                        ErrorCode.BRAND_INACTIVE_CANNOT_ACTIVATE_PRODUCT);
             }
         }
 
@@ -386,16 +384,16 @@ public class ProductService {
 
         if (request.getPrice() == null
                 || request.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new BadRequestException("Giá bán phải lớn hơn 0");
+            throw new AppException(ErrorCode.INVALID_PRICE);
         }
 
         if (request.getDiscount() != null) {
             if (request.getDiscount().compareTo(BigDecimal.ZERO) < 0) {
-                throw new BadRequestException("Số tiền giảm giá không được nhỏ hơn 0");
+                throw new AppException(ErrorCode.DISCOUNT_NEGATIVE);
             }
 
             if (request.getDiscount().compareTo(request.getPrice()) >= 0) {
-                throw new BadRequestException("Số tiền giảm giá phải nhỏ hơn giá bán");
+                throw new AppException(ErrorCode.DISCOUNT_EXCEEDS_PRICE);
             }
         }
 
@@ -408,25 +406,25 @@ public class ProductService {
                 && request.getDiscount().compareTo(BigDecimal.ZERO) > 0) {
 
             if (percent.compareTo(BigDecimal.ONE) < 0) {
-                throw new IllegalArgumentException("Phần trăm giảm giá phải >= 1%");
+                throw new AppException(ErrorCode.DISCOUNT_TOO_SMALL);
             }
         }
 
         if (request.getStock() == null
                 || request.getStock() < 0) {
-            throw new BadRequestException("Số lượng tồn kho phải lớn hơn hoặc bằng 0");
+            throw new AppException(ErrorCode.INVALID_STOCK);
         }
 
         if (files == null || files.isEmpty()) {
-            throw new BadRequestException("Vui lòng thêm ít nhất một hình sản phẩm");
+            throw new AppException(ErrorCode.PRODUCT_IMAGE_REQUIRED);
         }
 
         if (request.getSpecifications() == null || request.getSpecifications().isEmpty()) {
-            throw new BadRequestException("Vui lòng thêm ít nhất một thông tin chi tiết");
+            throw new AppException(ErrorCode.SPECIFICATION_REQUIRED);
         }
 
         if (productRepository.existsByName(request.getName())) {
-            throw new ConflictException("Tên sản phẩm đã được sử dụng");
+            throw new AppException(ErrorCode.PRODUCT_NAME_EXISTED);
         }
 
         Product product = ProductMapper.toEntity(request);
@@ -465,21 +463,20 @@ public class ProductService {
             List<MultipartFile> files) {
 
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Sản phẩm không tìm thấy"));
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
 
         if (request.getPrice() == null
                 || request.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new BadRequestException("Giá bán phải lớn hơn 0");
+            throw new AppException(ErrorCode.INVALID_PRICE);
         }
 
         if (request.getDiscount() != null) {
-
             if (request.getDiscount().compareTo(BigDecimal.ZERO) < 0) {
-                throw new BadRequestException("Số tiền giảm giá không được nhỏ hơn 0");
+                throw new AppException(ErrorCode.DISCOUNT_NEGATIVE);
             }
 
             if (request.getDiscount().compareTo(request.getPrice()) >= 0) {
-                throw new BadRequestException("Số tiền giảm giá phải nhỏ hơn giá bán");
+                throw new AppException(ErrorCode.DISCOUNT_EXCEEDS_PRICE);
             }
         }
 
@@ -492,19 +489,19 @@ public class ProductService {
                 && request.getDiscount().compareTo(BigDecimal.ZERO) > 0) {
 
             if (percent.compareTo(BigDecimal.ONE) < 0) {
-                throw new IllegalArgumentException("Phần trăm giảm giá phải >= 1%");
+                throw new AppException(ErrorCode.DISCOUNT_TOO_SMALL);
             }
         }
 
         if (request.getStock() == null
                 || request.getStock() < 0) {
-            throw new BadRequestException("Số lượng tồn kho phải lớn hơn hoặc bằng 0");
+            throw new AppException(ErrorCode.INVALID_STOCK);
         }
 
         productRepository.findByName(request.getName())
                 .filter(p -> !p.getId().equals(id))
                 .ifPresent(p -> {
-                    throw new ConflictException("Tên sản phẩm đã được sử dụng");
+                    throw new AppException(ErrorCode.PRODUCT_NAME_EXISTED);
                 });
 
         ProductMapper.updateEntity(product, request);
@@ -541,13 +538,12 @@ public class ProductService {
     public void deleteProduct(String id) {
 
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Sản phẩm không tìm thấy"));
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
 
         boolean existsInOrder = orderServiceClient.existsProductInOrderInternal(id);
 
         if (existsInOrder) {
-            throw new BadRequestException(
-                    "Sản phẩm này không thể xóa vì đã tồn tại trong đơn hàng");
+            throw new AppException(ErrorCode.PRODUCT_IN_ORDER);
         }
 
         deleteFolderOnCloudinary(product.getId());
@@ -562,10 +558,10 @@ public class ProductService {
     public void deleteProductImage(String productId, String imageId) {
 
         ImageProduct image = imageProductRepository.findById(imageId)
-                .orElseThrow(() -> new NotFoundException("Hình không tìm thấy"));
+                .orElseThrow(() -> new AppException(ErrorCode.IMAGE_NOT_FOUND));
 
         if (!image.getProduct().getId().equals(productId)) {
-            throw new ConflictException("Hình không thuộc sản phẩm");
+            throw new AppException(ErrorCode.IMAGE_NOT_BELONG_TO_PRODUCT);
         }
 
         deleteImageOnCloudinary(productId, imageId);
@@ -589,10 +585,10 @@ public class ProductService {
             String specificationId) {
 
         Specification specification = specificationRepository.findById(specificationId)
-                .orElseThrow(() -> new NotFoundException("Thông số không tìm thấy"));
+                .orElseThrow(() -> new AppException(ErrorCode.SPECIFICATION_NOT_FOUND));
 
         if (!specification.getProduct().getId().equals(productId)) {
-            throw new ConflictException("Thông số không thuộc sản phẩm");
+            throw new AppException(ErrorCode.SPECIFICATION_NOT_BELONG_TO_PRODUCT);
         }
 
         specificationRepository.delete(specification);
@@ -617,7 +613,7 @@ public class ProductService {
         List<Product> products = productRepository.findByIdIn(ids);
 
         if (products.isEmpty()) {
-            throw new NotFoundException("Không tìm thấy sản phẩm");
+            throw new AppException(ErrorCode.PRODUCT_NOT_FOUND);
         }
 
         return mapWithClient(products);
@@ -630,11 +626,10 @@ public class ProductService {
         for (StockRequest req : requests) {
 
             Product product = productRepository.findById(req.getProductId())
-                    .orElseThrow(() -> new NotFoundException("Sản phẩm không tồn tại"));
+                    .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
 
             if (product.getStock() < req.getQuantity()) {
-                throw new BadRequestException(
-                        "Sản phẩm " + product.getName() + " không đủ tồn kho");
+                throw new AppException(ErrorCode.PRODUCT_OUT_OF_STOCK);
             }
 
             product.setStock(product.getStock() - req.getQuantity());
@@ -651,10 +646,10 @@ public class ProductService {
         for (StockRequest req : requests) {
 
             Product product = productRepository.findById(req.getProductId())
-                    .orElseThrow(() -> new NotFoundException("Sản phẩm không tồn tại"));
+                    .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
 
             if (product.getStock() < req.getQuantity()) {
-                throw new BadRequestException("Sản phẩm không đủ tồn kho");
+                throw new AppException(ErrorCode.PRODUCT_OUT_OF_STOCK);
             }
 
             product.setStock(product.getStock() + req.getQuantity());
@@ -685,14 +680,14 @@ public class ProductService {
             MultipartFile file) {
 
         ImageProduct image = imageProductRepository.findById(imageId)
-                .orElseThrow(() -> new NotFoundException("Hình không tìm thấy"));
+                .orElseThrow(() -> new AppException(ErrorCode.IMAGE_NOT_FOUND));
 
         if (!image.getProduct().getId().equals(productId)) {
-            throw new ConflictException("Hình không thuộc sản phẩm");
+            throw new AppException(ErrorCode.IMAGE_NOT_BELONG_TO_PRODUCT);
         }
 
         if (file == null || file.isEmpty()) {
-            throw new BadRequestException("File hình không được để trống");
+            throw new AppException(ErrorCode.IMAGE_EMPTY);
         }
 
         deleteImageOnCloudinary(productId, imageId);
@@ -711,7 +706,7 @@ public class ProductService {
 
         // Validate size
         if (file.getSize() > 2 * 1024 * 1024) {
-            throw new BadRequestException("Dung lượng hình tối đa 2MB");
+            throw new AppException(ErrorCode.IMAGE_SIZE_EXCEEDED);
         }
 
         // Validate type
@@ -722,7 +717,7 @@ public class ProductService {
                 "image/webp");
 
         if (contentType == null || !allowedTypes.contains(contentType)) {
-            throw new BadRequestException("Hình chỉ cho phép JPG, PNG, WEBP");
+            throw new AppException(ErrorCode.IMAGE_TYPE_INVALID);
         }
 
         try {
@@ -737,7 +732,7 @@ public class ProductService {
             return uploadResult.get("secure_url").toString();
 
         } catch (IOException e) {
-            throw new ExternalServiceException("Upload hình thất bại: " + e.getMessage());
+            throw new AppException(ErrorCode.IMAGE_UPLOAD_FAILED);
         }
     }
 
@@ -778,7 +773,7 @@ public class ProductService {
                     ObjectUtils.asMap("resource_type", "image"));
 
         } catch (Exception e) {
-            throw new ExternalServiceException("Xóa hình thất bại" + e);
+            throw new AppException(ErrorCode.IMAGE_DELETE_FAILED);
         }
     }
 
@@ -795,7 +790,7 @@ public class ProductService {
                     ObjectUtils.emptyMap());
 
         } catch (Exception e) {
-            throw new ExternalServiceException("Xóa hình thất bại" + e);
+            throw new AppException(ErrorCode.IMAGE_DELETE_FAILED);
         }
     }
 
@@ -872,9 +867,9 @@ public class ProductService {
                     CategoryResponse category = categoryMap.get(product.getCategoryId());
                     BrandResponse brand = brandMap.get(product.getBrandId());
                     if (category == null)
-                        throw new NotFoundException("Danh mục không tìm thấy");
+                        throw new AppException(ErrorCode.CATEGORY_NOT_FOUND);
                     if (brand == null)
-                        throw new NotFoundException("Thương hiệu không tìm thấy");
+                        throw new AppException(ErrorCode.BRAND_NOT_FOUND);
                     return ProductMapper.toListItemResponse(product, category, brand); // ← đổi
                 })
                 .toList();
@@ -889,9 +884,9 @@ public class ProductService {
         CategoryResponse category = categoryServiceClient.getCategoryByIdInternal(product.getCategoryId());
         BrandResponse brand = brandServiceClient.getBrandByIdInternal(product.getBrandId());
         if (category == null)
-            throw new NotFoundException("Danh mục không tìm thấy");
+            throw new AppException(ErrorCode.CATEGORY_NOT_FOUND);
         if (brand == null)
-            throw new NotFoundException("Thương hiệu không tìm thấy");
+            throw new AppException(ErrorCode.BRAND_NOT_FOUND);
         return ProductMapper.toDetailResponse(product, category, brand);
     }
 

@@ -9,7 +9,8 @@ import com.backend.chat_service.dto.request.MessageRequest;
 import com.backend.chat_service.dto.response.ChatResponse;
 import com.backend.chat_service.dto.response.MessageResponse;
 import com.backend.chat_service.dto.response.ProductListItemResponse;
-import com.backend.chat_service.exception.NotFoundException;
+import com.backend.chat_service.exception.AppException;
+import com.backend.chat_service.exception.ErrorCode;
 import com.backend.chat_service.mapper.ChatMapper;
 import com.backend.chat_service.model.Chat;
 import com.backend.chat_service.model.Message;
@@ -53,7 +54,7 @@ public class ChatService {
         // Lưu tin nhắn với role được truyền vào (USER hoặc ASSISTANT)
         public void saveMessage(MessageRequest request, String userId, String role) {
                 Chat chat = chatRepository.findById(request.getChatId())
-                                .orElseThrow(() -> new NotFoundException("Chat không tìm thấy"));
+                                .orElseThrow(() -> new AppException(ErrorCode.CHAT_NOT_FOUND));
 
                 if (userId != null && !chat.getUserId().equals(userId)) {
                         throw new ForbiddenException("Bạn không có quyền gửi tin nhắn vào chat này");
@@ -66,7 +67,7 @@ public class ChatService {
         // lấy chat bằng id
         public ChatResponse getChatById(String chatId) {
                 Chat chat = chatRepository.findById(chatId)
-                                .orElseThrow(() -> new NotFoundException("Chat không tìm thấy"));
+                                .orElseThrow(() -> new AppException(ErrorCode.CHAT_NOT_FOUND));
 
                 List<MessageResponse> messages = messageRepository
                                 .findByChatIdOrderByCreatedAtAsc(chatId)

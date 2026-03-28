@@ -13,12 +13,12 @@ export default function useUpdateBrand(id: string) {
     setIsLoading(true);
     try {
       const url = `${import.meta.env.VITE_BACKEND_URL}/brand/${id}`;
-      await axios.put(url, data);
+      const res = await axios.put(url, data);
       await mutate();
       toast.dismiss(loadingToast);
-      toast.success("Cập nhật thành công");
-    } catch (err) {
-      console.error("Lỗi:", err);
+      toast.success(res.data?.message);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message);
       throw err;
     } finally {
       toast.dismiss(loadingToast);

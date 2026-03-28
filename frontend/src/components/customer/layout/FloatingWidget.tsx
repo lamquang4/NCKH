@@ -23,12 +23,12 @@ function FloatingWidget() {
     return () => {
       document.body.style.overflow = "";
     };
-  }, [isOpen]);
+  }, [isOpen, chat, isLoading]);
 
   return (
     <>
       {isOpen && !isLoading && (
-        <ChatContainer onClose={toggleChat} chat={chat} />
+        <ChatContainer onClose={toggleChat} chat={chat!} />
       )}
 
       <div className="fixed bottom-[15px] right-[15px] z-13">

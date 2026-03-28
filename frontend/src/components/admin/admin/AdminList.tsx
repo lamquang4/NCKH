@@ -39,11 +39,7 @@ function AdminList() {
       return;
     }
 
-    try {
-      await deleteAdmin(id);
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message);
-    }
+    await deleteAdmin(id);
   };
 
   const handleUpdateStatus = async (id: string, status: number) => {
@@ -56,14 +52,8 @@ function AdminList() {
       return;
     }
 
-    try {
-      await updateStatusUser(id, status);
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message);
-    }
+    await updateStatusUser(id, status);
   };
-
-
 
   return (
     <>
