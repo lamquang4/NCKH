@@ -133,17 +133,23 @@ function CheckoutForm() {
 
     const res = await addOrder(orderPayload);
 
+    if (!res?.orderCode) {
+      toast.error("Không lấy được mã đơn hàng");
+      return;
+    }
+
     setIsOrderPlaced(true);
 
     if (paymethod === "cod") {
       navigate("/order-result?result=successful");
     } else {
-      const momoResponse = await createPaymentMomo(res?.orderCode!);
-      console.log("Momo response:", momoResponse);
+      const momoResponse = await createPaymentMomo(res.orderCode);
+
       if (!momoResponse?.payUrl) {
         toast.error("Không lấy được link thanh toán Momo");
         return;
       }
+
       window.location.href = momoResponse.payUrl;
     }
   };
