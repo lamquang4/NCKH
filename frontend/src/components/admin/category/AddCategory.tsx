@@ -41,23 +41,19 @@ function AddCategory() {
       return;
     }
 
-    try {
-      await addCategory(
-        {
-          name: data.name.trim(),
-          status: Number(data.status),
-        },
-        orderedFiles[0],
-      );
+    await addCategory(
+      {
+        name: data.name.trim(),
+        status: Number(data.status),
+      },
+      orderedFiles[0],
+    );
 
-      setData({
-        name: "",
-        status: "",
-      });
-      clearImages();
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message);
-    }
+    setData({
+      name: "",
+      status: "",
+    });
+    clearImages();
   };
 
   return (

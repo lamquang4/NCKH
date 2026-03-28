@@ -71,6 +71,18 @@ export interface MessageRequest {
 }
 
 // Response
+export interface ApiResponse<T> {
+  message: string;
+  data: T;
+  totalPages?: number;
+  total?: number;
+}
+
+export interface LoginResponse {
+  token: string;
+  role: string;
+}
+
 export interface UserResponse {
   id: string;
   email: string;

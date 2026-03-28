@@ -1,6 +1,6 @@
 package com.backend.user_service.controller;
 
-import java.util.Map;
+import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.data.domain.Page;
 import com.backend.user_service.dto.request.UserRequest;
+import com.backend.user_service.dto.response.ApiResponse;
 import com.backend.user_service.dto.response.UserAuthResponse;
 import com.backend.user_service.dto.response.UserResponse;
 import com.backend.user_service.mapper.UserMapper;
@@ -34,7 +35,7 @@ public class UserController {
         }
 
         @GetMapping("/customers")
-        public ResponseEntity<?> getCustomers(
+        public ResponseEntity<ApiResponse<List<UserResponse>>> getCustomers(
                         @RequestParam(defaultValue = "1") int page,
                         @RequestParam(defaultValue = "12") int limit,
                         @RequestParam(required = false) String q,
@@ -43,14 +44,16 @@ public class UserController {
                 Page<UserResponse> userPage = userService.getCustomers(page, limit, q, status);
 
                 return ResponseEntity.ok(
-                                Map.of(
-                                                "customers", userPage.getContent(),
-                                                "totalPages", userPage.getTotalPages(),
-                                                "total", userPage.getTotalElements()));
+                                ApiResponse.<List<UserResponse>>builder()
+                                                .message("Lấy danh sách khách hàng thành công")
+                                                .data(userPage.getContent())
+                                                .totalPages(userPage.getTotalPages())
+                                                .total(userPage.getTotalElements())
+                                                .build());
         }
 
         @GetMapping("/admins")
-        public ResponseEntity<?> getAdmins(
+        public ResponseEntity<ApiResponse<List<UserResponse>>> getAdmins(
                         @RequestParam(defaultValue = "1") int page,
                         @RequestParam(defaultValue = "12") int limit,
                         @RequestParam(required = false) String q,
@@ -59,47 +62,66 @@ public class UserController {
                 Page<UserResponse> userPage = userService.getAdmins(page, limit, q, status);
 
                 return ResponseEntity.ok(
-                                Map.of(
-                                                "admins", userPage.getContent(),
-                                                "totalPages", userPage.getTotalPages(),
-                                                "total", userPage.getTotalElements()));
+                                ApiResponse.<List<UserResponse>>builder()
+                                                .message("Lấy danh sách admin thành công")
+                                                .data(userPage.getContent())
+                                                .totalPages(userPage.getTotalPages())
+                                                .total(userPage.getTotalElements())
+                                                .build());
         }
 
         @GetMapping("/{id}")
-        public ResponseEntity<UserResponse> getUserById(
+        public ResponseEntity<ApiResponse<UserResponse>> getUserById(
                         @PathVariable String id) {
 
-                return ResponseEntity.ok(userService.getUserById(id));
+                return ResponseEntity.ok(
+                                ApiResponse.<UserResponse>builder()
+                                                .message("Lấy thông tin người dùng thành công")
+                                                .data(userService.getUserById(id))
+                                                .build());
         }
 
         @PutMapping("/{id}")
-        public ResponseEntity<Void> updateUser(
+        public ResponseEntity<ApiResponse<Void>> updateUser(
                         @PathVariable String id,
                         @Valid @RequestBody UserRequest request) {
                 userService.updateUser(id, request);
-                return ResponseEntity.noContent().build();
+                return ResponseEntity.ok(
+                                ApiResponse.<Void>builder()
+                                                .message("Cập nhật người dùng thành công")
+                                                .build());
         }
 
         @PatchMapping("/status/{id}")
-        public ResponseEntity<Void> updateUserStatus(
+        public ResponseEntity<ApiResponse<Void>> updateUserStatus(
                         @PathVariable String id,
                         @RequestParam @NotNull Integer status) {
                 userService.updateUserStatus(id, status);
-                return ResponseEntity.noContent().build();
+                return ResponseEntity.ok(
+                                ApiResponse.<Void>builder()
+                                                .message("Cập nhật trạng thái thành công")
+                                                .build());
         }
 
         @DeleteMapping("/{id}")
-        public ResponseEntity<Void> deleteUser(@PathVariable String id) {
+        public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable String id) {
                 userService.deleteUser(id);
-                return ResponseEntity.noContent().build();
+
+                return ResponseEntity.ok(
+                                ApiResponse.<Void>builder()
+                                                .message("Xóa người dùng thành công")
+                                                .build());
         }
 
         @PostMapping
-        public ResponseEntity<Void> createUser(
+        public ResponseEntity<ApiResponse<Void>> createUser(
                         @Valid @RequestBody UserRequest request) {
 
                 userService.createUser(request);
-                return ResponseEntity.status(HttpStatus.CREATED).build();
+                return ResponseEntity.status(HttpStatus.CREATED)
+                                .body(ApiResponse.<Void>builder()
+                                                .message("Tạo người dùng thành công")
+                                                .build());
         }
 
         // internal

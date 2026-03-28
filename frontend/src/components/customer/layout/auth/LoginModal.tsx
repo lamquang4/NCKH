@@ -1,7 +1,6 @@
 import { HiOutlineEyeOff, HiOutlineEye } from "react-icons/hi";
 import { memo, useState } from "react";
 import useLogin from "../../../../hooks/auth/useLogin";
-import toast from "react-hot-toast";
 import Overplay from "../../ui/Overplay";
 import Loading from "../../../ui/Loading";
 
@@ -30,21 +29,17 @@ function LoginModal({ onClose, onSwitchRegister }: Props) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    try {
-      await handleLogin({
-        email: data.email,
-        password: data.password,
-      });
+    await handleLogin({
+      email: data.email,
+      password: data.password,
+    });
 
-      setData({
-        email: "",
-        password: "",
-      });
+    setData({
+      email: "",
+      password: "",
+    });
 
-      onClose();
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message);
-    }
+    onClose();
   };
 
   return (

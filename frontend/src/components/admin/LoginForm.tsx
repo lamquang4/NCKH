@@ -4,7 +4,7 @@ import { HiOutlineEyeOff, HiOutlineEye } from "react-icons/hi";
 import Loading from "../ui/Loading";
 import Overplay from "./ui/Overplay";
 import useLogin from "../../hooks/auth/useLogin";
-import toast from "react-hot-toast";
+
 function LoginForm() {
   const [data, setData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -25,19 +25,15 @@ function LoginForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    try {
-      await handleLogin({
-        email: data.email,
-        password: data.password,
-      });
+    await handleLogin({
+      email: data.email,
+      password: data.password,
+    });
 
-      setData({
-        email: "",
-        password: "",
-      });
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message);
-    }
+    setData({
+      email: "",
+      password: "",
+    });
   };
 
   return (
@@ -85,7 +81,7 @@ function LoginForm() {
                         value={data.password}
                         onChange={handleChange}
                         placeholder="Nhập mật khẩu"
-                    className="text-[0.9rem] block w-full px-3 pr-12 py-2 outline-none border border-gray-300"
+                        className="text-[0.9rem] block w-full px-3 pr-12 py-2 outline-none border border-gray-300"
                         required
                       />
 

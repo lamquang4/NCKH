@@ -39,16 +39,16 @@ export default function useUpdateProduct(id: string) {
         formData.append("images", file);
       });
 
-      await axios.put(url, formData, {
+      const res = await axios.put(url, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
       await mutate();
       toast.dismiss(loadingToast);
-      toast.success("Cập nhật thành công");
-    } catch (err) {
-      console.error("Lỗi:", err);
+      toast.success(res.data?.message);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message);
       throw err;
     } finally {
       toast.dismiss(loadingToast);

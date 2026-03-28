@@ -12,84 +12,67 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.validation.annotation.Validated;
 
 import com.backend.cart_service.dto.request.CartItemRequest;
+import com.backend.cart_service.dto.response.ApiResponse;
 import com.backend.cart_service.dto.response.CartResponse;
-import com.backend.cart_service.exception.BadRequestException;
 import com.backend.cart_service.service.CartService;
-import com.backend.cart_service.utils.JwtUtil;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import jakarta.ws.rs.ForbiddenException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 @Validated
 @RestController
 @RequestMapping("/api/cart")
 public class CartController {
     private final CartService cartService;
-    private final JwtUtil jwtUtil;
 
-    public CartController(CartService cartService, JwtUtil jwtUtil) {
+    public CartController(CartService cartService) {
         this.cartService = cartService;
-        this.jwtUtil = jwtUtil;
     }
 
     @GetMapping
-    public ResponseEntity<CartResponse> getCart(HttpServletRequest request) {
-        String userId = extractUserIdFromHeader(request);
+    public ResponseEntity<ApiResponse<CartResponse>> getCart(@AuthenticationPrincipal String userId) {
 
-        return ResponseEntity.ok(cartService.getCartByUserId(userId));
+        return ResponseEntity.ok(
+                ApiResponse.<CartResponse>builder()
+                        .message("Lấy giỏ hàng thành công")
+                        .data(cartService.getCartByUserId(userId))
+                        .build());
     }
 
     @PostMapping
-    public ResponseEntity<Void> addToCart(
-            HttpServletRequest request,
+    public ResponseEntity<ApiResponse<Void>> addToCart(
+            @AuthenticationPrincipal String userId,
             @RequestBody @Valid CartItemRequest itemRequest) {
 
-        String userId = extractUserIdFromHeader(request);
         cartService.addToCart(userId, itemRequest);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(
+                ApiResponse.<Void>builder()
+                        .message("Thêm sản phẩm vào giỏ hàng thành công")
+                        .build());
     }
 
     @PutMapping
-    public ResponseEntity<Void> updateQuantity(
-            HttpServletRequest request,
+    public ResponseEntity<ApiResponse<Void>> updateQuantity(
+            @AuthenticationPrincipal String userId,
             @RequestBody @Valid CartItemRequest itemRequest) {
 
-        String userId = extractUserIdFromHeader(request);
         cartService.updateQuantity(userId, itemRequest);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(
+                ApiResponse.<Void>builder()
+                        .message("Cập nhật số lượng thành công")
+                        .build());
     }
 
     @DeleteMapping("/{productId}")
-    public ResponseEntity<Void> removeItem(
-            HttpServletRequest request,
+    public ResponseEntity<ApiResponse<Void>> removeItem(
+            @AuthenticationPrincipal String userId,
             @PathVariable String productId) {
 
-        String userId = extractUserIdFromHeader(request);
         cartService.removeItem(userId, productId);
-        return ResponseEntity.noContent().build();
-    }
-
-    // Helper
-    private String extractUserIdFromHeader(HttpServletRequest request) {
-        String authHeader = request.getHeader("Authorization");
-
-        if (authHeader == null || authHeader.isEmpty()) {
-            throw new BadRequestException("Authorization header không được để trống");
-        }
-
-        String token = authHeader.replace("Bearer ", "");
-
-        if (!jwtUtil.isTokenValid(token)) {
-            throw new BadRequestException("Token không hợp lệ");
-        }
-
-        String role = jwtUtil.extractRole(token);
-        if (!"customer".equals(role)) {
-            throw new ForbiddenException("Chỉ customer mới có thể truy cập");
-        }
-
-        return jwtUtil.extractUserId(token);
+        return ResponseEntity.ok(
+                ApiResponse.<Void>builder()
+                        .message("Xóa sản phẩm khỏi giỏ hàng thành công")
+                        .build());
     }
 
     // Internal

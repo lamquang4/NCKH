@@ -31,12 +31,12 @@ export default function useUpdateStatusUser() {
       const url = `${
         import.meta.env.VITE_BACKEND_URL
       }/user/status/${id}?status=${status}`;
-      await axios.patch(url);
+      const res = await axios.patch(url);
       await Promise.all([mutateAdmins(), mutateCustomers()]);
       toast.dismiss(loadingToast);
-      toast.success("Cập nhật thành công");
-    } catch (err) {
-      console.error("Lỗi:", err);
+      toast.success(res.data?.message);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message);
       throw err;
     } finally {
       toast.dismiss(loadingToast);

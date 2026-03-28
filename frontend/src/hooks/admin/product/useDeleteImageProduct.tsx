@@ -6,7 +6,7 @@ import useGetProduct from "./useGetProduct";
 
 export default function useDeleteImageProduct(productId: string) {
   const [isLoading, setIsLoading] = useState(false);
- const { mutate } = useGetProduct(productId);
+  const { mutate } = useGetProduct(productId);
   const deleteImageProduct = async (imageId: string) => {
     const result = await Swal.fire({
       title: `Xác nhận xóa?`,
@@ -25,12 +25,12 @@ export default function useDeleteImageProduct(productId: string) {
 
     try {
       const url = `${import.meta.env.VITE_BACKEND_URL}/product/${productId}/image/${imageId}`;
-      await axios.delete(url);
+      const res = await axios.delete(url);
       await mutate();
       toast.dismiss(loadingToast);
-      toast.success("Xóa hình thành công");
-    } catch (err) {
-      console.error("Lỗi:", err);
+      toast.success(res.data?.message);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message);
       throw err;
     } finally {
       toast.dismiss(loadingToast);

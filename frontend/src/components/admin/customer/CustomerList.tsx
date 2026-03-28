@@ -7,7 +7,7 @@ import InputSearch from "../ui/InputSearch";
 import ListHeader from "../list/ListHeader";
 import ListBody from "../list/ListBody";
 import useGetCustomers from "../../../hooks/admin/user/useGetCustomers";
-import toast from "react-hot-toast";
+
 import useUpdateStatusUser from "../../../hooks/admin/user/useUpdateStatusUser";
 
 function CustomerList() {
@@ -27,11 +27,7 @@ function CustomerList() {
       return;
     }
 
-    try {
-      await updateStatusUser(id, status);
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message);
-    }
+    await updateStatusUser(id, status);
   };
 
   return (

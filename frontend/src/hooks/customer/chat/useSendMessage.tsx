@@ -3,6 +3,7 @@ import { useState } from "react";
 import type { MessageRequest } from "../../../types/type";
 import { getCookie } from "../../../utils/cookieUtil";
 import useGetChat from "./useGetChat";
+import toast from "react-hot-toast";
 
 export default function useSendMessage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -15,7 +16,10 @@ export default function useSendMessage() {
     mutate(
       (current: any) => ({
         ...current,
-        messages: [...(current?.messages ?? []), optimisticMessage],
+        data: {
+          ...current?.data,
+          messages: [...(current?.data?.messages ?? []), optimisticMessage],
+        },
       }),
       { revalidate: false },
     );
@@ -32,18 +36,21 @@ export default function useSendMessage() {
       });
 
       await mutate();
-    } catch (err) {
+    } catch (err: any) {
       mutate(
         (current: any) => ({
           ...current,
-          messages:
-            current?.messages?.filter(
-              (m: any) => m.id !== optimisticMessage.id,
-            ) ?? [],
+          data: {
+            ...current?.data,
+            messages:
+              current?.data?.messages?.filter(
+                (m: any) => m.id !== optimisticMessage.id,
+              ) ?? [],
+          },
         }),
         { revalidate: false },
       );
-      console.error("Lỗi:", err);
+      toast.error(err?.response?.data?.message);
       throw err;
     } finally {
       setIsLoading(false);

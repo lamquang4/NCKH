@@ -16,12 +16,13 @@ export default function useAddBrand() {
     setIsLoading(true);
     try {
       const url = `${import.meta.env.VITE_BACKEND_URL}/brand`;
-      await axios.post(url, data);
+      const res = await axios.post(url, data);
+
       await mutate();
       toast.dismiss(loadingToast);
-      toast.success("Thêm thành công");
-    } catch (err) {
-      console.error("Lỗi:", err);
+      toast.success(res.data?.message);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message);
       throw err;
     } finally {
       toast.dismiss(loadingToast);

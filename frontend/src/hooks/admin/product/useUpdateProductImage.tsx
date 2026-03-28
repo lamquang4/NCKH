@@ -18,12 +18,12 @@ export default function useUpdateImageProduct(productId: string) {
       const url = `${import.meta.env.VITE_BACKEND_URL}/product/${productId}/image/${imageId}`;
       const formData = new FormData();
       formData.append("file", file);
-      await axios.patch(url, formData);
+      const res = await axios.patch(url, formData);
       await mutate();
       toast.dismiss(loadingToast);
-      toast.success("Cập nhật hình thành công");
-    } catch (err) {
-      console.error(err);
+      toast.success(res.data?.message);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message);
       throw err;
     } finally {
       toast.dismiss(loadingToast);

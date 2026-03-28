@@ -13,7 +13,6 @@ import ListBody from "../list/ListBody";
 import useGetProducts from "../../../hooks/admin/product/useGetProducts";
 import useDeleteProduct from "../../../hooks/admin/product/useDeleteProduct";
 import useUpdateStatusProduct from "../../../hooks/admin/product/useUpdateStatusProduct";
-import toast from "react-hot-toast";
 
 function ProductList() {
   const { products, isLoading, totalItems, totalPages, currentPage, limit } =
@@ -42,11 +41,7 @@ function ProductList() {
       return;
     }
 
-    try {
-      await deleteProduct(id);
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message);
-    }
+    await deleteProduct(id);
   };
 
   const handleUpdateStatus = async (id: string, status: number) => {
@@ -54,11 +49,7 @@ function ProductList() {
       return;
     }
 
-    try {
-      await updateStatusProduct(id, status);
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message);
-    }
+    await updateStatusProduct(id, status);
   };
 
   return (

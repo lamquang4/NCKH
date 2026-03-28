@@ -20,7 +20,7 @@ export function useChangeQuantityItemInCart() {
 
       const url = `${import.meta.env.VITE_BACKEND_URL}/cart`;
 
-      await axios.put(url, data, {
+      const res = await axios.put(url, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -28,9 +28,9 @@ export function useChangeQuantityItemInCart() {
       await mutate();
 
       toast.dismiss(loadingToast);
-      toast.success("Cập nhật số lượng thành công");
+      toast.success(res.data?.message);
     } catch (err: any) {
-      console.error("Lỗi:", err);
+      toast.error(err?.response?.data?.message);
       throw err;
     } finally {
       toast.dismiss(loadingToast);

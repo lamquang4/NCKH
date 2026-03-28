@@ -59,14 +59,10 @@ function ProductDetail({ product }: Props) {
       return;
     }
 
-    try {
-      await addItem({
-        productId: product.id,
-        quantity,
-      });
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message);
-    }
+    await addItem({
+      productId: product.id,
+      quantity,
+    });
   };
 
   return (

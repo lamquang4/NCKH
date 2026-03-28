@@ -13,16 +13,10 @@ import ListHeader from "../list/ListHeader";
 import useGetCategories from "../../../hooks/admin/category/useGetCategories";
 import useDeleteCategory from "../../../hooks/admin/category/useDeleteCategory";
 import useUpdateStatusCategory from "../../../hooks/admin/category/useUpdateStatusCategory";
-import toast from "react-hot-toast";
+
 function CategoryList() {
-  const {
-    categories,
-    isLoading,
-    totalItems,
-    totalPages,
-    currentPage,
-    limit,
-  } = useGetCategories();
+  const { categories, isLoading, totalItems, totalPages, currentPage, limit } =
+    useGetCategories();
   const { deleteCategory, isLoading: isLoadingDelete } = useDeleteCategory();
   const { updateStatusCategory, isLoading: isLoadingUpdate } =
     useUpdateStatusCategory();
@@ -47,11 +41,7 @@ function CategoryList() {
       return;
     }
 
-    try {
-      await deleteCategory(id);
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message);
-    }
+    await deleteCategory(id);
   };
 
   const handleUpdateStatus = async (id: string, status: number) => {
@@ -59,11 +49,7 @@ function CategoryList() {
       return;
     }
 
-    try {
-      await updateStatusCategory(id, status);
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message);
-    }
+    await updateStatusCategory(id, status);
   };
   return (
     <>

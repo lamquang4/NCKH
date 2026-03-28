@@ -9,7 +9,7 @@ import ListHeader from "../list/ListHeader";
 import ListBody from "../list/ListBody";
 import useGetOrders from "../../../hooks/admin/order/useGetOrders";
 import useUpdateStatusOrder from "../../../hooks/admin/order/useUpdateStatusOrder";
-import toast from "react-hot-toast";
+
 function OrderList() {
   const { orders, isLoading, totalItems, totalPages, currentPage, limit } =
     useGetOrders();
@@ -20,11 +20,8 @@ function OrderList() {
     if (!id && !status) {
       return;
     }
-    try {
-      await updateStatusOrder(id, status);
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message);
-    }
+
+    await updateStatusOrder(id, status);
   };
 
   const array = [

@@ -18,16 +18,16 @@ export function useRemoveItemInCart() {
 
       const url = `${import.meta.env.VITE_BACKEND_URL}/cart/${productId}`;
 
-      await axios.delete(url, {
+      const res = await axios.delete(url, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       await mutate();
       toast.dismiss(loadingToast);
-      toast.success("Xóa khỏi giỏ hàng thành công");
+      toast.success(res.data?.message);
     } catch (err: any) {
-      console.error("Lỗi:", err);
+      toast.error(err?.response?.data?.message);
       throw err;
     } finally {
       toast.dismiss(loadingToast);
