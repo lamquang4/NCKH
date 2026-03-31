@@ -2,8 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 import Image from "../../ui/Image";
 import ChatContainer from "../chatbox/ChatContainer";
 import Overplay from "../ui/Overplay";
-import useGetChatMessages from "../../../hooks/customer/chat/useGetChatMessages";
-
 function FloatingWidget() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
