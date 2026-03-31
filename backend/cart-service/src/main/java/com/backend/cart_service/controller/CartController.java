@@ -75,6 +75,24 @@ public class CartController {
                         .build());
     }
 
+    // assistant
+    @GetMapping("/assistant")
+    public ResponseEntity<CartResponse> getCartAssistant(
+            @AuthenticationPrincipal String userId) {
+
+        return ResponseEntity.ok(
+                cartService.getCartByUserId(userId));
+    }
+
+    @PostMapping("/assistant")
+    public ResponseEntity<Void> addToCartAssistant(
+            @AuthenticationPrincipal String userId,
+            @RequestBody @Valid CartItemRequest itemRequest) {
+
+        cartService.addToCart(userId, itemRequest);
+        return ResponseEntity.ok().build();
+    }
+
     // Internal
     @DeleteMapping("/internal/all/{productId}")
     public ResponseEntity<Void> removeProductFromAllCartsInternal(@PathVariable String productId) {

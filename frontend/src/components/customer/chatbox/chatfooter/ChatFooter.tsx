@@ -9,11 +9,7 @@ import ChatVoice from "./ChatVoice";
 import { openAuthModal } from "../../../../redux/slices/AuthModalSlice";
 import { useDispatch } from "react-redux";
 
-type Props = {
-  chatId: string;
-};
-
-function ChatFooter({ chatId }: Props) {
+function ChatFooter() {
   const dispatch = useDispatch();
   const [textLength, setTextLength] = useState<number>(0);
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
@@ -46,24 +42,13 @@ function ChatFooter({ chatId }: Props) {
       return;
     }
 
-    const optimisticMessage = {
-      id: `temp-${Date.now()}`,
-      content: message,
-      role: "user",
-      createdAt: new Date().toISOString(),
-    };
-
     inputRef.current!.value = "";
     inputRef.current!.style.height = "auto";
     setTextLength(0);
 
-    await sendMessage(
-      {
-        content: message,
-        chatId: chatId,
-      },
-      optimisticMessage,
-    );
+    await sendMessage({
+      content: message,
+    });
   };
 
   return (
@@ -73,7 +58,6 @@ function ChatFooter({ chatId }: Props) {
       >
         <form onSubmit={handleSubmit} className="w-full">
           <ChatInput
-            isLoading={isLoading}
             ref={inputRef}
             onInput={handleInput}
             onSubmit={handleSubmit}

@@ -1,26 +1,48 @@
 import axios from "axios";
 import { useState } from "react";
-import type { MessageRequest } from "../../../types/type";
+import type { MessageRequest, MessageResponse } from "../../../types/type";
 import { getCookie } from "../../../utils/cookieUtil";
-import useGetChat from "./useGetChat";
 import toast from "react-hot-toast";
+import useGetChatMessages from "./useGetChatMessages";
 
 export default function useSendMessage() {
   const [isLoading, setIsLoading] = useState(false);
-  const { mutate } = useGetChat();
-  const sendMessage = async (data: MessageRequest, optimisticMessage: any) => {
+  const { mutate } = useGetChatMessages();
+  const sendMessage = async (data: MessageRequest) => {
     if (!data) {
       return;
     }
 
+    const optimisticAssistantMessage: MessageResponse = {
+      chatId: "ABC",
+      id: `assistant-temp-${Date.now()}`,
+      content: "Trợ lý ảo đang phản hồi...",
+      role: "ASSISTANT",
+      createdAt: new Date().toISOString(),
+    };
+
+    const optimisticMessage: MessageResponse = {
+      chatId: "ABC",
+      id: `temp-${Date.now()}`,
+      content: data.content,
+      role: "USER",
+      createdAt: new Date().toISOString(),
+    };
+
     mutate(
-      (current: any) => ({
-        ...current,
-        data: {
-          ...current?.data,
-          messages: [...(current?.data?.messages ?? []), optimisticMessage],
-        },
-      }),
+      (currentPages) => {
+        if (!currentPages) return currentPages;
+        const updatedPages = [...currentPages];
+        updatedPages[0] = {
+          ...updatedPages[0],
+          data: [
+            optimisticAssistantMessage,
+            optimisticMessage,
+            ...updatedPages[0].data,
+          ],
+        };
+        return updatedPages;
+      },
       { revalidate: false },
     );
 
@@ -37,19 +59,7 @@ export default function useSendMessage() {
 
       await mutate();
     } catch (err: any) {
-      mutate(
-        (current: any) => ({
-          ...current,
-          data: {
-            ...current?.data,
-            messages:
-              current?.data?.messages?.filter(
-                (m: any) => m.id !== optimisticMessage.id,
-              ) ?? [],
-          },
-        }),
-        { revalidate: false },
-      );
+      await mutate();
       toast.error(err?.response?.data?.message);
       throw err;
     } finally {

@@ -10,7 +10,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.backend.assistant_service.client.ChatServiceClient;
 import com.backend.assistant_service.dto.request.MessageRequest;
 import com.backend.assistant_service.dto.response.AssistantResponse;
-import com.backend.assistant_service.dto.response.ChatResponse;
+import com.backend.assistant_service.dto.response.MessageResponse;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -34,11 +34,13 @@ public class AssistantService {
         }
 
         public void handleChat(String userId, MessageRequest request) {
-                ChatResponse chat = chatServiceClient.getOrCreateChat(userId);
+                // Lưu tin nhắn của người dùng
+                String chatId = chatServiceClient.sendUserMessage(userId, request);
 
-                chatServiceClient.sendUserMessage(userId, request);
+                // Lấy history messages của người dùng
+                List<MessageResponse> messages = chatServiceClient.getChatMessagesInternal(userId, 1, 20);
 
-                AssistantResponse aiResponse = callAI(chat, request.getContent(), userId);
+                AssistantResponse aiResponse = callAI(chatId, userId, messages, request.getContent());
 
                 if (aiResponse == null || aiResponse.getContent() == null) {
                         aiResponse = AssistantResponse.builder()
@@ -47,27 +49,27 @@ public class AssistantService {
                                         .build();
                 }
 
-                MessageRequest aiMessage = MessageRequest.builder()
-                                .chatId(chat.getId())
+                // lưu tin nhắn của trợ lý ảo
+                chatServiceClient.saveAssistantMessage(MessageRequest.builder()
+                                .chatId(chatId)
                                 .content(aiResponse.getContent())
                                 .productIds(aiResponse.getProductIds())
-                                .build();
-
-                chatServiceClient.saveAssistantMessage(aiMessage);
+                                .build());
         }
 
-        private AssistantResponse callAI(ChatResponse chat, String currentMessage, String userId) {
-                List<Map<String, String>> messages = chat.getMessages().stream()
+        private AssistantResponse callAI(String chatId, String userId, List<MessageResponse> messages,
+                        String currentMessage) {
+                List<Map<String, String>> history = messages.stream()
                                 .map(m -> Map.of(
                                                 "role", mapRole(m.getRole()),
                                                 "content", m.getContent()))
                                 .toList();
 
                 Map<String, Object> body = Map.of(
-                                "chatId", chat.getId(),
-                                "userId", chat.getUserId(),
+                                "chatId", chatId,
+                                "userId", userId,
                                 "chatInput", currentMessage,
-                                "messages", messages);
+                                "messages", history);
 
                 String rawResponse = webClient.post()
                                 .uri(webhookPath)
@@ -93,7 +95,7 @@ public class AssistantService {
                 } catch (Exception e) {
                         System.out.println("Parse error: " + e.getMessage());
                         return AssistantResponse.builder()
-                                        .content("Xin lỗi, có lỗi xảy ra khi xử lý phản hồi.")
+                                        .content("Xin lỗi, trợ lý không phản hồi được lúc này.")
                                         .productIds(List.of())
                                         .build();
                 }

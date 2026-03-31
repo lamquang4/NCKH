@@ -5,16 +5,18 @@ import type {
   ApiResponse,
   ProductListItemResponse,
 } from "../../../../types/type";
+import useDebounce from "../../../useDebounce";
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 export default function useGetSuggestionProducts(limit: number) {
   const [keyword, setKeyword] = useState<string>("");
-  const url = `${import.meta.env.VITE_BACKEND_URL}/product/active/limit?q=${keyword}&limit=${limit}`;
+  const debouncedKeyword = useDebounce(keyword, 500);
+  const url = `${import.meta.env.VITE_BACKEND_URL}/product/active/limit?q=${debouncedKeyword}&limit=${limit}`;
 
   const { data, error, isLoading, mutate } = useSWR<
     ApiResponse<ProductListItemResponse[]>
-  >(url, fetcher, {
+  >(debouncedKeyword ? url : null, fetcher, {
     shouldRetryOnError: false,
     revalidateOnFocus: false,
   });

@@ -123,6 +123,27 @@ public class OrderController {
                                                 .build());
         }
 
+        // assistant
+        @GetMapping("/assistant/user/{orderCode}")
+        public ResponseEntity<OrderResponse> getUserOrderByCodeAssistant(
+                        @PathVariable String orderCode,
+                        @AuthenticationPrincipal String userId) {
+
+                return ResponseEntity.ok(
+                                orderService.getOrderByOrderCodeAndUser(orderCode, userId));
+        }
+
+        @GetMapping("/assistant/user")
+        public ResponseEntity<List<OrderResponse>> getOrdersByUserAssistant(
+                        @RequestParam(defaultValue = "12") int limit,
+                        @RequestParam(required = false) Integer status,
+                        @AuthenticationPrincipal String userId) {
+
+                Page<OrderResponse> orderPage = orderService.getOrdersByUser(userId, 1, limit, status);
+
+                return ResponseEntity.ok(orderPage.getContent());
+        }
+
         // Internal
         @GetMapping("/internal/code/{orderCode}")
         public ResponseEntity<OrderResponse> getOrderByOrderCodeInternal(

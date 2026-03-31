@@ -6,7 +6,7 @@ import useGetSuggestionProducts from "../../../hooks/customer/product/list/useGe
 type Props = {
   search: string;
 };
-function Suggestion({ search }: Props) {
+function SuggestionProduct({ search }: Props) {
   const { products, isLoading, setKeyword } = useGetSuggestionProducts(10);
 
   useEffect(() => {
@@ -75,4 +75,4 @@ function Suggestion({ search }: Props) {
   );
 }
 
-export default memo(Suggestion);
+export default memo(SuggestionProduct);

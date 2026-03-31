@@ -2,10 +2,12 @@ import Cookies from "js-cookie";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useGetAccount from "./useGetAccount";
+import useGetChat from "../customer/chat/useGetChatMessages";
 export default function useLogout() {
   const [isLoading, setIsLoading] = useState(false);
   const { mutate: mutateAccountCustomer } = useGetAccount("customer");
   const { mutate: mutateAccountAdmin } = useGetAccount("admin");
+  const { mutate: mutateChat } = useGetChat();
   const navigate = useNavigate();
 
   const handleLogout = async (type: "admin" | "customer") => {
@@ -18,6 +20,7 @@ export default function useLogout() {
       } else {
         Cookies.remove("token-customer");
         await mutateAccountCustomer(undefined, { revalidate: false });
+        await mutateChat(undefined, { revalidate: false });
         navigate("/", { replace: true });
       }
     } catch (err) {

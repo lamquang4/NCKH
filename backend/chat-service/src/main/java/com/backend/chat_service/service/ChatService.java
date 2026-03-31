@@ -2,11 +2,12 @@ package com.backend.chat_service.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.backend.chat_service.client.ProductServiceClient;
 import com.backend.chat_service.dto.request.MessageRequest;
-import com.backend.chat_service.dto.response.ChatResponse;
 import com.backend.chat_service.dto.response.MessageResponse;
 import com.backend.chat_service.dto.response.ProductListItemResponse;
 import com.backend.chat_service.exception.AppException;
@@ -16,7 +17,8 @@ import com.backend.chat_service.model.Chat;
 import com.backend.chat_service.model.Message;
 import com.backend.chat_service.repository.ChatRepository;
 import com.backend.chat_service.repository.MessageRepository;
-
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import jakarta.ws.rs.ForbiddenException;
 
 @Service
@@ -34,48 +36,29 @@ public class ChatService {
                 this.productServiceClient = productServiceClient;
         }
 
-        // Lấy chat của user
-        public ChatResponse getOrCreateChat(String userId) {
+        // Lấy messages của user
+        public Page<MessageResponse> getMessages(String userId, int page, int limit) {
                 Chat chat = chatRepository.findByUserId(userId)
-                                .orElseGet(() -> chatRepository.save(
-                                                Chat.builder()
-                                                                .userId(userId)
-                                                                .build()));
+                                .orElseThrow(() -> new AppException(ErrorCode.CHAT_NOT_FOUND));
 
-                List<MessageResponse> messages = messageRepository
-                                .findByChatIdOrderByCreatedAtAsc(chat.getId())
-                                .stream()
-                                .map(this::mapMessageWithProducts)
-                                .toList();
+                Pageable pageable = PageRequest.of(page - 1, limit, Sort.by("createdAt").descending());
 
-                return ChatMapper.toChatResponse(chat, messages);
+                return messageRepository.findByChatId(chat.getId(), pageable)
+                                .map(this::mapMessageWithProducts);
         }
 
         // Lưu tin nhắn với role được truyền vào (USER hoặc ASSISTANT)
-        public void saveMessage(MessageRequest request, String userId, String role) {
-                Chat chat = chatRepository.findById(request.getChatId())
-                                .orElseThrow(() -> new AppException(ErrorCode.CHAT_NOT_FOUND));
-
-                if (userId != null && !chat.getUserId().equals(userId)) {
-                        throw new ForbiddenException("Bạn không có quyền gửi tin nhắn vào chat này");
-                }
+        public String saveMessage(MessageRequest request, String userId, String role) {
+                Chat chat = userId != null
+                                ? chatRepository.findByUserId(userId)
+                                                .orElseGet(() -> chatRepository.save(
+                                                                Chat.builder().userId(userId).build()))
+                                : chatRepository.findById(request.getChatId())
+                                                .orElseThrow(() -> new AppException(ErrorCode.CHAT_NOT_FOUND));
 
                 Message message = ChatMapper.toMessageEntity(request, chat.getId(), role);
                 messageRepository.save(message);
-        }
-
-        // lấy chat bằng id
-        public ChatResponse getChatById(String chatId) {
-                Chat chat = chatRepository.findById(chatId)
-                                .orElseThrow(() -> new AppException(ErrorCode.CHAT_NOT_FOUND));
-
-                List<MessageResponse> messages = messageRepository
-                                .findByChatIdOrderByCreatedAtAsc(chatId)
-                                .stream()
-                                .map(this::mapMessageWithProducts)
-                                .toList();
-
-                return ChatMapper.toChatResponse(chat, messages);
+                return chat.getId();
         }
 
         private MessageResponse mapMessageWithProducts(Message message) {

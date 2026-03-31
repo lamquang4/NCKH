@@ -6,16 +6,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.chat_service.dto.request.MessageRequest;
 import com.backend.chat_service.dto.response.ApiResponse;
-import com.backend.chat_service.dto.response.ChatResponse;
+import com.backend.chat_service.dto.response.MessageResponse;
 import com.backend.chat_service.service.ChatService;
 
 import jakarta.validation.Valid;
+
+import java.util.List;
+
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
@@ -31,32 +35,30 @@ public class ChatController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<ApiResponse<ChatResponse>> getOrCreateChat(
-            @AuthenticationPrincipal String userId) {
+    public ResponseEntity<ApiResponse<List<MessageResponse>>> getChatMessages(
+            @AuthenticationPrincipal String userId,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "20") int limit) {
+
+        Page<MessageResponse> messagePage = chatService.getMessages(userId, page, limit);
 
         return ResponseEntity.ok(
-                ApiResponse.<ChatResponse>builder()
-                        .message("Lấy cuộc hội thoại thành công")
-                        .data(chatService.getOrCreateChat(userId))
+                ApiResponse.<List<MessageResponse>>builder()
+                        .message("Lấy tin nhắn thành công")
+                        .data(messagePage.getContent())
+                        .totalPages(messagePage.getTotalPages())
+                        .total(messagePage.getTotalElements())
                         .build());
     }
 
     // internal
-    @GetMapping("/internal/user/{userId}")
-    public ResponseEntity<ChatResponse> getOrCreateChatInternal(
-            @PathVariable String userId) {
-
-        return ResponseEntity.ok(
-                chatService.getOrCreateChat(userId));
-    }
-
     @PostMapping("/internal/user/message/{userId}")
-    public ResponseEntity<Void> sendUserMessage(
+    public ResponseEntity<String> sendUserMessage(
             @PathVariable String userId,
             @Valid @RequestBody MessageRequest messageRequest) {
 
-        chatService.saveMessage(messageRequest, userId, "USER");
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        String chatId = chatService.saveMessage(messageRequest, userId, "USER");
+        return ResponseEntity.status(HttpStatus.CREATED).body(chatId);
     }
 
     @PostMapping("/internal/assistant/message")
@@ -66,10 +68,14 @@ public class ChatController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/internal/{chatId}")
-    public ResponseEntity<ChatResponse> getChatByIdInternal(
-            @PathVariable String chatId) {
-        return ResponseEntity.ok(chatService.getChatById(chatId));
-    }
+    @GetMapping("/internal/user/{userId}")
+    public ResponseEntity<List<MessageResponse>> getChatMessagesInternal(
+            @PathVariable String userId,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "20") int limit) {
 
+        Page<MessageResponse> messagePage = chatService.getMessages(userId, page, limit);
+
+        return ResponseEntity.ok(messagePage.getContent());
+    }
 }
