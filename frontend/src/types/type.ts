@@ -1,6 +1,6 @@
 // Request
 export interface MessageRequest {
-  chatId: string;
+  chatId?: string;
   content: string;
 }
 
@@ -63,11 +63,6 @@ export interface ProductRequest {
 export interface CartItemRequest {
   productId: string;
   quantity: number;
-}
-
-export interface MessageRequest {
-  chatId: string;
-  content: string;
 }
 
 // Response
