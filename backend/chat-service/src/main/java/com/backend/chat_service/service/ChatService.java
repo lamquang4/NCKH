@@ -19,7 +19,6 @@ import com.backend.chat_service.repository.ChatRepository;
 import com.backend.chat_service.repository.MessageRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import jakarta.ws.rs.ForbiddenException;
 
 @Service
 public class ChatService {

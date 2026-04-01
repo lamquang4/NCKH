@@ -33,14 +33,14 @@ public class AssistantService {
                                 .build();
         }
 
-        public void handleChat(String userId, MessageRequest request) {
+        public void handleChat(String userId, String token, MessageRequest request) {
                 // Lưu tin nhắn của người dùng
                 String chatId = chatServiceClient.sendUserMessage(userId, request);
 
                 // Lấy history messages của người dùng
                 List<MessageResponse> messages = chatServiceClient.getChatMessagesInternal(userId, 1, 20);
 
-                AssistantResponse aiResponse = callAI(chatId, userId, messages, request.getContent());
+                AssistantResponse aiResponse = callAI(chatId, userId, token, messages, request.getContent());
 
                 if (aiResponse == null || aiResponse.getContent() == null) {
                         aiResponse = AssistantResponse.builder()
@@ -57,7 +57,7 @@ public class AssistantService {
                                 .build());
         }
 
-        private AssistantResponse callAI(String chatId, String userId, List<MessageResponse> messages,
+        private AssistantResponse callAI(String chatId, String userId, String token, List<MessageResponse> messages,
                         String currentMessage) {
                 List<Map<String, String>> history = messages.stream()
                                 .map(m -> Map.of(
@@ -68,6 +68,7 @@ public class AssistantService {
                 Map<String, Object> body = Map.of(
                                 "chatId", chatId,
                                 "userId", userId,
+                                "token", token,
                                 "chatInput", currentMessage,
                                 "messages", history);
 

@@ -8,10 +8,12 @@ import type {
 import { getCookie } from "../../../utils/cookieUtil";
 import useGetCart from "../cart/useGetCart";
 import toast from "react-hot-toast";
+import useGetOrders from "./useGetOrders";
 
 export default function useAddOrder() {
   const [isLoading, setIsLoading] = useState(false);
-  const { mutate } = useGetCart();
+  const { mutate: mutateCart } = useGetCart();
+  const { mutate: mutateOrders } = useGetOrders();
   const addOrder = async (data: OrderRequest) => {
     if (!data) {
       return;
@@ -32,7 +34,8 @@ export default function useAddOrder() {
       });
 
       if (data.paymethod === "cod") {
-        await mutate();
+        await mutateCart();
+        await mutateOrders();
       }
 
       return res.data.data;
