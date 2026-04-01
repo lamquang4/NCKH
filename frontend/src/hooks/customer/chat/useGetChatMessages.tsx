@@ -12,7 +12,9 @@ export default function useGetChatMessages() {
     ApiResponse<MessageResponse[]>
   >(
     (index) =>
-      `${import.meta.env.VITE_BACKEND_URL}/chat/user?page=${index + 1}&limit=${limit}`,
+      token
+        ? `${import.meta.env.VITE_BACKEND_URL}/chat/user?page=${index + 1}&limit=${limit}&token=${token}`
+        : null,
     (url) =>
       axios
         .get(url, { headers: { Authorization: `Bearer ${token}` } })
