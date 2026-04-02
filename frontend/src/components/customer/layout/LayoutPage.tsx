@@ -1,8 +1,8 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { useLocation } from "react-router-dom";
 import Header from "./header/Header";
 import Footer from "./Footer";
-import FloatingWidget from "./FloatingWidget";
+const FloatingWidget = lazy(() => import("./FloatingWidget"));
 
 export default function LayoutPage({
   children,
@@ -16,7 +16,11 @@ export default function LayoutPage({
     <>
       {!isPage && <Header />}
       {children}
-      {!isPage && <FloatingWidget />}
+      {!isPage && (
+        <Suspense fallback={null}>
+          <FloatingWidget />
+        </Suspense>
+      )}
       {!isPage && <Footer />}
     </>
   );

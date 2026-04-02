@@ -80,13 +80,4 @@ public class AuthController {
                                 .build());
         }
 
-        // assistant
-        @GetMapping("/assistant/me")
-        public ResponseEntity<UserResponse> getCurrentUserAssistant(
-                        @AuthenticationPrincipal String userId) {
-
-                UserResponse user = userServiceClient.getUserByIdInternal(userId);
-                return ResponseEntity.ok(user);
-        }
-
 }

@@ -7,16 +7,16 @@ import Image from "../../ui/Image";
 function MainBanner() {
   const banners = [
     {
-      mobile: "/assets/banners/mainbanner1.png",
-      desktop: "/assets/banners/mainbanner1.png",
+      mobile: "/assets/banners/mainbanner1.webp",
+      desktop: "/assets/banners/mainbanner1.webp",
     },
     {
-      mobile: "/assets/banners/mainbanner2.png",
-      desktop: "/assets/banners/mainbanner2.png",
+      mobile: "/assets/banners/mainbanner2.webp",
+      desktop: "/assets/banners/mainbanner2.webp",
     },
     {
-      mobile: "/assets/banners/mainbanner3.png",
-      desktop: "/assets/banners/mainbanner3.png",
+      mobile: "/assets/banners/mainbanner3.webp",
+      desktop: "/assets/banners/mainbanner3.webp",
     },
   ];
   return (

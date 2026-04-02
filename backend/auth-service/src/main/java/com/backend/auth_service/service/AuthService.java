@@ -19,7 +19,6 @@ import com.backend.auth_service.exception.ErrorCode;
 import com.backend.auth_service.repository.AuthRepository;
 import com.backend.auth_service.util.OtpUtil;
 import com.backend.auth_service.util.ValidationUtils;
-
 import feign.FeignException;
 @Service
 public class AuthService {

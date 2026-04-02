@@ -44,79 +44,79 @@ type MenuGroup = {
   items: MenuItem[];
 };
 
+const menuData: MenuGroup[] = [
+  {
+    title: "Sản phẩm",
+    items: [
+      {
+        icon: <RiComputerLine size={20} />,
+        label: "Sản phẩm",
+        key: "2a",
+        children: [
+          { label: "Danh sách sản phẩm", path: "/admin/products" },
+          { label: "Thêm sản phẩm", path: "/admin/add-product" },
+        ],
+      },
+      {
+        icon: <TbCategoryPlus size={20} />,
+        label: "Danh mục",
+        key: "3a",
+        children: [
+          { label: "Danh sách danh mục", path: "/admin/categories" },
+          { label: "Thêm danh mục", path: "/admin/add-category" },
+        ],
+      },
+      {
+        icon: <TiTags size={20} />,
+        label: "Thương hiệu",
+        key: "4a",
+        children: [
+          { label: "Danh sách thương hiệu", path: "/admin/brands" },
+          { label: "Thêm thương hiệu", path: "/admin/add-brand" },
+        ],
+      },
+    ],
+  },
+  {
+    title: "Đơn hàng & thanh toán",
+    items: [
+      {
+        icon: <RiShoppingBag4Line size={20} />,
+        label: "Đơn hàng",
+        path: "/admin/orders",
+      },
+      {
+        icon: <AiOutlineCreditCard size={20} />,
+        label: "Thanh toán",
+        path: "/admin/payments",
+      },
+    ],
+  },
+  {
+    title: "Người dùng",
+    items: [
+      {
+        icon: <FaRegAddressCard size={20} />,
+        label: "Quản trị viên",
+        key: "5a",
+        children: [
+          { label: "Danh sách quản trị viên", path: "/admin/admins" },
+          { label: "Thêm quản trị viên", path: "/admin/add-admin" },
+        ],
+      },
+      {
+        icon: <FaRegCircleUser size={20} />,
+        label: "Khách hàng",
+        path: "/admin/customers",
+      },
+    ],
+  },
+];
+
 function MenuSide({ menuOpen, onToggleMenu }: Props) {
   const location = useLocation();
   const pathname = location.pathname;
   const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
-
-  const menuData: MenuGroup[] = [
-    {
-      title: "Sản phẩm",
-      items: [
-        {
-          icon: <RiComputerLine size={20} />,
-          label: "Sản phẩm",
-          key: "2a",
-          children: [
-            { label: "Danh sách sản phẩm", path: "/admin/products" },
-            { label: "Thêm sản phẩm", path: "/admin/add-product" },
-          ],
-        },
-        {
-          icon: <TbCategoryPlus size={20} />,
-          label: "Danh mục",
-          key: "3a",
-          children: [
-            { label: "Danh sách danh mục", path: "/admin/categories" },
-            { label: "Thêm danh mục", path: "/admin/add-category" },
-          ],
-        },
-        {
-          icon: <TiTags size={20} />,
-          label: "Thương hiệu",
-          key: "4a",
-          children: [
-            { label: "Danh sách thương hiệu", path: "/admin/brands" },
-            { label: "Thêm thương hiệu", path: "/admin/add-brand" },
-          ],
-        },
-      ],
-    },
-    {
-      title: "Đơn hàng & thanh toán",
-      items: [
-        {
-          icon: <RiShoppingBag4Line size={20} />,
-          label: "Đơn hàng",
-          path: "/admin/orders",
-        },
-        {
-          icon: <AiOutlineCreditCard size={20} />,
-          label: "Thanh toán",
-          path: "/admin/payments",
-        },
-      ],
-    },
-    {
-      title: "Người dùng",
-      items: [
-        {
-          icon: <FaRegAddressCard size={20} />,
-          label: "Quản trị viên",
-          key: "5a",
-          children: [
-            { label: "Danh sách quản trị viên", path: "/admin/admins" },
-            { label: "Thêm quản trị viên", path: "/admin/add-admin" },
-          ],
-        },
-        {
-          icon: <FaRegCircleUser size={20} />,
-          label: "Khách hàng",
-          path: "/admin/customers",
-        },
-      ],
-    },
-  ];
 
   const toggleOpen = (menu: string) => {
     setOpenMenus((prev) => ({

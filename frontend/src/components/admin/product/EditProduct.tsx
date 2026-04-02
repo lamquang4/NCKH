@@ -2,13 +2,12 @@ import { useCallback, useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { FreeMode } from "swiper/modules";
+import { lazy, Suspense } from "react";
 import InputImage from "../ui/InputImage";
 import Image from "../../ui/Image";
-import ImageViewer from "../../ui/ImageViewer";
 import { HiMiniXMark } from "react-icons/hi2";
 import { SiTicktick } from "react-icons/si";
 import toast from "react-hot-toast";
-import TextBoxEditor from "../textboxeditor/TextBoxEditor";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { VscTrash } from "react-icons/vsc";
 import InputImage1 from "../ui/InputImage1";
@@ -23,6 +22,10 @@ import useUpdateProduct from "../../../hooks/admin/product/useUpdateProduct";
 import useDeleteImageProduct from "../../../hooks/admin/product/useDeleteImageProduct";
 import useUpdateImageProduct from "../../../hooks/admin/product/useUpdateProductImage";
 import SearchableSelect from "../ui/SearchableSelect";
+
+const TextBoxEditor = lazy(() => import("../textboxeditor/TextBoxEditor"));
+
+const ImageViewer = lazy(() => import("../../ui/ImageViewer"));
 
 function EditProduct() {
   const navigate = useNavigate();
@@ -417,10 +420,12 @@ function EditProduct() {
                 <label htmlFor="" className="text-[0.9rem] font-medium">
                   Mô tả
                 </label>
-                <TextBoxEditor
-                  content={data.description}
-                  onChange={handleDescriptionChange}
-                />
+                <Suspense fallback={null}>
+                  <TextBoxEditor
+                    content={data.description}
+                    onChange={handleDescriptionChange}
+                  />
+                </Suspense>
               </div>
             </div>
 
@@ -508,11 +513,13 @@ function EditProduct() {
       </div>
 
       {openViewer && (
-        <ImageViewer
-          image={viewerImage}
-          open={openViewer}
-          onClose={() => setOpenViewer(false)}
-        />
+        <Suspense fallback={null}>
+          <ImageViewer
+            image={viewerImage}
+            open={openViewer}
+            onClose={() => setOpenViewer(false)}
+          />
+        </Suspense>
       )}
     </>
   );
