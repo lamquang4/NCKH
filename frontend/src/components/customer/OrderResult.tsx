@@ -9,7 +9,7 @@ function OrderResult() {
   const result = searchParams.get("result");
 
   useEffect(() => {
-   if (result !== "successful" && result !== "fail") {
+    if (result !== "successful" && result !== "fail") {
       navigate("/", { replace: true });
     }
   }, [result, navigate]);
@@ -21,7 +21,7 @@ function OrderResult() {
           {result === "successful" ? (
             <div className="flex flex-col justify-center items-center gap-[15px]">
               <Image
-                source={"/assets/successful.png"}
+                source={"/assets/successful.webp"}
                 alt={""}
                 className={"w-[100px]"}
                 loading="eager"
@@ -38,7 +38,7 @@ function OrderResult() {
           ) : result === "fail" ? (
             <div className="flex flex-col justify-center items-center gap-[15px]">
               <Image
-                source={"/assets/fail.png"}
+                source={"/assets/fail.webp"}
                 alt={""}
                 className={"w-[120px]"}
                 loading="eager"

@@ -1,7 +1,6 @@
 import InputImage from "../ui/InputImage";
-import { useCallback, useState } from "react";
+import { useCallback, useState, lazy, Suspense } from "react";
 import toast from "react-hot-toast";
-import TextBoxEditor from "../textboxeditor/TextBoxEditor";
 import { Link } from "react-router-dom";
 import { useInputImage } from "../../../hooks/admin/useInputImage";
 import { useSpecification } from "../../../hooks/admin/useSpecification";
@@ -10,6 +9,8 @@ import useAddProduct from "../../../hooks/admin/product/useAddProduct";
 import useGetAllCategories from "../../../hooks/admin/category/useGetAllCategories";
 import useGetAllBrands from "../../../hooks/admin/brand/useGetAllBrands";
 import SearchableSelect from "../ui/SearchableSelect";
+
+const TextBoxEditor = lazy(() => import("../textboxeditor/TextBoxEditor"));
 
 function AddProduct() {
   const [data, setData] = useState({
@@ -135,35 +136,33 @@ function AddProduct() {
       specValue: s.specValue.trim(),
     }));
 
+    await addProduct(
+      {
+        name: data.name,
+        price: data.price,
+        discount: data.discount,
+        description: data.description,
+        status: Number(data.status),
+        stock: data.stock,
+        categoryId: data.category,
+        brandId: data.brand,
+        specifications: normalizedSpecifications,
+      },
+      orderedFiles,
+    );
 
-      await addProduct(
-        {
-          name: data.name,
-          price: data.price,
-          discount: data.discount,
-          description: data.description,
-          status: Number(data.status),
-          stock: data.stock,
-          categoryId: data.category,
-          brandId: data.brand,
-          specifications: normalizedSpecifications,
-        },
-        orderedFiles,
-      );
-
-      clearSpecifications();
-      clearImages();
-      setData({
-        name: "",
-        price: 1,
-        discount: 0,
-        description: "",
-        stock: 1,
-        category: "",
-        brand: "",
-        status: "",
-      });
-  
+    clearSpecifications();
+    clearImages();
+    setData({
+      name: "",
+      price: 1,
+      discount: 0,
+      description: "",
+      stock: 1,
+      category: "",
+      brand: "",
+      status: "",
+    });
   };
 
   return (
@@ -258,10 +257,12 @@ function AddProduct() {
                 <label htmlFor="" className="text-[0.9rem] font-medium">
                   Mô tả
                 </label>
-                <TextBoxEditor
-                  content={data.description}
-                  onChange={handleDescriptionChange}
-                />
+                <Suspense fallback={null}>
+                  <TextBoxEditor
+                    content={data.description}
+                    onChange={handleDescriptionChange}
+                  />
+                </Suspense>
               </div>
             </div>
 

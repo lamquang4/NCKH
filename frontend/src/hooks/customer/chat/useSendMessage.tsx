@@ -4,10 +4,12 @@ import type { MessageRequest, MessageResponse } from "../../../types/type";
 import { getCookie } from "../../../utils/cookieUtil";
 import toast from "react-hot-toast";
 import useGetChatMessages from "./useGetChatMessages";
+import useGetCart from "../cart/useGetCart";
 
 export default function useSendMessage() {
   const [isLoading, setIsLoading] = useState(false);
   const { mutate } = useGetChatMessages();
+  const { mutate: mutateCart } = useGetCart();
   const sendMessage = async (data: MessageRequest) => {
     if (!data) {
       return;
@@ -58,6 +60,12 @@ export default function useSendMessage() {
       });
 
       await mutate();
+
+      const content = data.content.toLowerCase();
+
+      if (content.includes("thêm") && content.includes("giỏ hàng")) {
+        await mutateCart();
+      }
     } catch (err: any) {
       await mutate();
       toast.error(err?.response?.data?.message);

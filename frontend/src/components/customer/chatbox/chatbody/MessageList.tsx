@@ -5,6 +5,7 @@ import useGetChatMessages from "../../../../hooks/customer/chat/useGetChatMessag
 function MessageList() {
   const { messages, isLoading, hasMore, loadMore } = useGetChatMessages();
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const bottomRef = useRef<HTMLDivElement | null>(null);
   const isFirstLoad = useRef(true);
   const isLoadingMore = useRef(false);
   const prevScrollHeight = useRef(0);
@@ -13,16 +14,22 @@ function MessageList() {
     const container = containerRef.current;
     if (!container || messages.length === 0) return;
 
+    // Lần đầu load
     if (isFirstLoad.current) {
       container.scrollTop = container.scrollHeight;
       isFirstLoad.current = false;
       return;
     }
 
+    // Load thêm tin cũ
     if (isLoadingMore.current) {
       container.scrollTop = container.scrollHeight - prevScrollHeight.current;
       isLoadingMore.current = false;
+      return;
     }
+
+    // Tin nhắn mới → scroll xuống cuối
+    container.scrollTop = container.scrollHeight;
   }, [messages.length]);
 
   const handleScroll = useCallback(() => {
@@ -50,7 +57,7 @@ function MessageList() {
           products={msg.products}
         />
       ))}
-      <div ref={containerRef} />
+      <div ref={bottomRef} />
     </div>
   );
 }

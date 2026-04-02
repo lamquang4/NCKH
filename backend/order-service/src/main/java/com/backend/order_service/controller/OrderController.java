@@ -124,9 +124,9 @@ public class OrderController {
         }
 
         // assistant
-        @GetMapping("/assistant/user/{orderCode}")
+        @GetMapping("/assistant/user/detail")
         public ResponseEntity<OrderResponse> getUserOrderByCodeAssistant(
-                        @PathVariable String orderCode,
+                        @RequestParam String orderCode,
                         @AuthenticationPrincipal String userId) {
 
                 return ResponseEntity.ok(
