@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.backend.assistant_service.client.ChatServiceClient;
+import com.backend.assistant_service.client.UserServiceClient;
 import com.backend.assistant_service.dto.request.MessageRequest;
 import com.backend.assistant_service.dto.response.AssistantResponse;
 import com.backend.assistant_service.dto.response.MessageResponse;
@@ -17,17 +18,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class AssistantService {
         private final ChatServiceClient chatServiceClient;
+        private final UserServiceClient userServiceClient;
         private final WebClient webClient;
 
         @Value("${n8n.webhook}")
         private String webhookPath;
 
-        public AssistantService(ChatServiceClient chatServiceClient,
+        public AssistantService(ChatServiceClient chatServiceClient, UserServiceClient userServiceClient,
                         WebClient.Builder builder,
                         @Value("${n8n.url}") String n8nUrl) {
 
                 this.chatServiceClient = chatServiceClient;
-
+                this.userServiceClient = userServiceClient;
                 this.webClient = builder
                                 .baseUrl(n8nUrl)
                                 .build();
@@ -40,7 +42,9 @@ public class AssistantService {
                 // Lấy history messages của người dùng
                 List<MessageResponse> messages = chatServiceClient.getChatMessagesInternal(userId, 1, 20);
 
-                AssistantResponse aiResponse = callAI(chatId, userId, token, messages, request.getContent());
+                String fullname = userServiceClient.getFullnameByIdInternal(userId).getFullname();
+
+                AssistantResponse aiResponse = callAI(fullname, token, messages, request.getContent());
 
                 if (aiResponse == null || aiResponse.getContent() == null) {
                         aiResponse = AssistantResponse.builder()
@@ -57,7 +61,8 @@ public class AssistantService {
                                 .build());
         }
 
-        private AssistantResponse callAI(String chatId, String userId, String token, List<MessageResponse> messages,
+        private AssistantResponse callAI(String fullname, String token,
+                        List<MessageResponse> messages,
                         String currentMessage) {
                 List<Map<String, String>> history = messages.stream()
                                 .map(m -> Map.of(
@@ -66,8 +71,7 @@ public class AssistantService {
                                 .toList();
 
                 Map<String, Object> body = Map.of(
-                                "chatId", chatId,
-                                "userId", userId,
+                                "fullname", fullname,
                                 "token", token,
                                 "chatInput", currentMessage,
                                 "messages", history);

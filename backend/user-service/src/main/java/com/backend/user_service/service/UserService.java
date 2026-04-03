@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.backend.user_service.dto.request.UserRequest;
+import com.backend.user_service.dto.response.UserFullnameResponse;
 import com.backend.user_service.dto.response.UserResponse;
 import com.backend.user_service.entity.User;
 import com.backend.user_service.exception.AppException;
@@ -192,5 +193,14 @@ public class UserService {
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+    }
+
+    public UserFullnameResponse getFullnameById(String id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        return UserFullnameResponse.builder()
+                .fullname(user.getFullname())
+                .build();
     }
 }

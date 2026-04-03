@@ -236,11 +236,3 @@ export interface MessageResponse {
   extraData?: Record<string, any>;
   createdAt: string;
 }
-
-export interface ChatResponse {
-  id: string;
-  userId: string;
-  sessionData?: Record<string, any>;
-  messages: MessageResponse[];
-  createdAt: string;
-}

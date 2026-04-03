@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import com.backend.user_service.dto.request.UserRequest;
 import com.backend.user_service.dto.response.ApiResponse;
 import com.backend.user_service.dto.response.UserAuthResponse;
+import com.backend.user_service.dto.response.UserFullnameResponse;
 import com.backend.user_service.dto.response.UserResponse;
 import com.backend.user_service.mapper.UserMapper;
 import com.backend.user_service.service.UserService;
@@ -152,5 +153,12 @@ public class UserController {
 
                 userService.createUser(request);
                 return ResponseEntity.status(HttpStatus.CREATED).build();
+        }
+
+        @GetMapping("/internal/fullname/{id}")
+        public ResponseEntity<UserFullnameResponse> getFullnameByIdInternal(
+                        @PathVariable String id) {
+
+                return ResponseEntity.ok(userService.getFullnameById(id));
         }
 }
