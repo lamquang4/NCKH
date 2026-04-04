@@ -92,48 +92,52 @@ function OrderDetail() {
 
               <div className="px-[20px]">
                 <div className="flex justify-center w-full py-[20px]">
-                  <Select
-                    name="status"
-                    isDisabled={isLoadingUpdate}
-                    onChange={(e) =>
-                      handleUpdateStatus(order!.id, parseInt(e.target.value))
-                    }
-                    value={order?.status!}
-                    className="border border-gray-300 p-[6px_10px] text-[0.9rem] outline-none focus:border-gray-400  "
-                  >
-                    {order?.status === -1 && (
-                      <option value="-1">Chờ thanh toán</option>
-                    )}
-                    {order?.status === 0 && (
-                      <>
-                        <option value="0">Chờ xác nhận</option>
-                        <option value="1">Xác nhận</option>
-                        <option value="4">Hủy</option>
-                      </>
-                    )}
-                    {order?.status === 1 && (
-                      <>
-                        <option value="1">Xác nhận</option>
-                        <option value="2">Đang giao</option>
-                        <option value="4">Hủy</option>
-                      </>
-                    )}
-                    {order?.status === 2 && (
-                      <>
-                        <option value="2">Đang giao</option>
-                        <option value="3">Giao thành công</option>
-                        <option value="4">Hủy</option>
-                      </>
-                    )}
-                    {order?.status === 3 && (
-                      <>
-                        <option value="3">Giao thành công</option>
+                  {order?.status && (
+                    <Select
+                      name="status"
+                      isDisabled={isLoadingUpdate}
+                      onChange={(e) =>
+                        handleUpdateStatus(order!.id, parseInt(e.target.value))
+                      }
+                      value={order?.status}
+                      className="border border-gray-300 p-[6px_10px] text-[0.9rem] outline-none focus:border-gray-400"
+                    >
+                      {order?.status === -1 && (
+                        <option value="-1">Chờ thanh toán</option>
+                      )}
+                      {order?.status === 0 && (
+                        <>
+                          <option value="0">Chờ xác nhận</option>
+                          <option value="1">Xác nhận</option>
+                          <option value="4">Hủy</option>
+                        </>
+                      )}
+                      {order?.status === 1 && (
+                        <>
+                          <option value="1">Xác nhận</option>
+                          <option value="2">Đang giao</option>
+                          <option value="4">Hủy</option>
+                        </>
+                      )}
+                      {order?.status === 2 && (
+                        <>
+                          <option value="2">Đang giao</option>
+                          <option value="3">Giao thành công</option>
+                          <option value="4">Hủy</option>
+                        </>
+                      )}
+                      {order?.status === 3 && (
+                        <>
+                          <option value="3">Giao thành công</option>
+                          <option value="5">Trả hàng</option>
+                        </>
+                      )}
+                      {order?.status === 4 && <option value="4">Hủy</option>}
+                      {order?.status === 5 && (
                         <option value="5">Trả hàng</option>
-                      </>
-                    )}
-                    {order?.status === 4 && <option value="4">Hủy</option>}
-                    {order?.status === 5 && <option value="5">Trả hàng</option>}
-                  </Select>
+                      )}
+                    </Select>
+                  )}
                 </div>
 
                 {order?.status === 4 ? (
