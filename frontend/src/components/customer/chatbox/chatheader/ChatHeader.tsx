@@ -1,6 +1,7 @@
 import { memo, useEffect, useState } from "react";
 import Image from "../../../ui/Image";
 import ToolTip from "../../ui/ToolTip";
+import Button from "../../../ui/Button";
 type Props = {
   onClose: () => void;
   onExpand: () => void;
@@ -38,10 +39,9 @@ function ChatHeader({ onClose, onExpand, isExpanded }: Props) {
           />
 
           {!isMobile && (
-            <button
+            <Button
               onClick={onExpand}
               className="p-2 hover:bg-gray-200 rounded-sm"
-              title={isExpanded ? "Thu nhỏ khung chat" : "Mở rộng khung chat"}
             >
               {isExpanded ? (
                 <svg
@@ -72,14 +72,14 @@ function ChatHeader({ onClose, onExpand, isExpanded }: Props) {
                   ></path>
                 </svg>
               )}
-            </button>
+            </Button>
           )}
         </div>
 
         <div className="relative group">
           <ToolTip text={"Đóng khung chat"} />
 
-          <button
+          <Button
             onClick={onClose}
             className="p-2 hover:bg-gray-200 rounded-sm"
           >
@@ -94,7 +94,7 @@ function ChatHeader({ onClose, onExpand, isExpanded }: Props) {
                 className="fill-gray-600"
               />
             </svg>
-          </button>
+          </Button>
         </div>
       </div>
     </div>

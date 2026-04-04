@@ -13,6 +13,8 @@ import ListBody from "../list/ListBody";
 import useGetProducts from "../../../hooks/admin/product/useGetProducts";
 import useDeleteProduct from "../../../hooks/admin/product/useDeleteProduct";
 import useUpdateStatusProduct from "../../../hooks/admin/product/useUpdateStatusProduct";
+import Button from "../../ui/Button";
+import { PRODUCT_STATUS_OPTIONS } from "../../../constants/filterOptions";
 
 function ProductList() {
   const { products, isLoading, totalItems, totalPages, currentPage, limit } =
@@ -20,21 +22,6 @@ function ProductList() {
   const { deleteProduct, isLoading: isLoadingDelete } = useDeleteProduct();
   const { updateStatusProduct, isLoading: isLoadingUpdate } =
     useUpdateStatusProduct();
-
-  const array = [
-    {
-      name: "Tất cả",
-      value: null,
-    },
-    {
-      name: "Hiện",
-      value: 1,
-    },
-    {
-      name: "Ẩn",
-      value: 0,
-    },
-  ];
 
   const handleDelete = async (id: string) => {
     if (!id) {
@@ -76,7 +63,7 @@ function ProductList() {
               <th className="p-[1rem]   relative">
                 <FilterDropDownMenu
                   title="Tình trạng"
-                  array={array}
+                  array={PRODUCT_STATUS_OPTIONS}
                   paramName="status"
                 />
               </th>
@@ -155,8 +142,8 @@ function ProductList() {
 
                     <td className="p-[1rem]  ">
                       <div className="flex items-center gap-[15px]">
-                        <button
-                          disabled={isLoadingUpdate}
+                        <Button
+                          isDisabled={isLoadingUpdate}
                           onClick={() =>
                             handleUpdateStatus(
                               product.id || "",
@@ -175,16 +162,16 @@ function ProductList() {
                               className="text-[#74767d]"
                             />
                           )}
-                        </button>
+                        </Button>
                         <Link to={`/admin/edit-product/${product.id}`}>
                           <LiaEdit size={22} className="text-[#076ffe]" />
                         </Link>
-                        <button
-                          disabled={isLoadingDelete}
+                        <Button
+                          isDisabled={isLoadingDelete}
                           onClick={() => handleDelete(product.id || "")}
                         >
                           <VscTrash size={22} className="text-[#d9534f]" />
-                        </button>
+                        </Button>
                       </div>
                     </td>
                   </tr>

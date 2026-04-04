@@ -13,6 +13,8 @@ import ListHeader from "../list/ListHeader";
 import useGetCategories from "../../../hooks/admin/category/useGetCategories";
 import useDeleteCategory from "../../../hooks/admin/category/useDeleteCategory";
 import useUpdateStatusCategory from "../../../hooks/admin/category/useUpdateStatusCategory";
+import Button from "../../ui/Button";
+import { CATEGORY_STATUS_OPTIONS } from "../../../constants/filterOptions";
 
 function CategoryList() {
   const { categories, isLoading, totalItems, totalPages, currentPage, limit } =
@@ -20,21 +22,6 @@ function CategoryList() {
   const { deleteCategory, isLoading: isLoadingDelete } = useDeleteCategory();
   const { updateStatusCategory, isLoading: isLoadingUpdate } =
     useUpdateStatusCategory();
-
-  const array = [
-    {
-      name: "Tất cả",
-      value: null,
-    },
-    {
-      name: "Hiện",
-      value: 1,
-    },
-    {
-      name: "Ẩn",
-      value: 0,
-    },
-  ];
 
   const handleDelete = async (id: string) => {
     if (!id) {
@@ -72,7 +59,7 @@ function CategoryList() {
               <th className="p-[1rem] relative">
                 <FilterDropDownMenu
                   title="Tình trạng"
-                  array={array}
+                  array={CATEGORY_STATUS_OPTIONS}
                   paramName="status"
                 />
               </th>
@@ -111,8 +98,8 @@ function CategoryList() {
 
                   <td className="p-[1rem]  ">
                     <div className="flex items-center gap-[15px]">
-                      <button
-                        disabled={isLoadingUpdate}
+                      <Button
+                        isDisabled={isLoadingUpdate}
                         onClick={() =>
                           handleUpdateStatus(
                             category.id || "",
@@ -128,18 +115,18 @@ function CategoryList() {
                             className="text-[#74767d]"
                           />
                         )}
-                      </button>
+                      </Button>
 
                       <Link to={`/admin/edit-category/${category.id}`}>
                         <LiaEdit size={22} className="text-[#076ffe]" />
                       </Link>
 
-                      <button
-                        disabled={isLoadingDelete}
+                      <Button
+                        isDisabled={isLoadingDelete}
                         onClick={() => handleDelete(category.id || "")}
                       >
                         <VscTrash size={22} className="text-[#d9534f]" />
-                      </button>
+                      </Button>
                     </div>
                   </td>
                 </tr>

@@ -9,6 +9,8 @@ import ListHeader from "../list/ListHeader";
 import ListBody from "../list/ListBody";
 import useGetOrders from "../../../hooks/admin/order/useGetOrders";
 import useUpdateStatusOrder from "../../../hooks/admin/order/useUpdateStatusOrder";
+import Select from "../../ui/Select";
+import { ORDER_STATUS_OPTIONS } from "../../../constants/filterOptions";
 
 function OrderList() {
   const { orders, isLoading, totalItems, totalPages, currentPage, limit } =
@@ -23,17 +25,6 @@ function OrderList() {
 
     await updateStatusOrder(id, status);
   };
-
-  const array = [
-    { name: "Tất cả", value: null },
-    { name: "Chờ thanh toán", value: -1 },
-    { name: "Chờ xác nhận", value: 0 },
-    { name: "Xác nhận", value: 1 },
-    { name: "Đang giao", value: 2 },
-    { name: "Giao thành công", value: 3 },
-    { name: "Đã hủy", value: 4 },
-    { name: "Trả hàng", value: 5 },
-  ];
 
   return (
     <>
@@ -61,7 +52,7 @@ function OrderList() {
               <th className="p-[1rem] relative">
                 <FilterDropDownMenu
                   title="Tình trạng"
-                  array={array}
+                  array={ORDER_STATUS_OPTIONS}
                   paramName="status"
                 />
               </th>
@@ -97,9 +88,9 @@ function OrderList() {
                   </td>
 
                   <td className="p-[1rem]">
-                    <select
+                    <Select
                       name="status"
-                      disabled={isLoadingUpdate}
+                      isDisabled={isLoadingUpdate}
                       onChange={(e) =>
                         handleUpdateStatus(order.id, parseInt(e.target.value))
                       }
@@ -140,7 +131,7 @@ function OrderList() {
                       {order.status === 5 && (
                         <option value="5">Trả hàng</option>
                       )}
-                    </select>
+                    </Select>
                   </td>
                   <td className="p-[1rem]  ">
                     <div className="flex items-center gap-[15px]">

@@ -7,20 +7,15 @@ import InputSearch from "../ui/InputSearch";
 import ListHeader from "../list/ListHeader";
 import ListBody from "../list/ListBody";
 import useGetCustomers from "../../../hooks/admin/user/useGetCustomers";
-
 import useUpdateStatusUser from "../../../hooks/admin/user/useUpdateStatusUser";
+import Button from "../../ui/Button";
+import { USER_STATUS_OPTIONS } from "../../../constants/filterOptions";
 
 function CustomerList() {
   const { customers, isLoading, totalItems, totalPages, currentPage, limit } =
     useGetCustomers();
   const { updateStatusUser, isLoading: isLoadingUpdate } =
     useUpdateStatusUser();
-
-  const array = [
-    { name: "Tất cả", value: null },
-    { name: "Bình thường", value: 1 },
-    { name: "Bị khóa", value: 0 },
-  ];
 
   const handleUpdateStatus = async (id: string, status: number) => {
     if (!id && !status) {
@@ -51,7 +46,7 @@ function CustomerList() {
               <th className="p-[1rem]  ">
                 <FilterDropDownMenu
                   title="Tình trạng"
-                  array={array}
+                  array={USER_STATUS_OPTIONS}
                   paramName="status"
                 />
               </th>
@@ -95,8 +90,8 @@ function CustomerList() {
 
                   <td className="p-[1rem]  ">
                     <div className="flex items-center gap-[15px]">
-                      <button
-                        disabled={isLoadingUpdate}
+                      <Button
+                        isDisabled={isLoadingUpdate}
                         onClick={() =>
                           handleUpdateStatus(
                             customer.id || "",
@@ -109,7 +104,7 @@ function CustomerList() {
                         ) : (
                           <TbLockOpen size={22} className="text-[#74767d]" />
                         )}
-                      </button>
+                      </Button>
                     </div>
                   </td>
                 </tr>

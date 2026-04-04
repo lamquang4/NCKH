@@ -1,5 +1,6 @@
 import { Editor } from "@tiptap/react";
 import { useState } from "react";
+import Button from "../../../ui/Button";
 
 function EditTableTool({ editor }: { editor: Editor | null }) {
   const [openTableEditRow, setOpenTableEditRow] = useState<boolean>(false);
@@ -242,17 +243,17 @@ function EditTableTool({ editor }: { editor: Editor | null }) {
           onMouseEnter={tool.onClick}
           onMouseLeave={tool.onClick}
         >
-          <button
+          <Button
             type="button"
             className="p-2 flex items-center gap-1 hover:bg-gray-100 bg-gray-50"
           >
             {tool.label}
-          </button>
+          </Button>
 
           {tool.isOpen && (
             <div className="absolute left-1/2 -translate-x-1/2 top-full  min-w-max bg-white z-10 border border-gray-200 shadow-md">
               {tool.children.map((child, index) => (
-                <button
+                <Button
                   key={`cc-${index}`}
                   type="button"
                   onClick={child.onClick}
@@ -261,7 +262,7 @@ function EditTableTool({ editor }: { editor: Editor | null }) {
                   }`}
                 >
                   {child.label}
-                </button>
+                </Button>
               ))}
             </div>
           )}

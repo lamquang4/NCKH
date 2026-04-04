@@ -13,27 +13,14 @@ import ListBody from "../list/ListBody";
 import useGetBrands from "../../../hooks/admin/brand/useGetBrands";
 import useDeleteBrand from "../../../hooks/admin/brand/useDeleteBrand";
 import useUpdateStatusBrand from "../../../hooks/admin/brand/useUpdateStatusBrand";
+import Button from "../../ui/Button";
+import { BRAND_STATUS_OPTIONS } from "../../../constants/filterOptions";
 function BrandList() {
   const { brands, isLoading, totalItems, totalPages, currentPage, limit } =
     useGetBrands();
   const { deleteBrand, isLoading: isLoadingDelete } = useDeleteBrand();
   const { updateStatusBrand, isLoading: isLoadingUpdate } =
     useUpdateStatusBrand();
-
-  const array = [
-    {
-      name: "Tất cả",
-      value: null,
-    },
-    {
-      name: "Hiện",
-      value: 1,
-    },
-    {
-      name: "Ẩn",
-      value: 0,
-    },
-  ];
 
   const handleDelete = async (id: string) => {
     if (!id) {
@@ -70,7 +57,7 @@ function BrandList() {
               <th className="p-[1rem] relative">
                 <FilterDropDownMenu
                   title="Tình trạng"
-                  array={array}
+                  array={BRAND_STATUS_OPTIONS}
                   paramName="status"
                 />
               </th>
@@ -99,8 +86,8 @@ function BrandList() {
 
                   <td className="p-[1rem]  ">
                     <div className="flex items-center gap-[15px]">
-                      <button
-                        disabled={isLoadingUpdate}
+                      <Button
+                        isDisabled={isLoadingUpdate}
                         onClick={() =>
                           handleUpdateStatus(
                             brand.id || "",
@@ -116,18 +103,18 @@ function BrandList() {
                             className="text-[#74767d]"
                           />
                         )}
-                      </button>
+                      </Button>
 
                       <Link to={`/admin/edit-brand/${brand.id}`}>
                         <LiaEdit size={22} className="text-[#076ffe]" />
                       </Link>
 
-                      <button
-                        disabled={isLoadingDelete}
+                      <Button
+                        isDisabled={isLoadingDelete}
                         onClick={() => handleDelete(brand.id || "")}
                       >
                         <VscTrash size={22} className="text-[#d9534f]" />
-                      </button>
+                      </Button>
                     </div>
                   </td>
                 </tr>

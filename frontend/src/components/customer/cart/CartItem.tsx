@@ -6,6 +6,7 @@ import { memo } from "react";
 import { useRemoveItemInCart } from "../../../hooks/customer/cart/useRemoveItemInCart";
 import { useChangeQuantityItemInCart } from "../../../hooks/customer/cart/useChangeQuantityItemInCart";
 import toast from "react-hot-toast";
+import Button from "../../ui/Button";
 
 type Props = {
   item: CartItemResponse;
@@ -85,10 +86,9 @@ function CartItem({ item, userId }: Props) {
                 )}
               </div>
 
-              <button
-                data-testid="btn-remove"
+              <Button
                 type="button"
-                disabled={isLoadingRemove}
+                isDisabled={isLoadingRemove}
                 onClick={() => handleRemoveItem(item.productId)}
                 className="mb-auto"
               >
@@ -106,34 +106,34 @@ function CartItem({ item, userId }: Props) {
                     data-original="#000000"
                   ></path>
                 </svg>
-              </button>
+              </Button>
             </div>
 
             <div className="flex-wrap justify-between flex gap-4 mt-auto">
               <div className="flex items-center gap-1">
-                <button
+                <Button
                   data-testid="btn-decrement"
                   type="button"
                   onClick={() => handleDecrement(item.productId, item.quantity)}
-                  disabled={item.quantity <= 1 || isLoadingChangeQuantity}
+                  isDisabled={item.quantity <= 1 || isLoadingChangeQuantity}
                   className="flex items-center justify-center w-7 h-7 outline-none bg-[#F7F7F7] border-gray-300 border"
                 >
                   <HiOutlineMinusSmall size={20} />
-                </button>
+                </Button>
                 <h5 className="flex items-center justify-center w-7 h-7">
                   {item.quantity}
                 </h5>
-                <button
+                <Button
                   data-testid="btn-increment"
                   type="button"
                   onClick={() =>
                     handleIncrement(item.productId, item.quantity, item.stock)
                   }
-                  disabled={isLoadingChangeQuantity}
+                  isDisabled={isLoadingChangeQuantity}
                   className="flex items-center justify-center w-7 h-7 outline-none bg-[#F7F7F7] border-gray-300 border"
                 >
                   <HiOutlinePlusSmall size={20} />
-                </button>
+                </Button>
               </div>
 
               <h5 className="font-medium text-accent">

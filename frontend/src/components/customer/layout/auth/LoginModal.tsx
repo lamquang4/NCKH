@@ -3,6 +3,9 @@ import { memo, useState } from "react";
 import useLogin from "../../../../hooks/auth/useLogin";
 import Overplay from "../../ui/Overplay";
 import Loading from "../../../ui/Loading";
+import Button from "../../../ui/Button";
+import Input from "../../../ui/Input";
+import Label from "../../../ui/Label";
 
 type Props = {
   onClose: () => void;
@@ -51,7 +54,7 @@ function LoginModal({ onClose, onSwitchRegister }: Props) {
               <div className="flex items-center justify-between">
                 <h4 className="uppercase">Đăng nhập</h4>
 
-                <button
+                <Button
                   onClick={onClose}
                   type="button"
                   className="bg-transparent ms-auto"
@@ -69,44 +72,44 @@ function LoginModal({ onClose, onSwitchRegister }: Props) {
                     <path d="M18 6 6 18"></path>
                     <path d="m6 6 12 12"></path>
                   </svg>
-                </button>
+                </Button>
               </div>
 
               <hr className="border-gray-300" />
 
               <form className="space-y-[15px]" onSubmit={handleSubmit}>
                 <div className="space-y-[5px]">
-                  <label htmlFor="" className="block text-[0.9rem] font-medium">
+                  <Label htmlFor="" className="block text-[0.9rem] font-medium">
                     Email
-                  </label>
-                  <input
+                  </Label>
+                  <Input
                     type="text"
                     name="email"
                     value={data.email}
                     onChange={handleChange}
                     className="text-[0.9rem] block w-full px-3 py-2 border border-gray-200"
                     placeholder="Nhập email"
-                    required
+                    isRequired={true}
                   />
                 </div>
 
                 <div className="space-y-[5px]">
-                  <label htmlFor="" className="block text-[0.9rem] font-medium">
+                  <Label htmlFor="" className="block text-[0.9rem] font-medium">
                     Mật khẩu
-                  </label>
+                  </Label>
 
                   <div className="relative">
-                    <input
+                    <Input
                       type={!showPassword ? "password" : "text"}
                       name="password"
                       value={data.password}
                       onChange={handleChange}
                       placeholder="Nhập mật khẩu"
                       className="text-[0.9rem] block w-full  px-3 pr-12 py-2 border border-gray-200"
-                      required
+                      isRequired={true}
                     />
 
-                    <button
+                    <Button
                       type="button"
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
                       onClick={toggleShowPassword}
@@ -116,27 +119,27 @@ function LoginModal({ onClose, onSwitchRegister }: Props) {
                       ) : (
                         <HiOutlineEyeOff size={22} />
                       )}
-                    </button>
+                    </Button>
                   </div>
                 </div>
 
-                <button
-                  disabled={isLoading}
+                <Button
+                  isDisabled={isLoading}
                   type="submit"
                   className="w-full bg-primary text-white focus:outline-none font-semibold rounded-sm text-[0.9rem] uppercase px-5 py-2.5 text-center"
                 >
                   Đăng nhập
-                </button>
+                </Button>
 
                 <p className="flex gap-1.5 justify-center font-medium">
                   Bạn chưa có tài khoản ư?
-                  <button
+                  <Button
                     onClick={onSwitchRegister}
                     type="button"
                     className="text-primary font-medium"
                   >
                     Đăng kí
-                  </button>
+                  </Button>
                 </p>
               </form>
             </div>

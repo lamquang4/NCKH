@@ -1,4 +1,6 @@
 import useGetAccount from "../../hooks/auth/useGetAccount";
+import Input from "../ui/Input";
+import Label from "../ui/Label";
 
 function Account() {
   const { account } = useGetAccount("admin");
@@ -12,53 +14,53 @@ function Account() {
             <h5 className="font-bold text-[#74767d]">Thông tin tài khoản</h5>
 
             <div className="flex flex-col gap-1 w-full ">
-              <label htmlFor="" className="text-[0.9rem]  font-medium">
+              <Label htmlFor="" className="text-[0.9rem]  font-medium">
                 Họ tên
-              </label>
-              <input
+              </Label>
+              <Input
                 type="text"
                 name="fullname"
                 value={account?.fullname}
-                readOnly
+                isReadOnly={true}
                 className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
               />
             </div>
 
             <div className="flex flex-col gap-1 w-full ">
-              <label htmlFor="" className="text-[0.9rem]  font-medium">
+              <Label htmlFor="" className="text-[0.9rem]  font-medium">
                 Email
-              </label>
-              <input
+              </Label>
+              <Input
                 type="text"
                 name="email"
                 value={account?.email}
-                readOnly
+                isReadOnly={true}
                 className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
               />
             </div>
 
             <div className="flex flex-col gap-1 w-full ">
-              <label htmlFor="" className="text-[0.9rem]  font-medium">
+              <Label htmlFor="" className="text-[0.9rem]  font-medium">
                 Số điện thoại
-              </label>
-              <input
+              </Label>
+              <Input
                 type="text"
                 name="phone"
                 value={account?.phone}
-                readOnly
+                isReadOnly={true}
                 className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
               />
             </div>
 
             <div className="flex flex-col gap-1 w-full ">
-              <label htmlFor="" className="text-[0.9rem]  font-medium">
+              <Label htmlFor="" className="text-[0.9rem]  font-medium">
                 Chức vụ
-              </label>
-              <input
+              </Label>
+              <Input
                 type="text"
                 name="role"
                 value={account?.role === "admin" ? "Quản trị viên" : ""}
-                readOnly
+                isReadOnly={true}
                 className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
               />
             </div>

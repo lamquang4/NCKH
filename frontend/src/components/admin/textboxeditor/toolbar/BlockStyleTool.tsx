@@ -3,6 +3,7 @@ import { Editor } from "@tiptap/react";
 import { memo, useEffect, useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import { IoCheckmark } from "react-icons/io5";
+import Button from "../../../ui/Button";
 
 function BlockStyleTool({ editor }: { editor: Editor | null }) {
   const [openBlockStyle, setOpenBlockStyle] = useState<boolean>(false);
@@ -86,7 +87,7 @@ function BlockStyleTool({ editor }: { editor: Editor | null }) {
         <div className="absolute left-0 top-full bg-white w-[130px] z-10 border border-gray-200 shadow-md">
           {blockStyles?.map((block, index) => (
             <div key={`block-${index}`}>
-              <button
+              <Button
                 type="button"
                 onClick={block.onClick}
                 className={`flex items-center justify-between w-full p-1.5  ${
@@ -95,7 +96,7 @@ function BlockStyleTool({ editor }: { editor: Editor | null }) {
               >
                 <span>{block.label}</span>
                 {block.active && <IoCheckmark size={14} />}
-              </button>
+              </Button>
             </div>
           ))}
         </div>

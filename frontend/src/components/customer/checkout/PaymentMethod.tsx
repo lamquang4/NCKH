@@ -1,4 +1,5 @@
 import Image from "../../ui/Image";
+import Input from "../../ui/Input";
 type Props = {
   paymethod: string;
   setPaymethod: (value: string) => void;
@@ -23,7 +24,7 @@ function PaymentMethod({ paymethod, setPaymethod }: Props) {
       <div className="grid gap-[20px]">
         {paymethods.map((method, index) => (
           <div className="relative" key={index}>
-            <input
+            <Input
               className="peer hidden"
               id={`paymethod-${method.value}`}
               type="radio"

@@ -14,14 +14,10 @@ import useDeleteAdmin from "../../../hooks/admin/user/useDeleteAdmin";
 import toast from "react-hot-toast";
 import useGetAccount from "../../../hooks/auth/useGetAccount";
 import useUpdateStatusUser from "../../../hooks/admin/user/useUpdateStatusUser";
+import Button from "../../ui/Button";
+import { USER_STATUS_OPTIONS } from "../../../constants/filterOptions";
 
 function AdminList() {
-  const array = [
-    { name: "Tất cả", value: null },
-    { name: "Bình thường", value: 1 },
-    { name: "Bị khóa", value: 0 },
-  ];
-
   const { account } = useGetAccount("admin");
   const { admins, isLoading, totalItems, totalPages, limit, currentPage } =
     useGetAdmins();
@@ -75,10 +71,10 @@ function AdminList() {
 
               <th className="p-[1rem]">Email</th>
 
-              <th className="p-[1rem]  ">
+              <th className="p-[1rem]">
                 <FilterDropDownMenu
                   title="Tình trạng"
-                  array={array}
+                  array={USER_STATUS_OPTIONS}
                   paramName="status"
                 />
               </th>
@@ -105,8 +101,8 @@ function AdminList() {
                   </td>
                   <td className="p-[1rem]  ">
                     <div className="flex items-center gap-[15px]">
-                      <button
-                        disabled={isLoadingUpdate}
+                      <Button
+                        isDisabled={isLoadingUpdate}
                         onClick={() =>
                           handleUpdateStatus(
                             admin.id || "",
@@ -119,18 +115,18 @@ function AdminList() {
                         ) : (
                           <TbLockOpen size={22} className="text-[#74767d]" />
                         )}
-                      </button>
+                      </Button>
 
                       <Link to={`/admin/edit-admin/${admin.id}`}>
                         <LiaEdit size={22} className="text-[#076ffe]" />
                       </Link>
 
-                      <button
-                        disabled={isLoadingDelete}
+                      <Button
+                        isDisabled={isLoadingDelete}
                         onClick={() => handleDelete(admin.id || "")}
                       >
                         <VscTrash size={22} className="text-[#d9534f]" />
-                      </button>
+                      </Button>
                     </div>
                   </td>
                 </tr>

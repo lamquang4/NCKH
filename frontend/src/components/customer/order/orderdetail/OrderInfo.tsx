@@ -11,13 +11,14 @@ type Props = {
   isLoading: boolean;
 };
 
+const steps = [
+  { label: "Chờ xác nhận", icon: <LuArchive size={24} /> },
+  { label: "Xác nhận", icon: <LuCheck size={24} /> },
+  { label: "Đang giao", icon: <LuTruck size={24} /> },
+  { label: "Giao thành công", icon: <LuStar size={24} /> },
+];
+
 function OrderInfo({ order, isLoading }: Props) {
-  const steps = [
-    { label: "Chờ xác nhận", icon: <LuArchive size={24} /> },
-    { label: "Xác nhận", icon: <LuCheck size={24} /> },
-    { label: "Đang giao", icon: <LuTruck size={24} /> },
-    { label: "Giao thành công", icon: <LuStar size={24} /> },
-  ];
   return (
     <div className="w-full flex-1 border border-gray-300 text-black">
       {isLoading ? (

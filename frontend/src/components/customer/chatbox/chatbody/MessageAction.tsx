@@ -1,4 +1,5 @@
 import { memo } from "react";
+import Button from "../../../ui/Button";
 
 type Props = {
   onCopy: () => void;
@@ -7,7 +8,7 @@ type Props = {
 function MessageAction({ onCopy }: Props) {
   return (
     <div className="flex gap-1 items-center">
-      <button onClick={onCopy}>
+      <Button onClick={onCopy}>
         <svg
           color="#808089"
           className="w-4 h-4"
@@ -38,7 +39,7 @@ function MessageAction({ onCopy }: Props) {
             </clipPath>
           </defs>
         </svg>
-      </button>
+      </Button>
     </div>
   );
 }

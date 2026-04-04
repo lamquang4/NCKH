@@ -8,6 +8,14 @@ import toast from "react-hot-toast";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import useGetOrder from "../../../hooks/admin/order/useGetOrder";
 import useUpdateStatusOrder from "../../../hooks/admin/order/useUpdateStatusOrder";
+import Select from "../../ui/Select";
+
+const steps = [
+  { label: "Chờ xác nhận", icon: <LuArchive size={24} /> },
+  { label: "Xác nhận", icon: <LuCheck size={24} /> },
+  { label: "Đang giao", icon: <LuTruck size={24} /> },
+  { label: "Giao thành công", icon: <LuStar size={24} /> },
+];
 
 function OrderDetail() {
   const navigate = useNavigate();
@@ -24,13 +32,6 @@ function OrderDetail() {
 
     await updateStatusOrder(id, status);
   };
-
-  const steps = [
-    { label: "Chờ xác nhận", icon: <LuArchive size={24} /> },
-    { label: "Xác nhận", icon: <LuCheck size={24} /> },
-    { label: "Đang giao", icon: <LuTruck size={24} /> },
-    { label: "Giao thành công", icon: <LuStar size={24} /> },
-  ];
 
   useEffect(() => {
     if (isLoading) return;
@@ -91,13 +92,13 @@ function OrderDetail() {
 
               <div className="px-[20px]">
                 <div className="flex justify-center w-full py-[20px]">
-                  <select
+                  <Select
                     name="status"
-                    disabled={isLoadingUpdate}
+                    isDisabled={isLoadingUpdate}
                     onChange={(e) =>
                       handleUpdateStatus(order!.id, parseInt(e.target.value))
                     }
-                    value={order?.status}
+                    value={order?.status!}
                     className="border border-gray-300 p-[6px_10px] text-[0.9rem] outline-none focus:border-gray-400  "
                   >
                     {order?.status === -1 && (
@@ -132,7 +133,7 @@ function OrderDetail() {
                     )}
                     {order?.status === 4 && <option value="4">Hủy</option>}
                     {order?.status === 5 && <option value="5">Trả hàng</option>}
-                  </select>
+                  </Select>
                 </div>
 
                 {order?.status === 4 ? (

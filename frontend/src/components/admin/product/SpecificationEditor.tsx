@@ -1,6 +1,8 @@
 import { ReactSortable } from "react-sortablejs";
 import type { SpecificationResponse } from "../../../types/type";
 import { memo } from "react";
+import Button from "../../ui/Button";
+import Input from "../../ui/Input";
 
 type Props = {
   specifications: SpecificationResponse[];
@@ -28,22 +30,22 @@ const SpecificationEditor = ({
   return (
     <div className=" bg-white rounded-md flex flex-col gap-[25px] w-full">
       <div className="flex gap-[15px] justify-between items-center">
-        <button
+        <Button
           type="button"
           onClick={addSpecification}
           className="border-0 cursor-pointer text-[0.9rem] font-medium p-[8px_12px] bg-primary text-white"
         >
           Thêm
-        </button>
+        </Button>
 
         {clearSpecifications && (
-          <button
+          <Button
             type="button"
             onClick={clearSpecifications}
             className="bg-red-500 border-0 cursor-pointer text-[0.9rem] font-medium p-[6px_12px] text-white"
           >
             Xóa tất cả
-          </button>
+          </Button>
         )}
       </div>
 
@@ -66,45 +68,37 @@ const SpecificationEditor = ({
             {specifications.map((spec) => (
               <tr key={spec.id} className="cursor-move">
                 <td className="py-[1rem]">
-                  <input
+                  <Input
                     type="text"
-                    required
+                    isRequired={true}
                     value={spec.specKey}
                     onChange={(e) =>
-                      updateSpecification(
-                        spec.id,
-                        "specKey",
-                        e.target.value,
-                      )
+                      updateSpecification(spec.id, "specKey", e.target.value)
                     }
                     className="border border-gray-300 p-[6px_10px] text-[0.9rem] outline-none focus:border-gray-400"
                   />
                 </td>
 
                 <td className="py-[1rem]">
-                  <input
+                  <Input
                     type="text"
-                    required
+                    isRequired={true}
                     value={spec.specValue}
                     onChange={(e) =>
-                      updateSpecification(
-                        spec.id,
-                        "specValue",
-                        e.target.value,
-                      )
+                      updateSpecification(spec.id, "specValue", e.target.value)
                     }
                     className="border border-gray-300 p-[6px_10px] text-[0.9rem] outline-none focus:border-gray-400"
                   />
                 </td>
 
                 <td className="py-[1rem]">
-                  <button
+                  <Button
                     type="button"
                     onClick={() => removeSpecification(spec.id)}
                     className="bg-red-500 border-0 cursor-pointer text-[0.9rem] font-medium p-[6px_12px] text-white"
                   >
                     Xóa
-                  </button>
+                  </Button>
                 </td>
               </tr>
             ))}

@@ -1,15 +1,14 @@
 import { Link, useLocation } from "react-router-dom";
 import useGetAccount from "../../../hooks/auth/useGetAccount";
-import useGetUser from "../../../hooks/useGetUser";
 import useLogout from "../../../hooks/auth/useLogout";
 import { LuDoorOpen } from "react-icons/lu";
+import Button from "../../ui/Button";
 
 function SideBar() {
   const location = useLocation();
   const pathname = location.pathname;
   const { handleLogout } = useLogout();
   const { account, mutate } = useGetAccount("customer");
-  const { user } = useGetUser(account?.id || "");
   return (
     <div className="w-full max-w-full lg:max-w-[300px] self-start lg:sticky lg:top-[5rem] bg-white ">
       <div className="text-[0.9rem] font-medium">
@@ -31,7 +30,7 @@ function SideBar() {
 
           <div>
             <h5 className="font-medium">Tài khoản của</h5>
-            <p className="font-normal">{user?.fullname}</p>
+            <p className="font-normal">{account?.fullname}</p>
           </div>
         </div>
 
@@ -89,7 +88,7 @@ function SideBar() {
           </div>
         </Link>
 
-        <button
+        <Button
           type="button"
           onClick={() => {
             handleLogout("customer");
@@ -102,7 +101,7 @@ function SideBar() {
 
             <span>Đăng xuất</span>
           </div>
-        </button>
+        </Button>
       </div>
     </div>
   );

@@ -6,16 +6,11 @@ import FilterDropDownMenu from "../ui/FilterDropDownMenu";
 import ListHeader from "../list/ListHeader";
 import ListBody from "../list/ListBody";
 import useGetPayments from "../../../hooks/admin/payment/useGetPayments";
+import { PAYMENT_STATUS_OPTIONS } from "../../../constants/filterOptions";
 
 function PaymentList() {
   const { payments, isLoading, totalItems, totalPages, currentPage, limit } =
     useGetPayments();
-
-  const array = [
-    { name: "Tất cả", value: null },
-    { name: "Thành công", value: 1 },
-    { name: "Hoàn tiền", value: 0 },
-  ];
 
   return (
     <>
@@ -36,7 +31,7 @@ function PaymentList() {
               <th className="p-[1rem] relative">
                 <FilterDropDownMenu
                   title="Tình trạng"
-                  array={array}
+                  array={PAYMENT_STATUS_OPTIONS}
                   paramName="status"
                 />
               </th>

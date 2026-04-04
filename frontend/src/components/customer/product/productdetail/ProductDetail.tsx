@@ -11,6 +11,8 @@ import useGetCart from "../../../../hooks/customer/cart/useGetCart";
 import toast from "react-hot-toast";
 import { openAuthModal } from "../../../../redux/slices/AuthModalSlice";
 import { useDispatch } from "react-redux";
+import Button from "../../../ui/Button";
+import Input from "../../../ui/Input";
 type Props = {
   product: ProductDetailResponse;
 };
@@ -110,55 +112,54 @@ function ProductDetail({ product }: Props) {
                     <div className="w-full flex items-center gap-[15px]">
                       <h5 className="font-medium">Số lượng:</h5>
                       <div className="relative flex justify-between items-center max-w-[8rem] border border-gray-300 rounded-sm">
-                        <button
+                        <Button
                           type="button"
                           onClick={HandleDecrement}
-                          disabled={quantity <= 1}
+                          isDisabled={quantity <= 1}
                           className=" p-3 h-11 outline-none"
                         >
                           <HiOutlineMinusSmall size={22} />
-                        </button>
-                        <input
+                        </Button>
+                        <Input
                           type="number"
                           name="quantity"
-                          readOnly
+                          isReadOnly={true}
                           className="h-11 text-center text-black w-11 outline-none placeholder:text-[1.2rem] font-medium"
                           placeholder="1"
                           min={1}
                           max={product?.stock > max ? max : product?.stock}
                           value={quantity}
                         />
-                        <button
+                        <Button
                           type="button"
                           onClick={HandleIncrement}
-                          disabled={
+                          isDisabled={
                             quantity >=
                             (product?.stock > max ? max : product?.stock)
                           }
                           className=" p-3 h-11 outline-none"
                         >
                           <HiOutlinePlusSmall size={22} />
-                        </button>
+                        </Button>
                       </div>
                     </div>
 
-                    <button
+                    <Button
                       type="button"
-                      disabled={isLoadingCart}
+                      isDisabled={isLoadingCart}
                       onClick={handleAddItemToCart}
-                      data-testid="btn-add-to-cart"
                       className="p-[10px] w-full uppercase text-[0.9rem] font-semibold bg-primary text-white"
                     >
                       Thêm vào giỏ
-                    </button>
+                    </Button>
                   </>
                 ) : (
-                  <button
+                  <Button
                     type="button"
                     className="p-[10px] w-full uppercase text-[0.9rem] font-semibold border bg-transparent border-accent text-accent"
                   >
                     Hết hàng
-                  </button>
+                  </Button>
                 )}
 
                 <ProductInformation

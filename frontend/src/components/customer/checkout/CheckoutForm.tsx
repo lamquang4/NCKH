@@ -13,6 +13,7 @@ import useAddOrder from "../../../hooks/customer/order/useAddOrder";
 import usePaymentMomo from "../../../hooks/customer/payment/usePaymentMomo";
 import Overplay from "../ui/Overplay";
 import Loading from "../../ui/Loading";
+import Button from "../../ui/Button";
 
 function CheckoutForm() {
   const navigate = useNavigate();
@@ -183,9 +184,9 @@ function CheckoutForm() {
                 />
 
                 <div className="flex justify-between items-center">
-                  <button className="text-[0.9rem] rounded-md bg-accent px-4 py-2 font-medium text-white">
+                  <Button className="text-[0.9rem] rounded-md bg-accent px-4 py-2 font-medium text-white">
                     Đặt hàng
-                  </button>
+                  </Button>
 
                   <Link
                     to={"/cart"}

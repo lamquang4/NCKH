@@ -3,6 +3,9 @@ import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import { validateEmail } from "../../../utils/validateEmail";
 import useAddAdmin from "../../../hooks/admin/user/useAddAdmin";
+import Input from "../../ui/Input";
+import Button from "../../ui/Button";
+import Label from "../../ui/Label";
 
 function AddAdmin() {
   const [data, setData] = useState({
@@ -63,57 +66,57 @@ function AddAdmin() {
             <h5 className="font-bold text-[#74767d]">Thông tin tài khoản</h5>
 
             <div className="flex flex-col gap-1">
-              <label htmlFor="" className="text-[0.9rem] font-medium">
+              <Label htmlFor="" className="text-[0.9rem] font-medium">
                 Họ tên
-              </label>
-              <input
+              </Label>
+              <Input
                 type="text"
                 name="fullname"
                 value={data.fullname}
                 onChange={handleChange}
-                required
+                isRequired={true}
                 className="lowercase border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
               />
             </div>
 
             <div className="flex flex-col gap-1">
-              <label htmlFor="" className="text-[0.9rem] font-medium">
+              <Label htmlFor="" className="text-[0.9rem] font-medium">
                 Email
-              </label>
-              <input
+              </Label>
+              <Input
                 type="email"
                 name="email"
                 value={data.email}
                 onChange={handleChange}
-                required
+                isRequired={true}
                 className="lowercase border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
               />
             </div>
 
             <div className="flex flex-col gap-1">
-              <label htmlFor="" className="text-[0.9rem] font-medium">
+              <Label htmlFor="" className="text-[0.9rem] font-medium">
                 Số điện thoại
-              </label>
-              <input
+              </Label>
+              <Input
                 type="text"
                 name="phone"
                 value={data.phone}
                 onChange={handleChange}
-                required
+                isRequired={true}
                 className="lowercase border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
               />
             </div>
 
             <div className="flex flex-col gap-1">
-              <label htmlFor="" className="text-[0.9rem] font-medium">
+              <Label htmlFor="" className="text-[0.9rem] font-medium">
                 Mật khẩu
-              </label>
-              <input
+              </Label>
+              <Input
                 type="password"
                 name="password"
                 value={data.password}
                 onChange={handleChange}
-                required
+                isRequired={true}
                 className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
               />
             </div>
@@ -121,13 +124,13 @@ function AddAdmin() {
         </div>
 
         <div className="flex justify-center gap-6">
-          <button
-            disabled={isLoading}
+          <Button
+            isDisabled={isLoading}
             type="submit"
             className="p-[6px_10px] bg-teal-500 text-white text-[0.9rem] font-medium text-center hover:bg-teal-600 rounded-sm"
           >
             {isLoading ? "Đang thêm..." : "Thêm"}
-          </button>
+          </Button>
           <Link
             to="/admin/admins"
             className="p-[6px_10px] bg-red-500 text-white text-[0.9rem] text-center hover:bg-red-600 rounded-sm"

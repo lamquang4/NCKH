@@ -3,6 +3,7 @@ import Image from "../../ui/Image";
 import { HiMiniXMark } from "react-icons/hi2";
 import ImageViewer from "../../ui/ImageViewer";
 import { ReactSortable } from "react-sortablejs";
+import Button from "../../ui/Button";
 type SortableImage = {
   id: string;
   url: string;
@@ -103,7 +104,7 @@ function InputImage({
                 </div>
 
                 <div className="absolute top-[6px] right-[6px]">
-                  <button
+                  <Button
                     type="button"
                     className="bg-white rounded-full flex justify-center items-center border-2"
                     onClick={(e) => {
@@ -113,7 +114,7 @@ function InputImage({
                     }}
                   >
                     <HiMiniXMark size={20} />
-                  </button>
+                  </Button>
                 </div>
               </div>
             ))}
