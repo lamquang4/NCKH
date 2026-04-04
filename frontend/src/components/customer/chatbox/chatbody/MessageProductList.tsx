@@ -9,8 +9,6 @@ type Props = {
 };
 
 function MessageProductList({ products }: Props) {
-  console.log(products);
-
   return (
     <div className="inline-flex border-gray-200 cursor-pointer max-w-fit text-black">
       <div className="grid grid-cols-3 gap-2">

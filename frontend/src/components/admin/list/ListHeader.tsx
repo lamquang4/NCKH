@@ -7,6 +7,9 @@ import {
   useNavigate,
   useSearchParams,
 } from "react-router-dom";
+import Button from "../../ui/Button";
+import Input from "../../ui/Input";
+import Label from "../../ui/Label";
 
 interface Props {
   title: string;
@@ -73,31 +76,31 @@ function ListHeader({
           className="flex gap-[15px] flex-wrap items-end"
         >
           <div className="flex gap-1.5 items-center">
-            <label className="text-[0.9rem] font-medium">Từ:</label>
-            <input
+            <Label className="text-[0.9rem] font-medium">Từ:</Label>
+            <Input
               name="start"
               type="date"
-              defaultValue={searchParams.get("start") || ""}
+              value={searchParams.get("start") || ""}
               className="bg-gray-50 border border-gray-300 text-[0.9rem] p-[6px_10px] outline-none focus:border-gray-400"
             />
           </div>
 
           <div className="flex gap-1.5 items-center">
-            <label className="text-[0.9rem] font-medium">Đến:</label>
-            <input
+            <Label className="text-[0.9rem] font-medium">Đến:</Label>
+            <Input
               name="end"
               type="date"
-              defaultValue={searchParams.get("end") || ""}
+              value={searchParams.get("end") || ""}
               className="bg-gray-50 border border-gray-300 text-[0.9rem] p-[6px_10px] outline-none focus:border-gray-400"
             />
           </div>
 
-          <button
+          <Button
             type="submit"
             className="p-[6px_12px] text-[0.9rem] bg-primary text-white"
           >
             Tìm kiếm
-          </button>
+          </Button>
         </form>
       )}
     </div>

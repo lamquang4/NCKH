@@ -14,6 +14,7 @@ import {
 } from "react-icons/lu";
 import { GoHorizontalRule } from "react-icons/go";
 import { BsQuote } from "react-icons/bs";
+import Button from "../../../ui/Button";
 function ButtonTool({
   editor,
   visibleTools,
@@ -175,7 +176,7 @@ function ButtonTool({
   return (
     <>
       {tools.map((tool, index) => (
-        <button
+        <Button
           key={`btn-tool-${index}`}
           type="button"
           onClick={tool.onClick}
@@ -185,7 +186,7 @@ function ButtonTool({
           }`}
         >
           {tool.label}
-        </button>
+        </Button>
       ))}
     </>
   );

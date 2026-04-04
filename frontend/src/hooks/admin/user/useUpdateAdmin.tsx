@@ -1,13 +1,13 @@
 import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import type { UserRequest } from "../types/type";
-import useGetUser from "./useGetUser";
+import useGetUser from "../../useGetUser";
+import type { UserRequest } from "../../../types/type";
 
-export default function useUpdateUser(id: string) {
+export default function useUpdateAdmin(id: string) {
   const [isLoading, setIsLoading] = useState(false);
   const { mutate } = useGetUser(id);
-  const updateUser = async (data: UserRequest) => {
+  const updateAdmin  = async (data: UserRequest) => {
     if (!id) return;
     const loadingToast = toast.loading("Đang cập nhật...");
     setIsLoading(true);
@@ -26,5 +26,5 @@ export default function useUpdateUser(id: string) {
     }
   };
 
-  return { updateUser, isLoading };
+  return { updateAdmin, isLoading };
 }

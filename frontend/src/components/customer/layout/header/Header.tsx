@@ -15,6 +15,7 @@ import useGetCart from "../../../../hooks/customer/cart/useGetCart";
 import { TbCategoryPlus } from "react-icons/tb";
 import MenuDropDown from "./CategoryDropDown";
 import useGetActiveCategories from "../../../../hooks/customer/category/useGetActiveCategories";
+import Button from "../../../ui/Button";
 
 function Header() {
   const [searchOpen, setSearchOpen] = useState<boolean>(false);
@@ -140,9 +141,9 @@ function Header() {
 
             {/* Mobile */}
             <div className="flex lg:hidden items-center gap-4 relative">
-              <button onClick={toggleSearch}>
+              <Button onClick={toggleSearch}>
                 <IoSearchOutline size={24} />
-              </button>
+              </Button>
 
               <div
                 className="relative cursor-pointer group"
@@ -161,9 +162,9 @@ function Header() {
                 </small>
               </Link>
 
-              <button onClick={toggleMobileMenu}>
+              <Button onClick={toggleMobileMenu}>
                 <AiOutlineMenu size={24} />
-              </button>
+              </Button>
             </div>
           </div>
 

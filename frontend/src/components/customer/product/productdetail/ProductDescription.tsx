@@ -1,4 +1,5 @@
 import { memo, useEffect, useRef, useState } from "react";
+import Button from "../../../ui/Button";
 
 type Props = {
   description: string;
@@ -41,7 +42,7 @@ function ProductDescription({ description }: Props) {
       </div>
 
       {canExpand && (
-        <button
+        <Button
           type="button"
           onClick={() => {
             setExpanded((prev) => {
@@ -57,7 +58,7 @@ function ProductDescription({ description }: Props) {
           className="text-blue-600 text-[0.9rem] font-medium text-center w-full"
         >
           {expanded ? "Thu gọn" : "Xem thêm"}
-        </button>
+        </Button>
       )}
     </div>
   );

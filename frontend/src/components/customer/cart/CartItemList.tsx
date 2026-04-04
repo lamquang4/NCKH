@@ -5,6 +5,7 @@ import Image from "../../ui/Image";
 import toast from "react-hot-toast";
 import CartItem from "./CartItem";
 import CartItemListSkeleton from "../skeleton/CartItemListSkeleton";
+import Button from "../../ui/Button";
 
 type Props = {
   cart: CartResponse;
@@ -97,13 +98,13 @@ function CartItemList({ cart, isLoading = false }: Props) {
               <hr className="border-gray-300 my-[20px]" />
 
               <div className="flex md:flex-row flex-col justify-between items-center gap-[10px]">
-                <button
+                <Button
                   onClick={handleCheckout}
                   type="submit"
                   className="text-[0.9rem] px-4 py-2.5 w-full font-semibold tracking-wide bg-accent text-white rounded-md"
                 >
                   Thanh toán
-                </button>
+                </Button>
 
                 <Link
                   className="text-[0.9rem] px-4 py-2.5 w-full tracking-wide bg-transparent hover:bg-gray-200 text-slate-900 border border-gray-300 rounded-md text-center font-semibold"

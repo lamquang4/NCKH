@@ -2,6 +2,8 @@ import { memo, useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
 import { useNavigate, useLocation } from "react-router-dom";
 import SuggestionProduct from "../../ui/SuggestionProduct";
+import Input from "../../../ui/Input";
+import Button from "../../../ui/Button";
 
 function SearchDesktop() {
   const navigate = useNavigate();
@@ -31,13 +33,12 @@ function SearchDesktop() {
         onSubmit={handleSearch}
         className={`flex items-stretch w-ful overflow-hidden duration-200 border border-primary rounded-lg font-medium`}
       >
-        <input
+        <Input
           type="text"
           className={`w-full px-3 py-2 text-[0.9rem] bg-transparent outline-none border-none`}
-          required
+          isRequired={true}
           maxLength={100}
           placeholder="Bạn cần tìm gì..."
-          autoComplete="off"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           onFocus={() => setFocused(true)}
@@ -48,12 +49,12 @@ function SearchDesktop() {
           }}
         />
 
-        <button
+        <Button
           className="px-3 font-medium bg-primary text-white"
           type="submit"
         >
           <IoSearchOutline size={22} />
-        </button>
+        </Button>
       </form>
 
       {focused && search && (

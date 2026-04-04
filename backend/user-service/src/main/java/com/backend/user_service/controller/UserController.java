@@ -17,12 +17,15 @@ import org.springframework.data.domain.Page;
 import com.backend.user_service.dto.request.UserRequest;
 import com.backend.user_service.dto.response.ApiResponse;
 import com.backend.user_service.dto.response.UserAuthResponse;
+import com.backend.user_service.dto.response.UserFullnameResponse;
 import com.backend.user_service.dto.response.UserResponse;
 import com.backend.user_service.mapper.UserMapper;
 import com.backend.user_service.service.UserService;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 @Validated
 @RestController
@@ -82,13 +85,24 @@ public class UserController {
         }
 
         @PutMapping("/{id}")
-        public ResponseEntity<ApiResponse<Void>> updateUser(
+        public ResponseEntity<ApiResponse<Void>> updateAdmin(
                         @PathVariable String id,
                         @Valid @RequestBody UserRequest request) {
                 userService.updateUser(id, request);
                 return ResponseEntity.ok(
                                 ApiResponse.<Void>builder()
                                                 .message("Cập nhật người dùng thành công")
+                                                .build());
+        }
+
+        @PutMapping
+        public ResponseEntity<ApiResponse<Void>> updateCustomer(
+                        @AuthenticationPrincipal String userId,
+                        @Valid @RequestBody UserRequest request) {
+                userService.updateUser(userId, request);
+                return ResponseEntity.ok(
+                                ApiResponse.<Void>builder()
+                                                .message("Cập nhật thông tin thành công")
                                                 .build());
         }
 
@@ -152,5 +166,12 @@ public class UserController {
 
                 userService.createUser(request);
                 return ResponseEntity.status(HttpStatus.CREATED).build();
+        }
+
+        @GetMapping("/internal/fullname/{id}")
+        public ResponseEntity<UserFullnameResponse> getFullnameByIdInternal(
+                        @PathVariable String id) {
+
+                return ResponseEntity.ok(userService.getFullnameById(id));
         }
 }

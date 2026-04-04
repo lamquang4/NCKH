@@ -1,6 +1,8 @@
 import { memo, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import SuggestionProduct from "../../ui/SuggestionProduct";
+import Input from "../../../ui/Input";
+import Button from "../../../ui/Button";
 
 type Props = {
   onToggleSearch: () => void;
@@ -52,12 +54,11 @@ function SearchMobile({ onToggleSearch, searchOpen }: Props) {
       <div className="relative">
         <div className="flex items-center px-[15px] py-4">
           <form onSubmit={handleSearch} className="w-full">
-            <input
+            <Input
               type="text"
-              required
+              isRequired={true}
               placeholder="Bạn cần tìm gì..."
               maxLength={50}
-              autoComplete="off"
               className="w-full rounded outline-none text-[0.9rem]"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -70,7 +71,7 @@ function SearchMobile({ onToggleSearch, searchOpen }: Props) {
             />
           </form>
 
-          <button onClick={onToggleSearch}>
+          <Button onClick={onToggleSearch}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -84,7 +85,7 @@ function SearchMobile({ onToggleSearch, searchOpen }: Props) {
               <path d="M18 6 6 18"></path>
               <path d="m6 6 12 12"></path>
             </svg>
-          </button>
+          </Button>
         </div>
 
         {focused && search && (

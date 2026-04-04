@@ -3,6 +3,10 @@ import toast from "react-hot-toast";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import useGetBrand from "../../../hooks/admin/brand/useGetBrand";
 import useUpdateBrand from "../../../hooks/admin/brand/useUpdateBrand";
+import Input from "../../ui/Input";
+import Select from "../../ui/Select";
+import Button from "../../ui/Button";
+import Label from "../../ui/Label";
 
 function EditBrand() {
   const navigate = useNavigate();
@@ -65,26 +69,26 @@ function EditBrand() {
               </p>
 
               <div className="flex flex-col gap-1">
-                <label htmlFor="" className="text-[0.9rem] font-medium">
+                <Label htmlFor="" className="text-[0.9rem] font-medium">
                   Tên
-                </label>
-                <input
+                </Label>
+                <Input
                   type="text"
                   name="name"
                   value={data.name}
                   onChange={handleChange}
-                  required
+                  isRequired={true}
                   className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
                 />
               </div>
 
               <div className="flex flex-col gap-1">
-                <label htmlFor="" className="text-[0.9rem] font-medium">
+                <Label htmlFor="" className="text-[0.9rem] font-medium">
                   Tình trạng
-                </label>
-                <select
+                </Label>
+                <Select
                   name="status"
-                  required
+                  isRequired={true}
                   onChange={handleChange}
                   value={data.status}
                   className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
@@ -92,19 +96,19 @@ function EditBrand() {
                   <option value="">Chọn tình trạng</option>
                   <option value="0">Ẩn</option>
                   <option value="1">Hiện</option>
-                </select>
+                </Select>
               </div>
             </div>
           </div>
 
           <div className="flex justify-center gap-6">
-            <button
-              disabled={isLoadingUpdate}
+            <Button
+              isDisabled={isLoadingUpdate}
               type="submit"
               className="p-[6px_10px] bg-teal-500 text-white text-[0.9rem] font-medium text-center hover:bg-teal-600 rounded-sm"
             >
               {isLoadingUpdate ? "Đang cập nhật..." : "Cập nhật"}
-            </button>
+            </Button>
             <Link
               to="/admin/brands"
               className="p-[6px_10px] bg-red-500 text-white text-[0.9rem] text-center hover:bg-red-600 rounded-sm"

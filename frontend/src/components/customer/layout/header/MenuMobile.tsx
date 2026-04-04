@@ -4,6 +4,7 @@ import { FaMinus } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Overplay from "../../ui/Overplay";
 import useGetActiveCategories from "../../../../hooks/customer/category/useGetActiveCategories";
+import Button from "../../../ui/Button";
 
 type MenuMobileProps = {
   isOpen: boolean;
@@ -40,7 +41,7 @@ function MenuMobile({ isOpen, onToggleMenu }: MenuMobileProps) {
         }`}
       >
         <div className="flex justify-end items-center">
-          <button onClick={onToggleMenu}>
+          <Button onClick={onToggleMenu}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -54,7 +55,7 @@ function MenuMobile({ isOpen, onToggleMenu }: MenuMobileProps) {
               <path d="M18 6 6 18"></path>
               <path d="m6 6 12 12"></path>
             </svg>
-          </button>
+          </Button>
         </div>
 
         <ul className="py-[20px] ">
@@ -64,9 +65,9 @@ function MenuMobile({ isOpen, onToggleMenu }: MenuMobileProps) {
           >
             <div className="w-full flex justify-between items-center py-[15px] text-black font-semibold">
               <p>Danh mục</p>
-              <button>
+              <Button>
                 {openMenus[`a3`] ? <FaMinus size={15} /> : <FaPlus size={15} />}
-              </button>
+              </Button>
             </div>
 
             <ul

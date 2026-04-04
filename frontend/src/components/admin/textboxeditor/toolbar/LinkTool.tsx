@@ -2,6 +2,8 @@ import { Editor } from "@tiptap/react";
 import { memo, useState } from "react";
 import toast from "react-hot-toast";
 import { MdInsertLink } from "react-icons/md";
+import Button from "../../../ui/Button";
+import Input from "../../../ui/Input";
 
 function LinkTool({ editor }: { editor: Editor | null }) {
   const [dataLink, setDataLink] = useState({
@@ -53,25 +55,26 @@ function LinkTool({ editor }: { editor: Editor | null }) {
       onMouseEnter={toggleLink}
       onMouseLeave={toggleLink}
     >
-      <button
+      <Button
         type="button"
         title="Link"
         className="p-2 flex items-center gap-1.5 justify-between hover:bg-gray-100 bg-gray-50"
       >
         <MdInsertLink size={18} />
-      </button>
+      </Button>
 
       {openLink && (
         <div className="absolute left-1/2 top-full -translate-x-1/2 w-[200px] bg-white z-10 border border-gray-200 shadow-md">
           <div className="flex flex-col gap-[10px] items-center p-2">
-            <input
+            <Input
+              type="text"
               name="linkUrl"
               placeholder="Enter link url..."
               value={dataLink.linkUrl}
               onChange={handleChangeDataLink}
               className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400"
             />
-            <input
+            <Input
               type="text"
               name="textUrl"
               placeholder="Enter link text..."
@@ -79,13 +82,13 @@ function LinkTool({ editor }: { editor: Editor | null }) {
               onChange={handleChangeDataLink}
               className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400"
             />
-            <button
+            <Button
               type="button"
               onClick={handleAddLink}
               className="p-[4px_12px] font-medium border border-gray-200 bg-gray-50 hover:bg-gray-100 text-[0.9rem] rounded-sm"
             >
               Save
-            </button>
+            </Button>
           </div>
         </div>
       )}

@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import useGetAccount from "../../../hooks/auth/useGetAccount";
-import useUpdateUser from "../../../hooks/useUpdateUser";
 import { validatePhone } from "../../../utils/validatePhone";
 import toast from "react-hot-toast";
+import useUpdateCustomer from "../../../hooks/customer/useUpdateCustomer";
+import Input from "../../ui/Input";
+import Button from "../../ui/Button";
+import Label from "../../ui/Label";
 
 function AccountForm() {
   const [data, setData] = useState({
@@ -14,7 +17,7 @@ function AccountForm() {
   });
 
   const { account } = useGetAccount("customer");
-  const { updateUser, isLoading } = useUpdateUser(account?.id || "");
+  const { updateCustomer, isLoading } = useUpdateCustomer();
 
   useEffect(() => {
     if (account) {
@@ -47,7 +50,7 @@ function AccountForm() {
       return;
     }
 
-    await updateUser({
+    await updateCustomer({
       fullname: data.fullname.trim(),
       email: data.email.trim(),
       phone: data.phone.trim(),
@@ -68,13 +71,13 @@ function AccountForm() {
         <form className="flex flex-col gap-[15px]" onSubmit={handleSubmit}>
           <div className="flex flex-wrap md:flex-nowrap gap-[15px]">
             <div className="space-y-[5px] w-full">
-              <label
+              <Label
                 htmlFor=""
                 className="block text-left text-[0.9rem] font-medium"
               >
                 Họ tên:
-              </label>
-              <input
+              </Label>
+              <Input
                 type="text"
                 name="fullname"
                 className="w-full rounded-sm p-[6px_10px] text-[0.9rem] border border-gray-300  focus:outline-0"
@@ -84,31 +87,31 @@ function AccountForm() {
             </div>
 
             <div className="space-y-[5px] w-full">
-              <label
+              <Label
                 htmlFor=""
                 className="block text-left text-[0.9rem] font-medium"
               >
                 Email:
-              </label>
-              <input
+              </Label>
+              <Input
                 type="text"
                 name="email"
                 className="w-full rounded-sm p-[6px_10px] text-[0.9rem] border border-gray-300  focus:outline-0"
                 value={data?.email}
-                readOnly
+                isReadOnly={true}
               />
             </div>
           </div>
 
           <div className="flex flex-wrap md:flex-nowrap gap-[15px]">
             <div className="space-y-[5px] w-full">
-              <label
+              <Label
                 htmlFor=""
                 className="block text-left text-[0.9rem] font-medium"
               >
                 Sinh nhật
-              </label>
-              <input
+              </Label>
+              <Input
                 type="date"
                 name="birthDate"
                 className="w-full rounded-sm p-[6px_10px] text-[0.9rem] border border-gray-300 focus:outline-0"
@@ -118,13 +121,13 @@ function AccountForm() {
             </div>
 
             <div className="space-y-[5px] w-full">
-              <label
+              <Label
                 htmlFor=""
                 className="block text-left text-[0.9rem] font-medium"
               >
                 Số điện thoại:
-              </label>
-              <input
+              </Label>
+              <Input
                 type="text"
                 name="phone"
                 className="w-full rounded-sm p-[6px_10px] text-[0.9rem] border border-gray-300 focus:outline-0"
@@ -135,16 +138,16 @@ function AccountForm() {
           </div>
 
           <div className="space-y-[5px]">
-            <label
+            <Label
               htmlFor=""
               className="block text-left text-[0.9rem] font-medium"
             >
               Giới tính
-            </label>
+            </Label>
 
             <div className="flex items-center gap-[25px]">
-              <label className="flex items-center gap-[6px] cursor-pointer">
-                <input
+              <Label className="flex items-center gap-[6px] cursor-pointer">
+                <Input
                   type="radio"
                   name="gender"
                   className="scale-140 accent-primary"
@@ -153,10 +156,10 @@ function AccountForm() {
                   onChange={handleChange}
                 />
                 <span className="text-[0.9rem]">Nam</span>
-              </label>
+              </Label>
 
-              <label className="flex items-center gap-[6px] cursor-pointer">
-                <input
+              <Label className="flex items-center gap-[6px] cursor-pointer">
+                <Input
                   type="radio"
                   name="gender"
                   className="scale-140 accent-primary"
@@ -165,18 +168,18 @@ function AccountForm() {
                   onChange={handleChange}
                 />
                 <span className="text-[0.9rem]">Nữ</span>
-              </label>
+              </Label>
             </div>
           </div>
 
           <div className="flex justify-center">
-            <button
-              disabled={isLoading}
+            <Button
+              isDisabled={isLoading}
               type="submit"
               className="p-[6px_10px] bg-primary text-white text-[0.9rem] font-medium text-center rounded-sm"
             >
               Lưu thay đổi
-            </button>
+            </Button>
           </div>
         </form>
       </div>

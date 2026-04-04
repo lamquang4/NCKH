@@ -2,6 +2,7 @@ import { memo } from "react";
 import { LuMic } from "react-icons/lu";
 import { RiVoiceAiLine } from "react-icons/ri";
 import { useVoice } from "../../../../hooks/customer/useVoice";
+import Button from "../../../ui/Button";
 
 type Props = {
   inputRef: React.RefObject<HTMLTextAreaElement | null>;
@@ -15,7 +16,7 @@ function ChatVoice({ inputRef, onInput }: Props) {
   });
 
   return (
-    <button
+    <Button
       type="button"
       onClick={recording ? stopVoice : startVoice}
       className={`w-9 h-9 flex items-center justify-center rounded-full ${
@@ -23,7 +24,7 @@ function ChatVoice({ inputRef, onInput }: Props) {
       }`}
     >
       {recording ? <RiVoiceAiLine size={18} /> : <LuMic size={18} />}
-    </button>
+    </Button>
   );
 }
 

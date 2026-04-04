@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, memo } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
+import Input from "../../ui/Input";
 
 type Option = {
   value: string;
@@ -55,7 +56,7 @@ function SearchableSelect({
       {open && (
         <div className="absolute z-10 w-full bg-white border border-gray-300 shadow-md max-h-60 overflow-y-auto">
           <div>
-            <input
+            <Input
               type="text"
               placeholder="Tìm kiếm..."
               value={search}

@@ -1,6 +1,7 @@
 import { Editor } from "@tiptap/react";
 import { memo, useState } from "react";
 import { VscTable } from "react-icons/vsc";
+import Button from "../../../ui/Button";
 
 function TableTool({ editor }: { editor: Editor | null }) {
   const [hoveredRow, setHoveredRow] = useState<number | null>(null);
@@ -37,13 +38,13 @@ function TableTool({ editor }: { editor: Editor | null }) {
       onMouseEnter={toggleTable}
       onMouseLeave={toggleTable}
     >
-      <button
+      <Button
         type="button"
         title="Table"
         className="p-2 flex items-center justify-between hover:bg-gray-100 bg-gray-50"
       >
         <VscTable size={18} />
-      </button>
+      </Button>
 
       {openTable && (
         <div className="absolute left-1/2 -translate-x-1/2 top-full min-w-max space-y-2 bg-white z-10 border border-gray-200 shadow-md p-2">

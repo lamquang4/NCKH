@@ -1,5 +1,6 @@
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { useNavigate, useLocation } from "react-router-dom";
+import Button from "../../ui/Button";
 
 interface Props {
   totalPages: number;
@@ -52,31 +53,31 @@ function Pagination({ totalPages, currentPage, totalItems }: Props) {
   return (
     <div className="mt-[20px] px-[15px]">
       <div className="flex items-center justify-center w-full flex-wrap gap-2.5 text-[0.9rem]">
-        <button
+        <Button
           type="button"
           className="h-8.5 w-8.5 flex justify-center items-center hover:bg-gray-100 text-primary border border-primary rounded-sm"
-          disabled={currentPage <= 1}
+          isDisabled={currentPage <= 1}
           onClick={() => currentPage > 1 && goToPage(currentPage - 1)}
         >
           <GrFormPrevious size={22} />
-        </button>
+        </Button>
 
         {getPageNumbers().map((page, index) => {
           if (page === "...") {
             return (
-              <button
+              <Button
                 type="button"
-                disabled
+                isDisabled={true}
                 key={`ellipsis-${index}`}
                 className="group h-8.5 w-8.5 flex justify-center items-center text-primary rounded-sm font-semibold border border-primary"
               >
                 ...
-              </button>
+              </Button>
             );
           }
 
           return (
-            <button
+            <Button
               key={page}
               onClick={() => goToPage(page as number)}
               className={`h-8.5 w-8.5 flex justify-center items-center text-primary font-medium rounded-sm ${
@@ -86,17 +87,17 @@ function Pagination({ totalPages, currentPage, totalItems }: Props) {
               }`}
             >
               {page}
-            </button>
+            </Button>
           );
         })}
 
-        <button
-          disabled={currentPage >= totalPages}
+        <Button
+          isDisabled={currentPage >= totalPages}
           onClick={() => currentPage < totalPages && goToPage(currentPage + 1)}
           className="h-8.5 w-8.5 flex justify-center items-center hover:bg-gray-100 text-primary border border-primary rounded-sm"
         >
           <GrFormNext size={22} />
-        </button>
+        </Button>
       </div>
     </div>
   );

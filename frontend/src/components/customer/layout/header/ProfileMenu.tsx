@@ -4,6 +4,7 @@ import useGetAccount from "../../../../hooks/auth/useGetAccount";
 import useLogout from "../../../../hooks/auth/useLogout";
 import { openAuthModal } from "../../../../redux/slices/AuthModalSlice";
 import { useDispatch } from "react-redux";
+import Button from "../../../ui/Button";
 type Props = {
   profileMenuOpen: boolean;
 };
@@ -39,30 +40,30 @@ function ProfileMenu({ profileMenuOpen }: Props) {
             Đơn hàng
           </Link>
 
-          <button
+          <Button
             onClick={async () => {
               await handleLogout("customer");
             }}
             className="hover:bg-gray-100 w-full block p-2.5 text-left"
           >
             Đăng xuất
-          </button>
+          </Button>
         </>
       ) : (
         <>
-          <button
+          <Button
             onClick={() => dispatch(openAuthModal("login"))}
             className="hover:bg-gray-100 w-full block p-2.5 text-left"
           >
             Đăng nhập
-          </button>
+          </Button>
 
-          <button
+          <Button
             onClick={() => dispatch(openAuthModal("register"))}
             className="hover:bg-gray-100 w-full block p-2.5 text-left"
           >
             Đăng ký
-          </button>
+          </Button>
         </>
       )}
     </div>

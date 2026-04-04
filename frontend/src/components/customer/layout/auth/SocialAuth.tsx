@@ -1,5 +1,6 @@
 import { memo } from "react";
 import { FaGoogle } from "react-icons/fa6";
+import Button from "../../../ui/Button";
 
 type Props = {
   title: string;
@@ -24,7 +25,7 @@ function SocialAuth({ title }: Props) {
 
       <div className="grid grid-cols-auto gap-[10px]">
         {providers.map((provider, index) => (
-          <button
+          <Button
             key={index}
             type="button"
             className="w-full px-[12px] py-[8px] bg-[#DF4A32] rounded-md font-semibold text-white"
@@ -33,7 +34,7 @@ function SocialAuth({ title }: Props) {
               {provider.icon}
               <span>{provider.label}</span>
             </div>
-          </button>
+          </Button>
         ))}
       </div>
     </>

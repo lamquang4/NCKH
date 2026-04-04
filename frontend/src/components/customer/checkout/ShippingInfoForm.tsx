@@ -1,5 +1,8 @@
 import { memo, useMemo } from "react";
 import type { Province } from "../../../types/type";
+import Input from "../../ui/Input";
+import Select from "../../ui/Select";
+import Label from "../../ui/Label";
 
 type Props = {
   data: {
@@ -35,46 +38,45 @@ function ShippingInfoForm({ data, setData, onChange, provinces }: Props) {
       <h4>Thông tin giao hàng</h4>
 
       <div className="space-y-[5px]">
-        <label htmlFor="" className="block text-[0.9rem] font-medium">
+        <Label htmlFor="" className="block text-[0.9rem] font-medium">
           Họ tên
-        </label>
-        <input
+        </Label>
+        <Input
           type="text"
           name="fullname"
           value={data.fullname}
           onChange={onChange}
-          required
+          isRequired={true}
           className="w-full rounded-md border border-gray-200 px-2.5 py-2 text-[0.9rem] outline-none focus:z-10 focus:border-[#197FB6] focus:ring-[#197FB6]"
           placeholder="Họ tên"
         />
       </div>
 
       <div className="space-y-[5px]">
-        <label htmlFor="" className="block text-[0.9rem] font-medium">
+        <Label htmlFor="" className="block text-[0.9rem] font-medium">
           Số điện thoại
-        </label>
-        <input
+        </Label>
+        <Input
           type="number"
-          inputMode="numeric"
           name="phone"
           value={data.phone}
           onChange={onChange}
-          required
+          isRequired={true}
           className="w-full rounded-md border border-gray-200 px-2.5 py-2 text-[0.9rem] outline-none focus:z-10 focus:border-[#197FB6] focus:ring-[#197FB6]"
           placeholder="Số điện thoại"
         />
       </div>
 
       <div className="space-y-[5px]">
-        <label htmlFor="" className="block text-[0.9rem] font-medium">
+        <Label htmlFor="" className="block text-[0.9rem] font-medium">
           Địa chỉ cụ thể
-        </label>
-        <input
+        </Label>
+        <Input
           type="text"
           name="speaddress"
           value={data.speaddress}
           onChange={onChange}
-          required
+          isRequired={true}
           className="w-full rounded-md border border-gray-200 px-2.5 py-2 text-[0.9rem] outline-none focus:z-10 focus:border-[#197FB6] focus:ring-[#197FB6]"
           placeholder="Địa chỉ cụ thể"
         />
@@ -82,12 +84,12 @@ function ShippingInfoForm({ data, setData, onChange, provinces }: Props) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-[14px]">
         <div className="space-y-[5px]">
-          <label htmlFor="" className="block text-[0.9rem] font-medium">
+          <Label htmlFor="" className="block text-[0.9rem] font-medium">
             Tỉnh/thành phố
-          </label>
-          <select
+          </Label>
+          <Select
             name="city"
-            required
+            isRequired={true}
             value={data.city}
             onChange={(e) =>
               setData((prev) => ({
@@ -104,17 +106,17 @@ function ShippingInfoForm({ data, setData, onChange, provinces }: Props) {
                 {province.province}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
 
         <div className="space-y-[5px]">
-          <label htmlFor="" className="block text-[0.9rem] font-medium">
+          <Label htmlFor="" className="block text-[0.9rem] font-medium">
             Phường/xã
-          </label>
-          <select
+          </Label>
+          <Select
             name="ward"
-            required
-            disabled={!selectedProvince}
+            isRequired={true}
+            isDisabled={!selectedProvince}
             value={data.ward}
             onChange={onChange}
             className="w-full rounded-md text-[0.9rem] border border-gray-200 px-2.5 py-2 text-sm outline-none focus:z-10 focus:border-[#197FB6] focus:ring-[#197FB6]"
@@ -125,7 +127,7 @@ function ShippingInfoForm({ data, setData, onChange, provinces }: Props) {
                 {ward.name}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
       </div>
     </div>

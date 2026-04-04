@@ -22,6 +22,10 @@ import useUpdateProduct from "../../../hooks/admin/product/useUpdateProduct";
 import useDeleteImageProduct from "../../../hooks/admin/product/useDeleteImageProduct";
 import useUpdateImageProduct from "../../../hooks/admin/product/useUpdateProductImage";
 import SearchableSelect from "../ui/SearchableSelect";
+import Button from "../../ui/Button";
+import Input from "../../ui/Input";
+import Select from "../../ui/Select";
+import Label from "../../ui/Label";
 
 const TextBoxEditor = lazy(() => import("../textboxeditor/TextBoxEditor"));
 
@@ -294,17 +298,17 @@ function EditProduct() {
                         <div className="flex items-center flex-col gap-2">
                           {!previewImages1?.[index] ? (
                             <>
-                              <button
+                              <Button
                                 className="bg-white rounded-full p-1 border border-gray-300"
                                 onClick={() => handleDeleteImage(image.id)}
-                                disabled={isLoadingDeleteImage}
+                                isDisabled={isLoadingDeleteImage}
                                 type="button"
                               >
                                 <VscTrash
                                   size={22}
                                   className="text-[#d9534f]"
                                 />
-                              </button>
+                              </Button>
 
                               <InputImage1
                                 InputId={`img-${index}`}
@@ -315,10 +319,10 @@ function EditProduct() {
                             </>
                           ) : (
                             <>
-                              <button
+                              <Button
                                 type="button"
                                 className="bg-white rounded-full p-1 border border-gray-300 text-green-500"
-                                disabled={isLoadingUpdateImage}
+                                isDisabled={isLoadingUpdateImage}
                                 onClick={() =>
                                   handleUpdateImage(
                                     image!.id,
@@ -327,15 +331,15 @@ function EditProduct() {
                                 }
                               >
                                 <SiTicktick size={22} />
-                              </button>
+                              </Button>
 
-                              <button
+                              <Button
                                 type="button"
                                 className="bg-white rounded-full p-1 border border-gray-300"
                                 onClick={() => handleClear(index)}
                               >
                                 <HiMiniXMark size={22} />
-                              </button>
+                              </Button>
                             </>
                           )}
                         </div>
@@ -350,24 +354,24 @@ function EditProduct() {
               <h5 className="font-bold text-[#74767d]">Thông tin chung</h5>
 
               <div className="flex flex-col gap-1 w-full">
-                <label htmlFor="" className="text-[0.9rem] font-medium">
+                <Label htmlFor="" className="text-[0.9rem] font-medium">
                   Tên
-                </label>
-                <input
+                </Label>
+                <Input
                   type="text"
                   value={data.name}
                   onChange={handleChange}
                   name="name"
-                  required
+                  isRequired={true}
                   className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
                 />
               </div>
 
               <div className="flex flex-wrap md:flex-nowrap gap-[15px]">
                 <div className="flex flex-col gap-1 w-full">
-                  <label htmlFor="" className="text-[0.9rem] font-medium">
+                  <Label htmlFor="" className="text-[0.9rem] font-medium">
                     Danh mục
-                  </label>
+                  </Label>
                   <SearchableSelect
                     options={categoryOptions}
                     value={data.category}
@@ -382,9 +386,9 @@ function EditProduct() {
                 </div>
 
                 <div className="flex flex-col gap-1 w-full">
-                  <label htmlFor="" className="text-[0.9rem] font-medium">
+                  <Label htmlFor="" className="text-[0.9rem] font-medium">
                     Thương hiệu
-                  </label>
+                  </Label>
                   <SearchableSelect
                     options={brandOptions}
                     value={data.brand}
@@ -399,12 +403,12 @@ function EditProduct() {
                 </div>
 
                 <div className="flex flex-col gap-1 w-full">
-                  <label htmlFor="" className="text-[0.9rem] font-medium">
+                  <Label htmlFor="" className="text-[0.9rem] font-medium">
                     Tình trạng
-                  </label>
-                  <select
+                  </Label>
+                  <Select
                     name="status"
-                    required
+                    isRequired={true}
                     onChange={handleChange}
                     value={data.status}
                     className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
@@ -412,14 +416,14 @@ function EditProduct() {
                     <option value="">Chọn tình trạng</option>
                     <option value="0">Ẩn</option>
                     <option value="1">Hiện</option>
-                  </select>
+                  </Select>
                 </div>
               </div>
 
               <div className="flex flex-col gap-1">
-                <label htmlFor="" className="text-[0.9rem] font-medium">
+                <Label htmlFor="" className="text-[0.9rem] font-medium">
                   Mô tả
-                </label>
+                </Label>
                 <Suspense fallback={null}>
                   <TextBoxEditor
                     content={data.description}
@@ -434,47 +438,44 @@ function EditProduct() {
 
               <div className="flex flex-wrap md:flex-nowrap gap-[15px]">
                 <div className="flex flex-col gap-1 w-full">
-                  <label htmlFor="" className="text-[0.9rem] font-medium">
+                  <Label htmlFor="" className="text-[0.9rem] font-medium">
                     Giá bán
-                  </label>
-                  <input
+                  </Label>
+                  <Input
                     type="number"
                     name="price"
-                    inputMode="numeric"
                     value={data.price}
                     onChange={handleChange}
-                    required
+                    isRequired={true}
                     className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
                   />
                 </div>
 
                 <div className="flex flex-col gap-1 w-full">
-                  <label htmlFor="" className="text-[0.9rem] font-medium">
+                  <Label htmlFor="" className="text-[0.9rem] font-medium">
                     Số tiền giảm (Giảm giá{" "}
                     {Math.floor((data.discount / data.price) * 100)}%)
-                  </label>
-                  <input
+                  </Label>
+                  <Input
                     type="number"
                     name="discount"
-                    inputMode="numeric"
                     value={data.discount}
                     onChange={handleChange}
-                    required
+                    isRequired={true}
                     className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
                   />
                 </div>
 
                 <div className="flex flex-col gap-1 w-full">
-                  <label htmlFor="" className="text-[0.9rem] font-medium">
+                  <Label htmlFor="" className="text-[0.9rem] font-medium">
                     Số lượng hiện có
-                  </label>
-                  <input
+                  </Label>
+                  <Input
                     type="number"
                     name="stock"
-                    inputMode="numeric"
                     value={data.stock}
                     onChange={handleChange}
-                    required
+                    isRequired={true}
                     className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
                   />
                 </div>
@@ -495,13 +496,13 @@ function EditProduct() {
           </div>
 
           <div className="flex justify-center gap-6">
-            <button
-              disabled={isLoadingUpdate}
+            <Button
+              isDisabled={isLoadingUpdate}
               type="submit"
               className="p-[6px_10px] bg-teal-500 text-white text-[0.9rem] font-medium text-center hover:bg-teal-600 rounded-sm"
             >
               {isLoadingUpdate ? "Đang cập nhật..." : "Cập nhật"}
-            </button>
+            </Button>
             <Link
               to="/admin/products"
               className="p-[6px_10px] bg-red-500 text-white text-[0.9rem] text-center hover:bg-red-600 rounded-sm"

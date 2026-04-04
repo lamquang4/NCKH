@@ -7,6 +7,8 @@ import { validateEmail } from "../../../../utils/validateEmail";
 import { validatePhone } from "../../../../utils/validatePhone";
 import Overplay from "../../ui/Overplay";
 import Loading from "../../../ui/Loading";
+import Button from "../../../ui/Button";
+import Input from "../../../ui/Input";
 
 type Props = {
   onClose: () => void;
@@ -106,7 +108,7 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
               <div className="flex items-center justify-between">
                 <h4 className="uppercase">Đăng ký</h4>
 
-                <button
+                <Button
                   onClick={onClose}
                   type="button"
                   className="bg-transparent ms-auto"
@@ -124,7 +126,7 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
                     <path d="M18 6 6 18"></path>
                     <path d="m6 6 12 12"></path>
                   </svg>
-                </button>
+                </Button>
               </div>
 
               <hr className="border-gray-300" />
@@ -138,14 +140,14 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
                     >
                       Email
                     </label>
-                    <input
+                    <Input
                       type="text"
                       name="email"
                       value={data.email}
                       onChange={handleChange}
                       className="text-[0.9rem] block w-full px-3 py-2 border border-gray-200"
                       placeholder="Nhập email"
-                      required
+                      isRequired={true}
                     />
                   </div>
                 ) : (
@@ -156,17 +158,17 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
                           Nhập mã OTP
                         </label>
 
-                        <button
+                        <Button
                           type="button"
                           onClick={handleSendOTP}
-                          disabled={isLoadingSendResetOTP}
+                          isDisabled={isLoadingSendResetOTP}
                           className="text-[0.9rem] text-gray-500 p-0"
                         >
                           Gửi lại mã
-                        </button>
+                        </Button>
                       </div>
 
-                      <input
+                      <Input
                         type="text"
                         name="otp"
                         maxLength={6}
@@ -174,7 +176,7 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
                         onChange={handleChange}
                         placeholder="Nhập mã OTP"
                         className="text-[0.9rem] block w-full px-3 py-2 border border-gray-200"
-                        required
+                        isRequired={true}
                       />
                     </div>
 
@@ -185,14 +187,14 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
                       >
                         Họ và tên
                       </label>
-                      <input
+                      <Input
                         type="text"
                         name="fullname"
                         value={data.fullname}
                         onChange={handleChange}
                         className="text-[0.9rem] block w-full px-3 py-2 border border-gray-200"
                         placeholder="Nhập họ và tên"
-                        required
+                        isRequired={true}
                       />
                     </div>
 
@@ -203,15 +205,14 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
                       >
                         Số điện thoại
                       </label>
-                      <input
+                      <Input
                         type="number"
                         name="phone"
-                        inputMode="numeric"
                         value={data.phone}
                         onChange={handleChange}
                         className="text-[0.9rem] block w-full px-3 py-2 border border-gray-200"
                         placeholder="Nhập số điện thoại"
-                        required
+                        isRequired={true}
                       />
                     </div>
 
@@ -224,17 +225,17 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
                       </label>
 
                       <div className="relative">
-                        <input
+                        <Input
                           type={!showPassword ? "password" : "text"}
                           name="password"
                           value={data.password}
                           onChange={handleChange}
                           placeholder="Nhập mật khẩu"
                           className="text-[0.9rem] block w-full  px-3 pr-12 py-2 border border-gray-200"
-                          required
+                          isRequired={true}
                         />
 
-                        <button
+                        <Button
                           type="button"
                           className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
                           onClick={toggleShowPassword}
@@ -244,12 +245,12 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
                           ) : (
                             <HiOutlineEyeOff size={22} />
                           )}
-                        </button>
+                        </Button>
                       </div>
                     </div>
 
                     <div className="mt-4">
-                      <button
+                      <Button
                         type="button"
                         onClick={() => {
                           setStep(1);
@@ -264,28 +265,28 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
                         className="text-[0.9rem] text-blue-400 font-medium"
                       >
                         Trở về
-                      </button>
+                      </Button>
                     </div>
                   </>
                 )}
 
-                <button
-                  disabled={isLoading}
+                <Button
+                  isDisabled={isLoading}
                   type="submit"
                   className="w-full bg-primary text-white focus:outline-none font-semibold rounded-sm uppercase text-[0.9rem] px-5 py-2.5 text-center"
                 >
                   Đăng kí
-                </button>
+                </Button>
 
                 <p className="flex gap-1.5 justify-center font-medium">
                   Bạn đã có tài khoản?
-                  <button
+                  <Button
                     type="button"
                     onClick={onSwitchLogin}
                     className="text-primary font-medium"
                   >
                     Đăng nhập
-                  </button>
+                  </Button>
                 </p>
               </form>
             </div>
