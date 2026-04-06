@@ -1,5 +1,8 @@
-import { memo } from "react";
+import { memo, useState } from "react";
 import { IoMdAddCircle } from "react-icons/io";
+import dayjs from "dayjs";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import StaticCard from "../ui/StaticCard";
 import {
   Link,
@@ -8,7 +11,6 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import Button from "../../ui/Button";
-import Input from "../../ui/Input";
 import Label from "../../ui/Label";
 
 interface Props {
@@ -34,25 +36,41 @@ function ListHeader({
   const location = useLocation();
   const [searchParams] = useSearchParams();
 
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
+
+  const handleStartDateChange = (date: Date | null) => {
+    setStartDate(date);
+
+    if (date && endDate && endDate < date) {
+      setEndDate(null);
+    }
+  };
+
+  const handleEndDateChange = (date: Date | null) => {
+    setEndDate(date);
+
+    if (date && startDate && startDate > date) {
+      setStartDate(null);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-
-    const start = formData.get("start") as string;
-    const end = formData.get("end") as string;
 
     const params = new URLSearchParams(searchParams.toString());
 
-    if (start) params.set("start", start);
+    if (startDate) params.set("start", dayjs(startDate).toISOString());
     else params.delete("start");
 
-    if (end) params.set("end", end);
+    if (endDate) params.set("end", dayjs(endDate).toISOString());
     else params.delete("end");
 
     navigate(`${location.pathname}?${params.toString()}`);
   };
+
   return (
-    <div className="py-[1.3rem] px-[1.2rem] bg-[#f1f4f9] space-y-[20px]">
+    <div className="py-[1.3rem] px-[1.2rem] space-y-[20px]">
       <div className="flex justify-between items-center flex-wrap gap-[20px]">
         <h2 className="text-[#74767d]">
           {title} ({totalItems})
@@ -77,20 +95,28 @@ function ListHeader({
         >
           <div className="flex gap-1.5 items-center">
             <Label className="text-[0.9rem] font-medium">Từ:</Label>
-            <Input
-              name="start"
-              type="date"
-              value={searchParams.get("start") || ""}
+            <DatePicker
+              selected={startDate}
+              onChange={handleStartDateChange}
+              showTimeSelect
+              timeFormat="HH:mm"
+              timeIntervals={5}
+              dateFormat="dd/MM/yyyy - HH-mm"
+              placeholderText="Chọn ngày giờ"
               className="bg-gray-50 border border-gray-300 text-[0.9rem] p-[6px_10px] outline-none focus:border-gray-400"
             />
           </div>
 
           <div className="flex gap-1.5 items-center">
             <Label className="text-[0.9rem] font-medium">Đến:</Label>
-            <Input
-              name="end"
-              type="date"
-              value={searchParams.get("end") || ""}
+            <DatePicker
+              selected={endDate}
+              onChange={handleEndDateChange}
+              showTimeSelect
+              timeFormat="HH:mm"
+              timeIntervals={5}
+              dateFormat="dd/MM/yyyy - HH-mm"
+              placeholderText="Chọn ngày giờ"
               className="bg-gray-50 border border-gray-300 text-[0.9rem] p-[6px_10px] outline-none focus:border-gray-400"
             />
           </div>
