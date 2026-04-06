@@ -25,8 +25,9 @@ docker compose up --build
 | Hạng mục         | Công nghệ / Công cụ              |
 | ---------------- | -------------------------------- |
 | Frontend         | Vite, TypeScript, ReactJS, Redux |
-| Backend          | Spring Boot                      |
+| Backend          | Spring Boot, Maven               |
 | Containerization | Docker                           |
 | Database         | MySQL, MongoDB, Redis            |
 | Media Storage    | Cloudinary                       |
+| Metrics          | Prometheus, Zipkin               |
 | CI/CD            | GitHub Actions                   |
