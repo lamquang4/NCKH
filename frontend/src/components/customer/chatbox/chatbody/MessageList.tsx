@@ -1,9 +1,15 @@
 import { memo, useCallback, useLayoutEffect, useRef } from "react";
 import MessageItem from "./MessageItem";
-import useGetChatMessages from "../../../../hooks/customer/chat/useGetChatMessages";
+import type { MessageResponse } from "../../../../types/type";
 
-function MessageList() {
-  const { messages, isLoading, hasMore, loadMore } = useGetChatMessages();
+type Props = {
+  messages: MessageResponse[];
+  isLoading: boolean;
+  hasMore: boolean;
+  loadMore: () => void;
+};
+
+function MessageList({ messages, isLoading, hasMore, loadMore }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const isFirstLoad = useRef(true);

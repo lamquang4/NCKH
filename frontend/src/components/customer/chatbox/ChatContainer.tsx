@@ -2,6 +2,7 @@ import { memo, useCallback, useState } from "react";
 import ChatBody from "./chatbody/ChatBody";
 import ChatHeader from "./chatheader/ChatHeader";
 import ChatFooter from "./chatfooter/ChatFooter";
+import useGetChatMessages from "../../../hooks/customer/chat/useGetChatMessages";
 
 type Props = {
   onClose: () => void;
@@ -9,6 +10,7 @@ type Props = {
 
 function ChatContainer({ onClose }: Props) {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const { messages, isLoading, hasMore, loadMore } = useGetChatMessages();
 
   const toggleExpand = useCallback(() => {
     setIsExpanded((prev) => !prev);
@@ -25,8 +27,13 @@ function ChatContainer({ onClose }: Props) {
           onExpand={toggleExpand}
           isExpanded={isExpanded}
         />
-        <ChatBody  />
-        <ChatFooter />
+        <ChatBody
+          messages={messages}
+          isLoading={isLoading}
+          hasMore={hasMore}
+          loadMore={loadMore}
+        />
+        <ChatFooter isLoadingMessages={isLoading} />
       </div>
     </div>
   );
