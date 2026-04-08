@@ -1,5 +1,6 @@
 package com.backend.cart_service.service;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,8 +25,12 @@ import com.backend.cart_service.repository.CartRepository;
 @Service
 public class CartService {
     private static final String CART_KEY_PREFIX = "cart:";
+    private static final String CART_RESPONSE_KEY_PREFIX = "cart:response:";
+    private static final Duration CART_TTL = Duration.ofMinutes(30);
+
     private final CartRepository cartRepository;
     private final ProductServiceClient productServiceClient;
+
     @Autowired(required = false)
     private RedisTemplate<String, Object> redisTemplate;
 
@@ -38,14 +43,21 @@ public class CartService {
 
     // lấy giỏ hàng của user
     public CartResponse getCartByUserId(String userId) {
+        String responseKey = CART_RESPONSE_KEY_PREFIX + userId;
+        CartResponse cached = getFromRedis(responseKey, CartResponse.class);
+        if (cached != null) {
+            return cached;
+        }
+
         Cart cart = getOrCreateCart(userId);
 
         if (cart.getItems().isEmpty()) {
-            return CartMapper.toResponse(cart, List.of());
+            CartResponse empty = CartMapper.toResponse(cart, List.of());
+            saveToRedis(responseKey, empty, CART_TTL);
+            return empty;
         }
 
-        List<String> productIds = cart.getItems()
-                .stream()
+        List<String> productIds = cart.getItems().stream()
                 .map(CartItem::getProductId)
                 .toList();
 
@@ -57,29 +69,27 @@ public class CartService {
         List<CartItemResponse> items = cart.getItems().stream()
                 .map(item -> {
                     ProductListItemResponse product = productMap.get(item.getProductId());
-                    if (product == null) {
+                    if (product == null)
                         throw new AppException(ErrorCode.PRODUCT_NOT_FOUND);
-                    }
                     return CartMapper.toItemResponse(item, product);
                 })
                 .toList();
 
-        return CartMapper.toResponse(cart, items);
+        CartResponse response = CartMapper.toResponse(cart, items);
+        saveToRedis(responseKey, response, CART_TTL); // ✅ cache lại
+        return response;
     }
 
     // thêm sản phẩm vào giỏ hàng
     public void addToCart(String userId, CartItemRequest request) {
-
-        if (request.getQuantity() < 1) {
+        if (request.getQuantity() < 1)
             throw new AppException(ErrorCode.INVALID_QUANTITY);
-        }
 
         Cart cart = getOrCreateCart(userId);
 
         CartItem item = cart.getItems().stream()
                 .filter(i -> i.getProductId().equals(request.getProductId()))
-                .findFirst()
-                .orElse(null);
+                .findFirst().orElse(null);
 
         if (item != null) {
             item.setQuantity(item.getQuantity() + request.getQuantity());
@@ -88,31 +98,28 @@ public class CartService {
         }
 
         cart = cartRepository.save(cart);
-        saveCartToRedis(userId, cart);
+        saveToRedis(CART_KEY_PREFIX + userId, cart, CART_TTL);
+        invalidateCartResponse(userId);
     }
 
     // xóa sản phẩm khỏi giỏ hàng
     public void removeItem(String userId, String productId) {
-
         Cart cart = getOrCreateCart(userId);
 
         boolean removed = cart.getItems()
                 .removeIf(item -> item.getProductId().equals(productId));
-
-        if (!removed) {
+        if (!removed)
             throw new AppException(ErrorCode.CART_ITEM_NOT_FOUND);
-        }
 
         cart = cartRepository.save(cart);
-        saveCartToRedis(userId, cart);
+        saveToRedis(CART_KEY_PREFIX + userId, cart, CART_TTL);
+        invalidateCartResponse(userId);
     }
 
     // cập nhật số lượng sản phẩm trong giỏ hàng
     public void updateQuantity(String userId, CartItemRequest request) {
-
-        if (request.getQuantity() < 1) {
+        if (request.getQuantity() < 1)
             throw new AppException(ErrorCode.INVALID_QUANTITY);
-        }
 
         Cart cart = getOrCreateCart(userId);
 
@@ -124,31 +131,23 @@ public class CartService {
         item.setQuantity(request.getQuantity());
 
         cart = cartRepository.save(cart);
-        saveCartToRedis(userId, cart);
+        saveToRedis(CART_KEY_PREFIX + userId, cart, CART_TTL);
+        invalidateCartResponse(userId);
     }
 
     // xóa sản phẩm có id đó khỏi tất cả giỏ hàng
     @Transactional
     public void removeProductFromAllCarts(String productId) {
-
         List<Cart> carts = cartRepository.findByItemsProductId(productId);
-
-        if (carts.isEmpty()) {
+        if (carts.isEmpty())
             return;
-        }
 
         for (Cart cart : carts) {
-
             boolean removed = cart.getItems()
                     .removeIf(item -> item.getProductId().equals(productId));
-
             if (removed) {
                 cartRepository.save(cart);
-
-                if (redisTemplate != null) {
-                    redisTemplate.delete(CART_KEY_PREFIX + cart.getUserId());
-                }
-
+                invalidateAllCartKeys(cart.getUserId());
             }
         }
     }
@@ -156,46 +155,57 @@ public class CartService {
     @Transactional
     public void clearCartByUserId(String userId) {
         Cart cart = cartRepository.findByUserId(userId).orElse(null);
-
-        if (cart == null) {
+        if (cart == null)
             return;
-        }
 
         cart.getItems().clear();
         cartRepository.save(cart);
-
-        if (redisTemplate != null) {
-            redisTemplate.delete(CART_KEY_PREFIX + userId);
-        }
-
+        invalidateAllCartKeys(userId);
     }
 
-    private Cart getCartFromRedis(String userId) {
-        if (redisTemplate == null) {
+    // redis helper
+    @SuppressWarnings("unchecked")
+    private <T> T getFromRedis(String key, Class<T> type) {
+        if (redisTemplate == null)
+            return null;
+        try {
+            Object value = redisTemplate.opsForValue().get(key);
+            return type.isInstance(value) ? (T) value : null;
+        } catch (Exception e) {
             return null;
         }
-        return (Cart) redisTemplate.opsForValue()
-                .get(CART_KEY_PREFIX + userId);
     }
 
-    private void saveCartToRedis(String userId, Cart cart) {
-        if (redisTemplate == null) {
+    private void saveToRedis(String key, Object value, Duration ttl) {
+        if (redisTemplate == null)
             return;
+        try {
+            redisTemplate.opsForValue().set(key, value, ttl);
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.REDIS_OPERATION_FAILED);
         }
-        redisTemplate.opsForValue()
-                .set(CART_KEY_PREFIX + userId, cart);
+    }
+
+    private void invalidateCartResponse(String userId) {
+        if (redisTemplate == null)
+            return;
+        redisTemplate.delete(CART_RESPONSE_KEY_PREFIX + userId);
+    }
+
+    private void invalidateAllCartKeys(String userId) {
+        if (redisTemplate == null)
+            return;
+        redisTemplate.delete(List.of(
+                CART_KEY_PREFIX + userId,
+                CART_RESPONSE_KEY_PREFIX + userId));
     }
 
     // helper
     private Cart getOrCreateCart(String userId) {
-        // Cố gắng lấy từ Redis trước
-        Cart cart = getCartFromRedis(userId);
-
-        if (cart != null) {
+        Cart cart = getFromRedis(CART_KEY_PREFIX + userId, Cart.class);
+        if (cart != null)
             return cart;
-        }
 
-        // Nếu không có trong Redis, lấy từ DB
         cart = cartRepository.findByUserId(userId)
                 .orElseGet(() -> cartRepository.save(
                         Cart.builder()
@@ -203,9 +213,7 @@ public class CartService {
                                 .items(new ArrayList<>())
                                 .build()));
 
-        // Lưu vào Redis
-        saveCartToRedis(userId, cart);
-
+        saveToRedis(CART_KEY_PREFIX + userId, cart, CART_TTL);
         return cart;
     }
 
