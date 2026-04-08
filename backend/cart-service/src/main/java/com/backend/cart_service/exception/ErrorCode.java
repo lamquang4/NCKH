@@ -14,6 +14,8 @@ public enum ErrorCode {
     PRODUCT_NOT_FOUND("Sản phẩm không tồn tại", HttpStatus.NOT_FOUND),
 
     INVALID_QUANTITY("Số lượng phải lớn hơn hoặc bằng 1", HttpStatus.BAD_REQUEST),
+
+    REDIS_OPERATION_FAILED("Lỗi cache, hệ thống đang dùng dữ liệu dự phòng", HttpStatus.INTERNAL_SERVER_ERROR),
     ;
 
     private final String message;

@@ -5,7 +5,6 @@ import java.util.List;
 import com.backend.chat_service.dto.request.MessageRequest;
 import com.backend.chat_service.dto.response.MessageResponse;
 import com.backend.chat_service.dto.response.ProductListItemResponse;
-import com.backend.chat_service.model.Chat;
 import com.backend.chat_service.model.Message;
 
 public final class ChatMapper {

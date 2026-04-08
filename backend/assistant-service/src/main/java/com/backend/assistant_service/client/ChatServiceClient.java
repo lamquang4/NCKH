@@ -14,7 +14,6 @@ import com.backend.assistant_service.dto.response.MessageResponse;
 
 @FeignClient(name = "chat-service")
 public interface ChatServiceClient {
-
         @PostMapping("/api/chat/internal/user/message/{userId}")
         String sendUserMessage(
                         @PathVariable("userId") String userId,

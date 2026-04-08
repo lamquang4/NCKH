@@ -27,9 +27,6 @@ public class Chat {
     @Indexed
     private String userId;
 
-    @Builder.Default
-    private Map<String, Object> sessionData = new HashMap<>();
-
     @CreatedDate
     private LocalDateTime createdAt;
 
