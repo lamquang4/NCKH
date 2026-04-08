@@ -4,11 +4,20 @@ import Button from "../../../ui/Button";
 
 type Props = {
   textLength: number;
-  isLoading: boolean;
+  isLoadingSendMessage: boolean;
+  isLoadingMessages: boolean;
 };
 
-function ChatButton({ textLength, isLoading }: Props) {
-  const isDisabled = textLength === 0 || textLength > 1000 || isLoading;
+function ChatButton({
+  textLength,
+  isLoadingSendMessage,
+  isLoadingMessages,
+}: Props) {
+  const isDisabled =
+    textLength === 0 ||
+    textLength > 1000 ||
+    isLoadingSendMessage ||
+    isLoadingMessages;
   return (
     <Button
       isDisabled={isDisabled}

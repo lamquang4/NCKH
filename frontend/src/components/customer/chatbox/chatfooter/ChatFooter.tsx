@@ -9,7 +9,11 @@ import ChatVoice from "./ChatVoice";
 import { openAuthModal } from "../../../../redux/slices/AuthModalSlice";
 import { useDispatch } from "react-redux";
 
-function ChatFooter() {
+type Props = {
+  isLoadingMessages: boolean;
+};
+
+function ChatFooter({ isLoadingMessages }: Props) {
   const dispatch = useDispatch();
   const [textLength, setTextLength] = useState<number>(0);
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
@@ -76,7 +80,7 @@ function ChatFooter() {
             <div className="relative group">
               {textLength > 1000 && <ToolTip text={"Tin nhắn quá dài"} />}
 
-              <SendButton textLength={textLength} isLoading={isLoading} />
+              <SendButton textLength={textLength} isLoadingSendMessage={isLoading} isLoadingMessages={isLoadingMessages} />
             </div>
           </label>
         </form>
