@@ -3,8 +3,6 @@ import useSWR from "swr";
 import type { ApiResponse, CategoryResponse } from "../../../types/type";
 import { getCookie } from "../../../utils/cookieUtil";
 
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
-
 export default function useGetCategory(id: string) {
   const token = getCookie("token-admin");
 
