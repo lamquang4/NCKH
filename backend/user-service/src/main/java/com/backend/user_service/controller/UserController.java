@@ -38,6 +38,7 @@ public class UserController {
         }
 
         @GetMapping("/customers")
+        @PreAuthorize("hasRole('ADMIN')")
         public ResponseEntity<ApiResponse<List<UserResponse>>> getCustomers(
                         @RequestParam(defaultValue = "1") int page,
                         @RequestParam(defaultValue = "12") int limit,
@@ -56,6 +57,7 @@ public class UserController {
         }
 
         @GetMapping("/admins")
+        @PreAuthorize("hasRole('ADMIN')")
         public ResponseEntity<ApiResponse<List<UserResponse>>> getAdmins(
                         @RequestParam(defaultValue = "1") int page,
                         @RequestParam(defaultValue = "12") int limit,
@@ -66,7 +68,7 @@ public class UserController {
 
                 return ResponseEntity.ok(
                                 ApiResponse.<List<UserResponse>>builder()
-                                                .message("Lấy danh sách admin thành công")
+                                                .message("Lấy danh sách quản trị viên thành công")
                                                 .data(userPage.getContent())
                                                 .totalPages(userPage.getTotalPages())
                                                 .total(userPage.getTotalElements())
@@ -74,6 +76,7 @@ public class UserController {
         }
 
         @GetMapping("/{id}")
+        @PreAuthorize("hasRole('ADMIN')")
         public ResponseEntity<ApiResponse<UserResponse>> getUserById(
                         @PathVariable String id) {
 
@@ -85,6 +88,7 @@ public class UserController {
         }
 
         @PutMapping("/{id}")
+        @PreAuthorize("hasRole('ADMIN')")
         public ResponseEntity<ApiResponse<Void>> updateAdmin(
                         @PathVariable String id,
                         @Valid @RequestBody UserRequest request) {
@@ -96,6 +100,7 @@ public class UserController {
         }
 
         @PutMapping
+        @PreAuthorize("hasRole('CUSTOMER')")
         public ResponseEntity<ApiResponse<Void>> updateCustomer(
                         @AuthenticationPrincipal String userId,
                         @Valid @RequestBody UserRequest request) {
@@ -107,6 +112,7 @@ public class UserController {
         }
 
         @PatchMapping("/status/{id}")
+        @PreAuthorize("hasRole('ADMIN')")
         public ResponseEntity<ApiResponse<Void>> updateUserStatus(
                         @PathVariable String id,
                         @RequestParam @NotNull Integer status) {
@@ -118,6 +124,7 @@ public class UserController {
         }
 
         @DeleteMapping("/{id}")
+        @PreAuthorize("hasRole('ADMIN')")
         public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable String id) {
                 userService.deleteUser(id);
 
@@ -128,6 +135,7 @@ public class UserController {
         }
 
         @PostMapping
+        @PreAuthorize("hasRole('ADMIN')")
         public ResponseEntity<ApiResponse<Void>> createUser(
                         @Valid @RequestBody UserRequest request) {
 
@@ -136,6 +144,18 @@ public class UserController {
                                 .body(ApiResponse.<Void>builder()
                                                 .message("Tạo người dùng thành công")
                                                 .build());
+        }
+
+        @GetMapping("/me")
+        @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
+        public ResponseEntity<ApiResponse<UserResponse>> getCurrentUser(
+                        @AuthenticationPrincipal String userId) {
+
+                UserResponse user = userService.getUserById(userId);
+                return ResponseEntity.ok(ApiResponse.<UserResponse>builder()
+                                .message("Lấy thông tin tài khoản thành công")
+                                .data(user)
+                                .build());
         }
 
         // internal

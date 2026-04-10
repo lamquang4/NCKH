@@ -10,7 +10,7 @@ type Props = {
 };
 
 function ProfileMenu({ profileMenuOpen }: Props) {
-  const { account, isLoading } = useGetAccount("customer");
+  const { account, isLoading } = useGetAccount("CUSTOMER");
   const { handleLogout } = useLogout();
   const dispatch = useDispatch();
 
@@ -42,7 +42,7 @@ function ProfileMenu({ profileMenuOpen }: Props) {
 
           <Button
             onClick={async () => {
-              await handleLogout("customer");
+              await handleLogout("CUSTOMER");
             }}
             className="hover:bg-gray-100 w-full block p-2.5 text-left"
           >

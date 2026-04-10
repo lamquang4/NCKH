@@ -8,8 +8,8 @@ import type { ApiResponse, LoginResponse } from "../../types/type";
 
 export default function useLogin() {
   const [isLoading, setIsLoading] = useState(false);
-  const { mutate: mutateAccountCustomer } = useGetAccount("customer");
-  const { mutate: mutateAccountAdmin } = useGetAccount("admin");
+  const { mutate: mutateAccountCustomer } = useGetAccount("CUSTOMER");
+  const { mutate: mutateAccountAdmin } = useGetAccount("ADMIN");
   const navigate = useNavigate();
 
   const handleLogin = async (data: { email: string; password: string }) => {
@@ -28,20 +28,20 @@ export default function useLogin() {
 
       const isAdminPage = window.location.pathname.startsWith("/admin");
 
-      if (!isAdminPage && role === "admin") {
+      if (!isAdminPage && role === "ADMIN") {
         toast.error("Không thể đăng nhập admin ở trang khách hàng");
         return;
       }
 
-      if (isAdminPage && role === "customer") {
+      if (isAdminPage && role === "CUSTOMER") {
         toast.error("Không thể đăng nhập customer ở trang admin");
         return;
       }
 
       const cookieName =
-        role === "admin"
+        role === "ADMIN"
           ? "token-admin"
-          : role === "customer"
+          : role === "CUSTOMER"
             ? "token-customer"
             : null;
 
@@ -55,14 +55,14 @@ export default function useLogin() {
         secure: import.meta.env.VITE_ENV === "production",
       });
 
-      if (role === "admin") {
+      if (role === "ADMIN") {
         await mutateAccountAdmin();
       } else {
         await mutateAccountCustomer();
       }
 
       toast.success(res.message);
-      navigate(role === "admin" ? "/admin/account/profile" : "/");
+      navigate(role === "ADMIN" ? "/admin/account/profile" : "/");
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
       throw err;

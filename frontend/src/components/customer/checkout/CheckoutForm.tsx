@@ -184,7 +184,10 @@ function CheckoutForm() {
                 />
 
                 <div className="flex justify-between items-center">
-                  <Button className="text-[0.9rem] rounded-md bg-accent px-4 py-2 font-medium text-white">
+                  <Button
+                    type="submit"
+                    className="text-[0.9rem] rounded-md bg-accent px-4 py-2 font-medium text-white"
+                  >
                     Đặt hàng
                   </Button>
 

@@ -8,14 +8,14 @@ export function useRemoveItemInCart() {
   const [isLoading, setIsLoading] = useState(false);
   const { mutate } = useGetCart();
   const removeItem = async (userId: string, productId: string) => {
-    if (!userId || !productId) {
+    const token = getCookie("token-customer");
+
+    if (!userId || !productId || !token) {
       return;
     }
     const loadingToast = toast.loading("Đang xóa...");
     setIsLoading(true);
     try {
-      const token = getCookie("token-customer");
-
       const url = `${import.meta.env.VITE_BACKEND_URL}/cart/${productId}`;
 
       const res = await axios.delete(url, {

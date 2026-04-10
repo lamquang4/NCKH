@@ -1,4 +1,4 @@
-package com.backend.product_service.config;
+package com.backend.product_service.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -2,11 +2,11 @@ import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import useSWR from "swr";
 import type { ApiResponse, OrderResponse } from "../../../types/type";
-
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+import { getCookie } from "../../../utils/cookieUtil";
 
 export default function useGetOrders() {
   const [searchParams] = useSearchParams();
+  const token = getCookie("token-admin");
 
   const page = parseInt(searchParams.get("page") || "1", 10);
   const limit = parseInt(searchParams.get("limit") || "12", 10);
@@ -27,10 +27,19 @@ export default function useGetOrders() {
 
   const { data, error, isLoading, mutate } = useSWR<
     ApiResponse<OrderResponse[]>
-  >(url, fetcher, {
-    shouldRetryOnError: false,
-    revalidateOnFocus: false,
-  });
+  >(
+    token ? [url, token] : null,
+    ([url, token]) =>
+      axios
+        .get(url, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => res.data),
+    {
+      shouldRetryOnError: false,
+      revalidateOnFocus: false,
+    },
+  );
 
   return {
     orders: data?.data ?? [],

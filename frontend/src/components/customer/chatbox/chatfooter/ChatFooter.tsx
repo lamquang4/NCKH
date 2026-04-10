@@ -19,7 +19,7 @@ function ChatFooter({ isLoadingMessages }: Props) {
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
 
   const { sendMessage, isLoading } = useSendMessage();
-  const { account } = useGetAccount("customer");
+  const { account } = useGetAccount("CUSTOMER");
 
   const handleInput = useCallback(() => {
     const el = inputRef.current;
@@ -80,7 +80,11 @@ function ChatFooter({ isLoadingMessages }: Props) {
             <div className="relative group">
               {textLength > 1000 && <ToolTip text={"Tin nhắn quá dài"} />}
 
-              <SendButton textLength={textLength} isLoadingSendMessage={isLoading} isLoadingMessages={isLoadingMessages} />
+              <SendButton
+                textLength={textLength}
+                isLoadingSendMessage={isLoading}
+                isLoadingMessages={isLoadingMessages}
+              />
             </div>
           </label>
         </form>

@@ -13,7 +13,7 @@ export default function useGetChatMessages() {
   >(
     (index) =>
       token
-        ? `${import.meta.env.VITE_BACKEND_URL}/chat/user?page=${index + 1}&limit=${limit}&token=${token}`
+        ? `${import.meta.env.VITE_BACKEND_URL}/chat/user?page=${index + 1}&limit=${limit}`
         : null,
     (url) =>
       axios

@@ -7,8 +7,6 @@ import type {
 } from "../../../../types/type";
 import useDebounce from "../../../useDebounce";
 
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
-
 export default function useGetSuggestionProducts(limit: number) {
   const [keyword, setKeyword] = useState<string>("");
   const debouncedKeyword = useDebounce(keyword, 500);
@@ -16,7 +14,7 @@ export default function useGetSuggestionProducts(limit: number) {
 
   const { data, error, isLoading, mutate } = useSWR<
     ApiResponse<ProductListItemResponse[]>
-  >(debouncedKeyword ? url : null, fetcher, {
+  >(url, (url) => axios.get(url).then((res) => res.data), {
     shouldRetryOnError: false,
     revalidateOnFocus: false,
   });

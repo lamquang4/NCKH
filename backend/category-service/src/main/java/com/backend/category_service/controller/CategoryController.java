@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +39,7 @@ public class CategoryController {
         }
 
         @GetMapping
+        @PreAuthorize("hasRole('ADMIN')")
         public ResponseEntity<ApiResponse<List<CategoryResponse>>> getCategories(
                         @RequestParam(defaultValue = "1") int page,
                         @RequestParam(defaultValue = "12") int limit,
@@ -56,6 +58,7 @@ public class CategoryController {
         }
 
         @GetMapping("/all")
+        @PreAuthorize("hasRole('ADMIN')")
         public ResponseEntity<ApiResponse<List<CategoryResponse>>> getAllCategories() {
                 return ResponseEntity.ok(
                                 ApiResponse.<List<CategoryResponse>>builder()
@@ -65,6 +68,7 @@ public class CategoryController {
         }
 
         @GetMapping("/{id}")
+        @PreAuthorize("hasRole('ADMIN')")
         public ResponseEntity<ApiResponse<CategoryResponse>> getCategoryById(
                         @PathVariable String id) {
                 return ResponseEntity.ok(
@@ -75,6 +79,7 @@ public class CategoryController {
         }
 
         @PostMapping(consumes = "multipart/form-data")
+        @PreAuthorize("hasRole('ADMIN')")
         public ResponseEntity<ApiResponse<Void>> createCategory(
                         @Valid @RequestPart("category") CategoryRequest request,
                         @RequestPart(value = "image", required = false) MultipartFile image) {
@@ -86,6 +91,7 @@ public class CategoryController {
         }
 
         @PutMapping(value = "/{id}", consumes = "multipart/form-data")
+        @PreAuthorize("hasRole('ADMIN')")
         public ResponseEntity<ApiResponse<Void>> updateCategory(
                         @PathVariable String id,
                         @Valid @RequestPart("category") CategoryRequest request,
@@ -98,6 +104,7 @@ public class CategoryController {
         }
 
         @PatchMapping("/status/{id}")
+        @PreAuthorize("hasRole('ADMIN')")
         public ResponseEntity<ApiResponse<Void>> updateStatusCategory(
                         @PathVariable String id,
                         @RequestParam @NotNull Integer status) {
@@ -109,6 +116,7 @@ public class CategoryController {
         }
 
         @DeleteMapping("/{id}")
+        @PreAuthorize("hasRole('ADMIN')")
         public ResponseEntity<ApiResponse<Void>> deleteCategory(@PathVariable String id) {
                 categoryService.deleteCategory(id);
                 return ResponseEntity.ok(

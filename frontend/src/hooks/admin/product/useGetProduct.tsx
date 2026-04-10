@@ -1,18 +1,26 @@
 import axios from "axios";
 import useSWR from "swr";
 import type { ApiResponse, ProductDetailResponse } from "../../../types/type";
-
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+import { getCookie } from "../../../utils/cookieUtil";
 
 export default function useGetProduct(id: string) {
-  const url = id ? `${import.meta.env.VITE_BACKEND_URL}/product/${id}` : null;
+  const token = getCookie("token-admin");
+  const url = `${import.meta.env.VITE_BACKEND_URL}/product/${id}`;
   const { data, error, isLoading, mutate } = useSWR<
     ApiResponse<ProductDetailResponse>
-  >(url, fetcher, {
-    shouldRetryOnError: false,
-    revalidateOnFocus: false,
-  });
-
+  >(
+    token && id ? [url, token] : null,
+    ([url, token]) =>
+      axios
+        .get(url, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => res.data),
+    {
+      shouldRetryOnError: false,
+      revalidateOnFocus: false,
+    },
+  );
   return {
     product: data?.data,
     isLoading,

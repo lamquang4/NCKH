@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { validateEmail } from "../../../utils/validateEmail";
-import useGetUser from "../../../hooks/useGetUser";
+import useGetUser from "../../../hooks/admin/user/useGetUser";
 import { validatePhone } from "../../../utils/validatePhone";
 import useGetAccount from "../../../hooks/auth/useGetAccount";
 import useUpdateAdmin from "../../../hooks/admin/user/useUpdateAdmin";
@@ -22,7 +22,7 @@ function EditAdmin() {
     status: "",
   });
 
-  const { account } = useGetAccount("admin");
+  const { account } = useGetAccount("ADMIN");
   const { user, isLoading } = useGetUser(id as string);
   const { updateAdmin, isLoading: isLoadingUpdate } = useUpdateAdmin(
     id as string,
@@ -82,7 +82,7 @@ function EditAdmin() {
       fullname: data.fullname.trim(),
       phone: data.phone.trim(),
       email: data.email.trim(),
-      role: "admin",
+      role: "ADMIN",
       status: Number(data.status),
     };
 

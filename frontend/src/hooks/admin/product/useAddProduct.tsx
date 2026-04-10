@@ -3,14 +3,18 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import type { ProductRequest } from "../../../types/type";
 import useGetProducts from "./useGetProducts";
+import { getCookie } from "../../../utils/cookieUtil";
 
 export default function useAddProduct() {
   const [isLoading, setIsLoading] = useState(false);
   const { mutate } = useGetProducts();
   const addProduct = async (data: ProductRequest, files: File[]) => {
-    if (!data) {
+    const token = getCookie("token-admin");
+
+    if (!data || !token) {
       return;
     }
+
     const loadingToast = toast.loading("Đang thêm...");
     setIsLoading(true);
     try {
@@ -44,6 +48,7 @@ export default function useAddProduct() {
       const res = await axios.post(url, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
         },
       });
       await mutate();

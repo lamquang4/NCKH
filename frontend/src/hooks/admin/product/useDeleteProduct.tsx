@@ -3,11 +3,14 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import useGetProducts from "./useGetProducts";
+import { getCookie } from "../../../utils/cookieUtil";
 
 export default function useDeleteProduct() {
   const [isLoading, setIsLoading] = useState(false);
   const { mutate } = useGetProducts();
   const deleteProduct = async (id: string) => {
+    const token = getCookie("token-admin");
+
     const result = await Swal.fire({
       title: `Xác nhận xóa?`,
       text: `Bạn có chắc muốn xóa sản phẩm này không?`,
@@ -17,7 +20,7 @@ export default function useDeleteProduct() {
       cancelButtonText: "Hủy",
     });
 
-    if (!result.isConfirmed || !id) return;
+    if (!result.isConfirmed || !id || !token) return;
 
     const loadingToast = toast.loading("Đang xóa...");
 
@@ -25,7 +28,11 @@ export default function useDeleteProduct() {
 
     try {
       const url = `${import.meta.env.VITE_BACKEND_URL}/product/${id}`;
-      const res = await axios.delete(url);
+      const res = await axios.delete(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       await mutate();
       toast.dismiss(loadingToast);
       toast.success(res.data?.message);

@@ -147,7 +147,10 @@ public final class ProductMapper {
                 return ProductAssistantResponse.builder()
                                 .id(product.getId())
                                 .name(product.getName())
+                                .discount(product.getDiscount())
+                                .price(product.getPrice())
                                 .finalPrice(product.getFinalPrice())
+                                .stock(product.getStock())
                                 .categoryName(category != null ? category.getName() : null)
                                 .brandName(brand != null ? brand.getName() : null)
                                 .build();

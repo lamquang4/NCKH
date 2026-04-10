@@ -4,19 +4,19 @@ import { jwtDecode } from "jwt-decode";
 
 interface JwtPayload {
   id: string;
-  role: "admin" | "customer";
+  role: "ADMIN" | "CUSTOMER";
   exp: number;
 }
 
 interface PublicRouteProps {
   children: React.ReactNode;
   redirectPath: string;
-  type: "admin" | "customer";
+  type: "ADMIN" | "CUSTOMER";
 }
 
 const PublicRoute = ({ children, redirectPath, type }: PublicRouteProps) => {
   const token =
-    type === "admin"
+    type === "ADMIN"
       ? Cookies.get("token-admin")
       : Cookies.get("token-customer");
 
@@ -32,9 +32,9 @@ const PublicRoute = ({ children, redirectPath, type }: PublicRouteProps) => {
     }
 
     // Nếu đã login redirect theo role
-    if (type === "admin" && role === "admin") {
+    if (type === "ADMIN" && role === "ADMIN") {
       return <Navigate to={redirectPath} replace />;
-    } else if (type === "customer" && role === "customer") {
+    } else if (type === "CUSTOMER" && role === "CUSTOMER") {
       return <Navigate to="/" replace />;
     }
   } catch {

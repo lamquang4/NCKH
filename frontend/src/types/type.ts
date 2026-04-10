@@ -28,7 +28,7 @@ export interface UserRequest {
   birthDate?: string;
   gender?: number | null;
   password?: string;
-  role?: "customer" | "admin";
+  role?: "CUSTOMER" | "ADMIN";
   status?: number;
 }
 
@@ -84,8 +84,8 @@ export interface UserResponse {
   fullname: string;
   phone?: string;
   birthDate?: string;
-  gender?: number | null;
-  role: "customer" | "admin";
+  gender?: number;
+  role: "CUSTOMER" | "ADMIN";
   status: number;
 }
 

@@ -1,4 +1,4 @@
-package com.backend.brand_service.config;
+package com.backend.cart_service.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

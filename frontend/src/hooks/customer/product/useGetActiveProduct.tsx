@@ -2,15 +2,12 @@ import axios from "axios";
 import useSWR from "swr";
 import type { ApiResponse, ProductDetailResponse } from "../../../types/type";
 
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
-
 export default function useGetActiveProduct(slug: string) {
-  const url = slug
-    ? `${import.meta.env.VITE_BACKEND_URL}/product/active/slug/${slug}`
-    : null;
+  const url = `${import.meta.env.VITE_BACKEND_URL}/product/active/slug/${slug}`;
+
   const { data, error, isLoading, mutate } = useSWR<
     ApiResponse<ProductDetailResponse>
-  >(url, fetcher, {
+  >(slug ? url : null, (url) => axios.get(url).then((res) => res.data), {
     shouldRetryOnError: false,
     revalidateOnFocus: false,
   });

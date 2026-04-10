@@ -1,4 +1,4 @@
-package com.backend.order_service.config;
+package com.backend.assistant_service.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

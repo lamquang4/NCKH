@@ -3,11 +3,14 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import useGetBrands from "./useGetBrands";
+import { getCookie } from "../../../utils/cookieUtil";
 
 export default function useUpdateStatusBrand() {
   const [isLoading, setIsLoading] = useState(false);
   const { mutate } = useGetBrands();
   const updateStatusBrand = async (id: string, status: number) => {
+    const token = getCookie("token-admin");
+
     const action = status === 1 ? "hiện" : "ẩn";
     const result = await Swal.fire({
       title: `Xác nhận ${action}?`,
@@ -29,7 +32,11 @@ export default function useUpdateStatusBrand() {
       const url = `${
         import.meta.env.VITE_BACKEND_URL
       }/brand/status/${id}?status=${status}`;
-      const res = await axios.patch(url);
+      const res = await axios.patch(url, null, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       await mutate();
       toast.dismiss(loadingToast);
       toast.success(res.data?.message);

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,6 +44,7 @@ public class ProductController {
         }
 
         @GetMapping
+        @PreAuthorize("hasRole('ADMIN')")
         public ResponseEntity<ApiResponse<List<ProductListItemResponse>>> getAllProducts(
                         @RequestParam(defaultValue = "1") int page,
                         @RequestParam(defaultValue = "12") int limit,
@@ -59,6 +61,7 @@ public class ProductController {
         }
 
         @GetMapping("/{id}")
+        @PreAuthorize("hasRole('ADMIN')")
         public ResponseEntity<ApiResponse<ProductDetailResponse>> getProductById(
                         @PathVariable String id) {
 
@@ -68,6 +71,7 @@ public class ProductController {
         }
 
         @PostMapping(consumes = "multipart/form-data")
+        @PreAuthorize("hasRole('ADMIN')")
         public ResponseEntity<ApiResponse<Void>> createProduct(
                         @Valid @RequestPart("product") ProductRequest request,
                         @RequestPart(value = "images", required = false) List<MultipartFile> images) {
@@ -80,6 +84,7 @@ public class ProductController {
         }
 
         @PutMapping(value = "/{id}", consumes = "multipart/form-data")
+        @PreAuthorize("hasRole('ADMIN')")
         public ResponseEntity<ApiResponse<Void>> updateProduct(
                         @PathVariable String id,
                         @Valid @RequestPart("product") ProductRequest request,
@@ -92,6 +97,7 @@ public class ProductController {
         }
 
         @PatchMapping("/status/{id}")
+        @PreAuthorize("hasRole('ADMIN')")
         public ResponseEntity<ApiResponse<Void>> updateProductStatus(
                         @PathVariable String id,
                         @RequestParam @NotNull Integer status) {
@@ -102,6 +108,7 @@ public class ProductController {
         }
 
         @DeleteMapping("/{id}")
+        @PreAuthorize("hasRole('ADMIN')")
         public ResponseEntity<ApiResponse<Void>> deleteProduct(
                         @PathVariable String id) {
 
@@ -112,6 +119,7 @@ public class ProductController {
         }
 
         @DeleteMapping("/{productId}/image/{imageId}")
+        @PreAuthorize("hasRole('ADMIN')")
         public ResponseEntity<ApiResponse<Void>> deleteImage(
                         @PathVariable String productId,
                         @PathVariable String imageId) {
@@ -123,6 +131,7 @@ public class ProductController {
         }
 
         @PatchMapping(value = "/{productId}/image/{imageId}", consumes = "multipart/form-data")
+        @PreAuthorize("hasRole('ADMIN')")
         public ResponseEntity<ApiResponse<Void>> updateProductImage(
                         @PathVariable String productId,
                         @PathVariable String imageId,

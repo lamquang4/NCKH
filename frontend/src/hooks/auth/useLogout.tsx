@@ -6,15 +6,15 @@ import useGetChatMessages from "../customer/chat/useGetChatMessages";
 
 export default function useLogout() {
   const [isLoading, setIsLoading] = useState(false);
-  const { mutate: mutateAccountCustomer } = useGetAccount("customer");
-  const { mutate: mutateAccountAdmin } = useGetAccount("admin");
+  const { mutate: mutateAccountCustomer } = useGetAccount("CUSTOMER");
+  const { mutate: mutateAccountAdmin } = useGetAccount("ADMIN");
   const { mutate: mutateChatMessages } = useGetChatMessages();
   const navigate = useNavigate();
 
-  const handleLogout = async (type: "admin" | "customer") => {
+  const handleLogout = async (type: "ADMIN" | "CUSTOMER") => {
     setIsLoading(true);
     try {
-      if (type === "admin") {
+      if (type === "ADMIN") {
         Cookies.remove("token-admin");
         await mutateAccountAdmin(undefined, { revalidate: false });
         navigate("/admin/login", { replace: true });

@@ -9,10 +9,6 @@ export default function useGetOrders() {
 
   const token = getCookie("token-customer");
 
-  if (!token) {
-    throw new Error("Vui lòng đăng nhập");
-  }
-
   const page = parseInt(searchParams.get("page") || "1", 10);
   const status = searchParams.get("status");
 
@@ -24,21 +20,23 @@ export default function useGetOrders() {
     import.meta.env.VITE_BACKEND_URL
   }/order/user?${query.toString()}`;
 
-  const fetcher = (url: string) =>
-    axios
-      .get(url, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => res.data);
-
   const { data, error, isLoading, mutate } = useSWR<
     ApiResponse<OrderResponse[]>
-  >(url, fetcher, {
-    shouldRetryOnError: false,
-    revalidateOnFocus: false,
-  });
+  >(
+    token ? [url, token] : null,
+    ([url, token]) =>
+      axios
+        .get(url, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => res.data),
+    {
+      shouldRetryOnError: false,
+      revalidateOnFocus: false,
+    },
+  );
 
   return {
     orders: data?.data ?? [],

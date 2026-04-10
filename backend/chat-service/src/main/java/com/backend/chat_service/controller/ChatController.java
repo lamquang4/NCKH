@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 @Validated
@@ -35,6 +36,7 @@ public class ChatController {
     }
 
     @GetMapping("/user")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponse<List<MessageResponse>>> getChatMessages(
             @AuthenticationPrincipal String userId,
             @RequestParam(defaultValue = "1") int page,

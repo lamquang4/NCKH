@@ -13,7 +13,10 @@ import lombok.NoArgsConstructor;
 public class ProductAssistantResponse {
     private String id;
     private String name;
+    private BigDecimal price;    
+    private BigDecimal discount;    
     private BigDecimal finalPrice;
+    private Integer stock;  
     private String brandName;
     private String categoryName;
 }

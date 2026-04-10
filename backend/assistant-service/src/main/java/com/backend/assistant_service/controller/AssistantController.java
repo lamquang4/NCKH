@@ -13,6 +13,7 @@ import com.backend.assistant_service.service.AssistantService;
 
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 @RestController
@@ -26,12 +27,13 @@ public class AssistantController {
     }
 
     @PostMapping("/chat")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponse<Void>> handleChat(
             @AuthenticationPrincipal String userId,
-            @RequestHeader("Authorization") String authHeader, 
+            @RequestHeader("Authorization") String authHeader,
             @Valid @RequestBody MessageRequest request) {
 
-        String token = authHeader.replace("Bearer ", ""); 
+        String token = authHeader.replace("Bearer ", "");
         assistantService.handleChat(userId, token, request);
 
         return ResponseEntity.status(HttpStatus.CREATED)
