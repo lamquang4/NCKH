@@ -22,7 +22,7 @@ function ProductDetail({ product }: Props) {
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState<number>(1);
 
-  const { account } = useGetAccount("customer");
+  const { account } = useGetAccount("CUSTOMER");
   const { cart } = useGetCart();
   const { addItem, isLoading: isLoadingCart } = useAddItemToCart();
 
