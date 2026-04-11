@@ -40,7 +40,7 @@ public class AssistantService {
                 String chatId = chatServiceClient.sendUserMessage(userId, request);
 
                 // Lấy history messages của người dùng
-                List<MessageResponse> messages = chatServiceClient.getChatMessagesInternal(userId, 1, 20);
+                List<MessageResponse> messages = chatServiceClient.getChatMessagesInternal(userId, 1, 10);
 
                 String fullname = userServiceClient.getFullnameByIdInternal(userId).getFullname();
 

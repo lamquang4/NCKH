@@ -13,7 +13,7 @@ type Props = {
 };
 
 function ProfileMenu({ menuOpen, onToggleMenu }: Props) {
-  const { account } = useGetAccount("admin");
+  const { account } = useGetAccount("ADMIN");
   const { handleLogout } = useLogout();
 
   return (
@@ -57,7 +57,7 @@ function ProfileMenu({ menuOpen, onToggleMenu }: Props) {
               <Button
                 className="w-full block hover:bg-gray-100 px-3 py-3.5"
                 onClick={async () => {
-                  await handleLogout("admin");
+                  await handleLogout("ADMIN");
                 }}
               >
                 <div className="flex items-center gap-[8px] text-accent font-normal">

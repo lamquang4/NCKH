@@ -3,11 +3,14 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import useGetCategories from "./useGetCategories";
+import { getCookie } from "../../../utils/cookieUtil";
 
 export default function useDeleteCategory() {
   const [isLoading, setIsLoading] = useState(false);
   const { mutate } = useGetCategories();
   const deleteCategory = async (id: string) => {
+    const token = getCookie("token-admin");
+
     const result = await Swal.fire({
       title: `Xác nhận xóa?`,
       text: `Bạn có chắc muốn xóa danh mục này không?`,
@@ -25,7 +28,11 @@ export default function useDeleteCategory() {
 
     try {
       const url = `${import.meta.env.VITE_BACKEND_URL}/category/${id}`;
-      const res = await axios.delete(url);
+      const res = await axios.delete(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       await mutate();
       toast.dismiss(loadingToast);
       toast.success(res.data?.message);

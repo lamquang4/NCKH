@@ -10,18 +10,15 @@ export function useAddItemToCart() {
   const { mutate } = useGetCart();
 
   const addItem = async (data: CartItemRequest) => {
-    if (!data) {
+    const token = getCookie("token-customer");
+
+    if (!data || !token) {
       return;
     }
+
     const loadingToast = toast.loading("Đang thêm...");
     setIsLoading(true);
     try {
-      const token = getCookie("token-customer");
-
-      if (!token) {
-        throw new Error("Vui lòng đăng nhập");
-      }
-
       const url = `${import.meta.env.VITE_BACKEND_URL}/cart`;
 
       const res = await axios.post(url, data, {

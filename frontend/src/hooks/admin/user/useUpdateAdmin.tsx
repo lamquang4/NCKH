@@ -1,19 +1,27 @@
 import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import useGetUser from "../../useGetUser";
+import useGetUser from "./useGetUser";
 import type { UserRequest } from "../../../types/type";
+import { getCookie } from "../../../utils/cookieUtil";
 
 export default function useUpdateAdmin(id: string) {
   const [isLoading, setIsLoading] = useState(false);
   const { mutate } = useGetUser(id);
-  const updateAdmin  = async (data: UserRequest) => {
-    if (!id) return;
+  const updateAdmin = async (data: UserRequest) => {
+    const token = getCookie("token-admin");
+
+    if (!id || !token) return;
+
     const loadingToast = toast.loading("Đang cập nhật...");
     setIsLoading(true);
     try {
       const url = `${import.meta.env.VITE_BACKEND_URL}/user/${id}`;
-      const res = await axios.put(url, data);
+      const res = await axios.put(url, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       await mutate();
       toast.dismiss(loadingToast);
       toast.success(res.data?.message);

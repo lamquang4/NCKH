@@ -2,11 +2,11 @@ import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import useSWR from "swr";
 import type { ApiResponse, ProductListItemResponse } from "../../../types/type";
-
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+import { useToken } from "../../../utils/cookieUtil";
 
 export default function useGetProducts() {
   const [searchParams] = useSearchParams();
+  const token = useToken("token-admin");
 
   const page = parseInt(searchParams.get("page") || "1", 10);
   const limit = parseInt(searchParams.get("limit") || "12", 10);
@@ -23,10 +23,19 @@ export default function useGetProducts() {
 
   const { data, error, isLoading, mutate } = useSWR<
     ApiResponse<ProductListItemResponse[]>
-  >(url, fetcher, {
-    shouldRetryOnError: false,
-    revalidateOnFocus: false,
-  });
+  >(
+    token ? [url, token] : null,
+    ([url, token]) =>
+      axios
+        .get(url, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => res.data),
+    {
+      shouldRetryOnError: false,
+      revalidateOnFocus: false,
+    },
+  );
 
   return {
     products: data?.data ?? [],

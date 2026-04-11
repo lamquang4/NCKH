@@ -1,25 +1,23 @@
 import axios from "axios";
 import useSWR from "swr";
 import type { ApiResponse, CartResponse } from "../../../types/type";
-import { getCookie } from "../../../utils/cookieUtil";
+import { useToken } from "../../../utils/cookieUtil";
 
 export default function useGetCart() {
-  const token = getCookie("token-customer");
+  const token = useToken("token-customer");
 
   const url = `${import.meta.env.VITE_BACKEND_URL}/cart`;
 
-  const fetcher = (url: string) =>
-    axios
-      .get(url, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => res.data);
-
   const { data, error, isLoading, mutate } = useSWR<ApiResponse<CartResponse>>(
-    url,
-    fetcher,
+    token ? [url, token] : null,
+    ([url, token]) =>
+      axios
+        .get(url, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => res.data),
     {
       shouldRetryOnError: false,
       revalidateOnFocus: false,

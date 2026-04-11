@@ -20,6 +20,7 @@ import com.backend.order_service.dto.response.ApiResponse;
 import com.backend.order_service.dto.response.OrderResponse;
 import com.backend.order_service.service.OrderService;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 @Validated
@@ -34,6 +35,7 @@ public class OrderController {
 
         // admin
         @GetMapping
+        @PreAuthorize("hasRole('ADMIN')")
         public ResponseEntity<ApiResponse<List<OrderResponse>>> getOrders(
                         @RequestParam(defaultValue = "1") int page,
                         @RequestParam(defaultValue = "12") int limit,
@@ -60,6 +62,7 @@ public class OrderController {
         }
 
         @GetMapping("/{id}")
+        @PreAuthorize("hasRole('ADMIN')")
         public ResponseEntity<ApiResponse<OrderResponse>> getOrderById(
                         @PathVariable String id) {
 
@@ -71,6 +74,7 @@ public class OrderController {
         }
 
         @PatchMapping("/status/{id}")
+        @PreAuthorize("hasRole('ADMIN')")
         public ResponseEntity<ApiResponse<Void>> updateOrderStatus(
                         @PathVariable String id,
                         @RequestParam Integer status) {
@@ -84,6 +88,7 @@ public class OrderController {
 
         // customer
         @GetMapping("/user/{orderCode}")
+        @PreAuthorize("hasRole('CUSTOMER')")
         public ResponseEntity<ApiResponse<OrderResponse>> getUserOrderByCode(@PathVariable String orderCode,
                         @AuthenticationPrincipal String userId) {
 
@@ -95,6 +100,7 @@ public class OrderController {
         }
 
         @GetMapping("/user")
+        @PreAuthorize("hasRole('CUSTOMER')")
         public ResponseEntity<ApiResponse<List<OrderResponse>>> getOrdersByUser(
                         @RequestParam(defaultValue = "1") int page,
                         @RequestParam(defaultValue = "12") int limit,
@@ -113,6 +119,7 @@ public class OrderController {
         }
 
         @PostMapping("/user")
+        @PreAuthorize("hasRole('CUSTOMER')")
         public ResponseEntity<ApiResponse<OrderResponse>> createOrder(
                         @RequestBody OrderRequest order, @AuthenticationPrincipal String userId) {
 

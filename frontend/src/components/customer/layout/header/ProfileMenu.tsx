@@ -10,17 +10,17 @@ type Props = {
 };
 
 function ProfileMenu({ profileMenuOpen }: Props) {
-  const { account, isLoading } = useGetAccount("customer");
+  const { account, isLoading } = useGetAccount("CUSTOMER");
   const { handleLogout } = useLogout();
   const dispatch = useDispatch();
 
-  if (!profileMenuOpen) return null;
+  if (!profileMenuOpen || isLoading) return null;
 
   return (
     <div
       className={`text-[0.9rem] font-medium absolute top-full right-0 z-20 bg-white shadow-md rounded-sm overflow-hidden w-max transition-all duration-100 origin-top`}
     >
-      {isLoading ? null : account ? (
+      {account ? (
         <>
           <p className="border-b p-2.5 border-gray-200 max-w-[210px] overflow-hidden text-ellipsis whitespace-nowrap text-center">
             Xin chào, {account.fullname}
@@ -42,7 +42,7 @@ function ProfileMenu({ profileMenuOpen }: Props) {
 
           <Button
             onClick={async () => {
-              await handleLogout("customer");
+              await handleLogout("CUSTOMER");
             }}
             className="hover:bg-gray-100 w-full block p-2.5 text-left"
           >

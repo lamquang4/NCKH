@@ -5,14 +5,12 @@ import type {
   ProductListItemResponse,
 } from "../../../../types/type";
 
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
-
 export default function useGetActiveProducts(limit: number) {
   const url = `${import.meta.env.VITE_BACKEND_URL}/product/active/limit?limit=${limit}`;
 
   const { data, error, isLoading, mutate } = useSWR<
     ApiResponse<ProductListItemResponse[]>
-  >(url, fetcher, {
+  >(url, (url) => axios.get(url).then((res) => res.data), {
     shouldRetryOnError: false,
     revalidateOnFocus: false,
   });

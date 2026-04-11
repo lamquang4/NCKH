@@ -4,12 +4,15 @@ import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import useGetOrders from "./useGetOrders";
 import useGetOrder from "./useGetOrder";
+import { getCookie } from "../../../utils/cookieUtil";
 
 export default function useUpdateStatusOrder(id?: string) {
   const [isLoading, setIsLoading] = useState(false);
   const { mutate: mutateOrder } = useGetOrder(id || "");
   const { mutate: mutateOrders } = useGetOrders();
   const updateStatusOrder = async (id: string, status: number) => {
+    const token = getCookie("token-admin");
+
     const result = await Swal.fire({
       title: `Xác nhận cập nhật trạng thái?`,
       text: `Bạn có chắc muốn cập nhật trạng thái đơn hàng này không?`,
@@ -19,7 +22,7 @@ export default function useUpdateStatusOrder(id?: string) {
       cancelButtonText: "Hủy",
     });
 
-    if (!result.isConfirmed || !id) {
+    if (!result.isConfirmed || !id || !token) {
       return;
     }
 
@@ -30,7 +33,11 @@ export default function useUpdateStatusOrder(id?: string) {
       const url = `${
         import.meta.env.VITE_BACKEND_URL
       }/order/status/${id}?status=${status}`;
-      const res = await axios.patch(url);
+      const res = await axios.patch(url, null, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       await mutateOrder?.();
       await mutateOrders?.();
 

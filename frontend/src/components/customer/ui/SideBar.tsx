@@ -8,7 +8,7 @@ function SideBar() {
   const location = useLocation();
   const pathname = location.pathname;
   const { handleLogout } = useLogout();
-  const { account, mutate } = useGetAccount("customer");
+  const { account, mutate } = useGetAccount("CUSTOMER");
   return (
     <div className="w-full max-w-full lg:max-w-[300px] self-start lg:sticky lg:top-[5rem] bg-white ">
       <div className="text-[0.9rem] font-medium">
@@ -91,7 +91,7 @@ function SideBar() {
         <Button
           type="button"
           onClick={() => {
-            handleLogout("customer");
+            handleLogout("CUSTOMER");
             mutate(undefined);
           }}
           className="border-l-4 border-transparent py-3 px-3.5 text-left text-accent font-medium hover:bg-gray-100 w-full"

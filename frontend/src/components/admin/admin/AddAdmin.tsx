@@ -44,7 +44,7 @@ function AddAdmin() {
       phone: data.phone.trim(),
       email: data.email.trim(),
       password: data.password.trim(),
-      role: "admin",
+      role: "ADMIN",
       status: 1,
     });
 

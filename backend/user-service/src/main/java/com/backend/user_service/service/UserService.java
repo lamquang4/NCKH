@@ -32,7 +32,7 @@ public class UserService {
     public Page<UserResponse> getCustomers(int page, int limit, String q, Integer status) {
 
         Pageable pageable = PageRequest.of(page - 1, limit, Sort.by("createdAt").descending());
-        String role = "customer";
+        String role = "CUSTOMER";
 
         Page<User> pageUser;
 
@@ -56,7 +56,7 @@ public class UserService {
     public Page<UserResponse> getAdmins(int page, int limit, String q, Integer status) {
 
         Pageable pageable = PageRequest.of(page - 1, limit, Sort.by("createdAt").descending());
-        List<String> roles = List.of("admin");
+        List<String> roles = List.of("ADMIN");
 
         Page<User> pageUser;
 
@@ -119,7 +119,7 @@ public class UserService {
             user.setPassword(passwordEncoder.encode(request.getPassword()));
         }
         user.setRole(
-                request.getRole() == null ? "customer" : request.getRole());
+                request.getRole() == null ? "CUSTOMER" : request.getRole());
         user.setStatus(
                 request.getStatus() == null ? 1 : request.getStatus());
 
@@ -160,7 +160,7 @@ public class UserService {
         UserMapper.updateEntity(user, request);
 
         user.setRole(
-                request.getRole() == null ? "customer" : request.getRole());
+                request.getRole() == null ? "CUSTOMER" : request.getRole());
 
         user.setStatus(
                 request.getStatus() == null ? 1 : request.getStatus());

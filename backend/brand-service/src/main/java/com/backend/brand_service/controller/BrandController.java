@@ -3,6 +3,7 @@ package com.backend.brand_service.controller;
 import java.util.List;
 import java.util.Map;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +36,7 @@ public class BrandController {
         }
 
         @GetMapping
+        @PreAuthorize("hasRole('ADMIN')")
         public ResponseEntity<ApiResponse<List<BrandResponse>>> getBrands(
                         @RequestParam(defaultValue = "1") int page,
                         @RequestParam(defaultValue = "12") int limit,
@@ -53,6 +55,7 @@ public class BrandController {
         }
 
         @GetMapping("/all")
+        @PreAuthorize("hasRole('ADMIN')")
         public ResponseEntity<ApiResponse<List<BrandResponse>>> getAllBrands() {
                 return ResponseEntity.ok(
                                 ApiResponse.<List<BrandResponse>>builder()
@@ -71,6 +74,7 @@ public class BrandController {
         }
 
         @GetMapping("/{id}")
+        @PreAuthorize("hasRole('ADMIN')")
         public ResponseEntity<ApiResponse<BrandResponse>> getBrandById(@PathVariable String id) {
                 return ResponseEntity.ok(
                                 ApiResponse.<BrandResponse>builder()
@@ -80,6 +84,7 @@ public class BrandController {
         }
 
         @PostMapping
+        @PreAuthorize("hasRole('ADMIN')")
         public ResponseEntity<ApiResponse<Void>> createBrand(
                         @Valid @RequestBody BrandRequest request) {
                 brandService.createBrand(request);
@@ -90,6 +95,7 @@ public class BrandController {
         }
 
         @PutMapping("/{id}")
+        @PreAuthorize("hasRole('ADMIN')")
         public ResponseEntity<ApiResponse<Void>> updateBrand(
                         @PathVariable String id,
                         @Valid @RequestBody BrandRequest request) {
@@ -101,6 +107,7 @@ public class BrandController {
         }
 
         @PatchMapping("/status/{id}")
+        @PreAuthorize("hasRole('ADMIN')")
         public ResponseEntity<ApiResponse<Void>> updateBrandStatus(
                         @PathVariable String id,
                         @RequestParam @NotNull Integer status) {
@@ -112,6 +119,7 @@ public class BrandController {
         }
 
         @DeleteMapping("/{id}")
+        @PreAuthorize("hasRole('ADMIN')")
         public ResponseEntity<ApiResponse<Void>> deleteBrand(@PathVariable String id) {
                 brandService.deleteBrand(id);
                 return ResponseEntity.ok(

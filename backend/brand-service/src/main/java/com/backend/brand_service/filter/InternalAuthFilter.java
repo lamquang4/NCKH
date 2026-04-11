@@ -1,4 +1,4 @@
-package com.backend.user_service.config;
+package com.backend.brand_service.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -29,6 +29,7 @@ public class InternalAuthFilter extends OncePerRequestFilter {
 
         // chỉ chặn internal api
         if (uri.contains("/internal/")) {
+
             String internalHeader = request.getHeader("X-Internal-Call");
 
             if (!"true".equals(internalHeader)) {

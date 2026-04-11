@@ -3,12 +3,16 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import type { ProductRequest } from "../../../types/type";
 import useGetProduct from "./useGetProduct";
+import { getCookie } from "../../../utils/cookieUtil";
 
 export default function useUpdateProduct(id: string) {
   const [isLoading, setIsLoading] = useState(false);
   const { mutate } = useGetProduct(id);
   const updateProduct = async (data: ProductRequest, files: File[]) => {
-    if (!id) return;
+    const token = getCookie("token-admin");
+
+    if (!id || !token) return;
+
     const loadingToast = toast.loading("Đang cập nhật...");
     setIsLoading(true);
     try {
@@ -42,6 +46,7 @@ export default function useUpdateProduct(id: string) {
       const res = await axios.put(url, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
         },
       });
       await mutate();

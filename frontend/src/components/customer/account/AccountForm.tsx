@@ -16,7 +16,7 @@ function AccountForm() {
     gender: null as number | null,
   });
 
-  const { account } = useGetAccount("customer");
+  const { account } = useGetAccount("CUSTOMER");
   const { updateCustomer, isLoading } = useUpdateCustomer();
 
   useEffect(() => {

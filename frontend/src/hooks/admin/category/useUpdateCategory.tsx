@@ -3,12 +3,16 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import type { CategoryRequest } from "../../../types/type";
 import useGetCategory from "./useGetCategory";
+import { getCookie } from "../../../utils/cookieUtil";
 
 export default function useUpdateCategory(id: string) {
   const [isLoading, setIsLoading] = useState(false);
   const { mutate } = useGetCategory(id);
   const updateCategory = async (data: CategoryRequest, file: File) => {
-    if (!id) return;
+    const token = getCookie("token-admin");
+
+    if (!id || !token) return;
+
     const loadingToast = toast.loading("Đang cập nhật...");
     setIsLoading(true);
     try {
@@ -35,6 +39,7 @@ export default function useUpdateCategory(id: string) {
       const res = await axios.put(url, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
         },
       });
       await mutate();

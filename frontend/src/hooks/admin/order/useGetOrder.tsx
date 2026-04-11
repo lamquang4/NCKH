@@ -1,17 +1,25 @@
 import axios from "axios";
 import useSWR from "swr";
 import type { ApiResponse, OrderResponse } from "../../../types/type";
-
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+import { useToken } from "../../../utils/cookieUtil";
 
 export default function useGetOrder(id: string) {
-  const url = id ? `${import.meta.env.VITE_BACKEND_URL}/order/${id}` : null;
-  const { data, error, isLoading, mutate } = useSWR<
-    ApiResponse<OrderResponse>
-  >(url, fetcher, {
-    shouldRetryOnError: false,
-    revalidateOnFocus: false,
-  });
+  const token = useToken("token-admin");
+
+  const url = `${import.meta.env.VITE_BACKEND_URL}/order/${id}`;
+  const { data, error, isLoading, mutate } = useSWR<ApiResponse<OrderResponse>>(
+    token && id ? [url, token] : null,
+    ([url, token]) =>
+      axios
+        .get(url, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => res.data),
+    {
+      shouldRetryOnError: false,
+      revalidateOnFocus: false,
+    },
+  );
 
   return {
     order: data?.data,

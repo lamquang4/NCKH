@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
+import { getCookie } from "../../../utils/cookieUtil";
 import useGetAdmins from "./useGetAdmins";
 import useGetCustomers from "./useGetCustomers";
 
@@ -10,6 +11,8 @@ export default function useUpdateStatusUser() {
   const { mutate: mutateAdmins } = useGetAdmins();
   const { mutate: mutateCustomers } = useGetCustomers();
   const updateStatusUser = async (id: string, status: number) => {
+    const token = getCookie("token-admin");
+
     const action = status === 1 ? "chặn" : "bỏ chặn";
     const result = await Swal.fire({
       title: `Xác nhận ${action}?`,
@@ -20,7 +23,7 @@ export default function useUpdateStatusUser() {
       cancelButtonText: "Hủy",
     });
 
-    if (!result.isConfirmed || !id) {
+    if (!result.isConfirmed || !id || !token) {
       return;
     }
 
@@ -31,8 +34,13 @@ export default function useUpdateStatusUser() {
       const url = `${
         import.meta.env.VITE_BACKEND_URL
       }/user/status/${id}?status=${status}`;
-      const res = await axios.patch(url);
+      const res = await axios.patch(url, null, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       await Promise.all([mutateAdmins(), mutateCustomers()]);
+
       toast.dismiss(loadingToast);
       toast.success(res.data?.message);
     } catch (err: any) {

@@ -3,13 +3,16 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import type { CategoryRequest } from "../../../types/type";
 import useGetCategories from "./useGetCategories";
+import { getCookie } from "../../../utils/cookieUtil";
 
 export default function useAddCategory() {
   const [isLoading, setIsLoading] = useState(false);
   const { mutate } = useGetCategories();
 
   const addCategory = async (data: CategoryRequest, file: File) => {
-    if (!data) return;
+    const token = getCookie("token-admin");
+
+    if (!data || !token) return;
 
     const loadingToast = toast.loading("Đang thêm...");
     setIsLoading(true);
@@ -39,6 +42,7 @@ export default function useAddCategory() {
       const res = await axios.post(url, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
         },
       });
       await mutate();

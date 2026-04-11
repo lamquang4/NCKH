@@ -18,8 +18,14 @@ function ChatFooter({ isLoadingMessages }: Props) {
   const [textLength, setTextLength] = useState<number>(0);
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
 
-  const { sendMessage, isLoading } = useSendMessage();
-  const { account } = useGetAccount("customer");
+  const { sendMessage, isLoading: isLoadingSendMessage } = useSendMessage();
+  const { account } = useGetAccount("CUSTOMER");
+
+  const isDisabled =
+    textLength === 0 ||
+    textLength > 1000 ||
+    isLoadingSendMessage ||
+    isLoadingMessages;
 
   const handleInput = useCallback(() => {
     const el = inputRef.current;
@@ -39,6 +45,8 @@ function ChatFooter({ isLoadingMessages }: Props) {
     if (!message) {
       return;
     }
+
+    if (isDisabled) return;
 
     if (!account?.id) {
       dispatch(openAuthModal("login"));
@@ -80,7 +88,11 @@ function ChatFooter({ isLoadingMessages }: Props) {
             <div className="relative group">
               {textLength > 1000 && <ToolTip text={"Tin nhắn quá dài"} />}
 
-              <SendButton textLength={textLength} isLoadingSendMessage={isLoading} isLoadingMessages={isLoadingMessages} />
+              <SendButton
+                textLength={textLength}
+                isLoadingSendMessage={isLoadingSendMessage}
+                isLoadingMessages={isLoadingMessages}
+              />
             </div>
           </label>
         </form>

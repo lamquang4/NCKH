@@ -18,7 +18,7 @@ import Button from "../../ui/Button";
 import { USER_STATUS_OPTIONS } from "../../../constants/filterOptions";
 
 function AdminList() {
-  const { account } = useGetAccount("admin");
+  const { account } = useGetAccount("ADMIN");
   const { admins, isLoading, totalItems, totalPages, limit, currentPage } =
     useGetAdmins();
   const { deleteAdmin, isLoading: isLoadingDelete } = useDeleteAdmin();

@@ -1,6 +1,6 @@
-package com.backend.category_service.config;
+package com.backend.auth_service.filter;
 
-import com.backend.category_service.service.JwtService;
+import com.backend.auth_service.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -6,8 +6,6 @@ import type {
   ProductListItemResponse,
 } from "../../../../types/type";
 
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
-
 export default function useGetActiveDiscountProducts() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -27,7 +25,7 @@ export default function useGetActiveDiscountProducts() {
 
   const { data, error, isLoading, mutate } = useSWR<
     ApiResponse<ProductListItemResponse[]>
-  >(url, fetcher, {
+  >(url, (url) => axios.get(url).then((res) => res.data), {
     shouldRetryOnError: false,
     revalidateOnFocus: false,
   });

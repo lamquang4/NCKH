@@ -15,17 +15,13 @@ export default function useAddOrder() {
   const { mutate: mutateCart } = useGetCart();
   const { mutate: mutateOrders } = useGetOrders();
   const addOrder = async (data: OrderRequest) => {
-    if (!data) {
+    const token = getCookie("token-customer");
+
+    if (!data || !token) {
       return;
     }
     setIsLoading(true);
     try {
-      const token = getCookie("token-customer");
-
-      if (!token) {
-        throw new Error("Vui lòng đăng nhập");
-      }
-
       const url = `${import.meta.env.VITE_BACKEND_URL}/order/user`;
       const res = await axios.post<ApiResponse<OrderResponse>>(url, data, {
         headers: {

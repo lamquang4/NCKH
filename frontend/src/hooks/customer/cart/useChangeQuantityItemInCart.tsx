@@ -10,14 +10,14 @@ export function useChangeQuantityItemInCart() {
   const { mutate } = useGetCart();
 
   const changeQuantity = async (userId: string, data: CartItemRequest) => {
-    if (!userId || !data) {
+    const token = getCookie("token-customer");
+
+    if (!userId || !data || !token) {
       return;
     }
     const loadingToast = toast.loading("Đang cập nhật số lượng...");
     setIsLoading(true);
     try {
-      const token = getCookie("token-customer");
-
       const url = `${import.meta.env.VITE_BACKEND_URL}/cart`;
 
       const res = await axios.put(url, data, {

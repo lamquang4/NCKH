@@ -17,6 +17,8 @@ import com.backend.cart_service.dto.response.CartResponse;
 import com.backend.cart_service.service.CartService;
 
 import jakarta.validation.Valid;
+
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 @Validated
@@ -30,6 +32,7 @@ public class CartController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponse<CartResponse>> getCart(@AuthenticationPrincipal String userId) {
 
         return ResponseEntity.ok(
@@ -40,6 +43,7 @@ public class CartController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponse<Void>> addToCart(
             @AuthenticationPrincipal String userId,
             @RequestBody @Valid CartItemRequest itemRequest) {
@@ -52,6 +56,7 @@ public class CartController {
     }
 
     @PutMapping
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponse<Void>> updateQuantity(
             @AuthenticationPrincipal String userId,
             @RequestBody @Valid CartItemRequest itemRequest) {
@@ -64,6 +69,7 @@ public class CartController {
     }
 
     @DeleteMapping("/{productId}")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponse<Void>> removeItem(
             @AuthenticationPrincipal String userId,
             @PathVariable String productId) {

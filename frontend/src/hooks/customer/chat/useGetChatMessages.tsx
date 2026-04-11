@@ -1,23 +1,23 @@
 import axios from "axios";
 import useSWRInfinite from "swr/infinite";
-import { getCookie } from "../../../utils/cookieUtil";
+import { useToken } from "../../../utils/cookieUtil";
 import type { ApiResponse, MessageResponse } from "../../../types/type";
 import { useCallback } from "react";
 
 export default function useGetChatMessages() {
-  const token = getCookie("token-customer");
+  const token = useToken("token-customer");
   const limit = 20;
+  const url = `${import.meta.env.VITE_BACKEND_URL}/chat/user`;
 
   const { data, size, setSize, isLoading, mutate } = useSWRInfinite<
     ApiResponse<MessageResponse[]>
   >(
-    (index) =>
-      token
-        ? `${import.meta.env.VITE_BACKEND_URL}/chat/user?page=${index + 1}&limit=${limit}&token=${token}`
-        : null,
-    (url) =>
+    (index) => (token ? [url, token, index + 1] : null),
+    ([url, token, page]) =>
       axios
-        .get(url, { headers: { Authorization: `Bearer ${token}` } })
+        .get(`${url}?page=${page}&limit=${limit}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
         .then((res) => res.data),
     {
       shouldRetryOnError: false,

@@ -3,11 +3,14 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import useGetCategories from "./useGetCategories";
+import { getCookie } from "../../../utils/cookieUtil";
 
 export default function useUpdateStatusCategory() {
   const [isLoading, setIsLoading] = useState(false);
   const { mutate } = useGetCategories();
   const updateStatusCategory = async (id: string, status: number) => {
+    const token = getCookie("token-admin");
+
     const action = status === 1 ? "hiện" : "ẩn";
     const result = await Swal.fire({
       title: `Xác nhận ${action}?`,
@@ -18,7 +21,7 @@ export default function useUpdateStatusCategory() {
       cancelButtonText: "Hủy",
     });
 
-    if (!result.isConfirmed || !id) {
+    if (!result.isConfirmed || !id || !token) {
       return;
     }
 
@@ -29,7 +32,11 @@ export default function useUpdateStatusCategory() {
       const url = `${
         import.meta.env.VITE_BACKEND_URL
       }/category/status/${id}?status=${status}`;
-      const res = await axios.patch(url);
+      const res = await axios.patch(url, null, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       await mutate();
       toast.dismiss(loadingToast);
       toast.success(res.data?.message);

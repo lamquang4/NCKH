@@ -1,12 +1,10 @@
 package com.backend.auth_service.service;
 
 import java.time.LocalDateTime;
-
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.backend.auth_service.client.UserServiceClient;
 import com.backend.auth_service.dto.request.LoginRequest;
 import com.backend.auth_service.dto.request.UserRequest;
@@ -20,6 +18,7 @@ import com.backend.auth_service.repository.AuthRepository;
 import com.backend.auth_service.util.OtpUtil;
 import com.backend.auth_service.util.ValidationUtils;
 import feign.FeignException;
+
 @Service
 public class AuthService {
     private final AuthRepository authRepository;

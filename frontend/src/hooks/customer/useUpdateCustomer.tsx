@@ -8,9 +8,15 @@ import { getCookie } from "../../utils/cookieUtil";
 export default function useUpdateUser() {
   const [isLoading, setIsLoading] = useState(false);
 
-  const token = getCookie("token-customer");
-  const { mutate } = useGetAccount("customer");
+  const { mutate } = useGetAccount("CUSTOMER");
+
   const updateCustomer = async (data: UserRequest) => {
+    const token = getCookie("token-customer");
+
+    if (!data || !token) {
+      return;
+    }
+
     const loadingToast = toast.loading("Đang cập nhật...");
     setIsLoading(true);
     try {

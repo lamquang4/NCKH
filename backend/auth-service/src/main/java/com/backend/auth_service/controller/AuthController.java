@@ -15,8 +15,6 @@ import com.backend.auth_service.dto.request.LoginRequest;
 import com.backend.auth_service.dto.request.RegisterRequest;
 import com.backend.auth_service.dto.response.ApiResponse;
 import com.backend.auth_service.dto.response.LoginResponse;
-import com.backend.auth_service.dto.response.UserResponse;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import com.backend.auth_service.service.AuthService;
 
 import jakarta.validation.Valid;
@@ -67,17 +65,6 @@ public class AuthController {
                                                 .message("Đăng nhập thành công")
                                                 .data(result)
                                                 .build());
-        }
-
-        @GetMapping("/me")
-        public ResponseEntity<ApiResponse<UserResponse>> getCurrentUser(
-                        @AuthenticationPrincipal String userId) {
-
-                UserResponse user = userServiceClient.getUserByIdInternal(userId);
-                return ResponseEntity.ok(ApiResponse.<UserResponse>builder()
-                                .message("Lấy thông tin tài khoản thành công")
-                                .data(user)
-                                .build());
         }
 
 }

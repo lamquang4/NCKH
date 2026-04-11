@@ -11,7 +11,9 @@ export default function useSendMessage() {
   const { mutate } = useGetChatMessages();
   const { mutate: mutateCart } = useGetCart();
   const sendMessage = async (data: MessageRequest) => {
-    if (!data) {
+    const token = getCookie("token-customer");
+
+    if (!data || !token) {
       return;
     }
 
@@ -50,8 +52,6 @@ export default function useSendMessage() {
 
     setIsLoading(true);
     try {
-      const token = getCookie("token-customer");
-
       const url = `${import.meta.env.VITE_BACKEND_URL}/assistant/chat`;
       await axios.post(url, data, {
         headers: {
