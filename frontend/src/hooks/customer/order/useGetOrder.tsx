@@ -1,10 +1,10 @@
 import axios from "axios";
 import useSWR from "swr";
-import { getCookie } from "../../../utils/cookieUtil";
+import { useToken } from "../../../utils/cookieUtil";
 import type { ApiResponse, OrderResponse } from "../../../types/type";
 
 export default function useGetOrder(orderCode: string) {
-  const token = getCookie("token-customer");
+  const token = useToken("token-customer");
 
   const url = `${import.meta.env.VITE_BACKEND_URL}/order/user/${orderCode}`;
 

@@ -1,10 +1,10 @@
 import axios from "axios";
 import useSWR from "swr";
 import type { ApiResponse, ProductDetailResponse } from "../../../types/type";
-import { getCookie } from "../../../utils/cookieUtil";
+import { useToken } from "../../../utils/cookieUtil";
 
 export default function useGetProduct(id: string) {
-  const token = getCookie("token-admin");
+  const token = useToken("token-admin");
   const url = `${import.meta.env.VITE_BACKEND_URL}/product/${id}`;
   const { data, error, isLoading, mutate } = useSWR<
     ApiResponse<ProductDetailResponse>

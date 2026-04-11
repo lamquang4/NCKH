@@ -1,10 +1,10 @@
 import axios from "axios";
 import useSWR from "swr";
 import type { ApiResponse, UserResponse } from "../../../types/type";
-import { getCookie } from "../../../utils/cookieUtil";
+import { useToken } from "../../../utils/cookieUtil";
 
 export default function useGetUser(id: string) {
-  const token = getCookie("token-admin");
+  const token = useToken("token-admin");
 
   const url = `${import.meta.env.VITE_BACKEND_URL}/user/${id}`;
 

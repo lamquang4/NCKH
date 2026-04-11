@@ -1,20 +1,16 @@
 import axios from "axios";
-import Cookies from "js-cookie";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import useGetAccount from "./useGetAccount";
+import { setCookie } from "../../utils/cookieUtil";
 import type { ApiResponse, LoginResponse } from "../../types/type";
 
 export default function useLogin() {
   const [isLoading, setIsLoading] = useState(false);
-  const { mutate: mutateAccountCustomer } = useGetAccount("CUSTOMER");
-  const { mutate: mutateAccountAdmin } = useGetAccount("ADMIN");
   const navigate = useNavigate();
 
   const handleLogin = async (data: { email: string; password: string }) => {
     if (!data) return;
-
     setIsLoading(true);
 
     try {
@@ -23,7 +19,6 @@ export default function useLogin() {
         url,
         data,
       );
-
       const { token, role } = res.data;
 
       const isAdminPage = window.location.pathname.startsWith("/admin");
@@ -45,21 +40,9 @@ export default function useLogin() {
             ? "token-customer"
             : null;
 
-      if (!cookieName) {
-        return;
-      }
+      if (!cookieName) return;
 
-      Cookies.set(cookieName, token, {
-        expires: 1,
-        sameSite: "strict",
-        secure: import.meta.env.VITE_ENV === "production",
-      });
-
-      if (role === "ADMIN") {
-        await mutateAccountAdmin();
-      } else {
-        await mutateAccountCustomer();
-      }
+      setCookie(cookieName, token);
 
       toast.success(res.message);
       navigate(role === "ADMIN" ? "/admin/account/profile" : "/");

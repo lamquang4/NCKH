@@ -1,27 +1,19 @@
-import Cookies from "js-cookie";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useGetAccount from "./useGetAccount";
-import useGetChatMessages from "../customer/chat/useGetChatMessages";
+import { removeCookie } from "../../utils/cookieUtil";
 
 export default function useLogout() {
   const [isLoading, setIsLoading] = useState(false);
-  const { mutate: mutateAccountCustomer } = useGetAccount("CUSTOMER");
-  const { mutate: mutateAccountAdmin } = useGetAccount("ADMIN");
-  const { mutate: mutateChatMessages } = useGetChatMessages();
   const navigate = useNavigate();
 
-  const handleLogout = async (type: "ADMIN" | "CUSTOMER") => {
+  const handleLogout = (type: "ADMIN" | "CUSTOMER") => {
     setIsLoading(true);
     try {
       if (type === "ADMIN") {
-        Cookies.remove("token-admin");
-        await mutateAccountAdmin(undefined, { revalidate: false });
+        removeCookie("token-admin");
         navigate("/admin/login", { replace: true });
       } else {
-        Cookies.remove("token-customer");
-        await mutateAccountCustomer(undefined, { revalidate: false });
-        await mutateChatMessages([], false);
+        removeCookie("token-customer");
         navigate("/", { replace: true });
       }
     } catch (err) {

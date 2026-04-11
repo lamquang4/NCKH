@@ -1,10 +1,10 @@
 import axios from "axios";
 import useSWR from "swr";
 import type { BrandResponse, ApiResponse } from "../../../types/type";
-import { getCookie } from "../../../utils/cookieUtil";
+import { useToken } from "../../../utils/cookieUtil";
 
 export default function useGetAllBrands() {
-  const token = getCookie("token-admin");
+  const token = useToken("token-admin");
   const url = `${import.meta.env.VITE_BACKEND_URL}/brand/all`;
 
   const { data, error, isLoading, mutate } = useSWR<

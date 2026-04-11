@@ -2,11 +2,11 @@ import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import useSWR from "swr";
 import type { ApiResponse, BrandResponse } from "../../../types/type";
-import { getCookie } from "../../../utils/cookieUtil";
+import { useToken } from "../../../utils/cookieUtil";
 
 export default function useGetBrands() {
   const [searchParams] = useSearchParams();
-  const token = getCookie("token-admin");
+  const token = useToken("token-admin");
 
   const page = parseInt(searchParams.get("page") || "1", 10);
   const limit = parseInt(searchParams.get("limit") || "12", 10);

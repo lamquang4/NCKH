@@ -1,10 +1,10 @@
 import axios from "axios";
 import useSWR from "swr";
 import type { ApiResponse, CategoryResponse } from "../../../types/type";
-import { getCookie } from "../../../utils/cookieUtil";
+import { useToken } from "../../../utils/cookieUtil";
 
 export default function useGetAllCategories() {
-  const token = getCookie("token-admin");
+  const token = useToken("token-admin");
   const url = `${import.meta.env.VITE_BACKEND_URL}/category/all`;
 
   const { data, error, isLoading, mutate } = useSWR<
