@@ -3,18 +3,19 @@ import Pagination from "../ui/Pagination";
 import ProductList from "./ProductList";
 import useGetActiveDiscountProducts from "../../../hooks/customer/product/page/useGetActiveDiscountProduct";
 
+const array = [
+  {
+    name: "Trang chủ",
+    href: "/",
+  },
+  {
+    name: "Giảm giá",
+  },
+];
+
 function ProductListDiscount() {
   const { products, totalItems, totalPages, currentPage, isLoading } =
     useGetActiveDiscountProducts();
-  const array = [
-    {
-      name: "Trang chủ",
-      href: "/",
-    },
-    {
-      name: "Giảm giá",
-    },
-  ];
   return (
     <>
       <BreadCrumb items={array} />

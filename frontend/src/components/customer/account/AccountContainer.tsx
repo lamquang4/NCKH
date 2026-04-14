@@ -1,16 +1,17 @@
 import BreadCrumb from "../ui/BreadCrumb";
 import SideBar from "../ui/SideBar";
 import AccountForm from "./AccountForm";
+
+const array = [
+  {
+    name: "Trang chủ",
+    href: "/",
+  },
+  {
+    name: "Thông tin tài khoản",
+  },
+];
 function Account() {
-  const array = [
-    {
-      name: "Trang chủ",
-      href: "/",
-    },
-    {
-      name: "Thông tin tài khoản",
-    },
-  ];
   return (
     <>
       <BreadCrumb items={array} />
