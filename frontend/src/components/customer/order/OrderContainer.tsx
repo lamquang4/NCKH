@@ -2,16 +2,17 @@ import OrderList from "./OrderList";
 import SideBar from "../ui/SideBar";
 import BreadCrumb from "../ui/BreadCrumb";
 
+const array = [
+  {
+    name: "Trang chủ",
+    href: "/",
+  },
+  {
+    name: "Đơn hàng",
+  },
+];
+
 function OrderContainer() {
-  const array = [
-    {
-      name: "Trang chủ",
-      href: "/",
-    },
-    {
-      name: "Đơn hàng",
-    },
-  ];
   return (
     <>
       <BreadCrumb items={array} />

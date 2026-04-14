@@ -8,15 +8,11 @@ function ProductListCategory() {
   const { slug } = useParams();
   const { products, totalItems, totalPages, currentPage, isLoading } =
     useGetActiveProductsByCategory(slug || "");
-  const array = [
-    {
-      name: "Trang chủ",
-      href: "/",
-    },
-    {
-      name: slug === "all" ? "Tất cả sản phẩm" : products[0]?.categoryName,
-    },
-  ];
+
+  const categoryName =
+    slug === "all" ? "Tất cả sản phẩm" : products?.[0]?.categoryName || "";
+
+  const array = [{ name: "Trang chủ", href: "/" }, { name: categoryName }];
   return (
     <>
       <BreadCrumb items={array} />

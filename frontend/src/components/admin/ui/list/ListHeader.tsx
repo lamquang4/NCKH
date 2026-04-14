@@ -3,15 +3,16 @@ import { IoMdAddCircle } from "react-icons/io";
 import dayjs from "dayjs";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import StaticCard from "../ui/StaticCard";
 import {
   Link,
   useLocation,
   useNavigate,
   useSearchParams,
 } from "react-router-dom";
-import Button from "../../ui/Button";
-import Label from "../../ui/Label";
+import Label from "../../../ui/Label";
+import StaticCard from "../StaticCard";
+import Button from "../../../ui/Button";
+
 
 interface Props {
   title: string;

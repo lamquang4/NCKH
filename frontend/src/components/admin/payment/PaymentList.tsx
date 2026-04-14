@@ -3,8 +3,8 @@ import Loading from "../../ui/Loading";
 import InputSearch from "../ui/InputSearch";
 import Pagination from "../ui/Pagination";
 import FilterDropDownMenu from "../ui/FilterDropDownMenu";
-import ListHeader from "../list/ListHeader";
-import ListBody from "../list/ListBody";
+import ListHeader from "../ui/list/ListHeader";
+import ListBody from "../ui/list/ListBody";
 import useGetPayments from "../../../hooks/admin/payment/useGetPayments";
 import { PAYMENT_STATUS_OPTIONS } from "../../../constants/filterOptions";
 
