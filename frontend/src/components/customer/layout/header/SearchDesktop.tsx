@@ -36,7 +36,7 @@ function SearchDesktop() {
         <Input
           type="text"
           className={`w-full px-3 py-2 text-[0.9rem] bg-transparent outline-none border-none`}
-          isRequired={true}
+          required
           maxLength={100}
           placeholder="Bạn cần tìm gì..."
           value={search}
