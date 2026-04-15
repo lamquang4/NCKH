@@ -2,7 +2,7 @@ import useGetAccount from "../../hooks/auth/useGetAccount";
 import Input from "../ui/Input";
 import Label from "../ui/Label";
 
-function Account() {
+function AccountInfo() {
   const { account } = useGetAccount("ADMIN");
   return (
     <div className="py-[30px] sm:px-[25px] px-[15px] bg-[#F1F4F9] h-full">
@@ -71,4 +71,4 @@ function Account() {
   );
 }
 
-export default Account;
+export default AccountInfo;

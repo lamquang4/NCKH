@@ -43,7 +43,7 @@ function CategoryDropDown({ categories, categoryDropDownOpen }: Props) {
             >
               <div className="flex items-center gap-2">
                 <Image
-                  source={"/assets/discount1.png"}
+                  source={"/assets/discount.png"}
                   alt={""}
                   className="w-[25px] h-[25px]"
                   loading="lazy"

@@ -1,9 +1,9 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import type { ProductListItemResponse } from "../../../types/type";
 import Image from "../../ui/Image";
-import ProductCard from "./ProductCard";
 import { memo } from "react";
 import ProductListSkeleton from "../skeleton/ProductListSkeleton";
+import ProductItem from "./ProductItem";
 
 interface Props {
   title?: string;
@@ -83,7 +83,7 @@ function ProductList({ title, products, isLoading = false, total }: Props) {
             }`}
           >
             {products.map((product) => {
-              return <ProductCard product={product} key={product.id} />;
+              return <ProductItem product={product} key={product.id} />;
             })}
           </div>
         ) : (

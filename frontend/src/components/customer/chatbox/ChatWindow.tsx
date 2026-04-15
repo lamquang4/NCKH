@@ -8,7 +8,7 @@ type Props = {
   onClose: () => void;
 };
 
-function ChatContainer({ onClose }: Props) {
+function ChatWindow({ onClose }: Props) {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const { messages, isLoading, hasMore, loadMore } = useGetChatMessages();
 
@@ -39,4 +39,4 @@ function ChatContainer({ onClose }: Props) {
   );
 }
 
-export default memo(ChatContainer);
+export default memo(ChatWindow);

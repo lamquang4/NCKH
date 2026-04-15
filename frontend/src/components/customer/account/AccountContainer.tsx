@@ -11,6 +11,7 @@ const array = [
     name: "Thông tin tài khoản",
   },
 ];
+
 function Account() {
   return (
     <>

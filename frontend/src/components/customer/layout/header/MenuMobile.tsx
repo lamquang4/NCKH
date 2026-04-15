@@ -1,10 +1,9 @@
-import { memo, useEffect, useState } from "react";
-import { FaPlus } from "react-icons/fa6";
-import { FaMinus } from "react-icons/fa";
+import { memo, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Overplay from "../../ui/Overplay";
 import useGetActiveCategories from "../../../../hooks/customer/category/useGetActiveCategories";
 import Button from "../../../ui/Button";
+import Image from "../../../ui/Image";
 
 type MenuMobileProps = {
   isOpen: boolean;
@@ -12,14 +11,6 @@ type MenuMobileProps = {
 };
 function MenuMobile({ isOpen, onToggleMenu }: MenuMobileProps) {
   const { categories } = useGetActiveCategories();
-  const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
-
-  const toggleOpen = (menu: string) => {
-    setOpenMenus((prev) => ({
-      ...prev,
-      [menu]: !prev[menu],
-    }));
-  };
 
   useEffect(() => {
     if (isOpen) {
@@ -59,46 +50,38 @@ function MenuMobile({ isOpen, onToggleMenu }: MenuMobileProps) {
         </div>
 
         <ul className="py-[20px] ">
-          <li
-            className="border-b border-gray-300 cursor-pointer"
-            onClick={() => toggleOpen(`a3`)}
-          >
-            <div className="w-full flex justify-between items-center py-[15px] text-black font-semibold">
-              <p>Danh mục</p>
-              <Button>
-                {openMenus[`a3`] ? <FaMinus size={15} /> : <FaPlus size={15} />}
-              </Button>
-            </div>
+          {categories.map((category) => (
+            <li key={category.id}>
+              <Link
+                to={`/products/${category.slug}`}
+                className="py-[15px] font-medium hover:text-black"
+              >
+                <div className="flex items-center gap-2">
+                  <Image
+                    source={category.image || ""}
+                    alt={category.name}
+                    className="w-[25px] h-[25px]"
+                    loading="lazy"
+                  />
 
-            <ul
-              className={`max-h-0 overflow-hidden invisible transition-all duration-600 ease-in-out ${
-                openMenus[`a3`] ? "max-h-fit visible" : ""
-              }`}
-            >
-              <li>
-                <Link
-                  to={`/products/all`}
-                  className="py-[15px]  font-medium hover:text-black"
-                >
-                  Tất cả
-                </Link>
-              </li>
-              {categories.map((category) => (
-                <li key={category.id}>
-                  <Link
-                    to={`/products/${category.slug}`}
-                    className="py-[15px]  font-medium hover:text-black"
-                  >
-                    {category.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </li>
+                  <p className="font-medium">{category.name}</p>
+                </div>
+              </Link>
+            </li>
+          ))}
 
           <li className="border-b border-gray-300 cursor-pointer text-black font-semibold">
             <Link to={"/products/sale"} className="py-[15px]">
-              Giảm giá
+              <div className="flex items-center gap-2">
+                <Image
+                  source={"/assets/discount.png"}
+                  alt={""}
+                  className="w-[25px] h-[25px]"
+                  loading="lazy"
+                />
+
+                <p className="font-medium">Giảm giá</p>
+              </div>
             </Link>
           </li>
         </ul>

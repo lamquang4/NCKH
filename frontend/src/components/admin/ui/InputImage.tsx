@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import Image from "../../ui/Image";
 import { HiMiniXMark } from "react-icons/hi2";
 import ImageViewer from "../../ui/ImageViewer";
@@ -30,8 +30,9 @@ function InputImage({
 }: Props) {
   const [openViewer, setOpenViewer] = useState<boolean>(false);
   const [viewerImage, setViewerImage] = useState<string>("");
-
   const [sortableItems, setSortableItems] = useState<SortableImage[]>([]);
+  const [isDraggingOver, setIsDraggingOver] = useState<boolean>(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setSortableItems((prev) => {
@@ -44,10 +45,45 @@ function InputImage({
     setViewerImage(image);
     setOpenViewer(true);
   };
+
+  const handleDragOver = (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDraggingOver(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    setIsDraggingOver(false);
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDraggingOver(false);
+
+    const files = e.dataTransfer.files;
+    if (!files || files.length === 0) return;
+
+    if (inputRef.current) {
+      const dataTransfer = new DataTransfer();
+      Array.from(files).forEach((file) => {
+        if (["image/png", "image/jpeg", "image/webp"].includes(file.type)) {
+          dataTransfer.items.add(file);
+        }
+      });
+      inputRef.current.files = dataTransfer.files;
+      inputRef.current.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+  };
+
   return (
     <div className="flex items-center justify-center w-full h-full">
       <label
         htmlFor={InputId}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
         className="flex flex-col p-[15px] items-center justify-center w-full min-h-70 h-auto border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 "
       >
         {!previewImages.length ? (
@@ -122,6 +158,7 @@ function InputImage({
         )}
 
         <input
+          ref={inputRef}
           id={InputId}
           type="file"
           className="hidden"

@@ -1,10 +1,10 @@
-import Home from "../../components/customer/home/Home";
+import HomeContainer from "../../components/customer/home/HomeContainer";
 import LayoutPage from "../../components/customer/layout/LayoutPage";
 
 function HomePage() {
   return (
     <LayoutPage>
-      <Home />
+      <HomeContainer />
     </LayoutPage>
   );
 }

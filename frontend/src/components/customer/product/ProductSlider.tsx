@@ -2,10 +2,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/free-mode";
 import { FreeMode } from "swiper/modules";
-import ProductCard from "./ProductCard";
 import type { ProductListItemResponse } from "../../../types/type";
 import { memo } from "react";
 import ProductSliderSkeleton from "../skeleton/ProductSliderSkeleton";
+import ProductItem from "./ProductItem";
 
 interface Props {
   title: string;
@@ -49,7 +49,7 @@ function ProductSlider({ title, isLoading = false, products }: Props) {
                 {products.map((product) => {
                   return (
                     <SwiperSlide key={product.id}>
-                      <ProductCard product={product} />
+                      <ProductItem product={product} />
                     </SwiperSlide>
                   );
                 })}
