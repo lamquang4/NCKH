@@ -301,7 +301,7 @@ function EditProduct() {
                               <Button
                                 className="bg-white rounded-full p-1 border border-gray-300"
                                 onClick={() => handleDeleteImage(image.id)}
-                                isDisabled={isLoadingDeleteImage}
+                                disabled={isLoadingDeleteImage}
                                 type="button"
                               >
                                 <VscTrash
@@ -322,7 +322,7 @@ function EditProduct() {
                               <Button
                                 type="button"
                                 className="bg-white rounded-full p-1 border border-gray-300 text-green-500"
-                                isDisabled={isLoadingUpdateImage}
+                                disabled={isLoadingUpdateImage}
                                 onClick={() =>
                                   handleUpdateImage(
                                     image!.id,
@@ -362,7 +362,7 @@ function EditProduct() {
                   value={data.name}
                   onChange={handleChange}
                   name="name"
-                  isRequired={true}
+                  required
                   className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
                 />
               </div>
@@ -408,7 +408,7 @@ function EditProduct() {
                   </Label>
                   <Select
                     name="status"
-                    isRequired={true}
+                    required
                     onChange={handleChange}
                     value={data.status}
                     className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
@@ -446,7 +446,7 @@ function EditProduct() {
                     name="price"
                     value={data.price}
                     onChange={handleChange}
-                    isRequired={true}
+                    required
                     className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
                   />
                 </div>
@@ -461,7 +461,7 @@ function EditProduct() {
                     name="discount"
                     value={data.discount}
                     onChange={handleChange}
-                    isRequired={true}
+                    required
                     className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
                   />
                 </div>
@@ -475,7 +475,7 @@ function EditProduct() {
                     name="stock"
                     value={data.stock}
                     onChange={handleChange}
-                    isRequired={true}
+                    required
                     className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
                   />
                 </div>
@@ -497,7 +497,7 @@ function EditProduct() {
 
           <div className="flex justify-center gap-6">
             <Button
-              isDisabled={isLoadingUpdate}
+              disabled={isLoadingUpdate}
               type="submit"
               className="p-[6px_10px] bg-teal-500 text-white text-[0.9rem] font-medium text-center hover:bg-teal-600 rounded-sm"
             >

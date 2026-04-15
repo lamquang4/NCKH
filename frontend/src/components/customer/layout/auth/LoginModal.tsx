@@ -89,7 +89,7 @@ function LoginModal({ onClose, onSwitchRegister }: Props) {
                     onChange={handleChange}
                     className="text-[0.9rem] block w-full px-3 py-2 border border-gray-200"
                     placeholder="Nhập email"
-                    isRequired={true}
+                    required
                   />
                 </div>
 
@@ -106,7 +106,7 @@ function LoginModal({ onClose, onSwitchRegister }: Props) {
                       onChange={handleChange}
                       placeholder="Nhập mật khẩu"
                       className="text-[0.9rem] block w-full  px-3 pr-12 py-2 border border-gray-200"
-                      isRequired={true}
+                      required
                     />
 
                     <Button
@@ -124,7 +124,7 @@ function LoginModal({ onClose, onSwitchRegister }: Props) {
                 </div>
 
                 <Button
-                  isDisabled={isLoading}
+                  disabled={isLoading}
                   type="submit"
                   className="w-full bg-primary text-white focus:outline-none font-semibold rounded-sm text-[0.9rem] uppercase px-5 py-2.5 text-center"
                 >

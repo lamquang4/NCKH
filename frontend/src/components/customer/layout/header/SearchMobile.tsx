@@ -56,7 +56,7 @@ function SearchMobile({ onToggleSearch, searchOpen }: Props) {
           <form onSubmit={handleSearch} className="w-full">
             <Input
               type="text"
-              isRequired={true}
+              required
               placeholder="Bạn cần tìm gì..."
               maxLength={50}
               className="w-full rounded outline-none text-[0.9rem]"

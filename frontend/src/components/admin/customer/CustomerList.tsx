@@ -91,7 +91,7 @@ function CustomerList() {
                   <td className="p-[1rem]  ">
                     <div className="flex items-center gap-[15px]">
                       <Button
-                        isDisabled={isLoadingUpdate}
+                        disabled={isLoadingUpdate}
                         onClick={() =>
                           handleUpdateStatus(
                             customer.id || "",

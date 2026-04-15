@@ -1,12 +1,12 @@
 import { lazy, Suspense } from "react";
-import MainBanner from "./MainBanner";
 import useGetActiveProducts from "../../../hooks/customer/product/list/useActiveProducts";
 import useGetBestsellerProducts from "../../../hooks/customer/product/list/useGetBestSellerProducts";
+import BannerCarousel from "./BannerCarousel";
 
 const ProductSlider = lazy(() => import("../product/ProductSlider"));
 const PromotionBanner = lazy(() => import("./PromotionBanner"));
 
-function Home() {
+function HomeContainer() {
   const { products: products1, isLoading: isLoading1 } =
     useGetActiveProducts(12);
   const { products: products2, isLoading: isLoading2 } =
@@ -14,7 +14,7 @@ function Home() {
 
   return (
     <>
-      <MainBanner />
+      <BannerCarousel />
 
       <Suspense fallback={null}>
         <ProductSlider
@@ -65,4 +65,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default HomeContainer;

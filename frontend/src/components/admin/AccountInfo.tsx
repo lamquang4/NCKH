@@ -2,7 +2,7 @@ import useGetAccount from "../../hooks/auth/useGetAccount";
 import Input from "../ui/Input";
 import Label from "../ui/Label";
 
-function Account() {
+function AccountInfo() {
   const { account } = useGetAccount("ADMIN");
   return (
     <div className="py-[30px] sm:px-[25px] px-[15px] bg-[#F1F4F9] h-full">
@@ -21,7 +21,7 @@ function Account() {
                 type="text"
                 name="fullname"
                 value={account?.fullname}
-                isReadOnly={true}
+                readOnly
                 className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
               />
             </div>
@@ -34,7 +34,7 @@ function Account() {
                 type="text"
                 name="email"
                 value={account?.email}
-                isReadOnly={true}
+                readOnly
                 className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
               />
             </div>
@@ -47,7 +47,7 @@ function Account() {
                 type="text"
                 name="phone"
                 value={account?.phone}
-                isReadOnly={true}
+                readOnly
                 className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
               />
             </div>
@@ -60,7 +60,7 @@ function Account() {
                 type="text"
                 name="role"
                 value={account?.role === "ADMIN" ? "Quản trị viên" : ""}
-                isReadOnly={true}
+                readOnly
                 className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
               />
             </div>
@@ -71,4 +71,4 @@ function Account() {
   );
 }
 
-export default Account;
+export default AccountInfo;

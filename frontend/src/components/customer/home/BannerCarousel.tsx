@@ -4,21 +4,23 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import Image from "../../ui/Image";
-function MainBanner() {
-  const banners = [
-    {
-      mobile: "/assets/banners/mainbanner1.webp",
-      desktop: "/assets/banners/mainbanner1.webp",
-    },
-    {
-      mobile: "/assets/banners/mainbanner2.webp",
-      desktop: "/assets/banners/mainbanner2.webp",
-    },
-    {
-      mobile: "/assets/banners/mainbanner3.webp",
-      desktop: "/assets/banners/mainbanner3.webp",
-    },
-  ];
+
+const banners = [
+  {
+    mobile: "/assets/banners/mainbanner1.webp",
+    desktop: "/assets/banners/mainbanner1.webp",
+  },
+  {
+    mobile: "/assets/banners/mainbanner2.webp",
+    desktop: "/assets/banners/mainbanner2.webp",
+  },
+  {
+    mobile: "/assets/banners/mainbanner3.webp",
+    desktop: "/assets/banners/mainbanner3.webp",
+  },
+];
+
+function BannerCarousel() {
   return (
     <section className="mb-[40px]">
       <div className="w-full max-w-[1200px] mx-auto">
@@ -53,4 +55,4 @@ function MainBanner() {
   );
 }
 
-export default MainBanner;
+export default BannerCarousel;

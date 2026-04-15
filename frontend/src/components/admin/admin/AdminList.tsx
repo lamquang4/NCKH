@@ -102,7 +102,7 @@ function AdminList() {
                   <td className="p-[1rem]  ">
                     <div className="flex items-center gap-[15px]">
                       <Button
-                        isDisabled={isLoadingUpdate}
+                        disabled={isLoadingUpdate}
                         onClick={() =>
                           handleUpdateStatus(
                             admin.id || "",
@@ -122,7 +122,7 @@ function AdminList() {
                       </Link>
 
                       <Button
-                        isDisabled={isLoadingDelete}
+                        disabled={isLoadingDelete}
                         onClick={() => handleDelete(admin.id || "")}
                       >
                         <VscTrash size={22} className="text-[#d9534f]" />

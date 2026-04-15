@@ -99,7 +99,7 @@ function CategoryList() {
                   <td className="p-[1rem]  ">
                     <div className="flex items-center gap-[15px]">
                       <Button
-                        isDisabled={isLoadingUpdate}
+                        disabled={isLoadingUpdate}
                         onClick={() =>
                           handleUpdateStatus(
                             category.id || "",
@@ -122,7 +122,7 @@ function CategoryList() {
                       </Link>
 
                       <Button
-                        isDisabled={isLoadingDelete}
+                        disabled={isLoadingDelete}
                         onClick={() => handleDelete(category.id || "")}
                       >
                         <VscTrash size={22} className="text-[#d9534f]" />

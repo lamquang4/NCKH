@@ -57,7 +57,7 @@ function AddBrand() {
                   name="name"
                   value={data.name}
                   onChange={handleChange}
-                  isRequired={true}
+                  required
                   className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
                 />
               </div>
@@ -68,7 +68,7 @@ function AddBrand() {
                 </Label>
                 <Select
                   name="status"
-                  isRequired={true}
+                  required
                   onChange={handleChange}
                   value={data.status}
                   className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
@@ -83,7 +83,7 @@ function AddBrand() {
 
           <div className="flex justify-center gap-6">
             <Button
-              isDisabled={isLoading}
+              disabled={isLoading}
               type="submit"
               className="p-[6px_10px] bg-teal-500 text-white text-[0.9rem] font-medium text-center hover:bg-teal-600 rounded-sm"
             >

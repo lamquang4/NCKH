@@ -5,7 +5,7 @@ import type { ProductListItemResponse } from "../../../types/type";
 interface Props {
   product: ProductListItemResponse;
 }
-function ProductCard({ product }: Props) {
+function ProductItem({ product }: Props) {
   return (
     <div className="space-y-[15px]">
       <div className="relative group border-gray-300 border">
@@ -79,4 +79,4 @@ function ProductCard({ product }: Props) {
   );
 }
 
-export default ProductCard;
+export default ProductItem;

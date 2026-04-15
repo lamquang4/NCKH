@@ -721,7 +721,7 @@ public class ProductService {
         }
 
         try {
-            String folderPath = "nckh/products/" + productId + "/" + imageId;
+            String folderPath = "nckh/products/" + productId;
 
             Map<?, ?> uploadResult = cloudinary.uploader().upload(
                     file.getBytes(),
@@ -748,6 +748,7 @@ public class ProductService {
                 imageId);
 
         return ImageProduct.builder()
+                .id(imageId)
                 .image(imageUrl)
                 .product(product)
                 .build();
@@ -763,14 +764,13 @@ public class ProductService {
 
     private void deleteImageOnCloudinary(String productId, String imageId) {
         try {
-            String publicId = "nckh/products/"
-                    + productId
-                    + "/"
-                    + imageId;
+            String publicId = "nckh/products/" + productId + "/" + imageId;
 
             cloudinary.uploader().destroy(
                     publicId,
-                    ObjectUtils.asMap("resource_type", "image"));
+                    ObjectUtils.asMap(
+                            "resource_type", "image",
+                            "invalidate", true));
 
         } catch (Exception e) {
             throw new AppException(ErrorCode.IMAGE_DELETE_FAILED);
@@ -783,7 +783,9 @@ public class ProductService {
 
             cloudinary.api().deleteResourcesByPrefix(
                     folderPath,
-                    ObjectUtils.emptyMap());
+                    ObjectUtils.asMap(
+                            "resource_type", "image",
+                            "invalidate", true));
 
             cloudinary.api().deleteFolder(
                     folderPath,

@@ -70,7 +70,7 @@ const SpecificationEditor = ({
                 <td className="py-[1rem]">
                   <Input
                     type="text"
-                    isRequired={true}
+                    required
                     value={spec.specKey}
                     onChange={(e) =>
                       updateSpecification(spec.id, "specKey", e.target.value)
@@ -82,7 +82,7 @@ const SpecificationEditor = ({
                 <td className="py-[1rem]">
                   <Input
                     type="text"
-                    isRequired={true}
+                    required
                     value={spec.specValue}
                     onChange={(e) =>
                       updateSpecification(spec.id, "specValue", e.target.value)
