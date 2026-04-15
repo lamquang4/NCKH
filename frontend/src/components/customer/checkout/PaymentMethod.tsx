@@ -4,20 +4,21 @@ type Props = {
   paymethod: string;
   setPaymethod: (value: string) => void;
 };
-function PaymentMethod({ paymethod, setPaymethod }: Props) {
-  const paymethods = [
-    {
-      image: "/assets/cod.png",
-      name: "Thanh toán khi nhận hàng",
-      value: "cod",
-    },
-    {
-      image: "/assets/momo.png",
-      name: "Thanh toán bằng Momo",
-      value: "momo",
-    },
-  ];
 
+const paymethods = [
+  {
+    image: "/assets/cod.png",
+    name: "Thanh toán khi nhận hàng",
+    value: "cod",
+  },
+  {
+    image: "/assets/momo.png",
+    name: "Thanh toán bằng Momo",
+    value: "momo",
+  },
+];
+
+function PaymentMethod({ paymethod, setPaymethod }: Props) {
   return (
     <div className="space-y-[15px]">
       <h4>Phương thức thanh toán</h4>

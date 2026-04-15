@@ -147,7 +147,7 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
                       onChange={handleChange}
                       className="text-[0.9rem] block w-full px-3 py-2 border border-gray-200"
                       placeholder="Nhập email"
-                      isRequired={true}
+                      required
                     />
                   </div>
                 ) : (
@@ -161,7 +161,7 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
                         <Button
                           type="button"
                           onClick={handleSendOTP}
-                          isDisabled={isLoadingSendResetOTP}
+                          disabled={isLoadingSendResetOTP}
                           className="text-[0.9rem] text-gray-500 p-0"
                         >
                           Gửi lại mã
@@ -176,7 +176,7 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
                         onChange={handleChange}
                         placeholder="Nhập mã OTP"
                         className="text-[0.9rem] block w-full px-3 py-2 border border-gray-200"
-                        isRequired={true}
+                        required
                       />
                     </div>
 
@@ -194,7 +194,7 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
                         onChange={handleChange}
                         className="text-[0.9rem] block w-full px-3 py-2 border border-gray-200"
                         placeholder="Nhập họ và tên"
-                        isRequired={true}
+                        required
                       />
                     </div>
 
@@ -212,7 +212,7 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
                         onChange={handleChange}
                         className="text-[0.9rem] block w-full px-3 py-2 border border-gray-200"
                         placeholder="Nhập số điện thoại"
-                        isRequired={true}
+                        required
                       />
                     </div>
 
@@ -232,7 +232,7 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
                           onChange={handleChange}
                           placeholder="Nhập mật khẩu"
                           className="text-[0.9rem] block w-full  px-3 pr-12 py-2 border border-gray-200"
-                          isRequired={true}
+                          required
                         />
 
                         <Button
@@ -271,7 +271,7 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
                 )}
 
                 <Button
-                  isDisabled={isLoading}
+                  disabled={isLoading}
                   type="submit"
                   className="w-full bg-primary text-white focus:outline-none font-semibold rounded-sm uppercase text-[0.9rem] px-5 py-2.5 text-center"
                 >

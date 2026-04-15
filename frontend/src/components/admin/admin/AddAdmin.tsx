@@ -74,7 +74,7 @@ function AddAdmin() {
                 name="fullname"
                 value={data.fullname}
                 onChange={handleChange}
-                isRequired={true}
+                required
                 className="lowercase border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
               />
             </div>
@@ -88,7 +88,7 @@ function AddAdmin() {
                 name="email"
                 value={data.email}
                 onChange={handleChange}
-                isRequired={true}
+                required
                 className="lowercase border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
               />
             </div>
@@ -102,7 +102,7 @@ function AddAdmin() {
                 name="phone"
                 value={data.phone}
                 onChange={handleChange}
-                isRequired={true}
+                required
                 className="lowercase border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
               />
             </div>
@@ -116,7 +116,7 @@ function AddAdmin() {
                 name="password"
                 value={data.password}
                 onChange={handleChange}
-                isRequired={true}
+                required
                 className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
               />
             </div>
@@ -125,7 +125,7 @@ function AddAdmin() {
 
         <div className="flex justify-center gap-6">
           <Button
-            isDisabled={isLoading}
+            disabled={isLoading}
             type="submit"
             className="p-[6px_10px] bg-teal-500 text-white text-[0.9rem] font-medium text-center hover:bg-teal-600 rounded-sm"
           >

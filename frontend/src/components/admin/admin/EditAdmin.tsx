@@ -116,7 +116,7 @@ function EditAdmin() {
                 name="fullname"
                 value={data.fullname}
                 onChange={handleChange}
-                isRequired={true}
+                required
                 className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
               />
             </div>
@@ -130,7 +130,7 @@ function EditAdmin() {
                 name="email"
                 value={data.email}
                 onChange={handleChange}
-                isRequired={true}
+                required
                 className="lowercase border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
               />
             </div>
@@ -145,7 +145,7 @@ function EditAdmin() {
                   name="phone"
                   value={data.phone}
                   onChange={handleChange}
-                  isRequired={true}
+                  required
                   className="lowercase border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
                 />
               </div>
@@ -158,7 +158,7 @@ function EditAdmin() {
                   name="status"
                   value={data.status}
                   onChange={handleChange}
-                  isRequired={true}
+                  required
                   className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
                 >
                   <option value="">Chọn tình trạng</option>
@@ -185,7 +185,7 @@ function EditAdmin() {
 
         <div className="flex justify-center gap-6">
           <Button
-            isDisabled={isLoadingUpdate}
+            disabled={isLoadingUpdate}
             type="submit"
             className="p-[6px_10px] bg-teal-500 text-white text-[0.9rem] font-medium text-center hover:bg-teal-600 rounded-sm"
           >

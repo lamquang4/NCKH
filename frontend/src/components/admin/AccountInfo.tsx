@@ -21,7 +21,7 @@ function AccountInfo() {
                 type="text"
                 name="fullname"
                 value={account?.fullname}
-                isReadOnly={true}
+                readOnly
                 className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
               />
             </div>
@@ -34,7 +34,7 @@ function AccountInfo() {
                 type="text"
                 name="email"
                 value={account?.email}
-                isReadOnly={true}
+                readOnly
                 className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
               />
             </div>
@@ -47,7 +47,7 @@ function AccountInfo() {
                 type="text"
                 name="phone"
                 value={account?.phone}
-                isReadOnly={true}
+                readOnly
                 className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
               />
             </div>
@@ -60,7 +60,7 @@ function AccountInfo() {
                 type="text"
                 name="role"
                 value={account?.role === "ADMIN" ? "Quản trị viên" : ""}
-                isReadOnly={true}
+                readOnly
                 className="border border-gray-300 p-[6px_10px] text-[0.9rem] w-full outline-none focus:border-gray-400  "
               />
             </div>

@@ -98,7 +98,7 @@ function AccountForm() {
                 name="email"
                 className="w-full rounded-sm p-[6px_10px] text-[0.9rem] border border-gray-300  focus:outline-0"
                 value={data?.email}
-                isReadOnly={true}
+                readOnly
               />
             </div>
           </div>
@@ -174,7 +174,7 @@ function AccountForm() {
 
           <div className="flex justify-center">
             <Button
-              isDisabled={isLoading}
+              disabled={isLoading}
               type="submit"
               className="p-[6px_10px] bg-primary text-white text-[0.9rem] font-medium text-center rounded-sm"
             >

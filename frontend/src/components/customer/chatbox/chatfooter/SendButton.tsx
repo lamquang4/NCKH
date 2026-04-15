@@ -21,7 +21,7 @@ function ChatButton({
   return (
     <Button
       type="submit"
-      isDisabled={isDisabled}
+      disabled={isDisabled}
       className={`w-9 h-9 flex items-center justify-center rounded-full ${
         isDisabled ? "bg-gray-200 text-gray-500" : "bg-primary text-white"
       } `}

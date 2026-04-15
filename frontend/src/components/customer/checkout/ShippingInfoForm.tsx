@@ -46,7 +46,7 @@ function ShippingInfoForm({ data, setData, onChange, provinces }: Props) {
           name="fullname"
           value={data.fullname}
           onChange={onChange}
-          isRequired={true}
+          required
           className="w-full rounded-md border border-gray-200 px-2.5 py-2 text-[0.9rem] outline-none focus:z-10 focus:border-[#197FB6] focus:ring-[#197FB6]"
           placeholder="Họ tên"
         />
@@ -61,7 +61,7 @@ function ShippingInfoForm({ data, setData, onChange, provinces }: Props) {
           name="phone"
           value={data.phone}
           onChange={onChange}
-          isRequired={true}
+          required
           className="w-full rounded-md border border-gray-200 px-2.5 py-2 text-[0.9rem] outline-none focus:z-10 focus:border-[#197FB6] focus:ring-[#197FB6]"
           placeholder="Số điện thoại"
         />
@@ -76,7 +76,7 @@ function ShippingInfoForm({ data, setData, onChange, provinces }: Props) {
           name="speaddress"
           value={data.speaddress}
           onChange={onChange}
-          isRequired={true}
+          required
           className="w-full rounded-md border border-gray-200 px-2.5 py-2 text-[0.9rem] outline-none focus:z-10 focus:border-[#197FB6] focus:ring-[#197FB6]"
           placeholder="Địa chỉ cụ thể"
         />
@@ -89,7 +89,7 @@ function ShippingInfoForm({ data, setData, onChange, provinces }: Props) {
           </Label>
           <Select
             name="city"
-            isRequired={true}
+            required
             value={data.city}
             onChange={(e) =>
               setData((prev) => ({
@@ -115,8 +115,8 @@ function ShippingInfoForm({ data, setData, onChange, provinces }: Props) {
           </Label>
           <Select
             name="ward"
-            isRequired={true}
-            isDisabled={!selectedProvince}
+            required
+            disabled={!selectedProvince}
             value={data.ward}
             onChange={onChange}
             className="w-full rounded-md text-[0.9rem] border border-gray-200 px-2.5 py-2 text-sm outline-none focus:z-10 focus:border-[#197FB6] focus:ring-[#197FB6]"

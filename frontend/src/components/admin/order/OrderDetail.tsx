@@ -95,7 +95,7 @@ function OrderDetail() {
                   {order?.status && (
                     <Select
                       name="status"
-                      isDisabled={isLoadingUpdate}
+                      disabled={isLoadingUpdate}
                       onChange={(e) =>
                         handleUpdateStatus(order!.id, parseInt(e.target.value))
                       }

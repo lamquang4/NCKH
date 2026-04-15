@@ -143,7 +143,7 @@ function ProductList() {
                     <td className="p-[1rem]  ">
                       <div className="flex items-center gap-[15px]">
                         <Button
-                          isDisabled={isLoadingUpdate}
+                          disabled={isLoadingUpdate}
                           onClick={() =>
                             handleUpdateStatus(
                               product.id || "",
@@ -167,7 +167,7 @@ function ProductList() {
                           <LiaEdit size={22} className="text-[#076ffe]" />
                         </Link>
                         <Button
-                          isDisabled={isLoadingDelete}
+                          disabled={isLoadingDelete}
                           onClick={() => handleDelete(product.id || "")}
                         >
                           <VscTrash size={22} className="text-[#d9534f]" />

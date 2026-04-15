@@ -115,7 +115,7 @@ function ProductDetail({ product }: Props) {
                         <Button
                           type="button"
                           onClick={HandleDecrement}
-                          isDisabled={quantity <= 1}
+                          disabled={quantity <= 1}
                           className=" p-3 h-11 outline-none"
                         >
                           <HiOutlineMinusSmall size={22} />
@@ -123,7 +123,7 @@ function ProductDetail({ product }: Props) {
                         <Input
                           type="number"
                           name="quantity"
-                          isReadOnly={true}
+                          readOnly
                           className="h-11 text-center text-black w-11 outline-none placeholder:text-[1.2rem] font-medium"
                           placeholder="1"
                           min={1}
@@ -133,7 +133,7 @@ function ProductDetail({ product }: Props) {
                         <Button
                           type="button"
                           onClick={HandleIncrement}
-                          isDisabled={
+                          disabled={
                             quantity >=
                             (product?.stock > max ? max : product?.stock)
                           }
@@ -146,7 +146,7 @@ function ProductDetail({ product }: Props) {
 
                     <Button
                       type="button"
-                      isDisabled={isLoadingCart}
+                      disabled={isLoadingCart}
                       onClick={handleAddItemToCart}
                       className="p-[10px] w-full uppercase text-[0.9rem] font-semibold bg-primary text-white"
                     >

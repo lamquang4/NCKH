@@ -4,6 +4,7 @@ import { HiMiniXMark } from "react-icons/hi2";
 import ImageViewer from "../../ui/ImageViewer";
 import { ReactSortable } from "react-sortablejs";
 import Button from "../../ui/Button";
+import Label from "../../ui/Label";
 type SortableImage = {
   id: string;
   url: string;
@@ -31,7 +32,6 @@ function InputImage({
   const [openViewer, setOpenViewer] = useState<boolean>(false);
   const [viewerImage, setViewerImage] = useState<string>("");
   const [sortableItems, setSortableItems] = useState<SortableImage[]>([]);
-  const [isDraggingOver, setIsDraggingOver] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -49,18 +49,15 @@ function InputImage({
   const handleDragOver = (e: React.DragEvent<HTMLLabelElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    setIsDraggingOver(true);
   };
 
   const handleDragLeave = (e: React.DragEvent<HTMLLabelElement>) => {
     e.preventDefault();
-    setIsDraggingOver(false);
   };
 
   const handleDrop = (e: React.DragEvent<HTMLLabelElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    setIsDraggingOver(false);
 
     const files = e.dataTransfer.files;
     if (!files || files.length === 0) return;
@@ -79,7 +76,7 @@ function InputImage({
 
   return (
     <div className="flex items-center justify-center w-full h-full">
-      <label
+      <Label
         htmlFor={InputId}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -167,7 +164,7 @@ function InputImage({
           multiple
           onChange={(e) => onPreviewImage(e, blockIndex)}
         />
-      </label>
+      </Label>
 
       {openViewer && (
         <ImageViewer

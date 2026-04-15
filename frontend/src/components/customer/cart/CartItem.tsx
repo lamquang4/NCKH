@@ -88,7 +88,7 @@ function CartItem({ item, userId }: Props) {
 
               <Button
                 type="button"
-                isDisabled={isLoadingRemove}
+                disabled={isLoadingRemove}
                 onClick={() => handleRemoveItem(item.productId)}
                 className="mb-auto"
               >
@@ -115,7 +115,7 @@ function CartItem({ item, userId }: Props) {
                   data-testid="btn-decrement"
                   type="button"
                   onClick={() => handleDecrement(item.productId, item.quantity)}
-                  isDisabled={item.quantity <= 1 || isLoadingChangeQuantity}
+                  disabled={item.quantity <= 1 || isLoadingChangeQuantity}
                   className="flex items-center justify-center w-7 h-7 outline-none bg-[#F7F7F7] border-gray-300 border"
                 >
                   <HiOutlineMinusSmall size={20} />
@@ -129,7 +129,7 @@ function CartItem({ item, userId }: Props) {
                   onClick={() =>
                     handleIncrement(item.productId, item.quantity, item.stock)
                   }
-                  isDisabled={isLoadingChangeQuantity}
+                  disabled={isLoadingChangeQuantity}
                   className="flex items-center justify-center w-7 h-7 outline-none bg-[#F7F7F7] border-gray-300 border"
                 >
                   <HiOutlinePlusSmall size={20} />
