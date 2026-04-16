@@ -100,9 +100,9 @@ function CustomerList() {
                         }
                       >
                         {customer.status === 1 ? (
-                          <TbLock size={22} className="text-[#74767d]" />
+                          <TbLock size={22} className="text-neutral" />
                         ) : (
-                          <TbLockOpen size={22} className="text-[#74767d]" />
+                          <TbLockOpen size={22} className="text-neutral" />
                         )}
                       </Button>
                     </div>

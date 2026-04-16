@@ -108,24 +108,24 @@ function CategoryList() {
                         }
                       >
                         {category.status === 1 ? (
-                          <FaRegEyeSlash size={22} className="text-[#74767d]" />
+                          <FaRegEyeSlash size={22} className="text-neutral" />
                         ) : (
                           <MdOutlineRemoveRedEye
                             size={22}
-                            className="text-[#74767d]"
+                            className="text-neutral"
                           />
                         )}
                       </Button>
 
                       <Link to={`/admin/edit-category/${category.id}`}>
-                        <LiaEdit size={22} className="text-[#076ffe]" />
+                        <LiaEdit size={22} className="text-info" />
                       </Link>
 
                       <Button
                         disabled={isLoadingDelete}
                         onClick={() => handleDelete(category.id || "")}
                       >
-                        <VscTrash size={22} className="text-[#d9534f]" />
+                        <VscTrash size={22} className="text-danger" />
                       </Button>
                     </div>
                   </td>

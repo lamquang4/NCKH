@@ -33,7 +33,7 @@ const SpecificationEditor = ({
         <Button
           type="button"
           onClick={addSpecification}
-          className="border-0 cursor-pointer text-[0.9rem] font-medium p-[8px_12px] bg-primary text-white"
+          className="border-0 cursor-pointer text-[0.9rem] font-medium p-[8px_12px] bg-success text-white"
         >
           Thêm
         </Button>
@@ -42,7 +42,7 @@ const SpecificationEditor = ({
           <Button
             type="button"
             onClick={clearSpecifications}
-            className="bg-red-500 border-0 cursor-pointer text-[0.9rem] font-medium p-[6px_12px] text-white"
+            className="bg-danger border-0 cursor-pointer text-[0.9rem] font-medium p-[6px_12px] text-white"
           >
             Xóa tất cả
           </Button>
@@ -95,7 +95,7 @@ const SpecificationEditor = ({
                   <Button
                     type="button"
                     onClick={() => removeSpecification(spec.id)}
-                    className="bg-red-500 border-0 cursor-pointer text-[0.9rem] font-medium p-[6px_12px] text-white"
+                    className="bg-danger border-0 cursor-pointer text-[0.9rem] font-medium p-[6px_12px] text-white"
                   >
                     Xóa
                   </Button>
