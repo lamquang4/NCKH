@@ -138,7 +138,7 @@ function OrderList() {
                       <Link to={`/admin/order/${order.id}`}>
                         <LiaExternalLinkAltSolid
                           size={23}
-                          className="text-[#076ffe]"
+                          className="text-info"
                         />
                       </Link>
                     </div>

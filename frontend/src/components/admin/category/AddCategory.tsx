@@ -38,10 +38,21 @@ function AddCategory() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     const orderedFiles = getOrderedFiles();
 
     if (!orderedFiles[0]) {
       toast.error("Vui lòng thêm hình danh mục");
+      return;
+    }
+
+    if (!data.name.trim()) {
+      toast.error("Tên danh mục không được để trống");
+      return;
+    }
+
+    if (data.status === "") {
+      toast.error("Vui lòng chọn tình trạng");
       return;
     }
 
@@ -62,7 +73,7 @@ function AddCategory() {
 
   return (
     <>
-      <div className="py-[30px] sm:px-[25px] px-[15px] bg-[#F1F4F9] h-auto">
+      <div className="py-[30px] sm:px-[25px] px-[15px] h-auto">
         <form className="flex flex-col gap-7 w-full" onSubmit={handleSubmit}>
           <h2 className="text-[#74767d]">Thêm danh mục</h2>
 
@@ -118,13 +129,13 @@ function AddCategory() {
             <Button
               disabled={isLoading}
               type="submit"
-              className="p-[6px_10px] bg-teal-500 text-white text-[0.9rem] font-medium text-center hover:bg-teal-600 rounded-sm"
+              className="p-[6px_10px] bg-success text-white text-[0.9rem] font-medium text-center rounded-sm"
             >
               {isLoading ? "Đang thêm..." : "Thêm"}
             </Button>
             <Link
               to="/admin/categories"
-              className="p-[6px_10px] bg-red-500 text-white text-[0.9rem] text-center hover:bg-red-600 rounded-sm"
+              className="p-[6px_10px] bg-danger text-white text-[0.9rem] text-center rounded-sm"
             >
               Trở về
             </Link>

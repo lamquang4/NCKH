@@ -111,21 +111,21 @@ function AdminList() {
                         }
                       >
                         {admin.status === 1 ? (
-                          <TbLock size={22} className="text-[#74767d]" />
+                          <TbLock size={22} className="text-neutral" />
                         ) : (
-                          <TbLockOpen size={22} className="text-[#74767d]" />
+                          <TbLockOpen size={22} className="text-neutral" />
                         )}
                       </Button>
 
                       <Link to={`/admin/edit-admin/${admin.id}`}>
-                        <LiaEdit size={22} className="text-[#076ffe]" />
+                        <LiaEdit size={22} className="text-info" />
                       </Link>
 
                       <Button
                         disabled={isLoadingDelete}
                         onClick={() => handleDelete(admin.id || "")}
                       >
-                        <VscTrash size={22} className="text-[#d9534f]" />
+                        <VscTrash size={22} className="text-danger" />
                       </Button>
                     </div>
                   </td>

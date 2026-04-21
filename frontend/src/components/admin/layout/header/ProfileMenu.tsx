@@ -60,7 +60,7 @@ function ProfileMenu({ menuOpen, onToggleMenu }: Props) {
                   await handleLogout("ADMIN");
                 }}
               >
-                <div className="flex items-center gap-[8px] text-accent font-normal">
+                <div className="flex items-center gap-[8px] text-danger font-normal">
                   <RiLogoutBoxLine size={18} />
                   <p>Đăng xuất</p>
                 </div>

@@ -9,6 +9,9 @@ import Overplay from "../../ui/Overplay";
 import Loading from "../../../ui/Loading";
 import Button from "../../../ui/Button";
 import Input from "../../../ui/Input";
+import { validateOtp } from "../../../../utils/validateOtp";
+import OtpBox from "./OtpBox";
+import { OTP_LENGTH } from "../../../../constants/otp";
 
 type Props = {
   onClose: () => void;
@@ -21,8 +24,8 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
     email: "",
     password: "",
     phone: "",
-    otp: "",
   });
+  const [otp, setOtp] = useState("");
   const [step, setStep] = useState<number>(1);
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
@@ -60,6 +63,11 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
         toast.error(err?.response?.data?.message);
       }
     } else {
+      if (!validateOtp(otp, OTP_LENGTH)) {
+        toast.error("Mã OTP không hợp lệ");
+        return;
+      }
+
       if (!validatePhone(data.phone)) {
         toast.error("Số điện thoại không hợp lệ");
         return;
@@ -77,16 +85,20 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
           phone: data.phone.trim(),
           password: data.password.trim(),
         },
-        data.otp.trim(),
+        otp.trim(),
       );
+
+      onClose();
+      onSwitchLogin();
 
       setData({
         fullname: "",
         email: "",
         password: "",
         phone: "",
-        otp: "",
       });
+
+      setOtp("");
     }
   };
 
@@ -152,33 +164,11 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
                   </div>
                 ) : (
                   <>
-                    <div className="space-y-[5px]">
-                      <div className="flex justify-between items-center">
-                        <label className="block text-[0.9rem] font-medium">
-                          Nhập mã OTP
-                        </label>
-
-                        <Button
-                          type="button"
-                          onClick={handleSendOTP}
-                          disabled={isLoadingSendResetOTP}
-                          className="text-[0.9rem] text-gray-500 p-0"
-                        >
-                          Gửi lại mã
-                        </Button>
-                      </div>
-
-                      <Input
-                        type="text"
-                        name="otp"
-                        maxLength={6}
-                        value={data.otp}
-                        onChange={handleChange}
-                        placeholder="Nhập mã OTP"
-                        className="text-[0.9rem] block w-full px-3 py-2 border border-gray-200"
-                        required
-                      />
-                    </div>
+                    <OtpBox
+                      value={otp}
+                      onChange={setOtp}
+                      onResend={handleSendOTP}
+                    />
 
                     <div className="space-y-[5px]">
                       <label
@@ -259,8 +249,8 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
                             email: "",
                             password: "",
                             phone: "",
-                            otp: "",
                           });
+                          setOtp("");
                         }}
                         className="text-[0.9rem] text-blue-400 font-medium"
                       >

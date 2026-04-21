@@ -14,7 +14,7 @@ public enum ErrorCode {
     OTP_EXPIRED("OTP đã hết hạn", HttpStatus.BAD_REQUEST),
     OTP_INCORRECT("OTP không đúng", HttpStatus.BAD_REQUEST),
     OTP_TOO_MANY_ATTEMPTS("Bạn đã nhập sai OTP quá 5 lần. Vui lòng gửi lại mã mới", HttpStatus.BAD_REQUEST),
-    WAIT_BEFORE_RESEND_OTP("Vui lòng đợi 5 phút trước khi gửi lại OTP", HttpStatus.BAD_REQUEST),
+    OTP_STILL_VALID("OTP vẫn còn hiệu lực. Vui lòng đợi đến khi hết hạn để gửi lại", HttpStatus.BAD_REQUEST),
 
     EMAIL_ALREADY_USED("Email đã được sử dụng", HttpStatus.CONFLICT),
     LOGIN_FAILED("Email hoặc mật khẩu không đúng", HttpStatus.BAD_REQUEST),

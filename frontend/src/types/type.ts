@@ -236,3 +236,11 @@ export interface MessageResponse {
   extraData?: Record<string, any>;
   createdAt: string;
 }
+
+// token
+export interface TokenPayload {
+  sub: string;
+  role: "ADMIN" | "CUSTOMER";
+  exp: number;
+  iat: number;
+}

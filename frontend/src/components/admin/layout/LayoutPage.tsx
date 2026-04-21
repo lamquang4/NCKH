@@ -27,7 +27,7 @@ function LayoutPage({ children }: LayoutProps) {
     };
   }, []);
   return (
-    <div className="flex min-h-screen w-full relative bg-[#F1F4F9]">
+    <div className="flex min-h-screen w-full relative bg-bg-primary">
       <MenuSide menuOpen={menuOpen} onToggleMenu={toggleMenu} />
       <main className="w-full">
         <Header onToggleMenu={toggleMenu} />

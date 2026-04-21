@@ -3,8 +3,15 @@
 
 @theme {
   --color-primary: #2b7fff;
-  --color-secondary: white;
   --color-accent: #ff4c58;
+
+  --color-success: #74c69d;
+  --color-info: #076ffe;
+  --color-danger: #d9534f;
+  --color-neutral: #74767d;
+
+  --color-text-primary: #444;
+  --color-bg-primary: #f1f4f9;
 }
 
 * {
@@ -13,7 +20,7 @@
 }
 
 body {
-  color: #444;
+  color: var(--color-text-primary);
 }
 
 .custom-scroll::-webkit-scrollbar {
@@ -36,11 +43,11 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .swiper-pagination-bullet {
-  background-color: #333 !important;
+  background-color: var(--color-text-primary) !important;
   opacity: 1 !important;
 }
 .swiper-pagination-bullet-active {
-  background-color: #ff4c58 !important;
+  background-color: var(--color-text-accent) !important;
 }
 
 .apexcharts-toolbar {
