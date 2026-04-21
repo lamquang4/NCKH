@@ -11,12 +11,12 @@ interface JwtPayload {
 interface PublicRouteProps {
   children: React.ReactNode;
   redirectPath: string;
-  type: "ADMIN" | "CUSTOMER";
+  role: "ADMIN" | "CUSTOMER";
 }
 
-const PublicRoute = ({ children, redirectPath, type }: PublicRouteProps) => {
+const PublicRoute = ({ children, redirectPath, role }: PublicRouteProps) => {
   const token =
-    type === "ADMIN"
+    role === "ADMIN"
       ? Cookies.get("token-admin")
       : Cookies.get("token-customer");
 
@@ -32,9 +32,9 @@ const PublicRoute = ({ children, redirectPath, type }: PublicRouteProps) => {
     }
 
     // Nếu đã login redirect theo role
-    if (type === "ADMIN" && role === "ADMIN") {
+    if (role === "ADMIN" && role === "ADMIN") {
       return <Navigate to={redirectPath} replace />;
-    } else if (type === "CUSTOMER" && role === "CUSTOMER") {
+    } else if (role === "CUSTOMER" && role === "CUSTOMER") {
       return <Navigate to="/" replace />;
     }
   } catch {

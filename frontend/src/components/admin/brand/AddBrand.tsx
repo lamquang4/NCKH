@@ -5,6 +5,7 @@ import Input from "../../ui/Input";
 import Select from "../../ui/Select";
 import Button from "../../ui/Button";
 import Label from "../../ui/Label";
+import toast from "react-hot-toast";
 
 function AddBrand() {
   const [data, setData] = useState({
@@ -26,6 +27,16 @@ function AddBrand() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!data.name.trim()) {
+      toast.error("Tên thương hiệu không được để trống");
+      return;
+    }
+
+    if (data.status === "") {
+      toast.error("Vui lòng chọn tình trạng");
+      return;
+    }
 
     await addBrand({
       name: data.name.trim(),

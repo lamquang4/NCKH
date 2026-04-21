@@ -96,6 +96,26 @@ function CheckoutForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!data.fullname.trim()) {
+      toast.error("Vui lòng nhập họ tên");
+      return;
+    }
+
+    if (!data.speaddress) {
+      toast.error("Vui lòng nhập địa chỉ cụ thể");
+      return;
+    }
+
+    if (!data.city) {
+      toast.error("Vui lòng chọn tỉnh / thành phố");
+      return;
+    }
+
+    if (!data.ward) {
+      toast.error("Vui lòng chọn phường / xã");
+      return;
+    }
+
     if (!paymethod) {
       toast.error("Vui lòng chọn phương thức thanh toán");
       return;

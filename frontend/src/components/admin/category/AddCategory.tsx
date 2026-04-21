@@ -38,10 +38,21 @@ function AddCategory() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     const orderedFiles = getOrderedFiles();
 
     if (!orderedFiles[0]) {
       toast.error("Vui lòng thêm hình danh mục");
+      return;
+    }
+
+    if (!data.name.trim()) {
+      toast.error("Tên danh mục không được để trống");
+      return;
+    }
+
+    if (data.status === "") {
+      toast.error("Vui lòng chọn tình trạng");
       return;
     }
 

@@ -58,6 +58,17 @@ function EditAdmin() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!data.fullname.trim()) {
+      toast.error("Họ tên không được để trống");
+      return;
+    }
+
+    if (data.status === "") {
+      toast.error("Vui lòng chọn tình trạng");
+      return;
+    }
+
     if (!validateEmail(data.email)) {
       toast.error("Email không hợp lệ");
       return;
@@ -78,19 +89,14 @@ function EditAdmin() {
       return;
     }
 
-    const payload: any = {
+    await updateAdmin({
       fullname: data.fullname.trim(),
       phone: data.phone.trim(),
       email: data.email.trim(),
       role: "ADMIN",
       status: Number(data.status),
-    };
-
-    if (data.password.trim()) {
-      payload.password = data.password.trim();
-    }
-
-    await updateAdmin(payload);
+      ...(data.password.trim() && { password: data.password.trim() }),
+    });
 
     setData((prev) => ({
       ...prev,

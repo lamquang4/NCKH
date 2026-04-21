@@ -6,6 +6,7 @@ import useAddAdmin from "../../../hooks/admin/user/useAddAdmin";
 import Input from "../../ui/Input";
 import Button from "../../ui/Button";
 import Label from "../../ui/Label";
+import { validatePhone } from "../../../utils/validatePhone";
 
 function AddAdmin() {
   const [data, setData] = useState({
@@ -29,12 +30,28 @@ function AddAdmin() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!data.fullname.trim()) {
+      toast.error("Họ tên không được để trống");
+      return;
+    }
+
     if (!validateEmail(data.email)) {
       toast.error("Email không hợp lệ");
       return;
     }
 
-    if (data.password.trim().length < 6) {
+    if (!validatePhone(data.phone)) {
+      toast.error("Số điện thoại không hợp lệ");
+      return;
+    }
+
+    if (!data.password.trim()) {
+      toast.error("Mật khẩu không được để trống");
+      return;
+    }
+
+    if (data.password.length < 6) {
       toast.error("Mật khẩu phải có ít nhất 6 ký tự");
       return;
     }

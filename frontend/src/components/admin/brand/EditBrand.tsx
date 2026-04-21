@@ -50,6 +50,16 @@ function EditBrand() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!data.name.trim()) {
+      toast.error("Tên thương hiệu không được để trống");
+      return;
+    }
+
+    if (data.status === "") {
+      toast.error("Vui lòng chọn tình trạng");
+      return;
+    }
+
     await updateBrand({
       name: data.name.trim(),
       status: Number(data.status),

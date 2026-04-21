@@ -72,6 +72,15 @@ function EditCategory() {
     e.preventDefault();
     const orderedFiles = getOrderedFiles();
 
+    if (!data.name.trim()) {
+      toast.error("Tên danh mục không được để trống");
+      return;
+    }
+
+    if (data.status === "") {
+      toast.error("Vui lòng chọn tình trạng");
+      return;
+    }
     await updateCategory(
       {
         name: data.name.trim(),

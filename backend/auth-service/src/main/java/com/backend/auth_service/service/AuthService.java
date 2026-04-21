@@ -21,6 +21,9 @@ import feign.FeignException;
 
 @Service
 public class AuthService {
+    private static final int OTP_EXPIRE_MINUTES = 5;
+    private static final int MAX_ATTEMPTS = 5;
+
     private final AuthRepository authRepository;
     private final UserServiceClient userServiceClient;
     private final EmailService emailService;
@@ -48,26 +51,28 @@ public class AuthService {
             throw new AppException(ErrorCode.EMAIL_ALREADY_USED);
         }
 
-        String otp = OtpUtil.generateOtp();
-
-        String hashedOtp = passwordEncoder.encode(otp);
-
         authRepository.findByEmail(email).ifPresent(existing -> {
-            if (existing.getExpiredAt().isAfter(LocalDateTime.now().minusMinutes(5))) {
-                throw new AppException(ErrorCode.WAIT_BEFORE_RESEND_OTP);
+
+            if (existing.getExpiredAt().isAfter(LocalDateTime.now())) {
+                throw new AppException(ErrorCode.OTP_STILL_VALID);
             }
+
+            // hết hạn thì xoá OTP cũ
             authRepository.delete(existing);
         });
+
+        String otp = OtpUtil.generateOtp();
+        String hashedOtp = passwordEncoder.encode(otp);
 
         Otp otpEntity = Otp.builder()
                 .email(email)
                 .otp(hashedOtp)
-                .expiredAt(LocalDateTime.now().plusMinutes(10))
+                .expiredAt(LocalDateTime.now().plusMinutes(OTP_EXPIRE_MINUTES))
+                .failedAttempts(0)
                 .build();
 
         authRepository.save(otpEntity);
 
-        // Gửi otp đến email
         emailService.sendOtp(email, otp);
     }
 
@@ -94,14 +99,16 @@ public class AuthService {
 
         if (!passwordEncoder.matches(otpRequest.getOtp(), otp.getOtp())) {
 
-            otp.setFailedAttempts(otp.getFailedAttempts() + 1);
+            int attempts = otp.getFailedAttempts() + 1;
 
-            if (otp.getFailedAttempts() >= 5) {
+            if (attempts >= MAX_ATTEMPTS) {
                 authRepository.delete(otp);
                 throw new AppException(ErrorCode.OTP_TOO_MANY_ATTEMPTS);
             }
 
+            otp.setFailedAttempts(attempts);
             authRepository.save(otp);
+
             throw new AppException(ErrorCode.OTP_INCORRECT);
         }
 

@@ -42,7 +42,7 @@ function LayoutRoute() {
         path="/account/profile"
         element={
           <PrivateRoute
-            type="CUSTOMER"
+            role="CUSTOMER"
             allowedRoles={["CUSTOMER"]}
             redirectPath="/"
           >
@@ -54,7 +54,7 @@ function LayoutRoute() {
         path="/order/history"
         element={
           <PrivateRoute
-            type="CUSTOMER"
+            role="CUSTOMER"
             allowedRoles={["CUSTOMER"]}
             redirectPath="/"
           >
@@ -66,7 +66,7 @@ function LayoutRoute() {
         path="/order/history/:code"
         element={
           <PrivateRoute
-            type="CUSTOMER"
+            role="CUSTOMER"
             allowedRoles={["CUSTOMER"]}
             redirectPath="/"
           >
@@ -78,7 +78,7 @@ function LayoutRoute() {
         path="/checkout"
         element={
           <PrivateRoute
-            type="CUSTOMER"
+            role="CUSTOMER"
             allowedRoles={["CUSTOMER"]}
             redirectPath="/"
           >
@@ -92,7 +92,7 @@ function LayoutRoute() {
       <Route
         path="/admin/login"
         element={
-          <PublicRoute type="ADMIN" redirectPath="/admin/account/profile">
+          <PublicRoute role="ADMIN" redirectPath="/admin/account/profile">
             <LoginPage />
           </PublicRoute>
         }
@@ -102,7 +102,7 @@ function LayoutRoute() {
         path="/admin/account/profile"
         element={
           <PrivateRoute
-            type="ADMIN"
+            role="ADMIN"
             allowedRoles={["ADMIN"]}
             redirectPath="/admin/login"
           >
@@ -114,7 +114,7 @@ function LayoutRoute() {
         path="/admin/payments"
         element={
           <PrivateRoute
-            type="ADMIN"
+            role="ADMIN"
             allowedRoles={["ADMIN"]}
             redirectPath="/admin/login"
           >
@@ -127,7 +127,7 @@ function LayoutRoute() {
         path="/admin/admins"
         element={
           <PrivateRoute
-            type="ADMIN"
+            role="ADMIN"
             allowedRoles={["ADMIN"]}
             redirectPath="/admin/login"
           >
@@ -139,7 +139,7 @@ function LayoutRoute() {
         path="/admin/add-admin"
         element={
           <PrivateRoute
-            type="ADMIN"
+            role="ADMIN"
             allowedRoles={["ADMIN"]}
             redirectPath="/admin/login"
           >
@@ -151,7 +151,7 @@ function LayoutRoute() {
         path="/admin/edit-admin/:id"
         element={
           <PrivateRoute
-            type="ADMIN"
+            role="ADMIN"
             allowedRoles={["ADMIN"]}
             redirectPath="/admin/login"
           >
@@ -164,7 +164,7 @@ function LayoutRoute() {
         path="/admin/customers"
         element={
           <PrivateRoute
-            type="ADMIN"
+            role="ADMIN"
             allowedRoles={["ADMIN"]}
             redirectPath="/admin/login"
           >
@@ -177,7 +177,7 @@ function LayoutRoute() {
         path="/admin/products"
         element={
           <PrivateRoute
-            type="ADMIN"
+            role="ADMIN"
             allowedRoles={["ADMIN"]}
             redirectPath="/admin/login"
           >
@@ -189,7 +189,7 @@ function LayoutRoute() {
         path="/admin/add-product"
         element={
           <PrivateRoute
-            type="ADMIN"
+            role="ADMIN"
             allowedRoles={["ADMIN"]}
             redirectPath="/admin/login"
           >
@@ -201,7 +201,7 @@ function LayoutRoute() {
         path="/admin/edit-product/:id"
         element={
           <PrivateRoute
-            type="ADMIN"
+            role="ADMIN"
             allowedRoles={["ADMIN"]}
             redirectPath="/admin/login"
           >
@@ -214,7 +214,7 @@ function LayoutRoute() {
         path="/admin/brands"
         element={
           <PrivateRoute
-            type="ADMIN"
+            role="ADMIN"
             allowedRoles={["ADMIN"]}
             redirectPath="/admin/login"
           >
@@ -226,7 +226,7 @@ function LayoutRoute() {
         path="/admin/add-brand"
         element={
           <PrivateRoute
-            type="ADMIN"
+            role="ADMIN"
             allowedRoles={["ADMIN"]}
             redirectPath="/admin/login"
           >
@@ -238,7 +238,7 @@ function LayoutRoute() {
         path="/admin/edit-brand/:id"
         element={
           <PrivateRoute
-            type="ADMIN"
+            role="ADMIN"
             allowedRoles={["ADMIN"]}
             redirectPath="/admin/login"
           >
@@ -251,7 +251,7 @@ function LayoutRoute() {
         path="/admin/categories"
         element={
           <PrivateRoute
-            type="ADMIN"
+            role="ADMIN"
             allowedRoles={["ADMIN"]}
             redirectPath="/admin/login"
           >
@@ -263,7 +263,7 @@ function LayoutRoute() {
         path="/admin/add-category"
         element={
           <PrivateRoute
-            type="ADMIN"
+            role="ADMIN"
             allowedRoles={["ADMIN"]}
             redirectPath="/admin/login"
           >
@@ -275,7 +275,7 @@ function LayoutRoute() {
         path="/admin/edit-category/:id"
         element={
           <PrivateRoute
-            type="ADMIN"
+            role="ADMIN"
             allowedRoles={["ADMIN"]}
             redirectPath="/admin/login"
           >
@@ -288,7 +288,7 @@ function LayoutRoute() {
         path="/admin/orders"
         element={
           <PrivateRoute
-            type="ADMIN"
+            role="ADMIN"
             allowedRoles={["ADMIN"]}
             redirectPath="/admin/login"
           >
@@ -300,7 +300,7 @@ function LayoutRoute() {
         path="/admin/order/:id"
         element={
           <PrivateRoute
-            type="ADMIN"
+            role="ADMIN"
             allowedRoles={["ADMIN"]}
             redirectPath="/admin/login"
           >

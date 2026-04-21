@@ -72,10 +72,13 @@ function AddProduct() {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
-    setData({
-      ...data,
-      [name]: value,
-    });
+    setData((prev) => ({
+      ...prev,
+      [name]:
+        name === "price" || name === "discount" || name === "stock"
+          ? Number(value)
+          : value,
+    }));
   };
 
   const handleDescriptionChange = useCallback((val: string) => {
@@ -84,6 +87,31 @@ function AddProduct() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!data.name.trim()) {
+      toast.error("Tên sản phẩm không được để trống");
+      return;
+    }
+
+    if (!data.category) {
+      toast.error("Vui lòng chọn danh mục");
+      return;
+    }
+
+    if (!data.brand) {
+      toast.error("Vui lòng chọn thương hiệu");
+      return;
+    }
+
+    if (data.status === "") {
+      toast.error("Vui lòng chọn tình trạng");
+      return;
+    }
+
+    if (!data.description.trim()) {
+      toast.error("Mô tả không được để trống");
+      return;
+    }
 
     if (Number(data.price) < Number(data.discount)) {
       toast.error("Số tiền giảm không được lớn hơn giá bán");
@@ -127,10 +155,26 @@ function AddProduct() {
       return;
     }
 
+    // Image
     const orderedFiles = getOrderedFiles();
 
     if (!orderedFiles.length) {
       toast.error("Vui lòng thêm ít nhất một hình sản phẩm");
+      return;
+    }
+
+    if (!specifications.length) {
+      toast.error("Vui lòng thêm ít nhất một thông tin chi tiết");
+      return;
+    }
+
+    // Specification
+    const isValidSpecs = specifications.every(
+      (s) => s.specKey.trim() && s.specValue.trim(),
+    );
+
+    if (!isValidSpecs) {
+      toast.error("Thông tin chi tiết không được để trống");
       return;
     }
 
@@ -291,7 +335,10 @@ function AddProduct() {
                 <div className="flex flex-col gap-1 w-full">
                   <label htmlFor="" className="text-[0.9rem] font-medium">
                     Số tiền giảm (Giảm giá{" "}
-                    {Math.floor((data.discount / data.price) * 100)}%)
+                    {data.price > 0
+                      ? Math.floor((data.discount / data.price) * 100)
+                      : 0}
+                    %)
                   </label>
                   <Input
                     type="number"

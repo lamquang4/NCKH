@@ -3,20 +3,16 @@ package com.backend.auth_service.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.backend.auth_service.client.UserServiceClient;
 import com.backend.auth_service.dto.request.LoginRequest;
 import com.backend.auth_service.dto.request.RegisterRequest;
 import com.backend.auth_service.dto.response.ApiResponse;
 import com.backend.auth_service.dto.response.LoginResponse;
 import com.backend.auth_service.service.AuthService;
-
 import jakarta.validation.Valid;
 
 @Validated
@@ -24,11 +20,10 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/auth")
 public class AuthController {
         private final AuthService authService;
-        private final UserServiceClient userServiceClient;
 
-        public AuthController(AuthService authService, UserServiceClient userServiceClient) {
+        public AuthController(AuthService authService) {
                 this.authService = authService;
-                this.userServiceClient = userServiceClient;
+
         }
 
         @PostMapping("/otp")

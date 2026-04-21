@@ -45,6 +45,11 @@ function AccountForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!data.fullname.trim()) {
+      toast.error("Vui lòng nhập họ tên");
+      return;
+    }
+
     if (!validatePhone(data.phone)) {
       toast.error("Số điện thoại không hợp lệ");
       return;
