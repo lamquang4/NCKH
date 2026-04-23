@@ -292,7 +292,7 @@ function EditProduct() {
     <>
       <div className="py-[30px] sm:px-[25px] px-[15px] h-auto">
         <form className="flex flex-col gap-7 w-full" onSubmit={handleSubmit}>
-          <h2 className="text-[#74767d]">Chỉnh sửa sản phẩm</h2>
+          <h2 className="text-neutral">Chỉnh sửa sản phẩm</h2>
 
           <div className="flex gap-[25px] w-full flex-col">
             <div className="md:p-[25px] p-[15px] bg-white rounded-md w-full space-y-[20px]">
@@ -393,7 +393,7 @@ function EditProduct() {
             </div>
 
             <div className="sm:p-[25px] p-[15px] bg-white rounded-md flex flex-col gap-[20px] w-full">
-              <h5 className="font-bold text-[#74767d]">Thông tin chung</h5>
+              <h5 className="font-bold text-neutral">Thông tin chung</h5>
 
               <div className="flex flex-col gap-1 w-full">
                 <Label htmlFor="" className="text-[0.9rem] font-medium">
@@ -476,7 +476,7 @@ function EditProduct() {
             </div>
 
             <div className="sm:p-[25px] p-[15px] bg-white rounded-md flex flex-col gap-[20px] w-full">
-              <h5 className="font-bold text-[#74767d]">Giá cả</h5>
+              <h5 className="font-bold text-neutral">Giá cả</h5>
 
               <div className="flex flex-wrap md:flex-nowrap gap-[15px]">
                 <div className="flex flex-col gap-1 w-full">
@@ -528,7 +528,7 @@ function EditProduct() {
             </div>
 
             <div className="sm:p-[25px] p-[15px] bg-white rounded-md flex flex-col gap-[20px] w-full">
-              <h5 className="font-bold text-[#74767d]">Thông tin chi tiết</h5>
+              <h5 className="font-bold text-neutral">Thông tin chi tiết</h5>
 
               <SpecificationEditor
                 specifications={specifications}
