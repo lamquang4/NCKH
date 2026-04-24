@@ -96,7 +96,7 @@ function EditCategory() {
     <>
       <div className="py-[30px] sm:px-[25px] px-[15px] h-auto">
         <form className="flex flex-col gap-7 w-full" onSubmit={handleSubmit}>
-          <h2 className="text-[#74767d]">Chỉnh sửa danh mục</h2>
+          <h2 className="text-neutral">Chỉnh sửa danh mục</h2>
 
           <div className="flex gap-[25px] w-full flex-col">
             <div className="md:p-[25px] p-[15px] bg-white rounded-md w-full">
@@ -133,7 +133,7 @@ function EditCategory() {
             </div>
 
             <div className="md:p-[25px] p-[15px] bg-white rounded-md flex flex-col gap-[15px] w-full">
-              <p className="font-bold text-[1rem] text-[#74767d]">
+              <p className="font-bold text-[1rem] text-neutral">
                 Thông tin chung
               </p>
 

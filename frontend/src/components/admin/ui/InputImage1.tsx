@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { RiImageEditFill } from "react-icons/ri";
 import Input from "../../ui/Input";
+import Label from "../../ui/Label";
 type Props = {
   InputId: string;
   onFileSelect: (file: File, imageIndex: number) => void;
@@ -17,9 +18,9 @@ function InputImage1({ InputId, onFileSelect, sizeIcon, imageIndex }: Props) {
 
   return (
     <div className="flex justify-center items-center bg-white rounded-full p-1.5 border border-gray-300">
-      <label htmlFor={InputId} className="cursor-pointer">
+      <Label htmlFor={InputId} className="cursor-pointer">
         <RiImageEditFill size={sizeIcon} />
-      </label>
+      </Label>
       <Input
         type="file"
         id={InputId}
