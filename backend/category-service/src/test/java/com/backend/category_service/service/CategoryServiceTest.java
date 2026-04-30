@@ -124,7 +124,7 @@ class CategoryServiceTest {
                 .isInstanceOf(AppException.class)
                 .hasMessage(ErrorCode.CATEGORY_NOT_FOUND.getMessage());
     }
-    
+
 
     @Test
     void createCategory_ShouldThrowException_WhenNameAlreadyExists() {
