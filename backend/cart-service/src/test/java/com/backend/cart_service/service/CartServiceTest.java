@@ -73,7 +73,7 @@ class CartServiceTest {
                 .isInstanceOf(AppException.class)
                 .hasMessage(ErrorCode.INVALID_QUANTITY.getMessage());
     }
-    
+
 
     // Helper Method
     private Cart createSampleCart() {
