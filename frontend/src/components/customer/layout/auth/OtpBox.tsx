@@ -11,8 +11,20 @@ type Props = {
 };
 
 function OtpBox({ value, onChange, onResend }: Props) {
+  const [isTimerActive, setIsTimerActive] = useState<boolean>(true);
+  const [endTime, setEndTime] = useState<number>(
+    Date.now() + OTP_EXPIRE_SECONDS * 1000,
+  );
   const [timeLeft, setTimeLeft] = useState(OTP_EXPIRE_SECONDS);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  const reset = () => {
+    onChange("");
+    const newEndTime = Date.now() + OTP_EXPIRE_SECONDS * 1000;
+    setEndTime(newEndTime);
+    setTimeLeft(OTP_EXPIRE_SECONDS);
+    setIsTimerActive(true);
+  };
 
   const digits = value
     .split("")
@@ -20,12 +32,23 @@ function OtpBox({ value, onChange, onResend }: Props) {
     .slice(0, OTP_LENGTH);
 
   useEffect(() => {
-    if (timeLeft <= 0) return;
+    if (!isTimerActive) return;
+
     const timer = setInterval(() => {
-      setTimeLeft((t) => t - 1);
+      const remaining = Math.round((endTime - Date.now()) / 1000);
+
+      if (remaining <= 0) {
+        clearInterval(timer);
+        setTimeLeft(0);
+        setIsTimerActive(false);
+        return;
+      }
+
+      setTimeLeft(remaining);
     }, 1000);
+
     return () => clearInterval(timer);
-  }, [timeLeft]);
+  }, [isTimerActive, endTime]);
 
   const handleChange = (index: number, val: string) => {
     if (!/^\d*$/.test(val)) return;
@@ -60,9 +83,10 @@ function OtpBox({ value, onChange, onResend }: Props) {
 
   const handleResend = async () => {
     if (timeLeft > 0) return;
-    await onResend();
-    onChange("");
-    setTimeLeft(OTP_EXPIRE_SECONDS);
+    try {
+      await onResend();
+      reset();
+    } catch {}
   };
 
   return (
@@ -79,7 +103,7 @@ function OtpBox({ value, onChange, onResend }: Props) {
             onKeyDown={(e) => handleKeyDown(index, e)}
             onPaste={handlePaste}
             maxLength={1}
-            className={`w-[50px] h-[50px] text-center text-[0.95rem] font-semibold border rounded-md outline-none transition-colors
+            className={`w-[40px] h-[40px] text-center text-[1rem] font-semibold border rounded-md outline-none transition-colors
                           ${digit ? "border-primary text-primary" : "border-gray-300"}
                           focus:border-primary`}
           />
