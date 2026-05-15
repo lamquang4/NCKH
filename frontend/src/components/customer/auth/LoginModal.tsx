@@ -1,11 +1,11 @@
 import { HiOutlineEyeOff, HiOutlineEye } from "react-icons/hi";
 import { memo, useState } from "react";
-import useLogin from "../../../../hooks/auth/useLogin";
-import Overplay from "../../ui/Overplay";
-import Loading from "../../../ui/Loading";
-import Button from "../../../ui/Button";
-import Input from "../../../ui/Input";
-import Label from "../../../ui/Label";
+import useLogin from "../../../hooks/auth/useLogin";
+import Overplay from "../ui/Overplay";
+import Loading from "../../ui/Loading";
+import Button from "../../ui/Button";
+import Input from "../../ui/Input";
+import Label from "../../ui/Label";
 
 type Props = {
   onClose: () => void;

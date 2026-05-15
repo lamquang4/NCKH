@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import Button from "../../../ui/Button";
-import Input from "../../../ui/Input";
-import { OTP_LENGTH, OTP_EXPIRE_SECONDS } from "../../../../constants/otp";
-import { validateOtp } from "../../../../utils/validateOtp";
+import { OTP_EXPIRE_SECONDS, OTP_LENGTH } from "../../../constants/otp";
+import { validateOtp } from "../../../utils/validateOtp";
+import Input from "../../ui/Input";
+import Button from "../../ui/Button";
 
 type Props = {
   value: string;
@@ -86,7 +86,9 @@ function OtpBox({ value, onChange, onResend }: Props) {
     try {
       await onResend();
       reset();
-    } catch (_error) {}
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
