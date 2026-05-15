@@ -12,6 +12,7 @@ import com.backend.assistant_service.client.UserServiceClient;
 import com.backend.assistant_service.dto.request.MessageRequest;
 import com.backend.assistant_service.dto.response.AssistantResponse;
 import com.backend.assistant_service.dto.response.MessageResponse;
+import com.backend.assistant_service.dto.response.ProductListItemResponse;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -42,9 +43,13 @@ public class AssistantService {
                 // Lấy history messages của người dùng
                 List<MessageResponse> messages = chatServiceClient.getChatMessagesInternal(userId, 1, 10);
 
+                // Reverse về cũ → mới
+                List<MessageResponse> sortedMessages = new java.util.ArrayList<>(messages);
+                java.util.Collections.reverse(sortedMessages);
+
                 String fullname = userServiceClient.getFullnameByIdInternal(userId).getFullname();
 
-                AssistantResponse aiResponse = callAI(fullname, token, messages, request.getContent());
+                AssistantResponse aiResponse = callAI(fullname, token, sortedMessages, request.getContent());
 
                 if (aiResponse == null || aiResponse.getContent() == null) {
                         aiResponse = AssistantResponse.builder()
@@ -64,10 +69,19 @@ public class AssistantService {
         private AssistantResponse callAI(String fullname, String token,
                         List<MessageResponse> messages,
                         String currentMessage) {
-                List<Map<String, String>> history = messages.stream()
-                                .map(m -> Map.of(
-                                                "role", mapRole(m.getRole()),
-                                                "content", m.getContent()))
+                List<Map<String, Object>> history = messages.stream()
+                                .map(m -> {
+                                        Map<String, Object> msg = new java.util.HashMap<>();
+                                        msg.put("role", mapRole(m.getRole()));
+                                        msg.put("content", m.getContent());
+                                        if (m.getProducts() != null && !m.getProducts().isEmpty()) {
+                                                List<String> productIds = m.getProducts().stream()
+                                                                .map(ProductListItemResponse::getId)
+                                                                .toList();
+                                                msg.put("productIds", productIds);
+                                        }
+                                        return msg;
+                                })
                                 .toList();
 
                 Map<String, Object> body = Map.of(

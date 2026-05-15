@@ -10,12 +10,12 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import SearchMobile from "./SearchMobile";
 import Overplay from "../../ui/Overplay";
 import MenuMobile from "./MenuMobile";
-import AuthModal from "../auth/AuthModal";
 import useGetCart from "../../../../hooks/customer/cart/useGetCart";
 import { TbCategoryPlus } from "react-icons/tb";
 import MenuDropDown from "./CategoryDropDown";
 import useGetActiveCategories from "../../../../hooks/customer/category/useGetActiveCategories";
 import Button from "../../../ui/Button";
+import AuthModal from "../../auth/AuthModal";
 
 function Header() {
   const [searchOpen, setSearchOpen] = useState<boolean>(false);

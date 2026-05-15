@@ -22,12 +22,12 @@ docker compose up --build
 
 ## Công nghệ sử dụng
 
-| Hạng mục         | Công nghệ / Công cụ              |
-| ---------------- | -------------------------------- |
-| Frontend         | Vite, TypeScript, ReactJS, Redux |
-| Backend          | Spring Boot, Maven               |
-| Containerization | Docker                           |
-| Database         | MySQL, MongoDB, Redis            |
-| Media Storage    | Cloudinary                       |
-| Metrics          | Prometheus, Zipkin               |
-| CI/CD            | GitHub Actions                   |
+| Hạng mục         | Công nghệ / Công cụ                                                       |
+| ---------------- | ------------------------------------------------------------------------- |
+| Frontend         | Vite + TypeScript + React 19 <br> TailwindCSS <br> Redux <br> Axios + SWR |
+| Backend          | Spring Boot + Maven + Java 17 <br> Spring Security + JWT + OAuth2         |
+| Containerization | Docker                                                                    |
+| Database         | MySQL, MongoDB, Redis                                                     |
+| Media Storage    | Cloudinary                                                                |
+| Monitoring       | Actuator + Prometheus + Zipkin                                            |
+| CI/CD            | GitHub Actions                                                            |

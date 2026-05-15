@@ -1,17 +1,17 @@
 import { memo, useState } from "react";
 import { HiOutlineEyeOff, HiOutlineEye } from "react-icons/hi";
-import useRegister from "../../../../hooks/auth/useRegister";
-import { useSendRegisterOTP } from "../../../../hooks/auth/useSendRegisterOtp";
+import useRegister from "../../../hooks/auth/useRegister";
+import { useSendRegisterOTP } from "../../../hooks/auth/useSendRegisterOtp";
 import toast from "react-hot-toast";
-import { validateEmail } from "../../../../utils/validateEmail";
-import { validatePhone } from "../../../../utils/validatePhone";
-import Overplay from "../../ui/Overplay";
-import Loading from "../../../ui/Loading";
-import Button from "../../../ui/Button";
-import Input from "../../../ui/Input";
-import { validateOtp } from "../../../../utils/validateOtp";
+import { validateEmail } from "../../../utils/validateEmail";
+import { validatePhone } from "../../../utils/validatePhone";
+import Overplay from "../ui/Overplay";
+import Loading from "../../ui/Loading";
+import Button from "../../ui/Button";
+import Input from "../../ui/Input";
+import { validateOtp } from "../../../utils/validateOtp";
 import OtpBox from "./OtpBox";
-import { OTP_LENGTH } from "../../../../constants/otp";
+import { OTP_LENGTH } from "../../../constants/otp";
 
 type Props = {
   onClose: () => void;

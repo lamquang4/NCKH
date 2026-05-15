@@ -23,7 +23,7 @@ function MessageProductList({ products }: Props) {
               <Image
                 source={p.images[0].image}
                 alt={p.name}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
                 loading="eager"
               />
             </Link>
