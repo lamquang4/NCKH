@@ -86,7 +86,7 @@ function OtpBox({ value, onChange, onResend }: Props) {
     try {
       await onResend();
       reset();
-    } catch {}
+    } catch (_error) {}
   };
 
   return (
