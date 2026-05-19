@@ -1,21 +1,32 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useInputImage } from "../../../hooks/admin/useInputImage";
 import InputImage from "../ui/InputImage";
-import useAddCategory from "../../../hooks/admin/category/useAddCategory";
+import Image from "../../ui/Image";
+import ImageViewer from "../../ui/ImageViewer";
+import useGetCategory from "../../../hooks/admin/category/useGetCategory";
+import useUpdateCategory from "../../../hooks/admin/category/useUpdateCategory";
 import Input from "../../ui/Input";
 import Select from "../../ui/Select";
 import Button from "../../ui/Button";
 import Label from "../../ui/Label";
 
-function AddCategory() {
+function EditCategoryForm() {
+  const navigate = useNavigate();
+  const { id } = useParams();
+
   const [data, setData] = useState({
     name: "",
     status: "",
   });
+  const [openViewer, setOpenViewer] = useState(false);
+  const [viewerImage, setViewerImage] = useState<string>("");
 
-  const { addCategory, isLoading } = useAddCategory();
+  const { category, isLoading } = useGetCategory(id as string);
+  const { updateCategory, isLoading: isLoadingUpdate } = useUpdateCategory(
+    id as string,
+  );
 
   const {
     previewImages,
@@ -25,6 +36,27 @@ function AddCategory() {
     handleReorder,
     clearImages,
   } = useInputImage(1);
+
+  const handleOpenViewer = (image: string) => {
+    setViewerImage(image);
+    setOpenViewer(true);
+  };
+
+  useEffect(() => {
+    if (isLoading) return;
+
+    if (!category) {
+      toast.error("Danh mục không tìm thấy");
+      navigate("/admin/categories");
+    }
+
+    if (category) {
+      setData({
+        name: category.name || "",
+        status: category.status?.toString() || "",
+      });
+    }
+  }, [isLoading, category, navigate]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -38,13 +70,7 @@ function AddCategory() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     const orderedFiles = getOrderedFiles();
-
-    if (!orderedFiles[0]) {
-      toast.error("Vui lòng thêm hình danh mục");
-      return;
-    }
 
     if (!data.name.trim()) {
       toast.error("Tên danh mục không được để trống");
@@ -55,8 +81,7 @@ function AddCategory() {
       toast.error("Vui lòng chọn tình trạng");
       return;
     }
-
-    await addCategory(
+    await updateCategory(
       {
         name: data.name.trim(),
         status: Number(data.status),
@@ -64,10 +89,6 @@ function AddCategory() {
       orderedFiles[0],
     );
 
-    setData({
-      name: "",
-      status: "",
-    });
     clearImages();
   };
 
@@ -75,7 +96,7 @@ function AddCategory() {
     <>
       <div className="py-[30px] sm:px-[25px] px-[15px] h-auto">
         <form className="flex flex-col gap-7 w-full" onSubmit={handleSubmit}>
-          <h2 className="text-neutral">Thêm danh mục</h2>
+          <h2 className="text-neutral">Chỉnh sửa danh mục</h2>
 
           <div className="flex gap-[25px] w-full flex-col">
             <div className="md:p-[25px] p-[15px] bg-white rounded-md w-full">
@@ -87,10 +108,34 @@ function AddCategory() {
                 onReorderImages={handleReorder}
                 blockIndex={0}
               />
+
+              <div className="flex gap-3 flex-wrap justify-center">
+                <div className=" relative">
+                  <div
+                    className="cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      if (category?.image) handleOpenViewer(category.image);
+                    }}
+                  >
+                    {category?.image && (
+                      <Image
+                        source={category.image}
+                        alt={category.name}
+                        className="w-full max-w-[140px]"
+                        loading="eager"
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div className="md:p-[25px] p-[15px] bg-white rounded-md flex flex-col gap-[15px] w-full">
-              <h5 className="font-bold text-neutral">Thông tin chung</h5>
+              <p className="font-bold text-[1rem] text-neutral">
+                Thông tin chung
+              </p>
 
               <div className="flex flex-col gap-1">
                 <Label htmlFor="" className="text-[0.9rem] font-medium">
@@ -127,11 +172,11 @@ function AddCategory() {
 
           <div className="flex justify-center gap-6">
             <Button
-              disabled={isLoading}
+              disabled={isLoadingUpdate}
               type="submit"
               className="p-[6px_10px] bg-success text-white text-[0.9rem] font-medium text-center rounded-sm"
             >
-              {isLoading ? "Đang thêm..." : "Thêm"}
+              {isLoadingUpdate ? "Đang cập nhật..." : "Cập nhật"}
             </Button>
             <Link
               to="/admin/categories"
@@ -142,8 +187,16 @@ function AddCategory() {
           </div>
         </form>
       </div>
+
+      {openViewer && (
+        <ImageViewer
+          image={viewerImage}
+          open={openViewer}
+          onClose={() => setOpenViewer(false)}
+        />
+      )}
     </>
   );
 }
 
-export default AddCategory;
+export default EditCategoryForm;

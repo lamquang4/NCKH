@@ -8,7 +8,7 @@ import Button from "../../ui/Button";
 import Label from "../../ui/Label";
 import { validatePhone } from "../../../utils/validatePhone";
 
-function AddAdmin() {
+function AddAdminForm() {
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -160,4 +160,4 @@ function AddAdmin() {
   );
 }
 
-export default AddAdmin;
+export default AddAdminForm;

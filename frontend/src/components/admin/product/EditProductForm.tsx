@@ -1,22 +1,40 @@
+import { useCallback, useEffect, useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import { FreeMode } from "swiper/modules";
+import { lazy, Suspense } from "react";
 import InputImage from "../ui/InputImage";
-import { useCallback, useState, lazy, Suspense } from "react";
+import Image from "../../ui/Image";
+import { HiMiniXMark } from "react-icons/hi2";
+import { SiTicktick } from "react-icons/si";
 import toast from "react-hot-toast";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { VscTrash } from "react-icons/vsc";
+import InputImage1 from "../ui/InputImage1";
 import { useInputImage } from "../../../hooks/admin/useInputImage";
+import { useInputImage1 } from "../../../hooks/admin/useInputImage1";
 import { useSpecification } from "../../../hooks/admin/useSpecification";
 import SpecificationEditor from "./SpecificationEditor";
-import useAddProduct from "../../../hooks/admin/product/useAddProduct";
 import useGetAllCategories from "../../../hooks/admin/category/useGetAllCategories";
 import useGetAllBrands from "../../../hooks/admin/brand/useGetAllBrands";
+import useGetProduct from "../../../hooks/admin/product/useGetProduct";
+import useUpdateProduct from "../../../hooks/admin/product/useUpdateProduct";
+import useDeleteImageProduct from "../../../hooks/admin/product/useDeleteImageProduct";
+import useUpdateImageProduct from "../../../hooks/admin/product/useUpdateProductImage";
 import SearchableSelect from "../ui/SearchableSelect";
+import Button from "../../ui/Button";
 import Input from "../../ui/Input";
 import Select from "../../ui/Select";
-import Button from "../../ui/Button";
 import Label from "../../ui/Label";
 
 const TextBoxEditor = lazy(() => import("../textboxeditor/TextBoxEditor"));
 
-function AddProduct() {
+const ImageViewer = lazy(() => import("../../ui/ImageViewer"));
+
+function EditProductForm() {
+  const navigate = useNavigate();
+  const { id } = useParams();
+
   const [data, setData] = useState({
     name: "",
     price: 1,
@@ -28,7 +46,19 @@ function AddProduct() {
     status: "",
   });
 
-  const { addProduct, isLoading } = useAddProduct();
+  const [openViewer, setOpenViewer] = useState<boolean>(false);
+  const [viewerImage, setViewerImage] = useState<string>("");
+
+  const max = 10;
+
+  const { product, isLoading } = useGetProduct(id as string);
+  const { updateProduct, isLoading: isLoadingUpdate } = useUpdateProduct(
+    id as string,
+  );
+  const { deleteImageProduct, isLoading: isLoadingDeleteImage } =
+    useDeleteImageProduct(product?.id || "");
+  const { updateImageProduct, isLoading: isLoadingUpdateImage } =
+    useUpdateImageProduct(product?.id || "");
   const { categories } = useGetAllCategories();
   const { brands } = useGetAllBrands();
 
@@ -46,18 +76,13 @@ function AddProduct() {
       label: b.name,
     }));
 
-  const max = 10;
-
   const {
     specifications,
     setSpecifications,
     addSpecification,
     removeSpecification,
     updateSpecification,
-    clearSpecifications,
-  } = useSpecification({
-    autoCreateEmpty: true,
-  });
+  } = useSpecification();
 
   const {
     previewImages,
@@ -67,6 +92,47 @@ function AddProduct() {
     getOrderedFiles,
     clearImages,
   } = useInputImage(max);
+
+  const {
+    previewImages1,
+    selectedFiles1,
+    setPreviewImages1,
+    setSelectedFiles1,
+    onFileSelect,
+    handleClear,
+  } = useInputImage1();
+
+  const handleOpenViewer = (image: string) => {
+    setViewerImage(image);
+    setOpenViewer(true);
+  };
+
+  useEffect(() => {
+    if (product?.specifications?.length) {
+      setSpecifications(product?.specifications);
+    }
+  }, [product, setSpecifications]);
+
+  useEffect(() => {
+    if (isLoading) return;
+
+    if (!product) {
+      toast.error("Sản phẩm không tìm thấy");
+      navigate("/admin/products");
+      return;
+    }
+
+    setData({
+      name: product.name || "",
+      price: product.price || 1,
+      discount: product.discount || 0,
+      description: product.description || "",
+      stock: product.stock || 1,
+      category: product.category?.id || "",
+      brand: product.brand?.id || "",
+      status: product.status?.toString() || "",
+    });
+  }, [isLoading, product, navigate]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -84,6 +150,23 @@ function AddProduct() {
   const handleDescriptionChange = useCallback((val: string) => {
     setData((prev) => ({ ...prev, description: val }));
   }, []);
+
+  const handleDeleteImage = async (imageId: string) => {
+    if (product?.images.length === 1 || !imageId) {
+      toast.error(
+        "Bạn không thể xóa hình này vì mỗi sách phải có ít nhất một hình ảnh",
+      );
+      return;
+    }
+
+    await deleteImageProduct(imageId);
+  };
+
+  const handleUpdateImage = async (imageId: string, file: File) => {
+    await updateImageProduct(imageId, file);
+    setPreviewImages1([]);
+    setSelectedFiles1([]);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -151,24 +234,10 @@ function AddProduct() {
     }
 
     if (!specifications.length) {
-      toast.error("Vui lòng thêm ít nhất một thông tin chi tiết");
+      toast.error("Vui lòng thêm thông tin chi tiết");
       return;
     }
 
-    // Image
-    const orderedFiles = getOrderedFiles();
-
-    if (!orderedFiles.length) {
-      toast.error("Vui lòng thêm ít nhất một hình sản phẩm");
-      return;
-    }
-
-    if (!specifications.length) {
-      toast.error("Vui lòng thêm ít nhất một thông tin chi tiết");
-      return;
-    }
-
-    // Specification
     const isValidSpecs = specifications.every(
       (s) => s.specKey.trim() && s.specValue.trim(),
     );
@@ -184,7 +253,9 @@ function AddProduct() {
       specValue: s.specValue.trim(),
     }));
 
-    await addProduct(
+    const orderedFiles = getOrderedFiles();
+
+    await updateProduct(
       {
         name: data.name,
         price: data.price,
@@ -199,28 +270,32 @@ function AddProduct() {
       orderedFiles,
     );
 
-    clearSpecifications();
+    if (selectedFiles1.length > 0) {
+      const newFiles = selectedFiles1.filter((f) => f !== null);
+      if (newFiles.length > 0) {
+        const oldImageIds = product?.images
+          .map((img, index) => (selectedFiles1[index] ? img.id : null))
+          .filter((id) => id !== null);
+
+        const formData = new FormData();
+        selectedFiles1.forEach((file) => formData.append("files", file));
+        oldImageIds?.forEach((id) => formData.append("oldImageIds", id));
+      }
+    }
+
     clearImages();
-    setData({
-      name: "",
-      price: 1,
-      discount: 0,
-      description: "",
-      stock: 1,
-      category: "",
-      brand: "",
-      status: "",
-    });
+    setPreviewImages1([]);
+    setSelectedFiles1([]);
   };
 
   return (
     <>
       <div className="py-[30px] sm:px-[25px] px-[15px] h-auto">
         <form className="flex flex-col gap-7 w-full" onSubmit={handleSubmit}>
-          <h2 className="text-neutral">Thêm sản phẩm</h2>
+          <h2 className="text-neutral">Chỉnh sửa sản phẩm</h2>
 
           <div className="flex gap-[25px] w-full flex-col">
-            <div className="md:p-[25px] p-[15px] bg-white rounded-md w-full">
+            <div className="md:p-[25px] p-[15px] bg-white rounded-md w-full space-y-[20px]">
               <InputImage
                 InputId="images-product"
                 previewImages={previewImages}
@@ -229,6 +304,92 @@ function AddProduct() {
                 onReorderImages={handleReorder}
                 blockIndex={0}
               />
+
+              <div className="flex justify-center items-center">
+                <Swiper
+                  spaceBetween={15}
+                  slidesPerView={"auto"}
+                  modules={[FreeMode]}
+                  grabCursor={true}
+                >
+                  {product?.images.map((image, index) => (
+                    <SwiperSlide key={index} className="!w-auto relative">
+                      <div
+                        className="w-[150px] border border-gray-300 cursor-pointer"
+                        onClick={() => {
+                          const src = previewImages1?.[index]
+                            ? previewImages1[index]
+                            : image.image;
+
+                          if (src) handleOpenViewer(src);
+                        }}
+                      >
+                        <Image
+                          source={
+                            previewImages1?.[index]
+                              ? previewImages1[index]
+                              : `${image.image}`
+                          }
+                          alt={product.name}
+                          className="w-full h-full"
+                          loading="lazy"
+                        />
+                      </div>
+
+                      <div className="absolute top-[6px] right-[6px]">
+                        <div className="flex items-center flex-col gap-2">
+                          {!previewImages1?.[index] ? (
+                            <>
+                              <Button
+                                className="bg-white rounded-full p-1 border border-gray-300"
+                                onClick={() => handleDeleteImage(image.id)}
+                                disabled={isLoadingDeleteImage}
+                                type="button"
+                              >
+                                <VscTrash
+                                  size={22}
+                                  className="text-[#d9534f]"
+                                />
+                              </Button>
+
+                              <InputImage1
+                                InputId={`img-${index}`}
+                                sizeIcon={22}
+                                imageIndex={index}
+                                onFileSelect={onFileSelect}
+                              />
+                            </>
+                          ) : (
+                            <>
+                              <Button
+                                type="button"
+                                className="bg-white rounded-full p-1 border border-gray-300 text-green-500"
+                                disabled={isLoadingUpdateImage}
+                                onClick={() =>
+                                  handleUpdateImage(
+                                    image!.id,
+                                    selectedFiles1[index],
+                                  )
+                                }
+                              >
+                                <SiTicktick size={22} />
+                              </Button>
+
+                              <Button
+                                type="button"
+                                className="bg-white rounded-full p-1 border border-gray-300"
+                                onClick={() => handleClear(index)}
+                              >
+                                <HiMiniXMark size={22} />
+                              </Button>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              </div>
             </div>
 
             <div className="sm:p-[25px] p-[15px] bg-white rounded-md flex flex-col gap-[20px] w-full">
@@ -333,13 +494,13 @@ function AddProduct() {
                 </div>
 
                 <div className="flex flex-col gap-1 w-full">
-                  <label htmlFor="" className="text-[0.9rem] font-medium">
+                  <Label htmlFor="" className="text-[0.9rem] font-medium">
                     Số tiền giảm (Giảm giá{" "}
                     {data.price > 0
                       ? Math.floor((data.discount / data.price) * 100)
                       : 0}
                     %)
-                  </label>
+                  </Label>
                   <Input
                     type="number"
                     name="discount"
@@ -373,7 +534,6 @@ function AddProduct() {
                 specifications={specifications}
                 setSpecifications={setSpecifications}
                 addSpecification={addSpecification}
-                clearSpecifications={clearSpecifications}
                 removeSpecification={removeSpecification}
                 updateSpecification={updateSpecification}
               />
@@ -382,23 +542,33 @@ function AddProduct() {
 
           <div className="flex justify-center gap-6">
             <Button
-              disabled={isLoading}
+              disabled={isLoadingUpdate}
               type="submit"
               className="p-[6px_10px] bg-success text-white text-[0.9rem] font-medium text-center rounded-sm"
             >
-              {isLoading ? "Đang thêm..." : "Thêm"}
+              {isLoadingUpdate ? "Đang cập nhật..." : "Cập nhật"}
             </Button>
             <Link
               to="/admin/products"
               className="p-[6px_10px] bg-danger text-white text-[0.9rem] text-center rounded-sm"
             >
-              Trở vể
+              Trở về
             </Link>
           </div>
         </form>
       </div>
+
+      {openViewer && (
+        <Suspense fallback={null}>
+          <ImageViewer
+            image={viewerImage}
+            open={openViewer}
+            onClose={() => setOpenViewer(false)}
+          />
+        </Suspense>
+      )}
     </>
   );
 }
 
-export default AddProduct;
+export default EditProductForm;

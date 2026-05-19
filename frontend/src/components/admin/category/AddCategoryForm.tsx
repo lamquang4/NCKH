@@ -1,19 +1,30 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
-import useAddBrand from "../../../hooks/admin/brand/useAddBrand";
+import { useInputImage } from "../../../hooks/admin/useInputImage";
+import InputImage from "../ui/InputImage";
+import useAddCategory from "../../../hooks/admin/category/useAddCategory";
 import Input from "../../ui/Input";
 import Select from "../../ui/Select";
 import Button from "../../ui/Button";
 import Label from "../../ui/Label";
-import toast from "react-hot-toast";
 
-function AddBrand() {
+function AddCategoryForm() {
   const [data, setData] = useState({
     name: "",
     status: "",
   });
 
-  const { addBrand, isLoading } = useAddBrand();
+  const { addCategory, isLoading } = useAddCategory();
+
+  const {
+    previewImages,
+    getOrderedFiles,
+    handlePreviewImage,
+    handleRemovePreviewImage,
+    handleReorder,
+    clearImages,
+  } = useInputImage(1);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -28,8 +39,15 @@ function AddBrand() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const orderedFiles = getOrderedFiles();
+
+    if (!orderedFiles[0]) {
+      toast.error("Vui lòng thêm hình danh mục");
+      return;
+    }
+
     if (!data.name.trim()) {
-      toast.error("Tên thương hiệu không được để trống");
+      toast.error("Tên danh mục không được để trống");
       return;
     }
 
@@ -38,24 +56,39 @@ function AddBrand() {
       return;
     }
 
-    await addBrand({
-      name: data.name.trim(),
-      status: Number(data.status),
-    });
+    await addCategory(
+      {
+        name: data.name.trim(),
+        status: Number(data.status),
+      },
+      orderedFiles[0],
+    );
 
     setData({
       name: "",
       status: "",
     });
+    clearImages();
   };
 
   return (
     <>
-      <div className="py-[30px] sm:px-[25px] px-[15px] h-full">
+      <div className="py-[30px] sm:px-[25px] px-[15px] h-auto">
         <form className="flex flex-col gap-7 w-full" onSubmit={handleSubmit}>
-          <h2 className="text-neutral">Thêm thương hiệu</h2>
+          <h2 className="text-neutral">Thêm danh mục</h2>
 
           <div className="flex gap-[25px] w-full flex-col">
+            <div className="md:p-[25px] p-[15px] bg-white rounded-md w-full">
+              <InputImage
+                InputId="img-category"
+                previewImages={previewImages}
+                onPreviewImage={handlePreviewImage}
+                onRemovePreviewImage={handleRemovePreviewImage}
+                onReorderImages={handleReorder}
+                blockIndex={0}
+              />
+            </div>
+
             <div className="md:p-[25px] p-[15px] bg-white rounded-md flex flex-col gap-[15px] w-full">
               <h5 className="font-bold text-neutral">Thông tin chung</h5>
 
@@ -101,7 +134,7 @@ function AddBrand() {
               {isLoading ? "Đang thêm..." : "Thêm"}
             </Button>
             <Link
-              to="/admin/brands"
+              to="/admin/categories"
               className="p-[6px_10px] bg-danger text-white text-[0.9rem] text-center rounded-sm"
             >
               Trở về
@@ -113,4 +146,4 @@ function AddBrand() {
   );
 }
 
-export default AddBrand;
+export default AddCategoryForm;

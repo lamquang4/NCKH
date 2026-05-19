@@ -8,7 +8,7 @@ import Select from "../../ui/Select";
 import Button from "../../ui/Button";
 import Label from "../../ui/Label";
 
-function EditBrand() {
+function EditBrandForm() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [data, setData] = useState({
@@ -132,4 +132,4 @@ function EditBrand() {
   );
 }
 
-export default EditBrand;
+export default EditBrandForm;

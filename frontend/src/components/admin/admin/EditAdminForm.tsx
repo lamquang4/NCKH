@@ -11,7 +11,7 @@ import Select from "../../ui/Select";
 import Button from "../../ui/Button";
 import Label from "../../ui/Label";
 
-function EditAdmin() {
+function EditAdminForm() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [data, setData] = useState({
@@ -209,4 +209,4 @@ function EditAdmin() {
   );
 }
 
-export default EditAdmin;
+export default EditAdminForm;

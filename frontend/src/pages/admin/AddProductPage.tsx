@@ -1,10 +1,10 @@
 import LayoutPage from "../../components/admin/layout/LayoutPage";
-import AddProduct from "../../components/admin/product/AddProduct";
+import AddProductForm from "../../components/admin/product/AddProductForm";
 
 function AddProductPage() {
   return (
     <LayoutPage>
-      <AddProduct />
+      <AddProductForm />
     </LayoutPage>
   );
 }

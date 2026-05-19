@@ -1,10 +1,10 @@
 import LayoutPage from "../../components/admin/layout/LayoutPage";
-import AddAdmin from "../../components/admin/admin/AddAdmin";
+import AddAdminForm from "../../components/admin/admin/AddAdminForm";
 
 function AddAdminPage() {
   return (
     <LayoutPage>
-      <AddAdmin />
+      <AddAdminForm />
     </LayoutPage>
   );
 }

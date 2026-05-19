@@ -1,10 +1,10 @@
 import LayoutPage from "../../components/admin/layout/LayoutPage";
-import EditBrand from "../../components/admin/brand/EditBrand";
+import EditBrandForm from "../../components/admin/brand/EditBrandForm";
 
 function EditBrandPage() {
   return (
     <LayoutPage>
-      <EditBrand />
+      <EditBrandForm />
     </LayoutPage>
   );
 }
