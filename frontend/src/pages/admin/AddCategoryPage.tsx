@@ -1,10 +1,10 @@
 import LayoutPage from "../../components/admin/layout/LayoutPage";
-import AddCategory from "../../components/admin/category/AddCategory";
+import AddCategoryForm from "../../components/admin/category/AddCategoryForm";
 
 function AddCategoryPage() {
   return (
     <LayoutPage>
-      <AddCategory />
+      <AddCategoryForm />
     </LayoutPage>
   );
 }

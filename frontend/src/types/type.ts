@@ -192,7 +192,6 @@ export interface OrderResponse {
   id: string;
   orderCode: string;
   userId: string;
-  email: string;
   fullname: string;
   phone: string;
   speaddress: string;
