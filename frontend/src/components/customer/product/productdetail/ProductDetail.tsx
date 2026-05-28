@@ -9,10 +9,10 @@ import { useAddItemToCart } from "../../../../hooks/customer/cart/useAddItemToCa
 import useGetAccount from "../../../../hooks/auth/useGetAccount";
 import useGetCart from "../../../../hooks/customer/cart/useGetCart";
 import toast from "react-hot-toast";
-import { openAuthModal } from "../../../../redux/slices/authModalSlice2";
+import { openAuthModal } from "../../../../redux/slices/authModalSlice";
 import Button from "../../../ui/Button";
 import Input from "../../../ui/Input";
-import { useAppDispatch } from "../../../../redux/store2";
+import { useAppDispatch } from "../../../../redux/store";
 
 type Props = {
   product: ProductDetailResponse;

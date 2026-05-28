@@ -5,8 +5,8 @@ import RegisterModal from "./RegisterModal";
 import {
   closeAuthModal,
   switchAuthModal,
-} from "../../../redux/slices/authModalSlice2";
-import { useAppDispatch, useAppSelector } from "../../../redux/store2";
+} from "../../../redux/slices/authModalSlice";
+import { useAppDispatch, useAppSelector } from "../../../redux/store";
 
 function AuthModal() {
   const dispatch = useAppDispatch();

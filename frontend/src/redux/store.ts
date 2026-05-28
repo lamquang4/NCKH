@@ -4,7 +4,7 @@ import {
   useSelector,
   type TypedUseSelectorHook,
 } from "react-redux";
-import authModalReducer from "./slices/authModalSlice2";
+import authModalReducer from "./slices/authModalSlice";
 
 export const store = configureStore({
   reducer: {
