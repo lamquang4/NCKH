@@ -9,17 +9,18 @@ import { useAddItemToCart } from "../../../../hooks/customer/cart/useAddItemToCa
 import useGetAccount from "../../../../hooks/auth/useGetAccount";
 import useGetCart from "../../../../hooks/customer/cart/useGetCart";
 import toast from "react-hot-toast";
-import { openAuthModal } from "../../../../redux/slices/AuthModalSlice";
-import { useDispatch } from "react-redux";
+import { openAuthModal } from "../../../../redux/slices/authModalSlice";
 import Button from "../../../ui/Button";
 import Input from "../../../ui/Input";
+import { useAppDispatch } from "../../../../redux/store";
+
 type Props = {
   product: ProductDetailResponse;
 };
 
 function ProductDetail({ product }: Props) {
   const max = 15;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [quantity, setQuantity] = useState<number>(1);
 
   const { account } = useGetAccount("CUSTOMER");

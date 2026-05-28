@@ -6,15 +6,15 @@ import useSendMessage from "../../../../hooks/customer/chat/useSendMessage";
 import useGetAccount from "../../../../hooks/auth/useGetAccount";
 import toast from "react-hot-toast";
 import ChatVoice from "./ChatVoice";
-import { openAuthModal } from "../../../../redux/slices/AuthModalSlice";
-import { useDispatch } from "react-redux";
+import { openAuthModal } from "../../../../redux/slices/authModalSlice";
+import { useAppDispatch } from "../../../../redux/store";
 
 type Props = {
   isLoadingMessages: boolean;
 };
 
 function ChatFooter({ isLoadingMessages }: Props) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [textLength, setTextLength] = useState<number>(0);
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
 

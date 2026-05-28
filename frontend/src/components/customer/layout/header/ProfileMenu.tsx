@@ -2,9 +2,9 @@ import { memo } from "react";
 import { Link } from "react-router-dom";
 import useGetAccount from "../../../../hooks/auth/useGetAccount";
 import useLogout from "../../../../hooks/auth/useLogout";
-import { openAuthModal } from "../../../../redux/slices/AuthModalSlice";
-import { useDispatch } from "react-redux";
 import Button from "../../../ui/Button";
+import { useAppDispatch } from "../../../../redux/store";
+import { openAuthModal } from "../../../../redux/slices/authModalSlice";
 type Props = {
   profileMenuOpen: boolean;
 };
@@ -12,7 +12,7 @@ type Props = {
 function ProfileMenu({ profileMenuOpen }: Props) {
   const { account, isLoading } = useGetAccount("CUSTOMER");
   const { handleLogout } = useLogout();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   if (!profileMenuOpen || isLoading) return null;
 
