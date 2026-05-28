@@ -6,8 +6,8 @@ import useSendMessage from "../../../../hooks/customer/chat/useSendMessage";
 import useGetAccount from "../../../../hooks/auth/useGetAccount";
 import toast from "react-hot-toast";
 import ChatVoice from "./ChatVoice";
-import { openAuthModal } from "../../../../redux/slices/authModalSlice";
-import { useAppDispatch } from "../../../../redux/store";
+import { openAuthModal } from "../../../../redux/slices/authModalSlice2";
+import { useAppDispatch } from "../../../../redux/store2";
 
 type Props = {
   isLoadingMessages: boolean;

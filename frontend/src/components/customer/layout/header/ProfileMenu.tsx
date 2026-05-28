@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import useGetAccount from "../../../../hooks/auth/useGetAccount";
 import useLogout from "../../../../hooks/auth/useLogout";
 import Button from "../../../ui/Button";
-import { useAppDispatch } from "../../../../redux/store";
-import { openAuthModal } from "../../../../redux/slices/authModalSlice";
+import { useAppDispatch } from "../../../../redux/store2";
+import { openAuthModal } from "../../../../redux/slices/authModalSlice2";
 type Props = {
   profileMenuOpen: boolean;
 };
