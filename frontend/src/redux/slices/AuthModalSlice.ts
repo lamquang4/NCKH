@@ -8,7 +8,7 @@ interface AuthModalState {
 
 const initialState: AuthModalState = { type: null };
 
-const AuthModalSlice = createSlice({
+const authModalSlice = createSlice({
   name: "authModal",
   initialState,
   reducers: {
@@ -18,11 +18,15 @@ const AuthModalSlice = createSlice({
     closeAuthModal: (state) => {
       state.type = null;
     },
-    switchAuthModal: (state, action: PayloadAction<Exclude<AuthType, null>>) => {
+    switchAuthModal: (
+      state,
+      action: PayloadAction<Exclude<AuthType, null>>,
+    ) => {
       state.type = action.payload;
     },
   },
 });
 
-export const { openAuthModal, closeAuthModal, switchAuthModal } = AuthModalSlice.actions;
-export default AuthModalSlice.reducer;
+export const { openAuthModal, closeAuthModal, switchAuthModal } =
+  authModalSlice.actions;
+export default authModalSlice.reducer;

@@ -2,16 +2,15 @@ import { memo } from "react";
 import Overplay from "../ui/Overplay";
 import LoginModal from "./LoginModal";
 import RegisterModal from "./RegisterModal";
-import { useSelector, useDispatch } from "react-redux";
-import type { RootState } from "../../../redux/Store";
 import {
   closeAuthModal,
   switchAuthModal,
-} from "../../../redux/slices/AuthModalSlice";
+} from "../../../redux/slices/authModalSlice";
+import { useAppDispatch, useAppSelector } from "../../../redux/store";
 
 function AuthModal() {
-  const type = useSelector((state: RootState) => state.authModal.type);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+  const type = useAppSelector((state) => state.authModal.type);
 
   if (!type) return null;
 
