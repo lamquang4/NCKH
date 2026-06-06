@@ -19,7 +19,7 @@ function PromotionBanner({ banners }: Props) {
                 <picture>
                   <source srcSet={banner.mobile} media="(max-width: 768px)" />
                   <Image
-                    source={banner.desktop}
+                    src={banner.desktop}
                     alt="banner"
                     className="w-full h-full object-cover"
                     loading="lazy"

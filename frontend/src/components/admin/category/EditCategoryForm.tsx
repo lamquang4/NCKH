@@ -121,7 +121,7 @@ function EditCategoryForm() {
                   >
                     {category?.image && (
                       <Image
-                        source={category.image}
+                        src={category.image}
                         alt={category.name}
                         className="w-full max-w-[140px]"
                         loading="eager"

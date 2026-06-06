@@ -325,7 +325,7 @@ function EditProductForm() {
                         }}
                       >
                         <Image
-                          source={
+                          src={
                             previewImages1?.[index]
                               ? previewImages1[index]
                               : `${image.image}`

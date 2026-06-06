@@ -232,7 +232,7 @@ function OrderDetail() {
                           <div className="flex items-center gap-[10px]">
                             <div className="w-[80px] h-[80px] overflow-hidden">
                               <Image
-                                source={`${item.images[0]}`}
+                                src={`${item.images[0]}`}
                                 alt={""}
                                 className={"w-full h-full object-contain"}
                                 loading="eager"

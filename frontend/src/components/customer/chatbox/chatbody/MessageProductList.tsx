@@ -21,7 +21,7 @@ function MessageProductList({ products }: Props) {
               className="block w-24 h-24 rounded-md overflow-hidden border border-gray-200"
             >
               <Image
-                source={p.images[0].image}
+                src={p.images[0].image}
                 alt={p.name}
                 className="w-full h-full object-contain"
                 loading="eager"

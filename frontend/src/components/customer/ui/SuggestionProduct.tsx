@@ -33,7 +33,7 @@ function SuggestionProduct({ search }: Props) {
                 <div className="hover:bg-[#F7F7F7] p-2.5 w-full flex gap-3.5 border-t border-gray-200">
                   <div className="w-[80px] h-[80px] overflow-hidden">
                     <Image
-                      source={`${product.images[0].image}`}
+                      src={`${product.images[0].image}`}
                       alt={product.name}
                       className="w-full h-full object-contain z-1 relative"
                       loading="lazy"

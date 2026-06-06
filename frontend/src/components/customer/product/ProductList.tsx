@@ -90,7 +90,7 @@ function ProductList({ title, products, isLoading = false, total }: Props) {
           <div className="flex justify-center items-center h-[60vh]">
             <div className="flex flex-col justify-center items-center gap-[15px]">
               <Image
-                source={"/assets/notfound1.webp"}
+                src={"/assets/notfound1.webp"}
                 className={"w-[135px]"}
                 alt={"not found"}
                 loading="eager"

@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from "react";
+import { memo } from "react";
 import ChatBody from "./chatbody/ChatBody";
 import ChatHeader from "./chatheader/ChatHeader";
 import ChatFooter from "./chatfooter/ChatFooter";
@@ -9,24 +9,14 @@ type Props = {
 };
 
 function ChatWindow({ onClose }: Props) {
-  const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const { messages, isLoading, hasMore, loadMore } = useGetChatMessages();
-
-  const toggleExpand = useCallback(() => {
-    setIsExpanded((prev) => !prev);
-  }, []);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-16">
       <div
-        className={`bg-white pointer-events-auto shadow-xl flex flex-col transition-all duration-300 w-full h-full
-    ${isExpanded ? "rounded-none" : "md:w-[600px] md:h-[580px] md:rounded-lg"}`}
+        className={`bg-white pointer-events-auto shadow-xl flex flex-col transition-all duration-300 w-full h-full md:w-[600px] md:h-[580px] md:rounded-lg rounded-none`}
       >
-        <ChatHeader
-          onClose={onClose}
-          onExpand={toggleExpand}
-          isExpanded={isExpanded}
-        />
+        <ChatHeader onClose={onClose} />
         <ChatBody
           messages={messages}
           isLoading={isLoading}

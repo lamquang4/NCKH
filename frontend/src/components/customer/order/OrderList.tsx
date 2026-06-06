@@ -63,7 +63,7 @@ function OrderList() {
           <div className="flex justify-center items-center h-[60vh]">
             <div className="flex flex-col justify-center items-center gap-[15px]">
               <Image
-                source={"/assets/empty-order.png"}
+                src={"/assets/empty-order.png"}
                 alt={""}
                 className={"w-[120px]"}
                 loading="eager"

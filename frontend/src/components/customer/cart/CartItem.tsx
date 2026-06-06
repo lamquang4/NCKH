@@ -7,6 +7,7 @@ import { useRemoveItemInCart } from "../../../hooks/customer/cart/useRemoveItemI
 import { useChangeQuantityItemInCart } from "../../../hooks/customer/cart/useChangeQuantityItemInCart";
 import toast from "react-hot-toast";
 import Button from "../../ui/Button";
+import { LuTrash2 } from "react-icons/lu";
 
 type Props = {
   item: CartItemResponse;
@@ -56,7 +57,7 @@ function CartItem({ item, userId }: Props) {
           <Link to={`/product/${item.slug}`} className="mx-auto bg-gray-100">
             <div className="w-[200px] h-[200px] overflow-hidden">
               <Image
-                source={`${item.images[0]}`}
+                src={`${item.images[0]}`}
                 alt={item.name}
                 className="w-full h-full object-contain"
                 loading="eager"
@@ -90,29 +91,15 @@ function CartItem({ item, userId }: Props) {
                 type="button"
                 disabled={isLoadingRemove}
                 onClick={() => handleRemoveItem(item.productId)}
-                className="mb-auto"
+                className="mb-auto text-danger"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-5 h-5 cursor-pointer fill-black hover:fill-danger inline-block"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M19 7a1 1 0 0 0-1 1v11.191A1.92 1.92 0 0 1 15.99 21H8.01A1.92 1.92 0 0 1 6 19.191V8a1 1 0 0 0-2 0v11.191A3.918 3.918 0 0 0 8.01 23h7.98A3.918 3.918 0 0 0 20 19.191V8a1 1 0 0 0-1-1Zm1-3h-4V2a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v2H4a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2ZM10 4V3h4v1Z"
-                    data-original="#000000"
-                  ></path>
-                  <path
-                    d="M11 17v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Zm4 0v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Z"
-                    data-original="#000000"
-                  ></path>
-                </svg>
+                <LuTrash2 size={20} />
               </Button>
             </div>
 
             <div className="flex-wrap justify-between flex gap-4 mt-auto">
               <div className="flex items-center gap-1">
                 <Button
-                  data-testid="btn-decrement"
                   type="button"
                   onClick={() => handleDecrement(item.productId, item.quantity)}
                   disabled={item.quantity <= 1 || isLoadingChangeQuantity}

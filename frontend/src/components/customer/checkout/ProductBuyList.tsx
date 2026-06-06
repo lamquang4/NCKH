@@ -24,7 +24,7 @@ function ProductBuyList({ items, isLoading = false }: Props) {
             <div className="relative border border-gray-300 bg-gray-100">
               <div className="w-[120px] h-[120px]">
                 <Image
-                  source={`${item.images[0]}`}
+                  src={`${item.images[0]}`}
                   alt={item.name}
                   className={"w-full h-full object-contain"}
                   loading="eager"

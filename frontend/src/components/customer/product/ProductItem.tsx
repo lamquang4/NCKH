@@ -17,7 +17,7 @@ function ProductItem({ product }: Props) {
               }`}
             >
               <Image
-                source={product.images[0].image}
+                src={product.images[0].image}
                 alt={product.name}
                 className={`absolute inset-0 w-full h-full transition-opacity duration-300 ${
                   product.images.length > 1 ? "group-hover:opacity-0" : ""
@@ -27,7 +27,7 @@ function ProductItem({ product }: Props) {
 
               {product.images.length > 1 && (
                 <Image
-                  source={product.images[1].image}
+                  src={product.images[1].image}
                   alt={product.name}
                   className="absolute inset-0 w-full h-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                   loading="lazy"

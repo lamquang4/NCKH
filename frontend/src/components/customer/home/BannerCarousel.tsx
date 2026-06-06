@@ -39,7 +39,7 @@ function BannerCarousel() {
                   <picture>
                     <source srcSet={banner.mobile} media="(max-width: 768px)" />
                     <Image
-                      source={banner.desktop}
+                      src={banner.desktop}
                       alt={"banner"}
                       className={"w-full object-center"}
                       loading="eager"

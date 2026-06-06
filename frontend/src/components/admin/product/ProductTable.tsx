@@ -72,7 +72,7 @@ function ProductTable({ products, isLoading }: Props) {
                     <div className="relative group w-[80px] h-[80px] overflow-hidden">
                       {product.images?.[0]?.image && (
                         <Image
-                          source={`${product.images[0].image}`}
+                          src={`${product.images[0].image}`}
                           alt={product.name}
                           className={
                             "w-full h-full object-contain z-1 relative"
@@ -165,7 +165,7 @@ function ProductTable({ products, isLoading }: Props) {
             <td colSpan={8} className="w-full h-[70vh]">
               <div className="flex justify-center items-center">
                 <Image
-                  source={"/assets/notfound1.webp"}
+                  src={"/assets/notfound1.webp"}
                   alt={""}
                   className={"w-[135px]"}
                   loading="lazy"

@@ -11,9 +11,9 @@ import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import useGetCart from "../../../hooks/customer/cart/useGetCart";
 import useAddOrder from "../../../hooks/customer/order/useAddOrder";
 import usePaymentMomo from "../../../hooks/customer/payment/usePaymentMomo";
-import Overplay from "../ui/Overplay";
 import Loading from "../../ui/Loading";
 import Button from "../../ui/Button";
+import Overplay from "../../ui/Overplay";
 
 function CheckoutForm() {
   const navigate = useNavigate();
@@ -178,7 +178,7 @@ function CheckoutForm() {
       <div className="mx-auto max-w-[1200px] w-full">
         <Link to={"/"}>
           <Image
-            source={"/assets/logo.png"}
+            src={"/assets/logo.png"}
             alt={"logo"}
             className={"w-[100px]"}
             loading="eager"
@@ -246,7 +246,7 @@ function CheckoutForm() {
       </div>
 
       {(isLoadingCart || isLoadingOrder || isLoadingPaymentMomo) && (
-        <Overplay IndexForZ={50}>
+        <Overplay className="z-50">
           <Loading height={0} size={55} color="white" thickness={8} />
           <h4 className="text-white">Vui lòng chờ trong giây lát...</h4>
         </Overplay>

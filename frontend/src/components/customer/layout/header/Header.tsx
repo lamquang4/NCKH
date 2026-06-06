@@ -8,7 +8,6 @@ import { AiOutlineUser } from "react-icons/ai";
 import { PiShoppingCart } from "react-icons/pi";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import SearchMobile from "./SearchMobile";
-import Overplay from "../../ui/Overplay";
 import MenuMobile from "./MenuMobile";
 import useGetCart from "../../../../hooks/customer/cart/useGetCart";
 import { TbCategoryPlus } from "react-icons/tb";
@@ -16,6 +15,7 @@ import MenuDropDown from "./CategoryDropDown";
 import useGetActiveCategories from "../../../../hooks/customer/category/useGetActiveCategories";
 import Button from "../../../ui/Button";
 import AuthModal from "../../auth/AuthModal";
+import Overplay from "../../../ui/Overplay";
 
 function Header() {
   const [searchOpen, setSearchOpen] = useState<boolean>(false);
@@ -78,7 +78,7 @@ function Header() {
           <div className="w-full max-w-[1200px] mx-auto flex justify-between items-center">
             <Link to={"/"}>
               <Image
-                source={"/assets/logo.png"}
+                src={"/assets/logo.png"}
                 alt={"logo"}
                 className={"w-[100px]"}
                 loading="eager"
@@ -176,7 +176,7 @@ function Header() {
 
       <AuthModal />
 
-      {searchOpen && <Overplay onClose={toggleSearch} IndexForZ={14} />}
+      {searchOpen && <Overplay className="z-14" onClose={toggleSearch} />}
     </>
   );
 }
