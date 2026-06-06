@@ -251,7 +251,7 @@ function OrderDetail() {
                                 {item.price.toLocaleString("vi-VN")}₫
                               </del>
 
-                              <p className="font-medium text-[#FF424E]">
+                              <p className="font-medium text-danger">
                                 {(item.price - item.discount).toLocaleString(
                                   "vi-VN",
                                 )}
