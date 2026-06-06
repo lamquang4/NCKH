@@ -26,7 +26,7 @@ function MessageItem({ role, content, products }: props) {
       {role === "ASSISTANT" && (
         <Image
           className="w-10 h-10 rounded-full self-start"
-          source="/assets/troly.png"
+          src="/assets/troly.png"
           alt="troly"
           loading="lazy"
         />

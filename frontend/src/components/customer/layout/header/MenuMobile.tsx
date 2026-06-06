@@ -1,9 +1,10 @@
 import { memo, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Overplay from "../../ui/Overplay";
 import useGetActiveCategories from "../../../../hooks/customer/category/useGetActiveCategories";
 import Button from "../../../ui/Button";
 import Image from "../../../ui/Image";
+import Overplay from "../../../ui/Overplay";
+import { HiOutlineXMark } from "react-icons/hi2";
 
 type MenuMobileProps = {
   isOpen: boolean;
@@ -33,19 +34,7 @@ function MenuMobile({ isOpen, onToggleMenu }: MenuMobileProps) {
       >
         <div className="flex justify-end items-center">
           <Button onClick={onToggleMenu}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="lucide lucide-x-icon lucide-x w-4"
-              viewBox="5 5 14 14"
-            >
-              <path d="M18 6 6 18"></path>
-              <path d="m6 6 12 12"></path>
-            </svg>
+            <HiOutlineXMark size={28} strokeWidth={2} />
           </Button>
         </div>
 
@@ -58,7 +47,7 @@ function MenuMobile({ isOpen, onToggleMenu }: MenuMobileProps) {
               >
                 <div className="flex items-center gap-2">
                   <Image
-                    source={category.image || ""}
+                    src={category.image || ""}
                     alt={category.name}
                     className="w-[25px] h-[25px]"
                     loading="lazy"
@@ -74,7 +63,7 @@ function MenuMobile({ isOpen, onToggleMenu }: MenuMobileProps) {
             <Link to={"/products/sale"} className="py-[15px]">
               <div className="flex items-center gap-2">
                 <Image
-                  source={"/assets/discount.png"}
+                  src={"/assets/discount.png"}
                   alt={""}
                   className="w-[25px] h-[25px]"
                   loading="lazy"
@@ -87,7 +76,7 @@ function MenuMobile({ isOpen, onToggleMenu }: MenuMobileProps) {
         </ul>
       </nav>
 
-      {isOpen && <Overplay onClose={onToggleMenu} IndexForZ={15} />}
+      {isOpen && <Overplay className="z-15" onClose={onToggleMenu} />}
     </>
   );
 }

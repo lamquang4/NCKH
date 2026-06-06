@@ -1,5 +1,4 @@
 import { memo, useState, type ReactNode } from "react";
-import Overplay from "../ui/Overplay";
 import Image from "../../ui/Image";
 import { IoIosArrowDown } from "react-icons/io";
 import { IoIosArrowUp } from "react-icons/io";
@@ -11,6 +10,7 @@ import { Link, useLocation } from "react-router-dom";
 import { AiOutlineCreditCard } from "react-icons/ai";
 import { TiTags } from "react-icons/ti";
 import Button from "../../ui/Button";
+import Overplay from "../../ui/Overplay";
 type Props = {
   menuOpen: boolean;
   onToggleMenu: () => void;
@@ -137,7 +137,7 @@ function MenuSide({ menuOpen, onToggleMenu }: Props) {
         <div className="mb-[20px] flex justify-center sticky top-0 bg-white px-3.5 py-4.5">
           <Link to="/">
             <Image
-              source={"/assets/logo.png"}
+              src={"/assets/logo.png"}
               alt=""
               className="w-[100px]"
               loading="eager"
@@ -223,7 +223,7 @@ function MenuSide({ menuOpen, onToggleMenu }: Props) {
         </ul>
       </nav>
 
-      {menuOpen && <Overplay onClose={onToggleMenu} />}
+      {menuOpen && <Overplay className="xl:hidden" onClose={onToggleMenu} />}
     </>
   );
 }

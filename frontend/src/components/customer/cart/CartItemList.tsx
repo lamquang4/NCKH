@@ -119,7 +119,7 @@ function CartItemList({ cart, isLoading = false }: Props) {
           <div className="flex justify-center items-center h-[60vh]">
             <div className="flex flex-col justify-center items-center gap-[15px]">
               <Image
-                source={"/assets/empty-cart.png"}
+                src={"/assets/empty-cart.png"}
                 alt={""}
                 className={"w-[130px]"}
                 loading="eager"

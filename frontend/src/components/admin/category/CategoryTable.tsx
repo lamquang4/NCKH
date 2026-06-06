@@ -66,7 +66,7 @@ function CategoryTable({ categories, isLoading }: Props) {
               <td className="p-[1rem]">
                 <div className="relative group w-[80px] h-[80px] overflow-hidden">
                   <Image
-                    source={`${category.image}`}
+                    src={`${category.image}`}
                     alt={category.name}
                     className={"w-full h-full object-contain z-1 relative"}
                     loading="lazy"
@@ -123,7 +123,7 @@ function CategoryTable({ categories, isLoading }: Props) {
             <td colSpan={8} className="w-full h-[70vh]">
               <div className="flex justify-center items-center">
                 <Image
-                  source={"/assets/notfound1.webp"}
+                  src={"/assets/notfound1.webp"}
                   alt={""}
                   className={"w-[135px]"}
                   loading="lazy"

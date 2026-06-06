@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import Image from "../../ui/Image";
-import Overplay from "../ui/Overplay";
 import Button from "../../ui/Button";
 import ChatWindow from "../chatbox/ChatWindow";
+import Overplay from "../../ui/Overplay";
 function FloatingWidget() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -32,7 +32,7 @@ function FloatingWidget() {
           className="w-14 h-14 rounded-full shadow-lg bg-primary flex items-center justify-center"
         >
           <Image
-            source="/assets/chat-box.png"
+            src="/assets/chat-box.png"
             alt="chat"
             className="w-7 h-7"
             loading="eager"
@@ -40,7 +40,7 @@ function FloatingWidget() {
         </Button>
       </div>
 
-      {isOpen && <Overplay onClose={toggleChat} IndexForZ={15} />}
+      {isOpen && <Overplay className="z-15" onClose={toggleChat} />}
     </>
   );
 }

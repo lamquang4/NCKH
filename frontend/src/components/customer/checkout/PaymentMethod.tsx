@@ -39,7 +39,7 @@ function PaymentMethod({ paymethod, setPaymethod }: Props) {
               htmlFor={`paymethod-${method.value}`}
             >
               <Image
-                source={method.image}
+                src={method.image}
                 className="w-[60px] rounded-lg border border-gray-300"
                 loading="eager"
                 alt=""

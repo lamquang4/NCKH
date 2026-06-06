@@ -86,7 +86,7 @@ function ProductGallery({ images }: Props) {
                 }`}
               >
                 <Image
-                  source={`${image.image}`}
+                  src={`${image.image}`}
                   alt=""
                   className="w-full h-full object-contain"
                   loading="eager"
@@ -117,7 +117,7 @@ function ProductGallery({ images }: Props) {
 
             <div className="w-full h-[400px] sm:h-[500px] md:h-[600px] overflow-hidden">
               <Image
-                source={`${mainImage}`}
+                src={`${mainImage}`}
                 alt=""
                 className="w-full h-full object-contain "
                 loading="eager"

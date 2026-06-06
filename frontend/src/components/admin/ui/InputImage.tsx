@@ -123,7 +123,7 @@ function InputImage({
                   }}
                 >
                   <Image
-                    source={item.url}
+                    src={item.url}
                     alt={`preview-${index}`}
                     className="w-[150px]"
                     loading="eager"

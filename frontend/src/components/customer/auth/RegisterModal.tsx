@@ -5,13 +5,14 @@ import { useSendRegisterOTP } from "../../../hooks/auth/useSendRegisterOtp";
 import toast from "react-hot-toast";
 import { validateEmail } from "../../../utils/validateEmail";
 import { validatePhone } from "../../../utils/validatePhone";
-import Overplay from "../ui/Overplay";
 import Loading from "../../ui/Loading";
 import Button from "../../ui/Button";
 import Input from "../../ui/Input";
 import { validateOtp } from "../../../utils/validateOtp";
 import OtpBox from "./OtpBox";
 import { OTP_LENGTH } from "../../../constants/otp";
+import Overplay from "../../ui/Overplay";
+import { HiOutlineXMark } from "react-icons/hi2";
 
 type Props = {
   onClose: () => void;
@@ -113,179 +114,162 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
 
   return (
     <>
-      <div className="fixed inset-0 pointer-events-none z-99 flex items-center justify-center overflow-y-auto text-black">
-        <div className="px-[15px] w-full">
-          <div className="relative w-full max-w-md mx-auto pointer-events-auto">
-            <div className="relative p-[25px_15px] bg-white space-y-[15px] rounded-lg">
-              <div className="flex items-center justify-between">
-                <h4 className="uppercase">Đăng ký</h4>
+      <div className="fixed inset-0 pointer-events-none z-99 flex items-center justify-center overflow-y-auto">
+        <div className="relative w-full max-w-md mx-auto pointer-events-auto">
+          <div className="relative p-[25px_15px] bg-white space-y-[15px] rounded-lg">
+            <div className="flex items-center justify-between">
+              <h4 className="uppercase">Đăng ký</h4>
 
-                <Button
-                  onClick={onClose}
-                  type="button"
-                  className="bg-transparent ms-auto"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="lucide lucide-x-icon lucide-x w-4"
-                    viewBox="5 5 14 14"
-                  >
-                    <path d="M18 6 6 18"></path>
-                    <path d="m6 6 12 12"></path>
-                  </svg>
-                </Button>
-              </div>
+              <Button
+                onClick={onClose}
+                type="button"
+                className="bg-transparent ms-auto"
+              >
+                <HiOutlineXMark size={28} strokeWidth={2} />
+              </Button>
+            </div>
 
-              <hr className="border-gray-300" />
+            <hr className="border-gray-300" />
 
-              <form className="space-y-[15px]" onSubmit={handleSubmit}>
-                {step === 1 ? (
+            <form className="space-y-[15px]" onSubmit={handleSubmit}>
+              {step === 1 ? (
+                <div className="space-y-[5px]">
+                  <label htmlFor="" className="block text-[0.9rem] font-medium">
+                    Email
+                  </label>
+                  <Input
+                    type="text"
+                    name="email"
+                    value={data.email}
+                    onChange={handleChange}
+                    className="text-[0.9rem] block w-full px-3 py-2 border border-gray-200"
+                    placeholder="Nhập email"
+                    required
+                  />
+                </div>
+              ) : (
+                <>
+                  <OtpBox
+                    value={otp}
+                    onChange={setOtp}
+                    onResend={handleSendOTP}
+                  />
+
                   <div className="space-y-[5px]">
                     <label
                       htmlFor=""
                       className="block text-[0.9rem] font-medium"
                     >
-                      Email
+                      Họ và tên
                     </label>
                     <Input
                       type="text"
-                      name="email"
-                      value={data.email}
+                      name="fullname"
+                      value={data.fullname}
                       onChange={handleChange}
                       className="text-[0.9rem] block w-full px-3 py-2 border border-gray-200"
-                      placeholder="Nhập email"
+                      placeholder="Nhập họ và tên"
                       required
                     />
                   </div>
-                ) : (
-                  <>
-                    <OtpBox
-                      value={otp}
-                      onChange={setOtp}
-                      onResend={handleSendOTP}
+
+                  <div className="space-y-[5px]">
+                    <label
+                      htmlFor=""
+                      className="block text-[0.9rem] font-medium"
+                    >
+                      Số điện thoại
+                    </label>
+                    <Input
+                      type="number"
+                      name="phone"
+                      value={data.phone}
+                      onChange={handleChange}
+                      className="text-[0.9rem] block w-full px-3 py-2 border border-gray-200"
+                      placeholder="Nhập số điện thoại"
+                      required
                     />
+                  </div>
 
-                    <div className="space-y-[5px]">
-                      <label
-                        htmlFor=""
-                        className="block text-[0.9rem] font-medium"
-                      >
-                        Họ và tên
-                      </label>
+                  <div className="space-y-[5px]">
+                    <label
+                      htmlFor=""
+                      className="block text-[0.9rem] font-medium"
+                    >
+                      Mật khẩu
+                    </label>
+
+                    <div className="relative">
                       <Input
-                        type="text"
-                        name="fullname"
-                        value={data.fullname}
+                        type={!showPassword ? "password" : "text"}
+                        name="password"
+                        value={data.password}
                         onChange={handleChange}
-                        className="text-[0.9rem] block w-full px-3 py-2 border border-gray-200"
-                        placeholder="Nhập họ và tên"
+                        placeholder="Nhập mật khẩu"
+                        className="text-[0.9rem] block w-full  px-3 pr-12 py-2 border border-gray-200"
                         required
                       />
-                    </div>
 
-                    <div className="space-y-[5px]">
-                      <label
-                        htmlFor=""
-                        className="block text-[0.9rem] font-medium"
-                      >
-                        Số điện thoại
-                      </label>
-                      <Input
-                        type="number"
-                        name="phone"
-                        value={data.phone}
-                        onChange={handleChange}
-                        className="text-[0.9rem] block w-full px-3 py-2 border border-gray-200"
-                        placeholder="Nhập số điện thoại"
-                        required
-                      />
-                    </div>
-
-                    <div className="space-y-[5px]">
-                      <label
-                        htmlFor=""
-                        className="block text-[0.9rem] font-medium"
-                      >
-                        Mật khẩu
-                      </label>
-
-                      <div className="relative">
-                        <Input
-                          type={!showPassword ? "password" : "text"}
-                          name="password"
-                          value={data.password}
-                          onChange={handleChange}
-                          placeholder="Nhập mật khẩu"
-                          className="text-[0.9rem] block w-full  px-3 pr-12 py-2 border border-gray-200"
-                          required
-                        />
-
-                        <Button
-                          type="button"
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral"
-                          onClick={toggleShowPassword}
-                        >
-                          {!showPassword ? (
-                            <HiOutlineEye size={22} />
-                          ) : (
-                            <HiOutlineEyeOff size={22} />
-                          )}
-                        </Button>
-                      </div>
-                    </div>
-
-                    <div className="mt-4">
                       <Button
                         type="button"
-                        onClick={() => {
-                          setStep(1);
-                          setData({
-                            fullname: "",
-                            email: "",
-                            password: "",
-                            phone: "",
-                          });
-                          setOtp("");
-                        }}
-                        className="text-[0.9rem] text-blue-400 font-medium"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral"
+                        onClick={toggleShowPassword}
                       >
-                        Trở về
+                        {!showPassword ? (
+                          <HiOutlineEye size={22} />
+                        ) : (
+                          <HiOutlineEyeOff size={22} />
+                        )}
                       </Button>
                     </div>
-                  </>
-                )}
+                  </div>
 
+                  <div className="mt-4">
+                    <Button
+                      type="button"
+                      onClick={() => {
+                        setStep(1);
+                        setData({
+                          fullname: "",
+                          email: "",
+                          password: "",
+                          phone: "",
+                        });
+                        setOtp("");
+                      }}
+                      className="text-[0.9rem] text-primary font-medium"
+                    >
+                      Trở về
+                    </Button>
+                  </div>
+                </>
+              )}
+
+              <Button
+                disabled={isLoading}
+                type="submit"
+                className="w-full bg-primary text-white focus:outline-none font-semibold rounded-sm uppercase text-[0.9rem] px-5 py-2.5 text-center"
+              >
+                Đăng kí
+              </Button>
+
+              <p className="flex gap-1.5 justify-center font-medium">
+                Bạn đã có tài khoản?
                 <Button
-                  disabled={isLoading}
-                  type="submit"
-                  className="w-full bg-primary text-white focus:outline-none font-semibold rounded-sm uppercase text-[0.9rem] px-5 py-2.5 text-center"
+                  type="button"
+                  onClick={onSwitchLogin}
+                  className="text-primary font-medium"
                 >
-                  Đăng kí
+                  Đăng nhập
                 </Button>
-
-                <p className="flex gap-1.5 justify-center font-medium">
-                  Bạn đã có tài khoản?
-                  <Button
-                    type="button"
-                    onClick={onSwitchLogin}
-                    className="text-primary font-medium"
-                  >
-                    Đăng nhập
-                  </Button>
-                </p>
-              </form>
-            </div>
+              </p>
+            </form>
           </div>
         </div>
       </div>
 
       {(isLoading || isLoadingSendResetOTP) && (
-        <Overplay IndexForZ={99}>
+        <Overplay className="z-99 xl:hidden">
           <Loading height={0} size={55} color="white" thickness={8} />
           <h4 className="text-white">Vui lòng chờ trong giây lát...</h4>
         </Overplay>

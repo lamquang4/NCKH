@@ -8,7 +8,7 @@ function Footer() {
           <div className="col-span-full lg:col-span-1  space-y-4">
             <Link to={"/"}>
               <Image
-                source={"/assets/logo.png"}
+                src={"/assets/logo.png"}
                 alt={"logo"}
                 className={"w-[100px]"}
                 loading="eager"

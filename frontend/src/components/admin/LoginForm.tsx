@@ -2,11 +2,11 @@ import Image from "../ui/Image";
 import { useState } from "react";
 import { HiOutlineEyeOff, HiOutlineEye } from "react-icons/hi";
 import Loading from "../ui/Loading";
-import Overplay from "./ui/Overplay";
 import useLogin from "../../hooks/auth/useLogin";
 import Input from "../ui/Input";
 import Button from "../ui/Button";
 import Label from "../ui/Label";
+import Overplay from "../ui/Overplay";
 
 function LoginForm() {
   const [data, setData] = useState({ email: "", password: "" });
@@ -114,7 +114,7 @@ function LoginForm() {
 
               <div className="hidden sm:block border-l-2 border-gray-200 sm:px-2">
                 <Image
-                  source={"/assets/hero1.webp"}
+                  src={"/assets/hero1.webp"}
                   alt={""}
                   className={"w-auto"}
                   loading="eager"
@@ -126,7 +126,7 @@ function LoginForm() {
       </section>
 
       {isLoading && (
-        <Overplay>
+        <Overplay className="xl:hidden">
           <Loading height={0} size={55} color="white" thickness={8} />
           <h4 className="text-white">Vui lòng chờ trong giây lát ...</h4>
         </Overplay>
