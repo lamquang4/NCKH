@@ -94,7 +94,7 @@ function SideBar() {
             handleLogout("CUSTOMER");
             mutate(undefined);
           }}
-          className="border-l-4 border-transparent py-3 px-3.5 text-left text-accent font-medium hover:bg-gray-100 w-full"
+          className="border-l-4 border-transparent py-3 px-3.5 text-left text-danger font-medium hover:bg-gray-100 w-full"
         >
           <div className="flex items-center gap-5">
             <LuDoorOpen size={20} />

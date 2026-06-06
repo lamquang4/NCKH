@@ -41,19 +41,19 @@ function ProductTable({ products, isLoading }: Props) {
     <table className="w-[350%] border-collapse sm:w-[220%] xl:w-full text-[0.9rem]">
       <thead>
         <tr className="bg-[#E9EDF2] text-left">
-          <th className="p-[1rem]  ">Sản phẩm</th>
-          <th className="p-[1rem]  ">Giá bán</th>
-          <th className="p-[1rem]  ">Số lượng</th>
-          <th className="p-[1rem]  ">Danh mục</th>
-          <th className="p-[1rem]  ">Thương hiệu</th>
-          <th className="p-[1rem]   relative">
+          <th className="p-[1rem]">Sản phẩm</th>
+          <th className="p-[1rem]">Giá bán</th>
+          <th className="p-[1rem]">Số lượng</th>
+          <th className="p-[1rem]">Danh mục</th>
+          <th className="p-[1rem]">Thương hiệu</th>
+          <th className="p-[1rem] relative">
             <FilterDropDownMenu
               title="Tình trạng"
               array={PRODUCT_STATUS_OPTIONS}
               paramName="status"
             />
           </th>
-          <th className="p-[1rem]  ">Hành động</th>
+          <th className="p-[1rem]">Hành động</th>
         </tr>
       </thead>
       <tbody>
@@ -93,7 +93,7 @@ function ProductTable({ products, isLoading }: Props) {
                         {product.price.toLocaleString("vi-VN")}₫
                       </del>
 
-                      <p className="font-medium text-accent">
+                      <p className="font-medium text-danger">
                         {(product.price - product.discount).toLocaleString(
                           "vi-VN",
                         )}
@@ -101,7 +101,7 @@ function ProductTable({ products, isLoading }: Props) {
                       </p>
                     </div>
                   ) : (
-                    <p className="font-medium text-accent">
+                    <p className="font-medium text-danger">
                       {product.price.toLocaleString("vi-VN")}₫
                     </p>
                   )}

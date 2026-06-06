@@ -89,19 +89,19 @@ function ProductDetail({ product }: Props) {
                       {product?.price.toLocaleString("vi-VN")}₫
                     </del>
 
-                    <h3 className="text-accent font-medium">
+                    <h3 className="text-danger font-medium">
                       {(product?.price - product?.discount).toLocaleString(
                         "vi-VN",
                       )}
                       ₫
                     </h3>
 
-                    <p className="text-accent p-1.5 border border-accent rounded-sm font-semibold">
+                    <p className="text-danger p-1.5 border border-danger rounded-sm font-semibold">
                       -{Math.floor((product.discount / product.price) * 100)}%
                     </p>
                   </>
                 ) : (
-                  <h3 className="font-medium text-accent">
+                  <h3 className="font-medium text-danger">
                     {product?.price.toLocaleString("vi-VN")}₫
                   </h3>
                 )}
@@ -157,7 +157,7 @@ function ProductDetail({ product }: Props) {
                 ) : (
                   <Button
                     type="button"
-                    className="p-[10px] w-full uppercase text-[0.9rem] font-semibold border bg-transparent border-accent text-accent"
+                    className="p-[10px] w-full uppercase text-[0.9rem] font-semibold border bg-transparent border-danger text-danger"
                   >
                     Hết hàng
                   </Button>

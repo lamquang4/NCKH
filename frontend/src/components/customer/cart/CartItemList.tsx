@@ -90,7 +90,7 @@ function CartItemList({ cart, isLoading = false }: Props) {
             <div className="bg-[#F7F7F7] rounded-sm px-4 py-6 h-auto basis-[40%]">
               <div className="flex justify-between items-center">
                 <h4>Tổng cộng</h4>
-                <h4 className="text-accent">
+                <h4 className="text-danger">
                   {totalPrice.toLocaleString("vi-VN")}₫
                 </h4>
               </div>
@@ -101,7 +101,7 @@ function CartItemList({ cart, isLoading = false }: Props) {
                 <Button
                   onClick={handleCheckout}
                   type="submit"
-                  className="text-[0.9rem] px-4 py-2.5 w-full font-semibold tracking-wide bg-accent text-white rounded-md"
+                  className="text-[0.9rem] px-4 py-2.5 w-full font-semibold tracking-wide bg-danger text-white rounded-md"
                 >
                   Thanh toán
                 </Button>

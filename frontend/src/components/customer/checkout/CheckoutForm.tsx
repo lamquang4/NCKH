@@ -206,14 +206,14 @@ function CheckoutForm() {
                 <div className="flex justify-between items-center">
                   <Button
                     type="submit"
-                    className="text-[0.9rem] rounded-md bg-accent px-4 py-2 font-medium text-white"
+                    className="text-[0.9rem] rounded-md bg-danger px-4 py-2 font-medium text-white"
                   >
                     Đặt hàng
                   </Button>
 
                   <Link
                     to={"/cart"}
-                    className="text-[0.95rem] rounded-md bg-transparent px-4 py-2 font-medium text-accent"
+                    className="text-[0.95rem] rounded-md bg-transparent px-4 py-2 font-medium text-danger"
                   >
                     <div className="flex gap-[5px] items-center">
                       <MdOutlineKeyboardBackspace size={25} /> Giỏ hàng

@@ -110,7 +110,7 @@ function ProductGallery({ images }: Props) {
             <Button
               type="button"
               onClick={handleNextImage}
-              className="absolute border right-1.5 top-1/2 w-10 h-10 bg-white rounded-full flex justify-center items-center -translate-y-1/2 z-10 p-2 lg:opacity-0 lg:group-hover:opacity-100 transition duration-300 hover:bg-accent hover:text-white"
+              className="absolute border right-1.5 top-1/2 w-10 h-10 bg-white rounded-full flex justify-center items-center -translate-y-1/2 z-10 p-2 lg:opacity-0 lg:group-hover:opacity-100 transition duration-300 hover:bg-danger hover:text-white"
             >
               <GrNext size={20} />
             </Button>
@@ -127,7 +127,7 @@ function ProductGallery({ images }: Props) {
             <Button
               type="button"
               onClick={handlePrevImage}
-              className="absolute left-1.5 top-1/2 w-10 h-10 border bg-white rounded-full flex justify-center items-center -translate-y-1/2 z-10 p-2 lg:opacity-0 lg:group-hover:opacity-100 transition duration-300 hover:bg-accent hover:text-white"
+              className="absolute left-1.5 top-1/2 w-10 h-10 border bg-white rounded-full flex justify-center items-center -translate-y-1/2 z-10 p-2 lg:opacity-0 lg:group-hover:opacity-100 transition duration-300 hover:bg-danger hover:text-white"
             >
               <GrPrevious size={20} />
             </Button>

@@ -129,7 +129,7 @@ function Header() {
                   <div className="relative">
                     <PiShoppingCart size={24} />
 
-                    <small className="absolute flex items-center justify-center top-[-12px] right-[-11px] bg-accent text-white text-[0.7rem] font-medium leading-none  rounded-full w-[20px] h-[20px]">
+                    <small className="absolute flex items-center justify-center top-[-12px] right-[-11px] bg-primary text-white text-[0.7rem] font-medium leading-none  rounded-full w-[20px] h-[20px]">
                       {totalQuantity}
                     </small>
                   </div>
@@ -157,7 +157,7 @@ function Header() {
               <Link to={"/cart"} className="relative">
                 <PiShoppingCart size={24} />
 
-                <small className="absolute flex items-center justify-center top-[-9px] right-[-11px] bg-accent text-white text-[0.7rem] font-medium leading-none  rounded-full w-[20px] h-[20px]">
+                <small className="absolute flex items-center justify-center top-[-9px] right-[-11px] bg-primary text-white text-[0.7rem] font-medium leading-none  rounded-full w-[20px] h-[20px]">
                   {totalQuantity}
                 </small>
               </Link>

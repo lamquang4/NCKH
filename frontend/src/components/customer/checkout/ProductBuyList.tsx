@@ -31,7 +31,7 @@ function ProductBuyList({ items, isLoading = false }: Props) {
                 />
               </div>
 
-              <small className="text-[0.8rem] absolute flex items-center justify-center top-[-7px] right-[-9px] bg-accent text-white font-medium rounded-full w-[25px] h-[25px]">
+              <small className="text-[0.8rem] absolute flex items-center justify-center top-[-7px] right-[-9px] bg-danger text-white font-medium rounded-full w-[25px] h-[25px]">
                 {item.quantity}
               </small>
             </div>
@@ -44,18 +44,18 @@ function ProductBuyList({ items, isLoading = false }: Props) {
                   <del className="text-[#707072]">
                     {item.price.toLocaleString("vi-VN")}₫
                   </del>
-                  <p className="font-medium text-accent">
+                  <p className="font-medium text-danger">
                     {(item.price - item.discount).toLocaleString("vi-VN")}₫
                   </p>
                 </div>
               ) : (
-                <p className="font-medium text-accent">
+                <p className="font-medium text-danger">
                   {item.price.toLocaleString("vi-VN")}₫
                 </p>
               )}
             </div>
 
-            <h5 className="font-medium text-accent my-auto">
+            <h5 className="font-medium text-danger my-auto">
               {item.discount > 0
                 ? ((item.price - item.discount) * item.quantity).toLocaleString(
                     "vi-VN",

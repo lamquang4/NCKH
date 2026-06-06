@@ -39,14 +39,14 @@ function ProductItem({ product }: Props) {
 
         {product.discount > 0 && (
           <div className="absolute top-2 right-2 z-10 font-semibold text-center">
-            <p className="text-white text-[0.8rem] px-2 py-1 bg-accent w-10 h-10 rounded-full text-center flex justify-center items-center">
+            <p className="text-white text-[0.8rem] px-2 py-1 bg-danger w-10 h-10 rounded-full text-center flex justify-center items-center">
               -{Math.floor((product.discount / product.price) * 100)}%
             </p>
           </div>
         )}
 
         {product.stock === 0 && (
-          <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center text-white p-1 font-medium bg-accent uppercase z-10">
+          <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center text-white p-1 font-medium bg-danger uppercase z-10">
             Hết hàng
           </p>
         )}
@@ -65,12 +65,12 @@ function ProductItem({ product }: Props) {
               {product.price.toLocaleString("vi-VN")}₫
             </del>
 
-            <h5 className="font-semibold text-accent">
+            <h5 className="font-semibold text-danger">
               {(product.price - product.discount).toLocaleString("vi-VN")}₫
             </h5>
           </div>
         ) : (
-          <h5 className="font-semibold text-accent">
+          <h5 className="font-semibold text-danger">
             {product.price.toLocaleString("vi-VN")}₫
           </h5>
         )}
