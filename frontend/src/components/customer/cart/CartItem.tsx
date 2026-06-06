@@ -75,12 +75,12 @@ function CartItem({ item, userId }: Props) {
                       {item.price.toLocaleString("vi-VN")}₫
                     </del>
 
-                    <h5 className="font-medium text-accent">
+                    <h5 className="font-medium text-danger">
                       {(item.price - item.discount).toLocaleString("vi-VN")}₫
                     </h5>
                   </div>
                 ) : (
-                  <h5 className="font-medium text-accent">
+                  <h5 className="font-medium text-danger">
                     {item.price.toLocaleString("vi-VN")}₫
                   </h5>
                 )}
@@ -94,7 +94,7 @@ function CartItem({ item, userId }: Props) {
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="w-5 h-5 cursor-pointer fill-black hover:fill-accent inline-block"
+                  className="w-5 h-5 cursor-pointer fill-black hover:fill-danger inline-block"
                   viewBox="0 0 24 24"
                 >
                   <path
@@ -136,7 +136,7 @@ function CartItem({ item, userId }: Props) {
                 </Button>
               </div>
 
-              <h5 className="font-medium text-accent">
+              <h5 className="font-medium text-danger">
                 {item.discount > 0
                   ? (
                       (item.price - item.discount) *
@@ -151,7 +151,7 @@ function CartItem({ item, userId }: Props) {
         <div className="flex gap-2 flex-col">
           {item.stock < item.quantity && (
             <div>
-              <p className="text-accent font-semibold text-center">
+              <p className="text-danger font-semibold text-center">
                 Sản phẩm hiện tại không đủ số lượng. Vui lòng giảm số lượng hoặc
                 xóa sản phẩm khỏi giỏ hàng!
               </p>
@@ -160,7 +160,7 @@ function CartItem({ item, userId }: Props) {
 
           {item.status === 0 && (
             <div>
-              <p className="text-accent font-semibold text-center">
+              <p className="text-danger font-semibold text-center">
                 Sản phẩm đang tạm ngừng bán. Vui lòng xóa sản phẩm khỏi giỏ
                 hàng!
               </p>

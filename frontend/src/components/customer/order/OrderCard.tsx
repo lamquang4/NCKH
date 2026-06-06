@@ -86,12 +86,12 @@ function OrderCard({ order }: Props) {
                   {item.discount > 0 ? (
                     <>
                       <del>{item.price.toLocaleString("vi-VN")}₫</del>
-                      <span className="font-medium text-accent">
+                      <span className="font-medium text-danger">
                         {(item.price - item.discount).toLocaleString("vi-VN")}₫
                       </span>
                     </>
                   ) : (
-                    <span className="font-medium text-accent">
+                    <span className="font-medium text-danger">
                       {item.price.toLocaleString("vi-VN")} ₫
                     </span>
                   )}
