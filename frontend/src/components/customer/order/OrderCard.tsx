@@ -69,7 +69,7 @@ function OrderCard({ order }: Props) {
             <div className="flex items-center gap-[10px] w-full">
               <div className="w-[120px] h-[120px] overflow-hidden">
                 <Image
-                  source={`${item.images[0]}`}
+                  src={`${item.images[0]}`}
                   alt={item.name}
                   className={"w-full h-full object-contain"}
                   loading="lazy"
