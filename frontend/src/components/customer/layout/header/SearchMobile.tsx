@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import SuggestionProduct from "../../ui/SuggestionProduct";
 import Input from "../../../ui/Input";
 import Button from "../../../ui/Button";
+import { LuX } from "react-icons/lu";
 
 type Props = {
   onToggleSearch: () => void;
@@ -72,19 +73,7 @@ function SearchMobile({ onToggleSearch, searchOpen }: Props) {
           </form>
 
           <Button onClick={onToggleSearch}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="lucide lucide-x-icon lucide-x w-3"
-              viewBox="5 5 14 14"
-            >
-              <path d="M18 6 6 18"></path>
-              <path d="m6 6 12 12"></path>
-            </svg>
+            <LuX size={22} />
           </Button>
         </div>
 

@@ -1,7 +1,7 @@
 import { memo } from "react";
 import Image from "../../../ui/Image";
 import Button from "../../../ui/Button";
-import { HiOutlineXMark } from "react-icons/hi2";
+import { LuX } from "react-icons/lu";
 type Props = {
   onClose: () => void;
 };
@@ -21,7 +21,7 @@ function ChatHeader({ onClose }: Props) {
 
       <div className="flex items-center gap-2">
         <Button onClick={onClose}>
-          <HiOutlineXMark size={28} strokeWidth={2} />
+          <LuX size={24} />
         </Button>
       </div>
     </div>

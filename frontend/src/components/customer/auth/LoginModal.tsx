@@ -6,7 +6,7 @@ import Button from "../../ui/Button";
 import Input from "../../ui/Input";
 import Label from "../../ui/Label";
 import Overplay from "../../ui/Overplay";
-import { HiOutlineXMark } from "react-icons/hi2";
+import { LuX } from "react-icons/lu";
 
 type Props = {
   onClose: () => void;
@@ -59,7 +59,7 @@ function LoginModal({ onClose, onSwitchRegister }: Props) {
                 type="button"
                 className="bg-transparent ms-auto"
               >
-                <HiOutlineXMark size={28} strokeWidth={2} />
+                <LuX size={24} />
               </Button>
             </div>
 

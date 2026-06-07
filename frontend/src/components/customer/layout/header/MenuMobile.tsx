@@ -4,7 +4,7 @@ import useGetActiveCategories from "../../../../hooks/customer/category/useGetAc
 import Button from "../../../ui/Button";
 import Image from "../../../ui/Image";
 import Overplay from "../../../ui/Overplay";
-import { HiOutlineXMark } from "react-icons/hi2";
+import { LuX } from "react-icons/lu";
 
 type MenuMobileProps = {
   isOpen: boolean;
@@ -34,7 +34,7 @@ function MenuMobile({ isOpen, onToggleMenu }: MenuMobileProps) {
       >
         <div className="flex justify-end items-center">
           <Button onClick={onToggleMenu}>
-            <HiOutlineXMark size={28} strokeWidth={2} />
+            <LuX size={24} />
           </Button>
         </div>
 

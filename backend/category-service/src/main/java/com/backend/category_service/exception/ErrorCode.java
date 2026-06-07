@@ -14,7 +14,7 @@ public enum ErrorCode {
 
     IMAGE_REQUIRED("Hình ảnh không được để trống", HttpStatus.BAD_REQUEST),
     IMAGE_TOO_LARGE("Dung lượng hình tối đa 2MB", HttpStatus.BAD_REQUEST),
-    IMAGE_INVALID_TYPE("Hình chỉ cho phép JPG, PNG, WEBP, SVG", HttpStatus.BAD_REQUEST),
+    IMAGE_INVALID_TYPE("Hình chỉ cho phép JPG, PNG, WEBP", HttpStatus.BAD_REQUEST),
     IMAGE_UPLOAD_FAILED("Tải hình lên thất bại", HttpStatus.BAD_GATEWAY),
     IMAGE_DELETE_FAILED("Xóa hình thất bại", HttpStatus.BAD_GATEWAY);
 
