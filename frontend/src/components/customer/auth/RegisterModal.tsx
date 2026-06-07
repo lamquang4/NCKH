@@ -12,7 +12,8 @@ import { validateOtp } from "../../../utils/validateOtp";
 import OtpBox from "./OtpBox";
 import { OTP_LENGTH } from "../../../constants/otp";
 import Overplay from "../../ui/Overplay";
-import { HiOutlineXMark } from "react-icons/hi2";
+import Label from "../../ui/Label";
+import { LuX } from "react-icons/lu";
 
 type Props = {
   onClose: () => void;
@@ -125,7 +126,7 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
                 type="button"
                 className="bg-transparent ms-auto"
               >
-                <HiOutlineXMark size={28} strokeWidth={2} />
+                <LuX size={24} />
               </Button>
             </div>
 
@@ -134,9 +135,9 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
             <form className="space-y-[15px]" onSubmit={handleSubmit}>
               {step === 1 ? (
                 <div className="space-y-[5px]">
-                  <label htmlFor="" className="block text-[0.9rem] font-medium">
+                  <Label htmlFor="" className="block text-[0.9rem] font-medium">
                     Email
-                  </label>
+                  </Label>
                   <Input
                     type="text"
                     name="email"
@@ -156,12 +157,12 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
                   />
 
                   <div className="space-y-[5px]">
-                    <label
+                    <Label
                       htmlFor=""
                       className="block text-[0.9rem] font-medium"
                     >
                       Họ và tên
-                    </label>
+                    </Label>
                     <Input
                       type="text"
                       name="fullname"
@@ -174,12 +175,12 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
                   </div>
 
                   <div className="space-y-[5px]">
-                    <label
+                    <Label
                       htmlFor=""
                       className="block text-[0.9rem] font-medium"
                     >
                       Số điện thoại
-                    </label>
+                    </Label>
                     <Input
                       type="number"
                       name="phone"
@@ -192,12 +193,12 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
                   </div>
 
                   <div className="space-y-[5px]">
-                    <label
+                    <Label
                       htmlFor=""
                       className="block text-[0.9rem] font-medium"
                     >
                       Mật khẩu
-                    </label>
+                    </Label>
 
                     <div className="relative">
                       <Input

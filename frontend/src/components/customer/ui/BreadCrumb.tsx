@@ -14,20 +14,20 @@ const BreadCrumb = ({ items }: Props) => {
     <div className="px-[15px]">
       <div className="w-full mx-auto max-w-[1200px] overflow-x-auto">
         <nav className="py-4">
-          <ol className="flex items-center gap-1.5 text-[0.9rem] text-gray-500 font-medium whitespace-nowrap">
+          <ol className="flex items-center gap-1.5 text-[0.9rem] text-neutral whitespace-nowrap">
             {items.map((item, index) => (
               <React.Fragment key={index}>
-                <li className="flex items-center gap-1">
+                <li className="flex items-center gap-1 font-medium hover:text-[#444]">
                   {item.href ? (
                     <Link
                       to={item.href}
-                      className="!inline-flex items-center gap-1 hover:text-black"
+                      className="!inline-flex items-center gap-1"
                     >
                       {index === 0 && <FaHouse size={16} />}
                       {item.name}
                     </Link>
                   ) : (
-                    <span className="text-black">{item.name}</span>
+                    <span>{item.name}</span>
                   )}
                 </li>
 

@@ -225,8 +225,7 @@ public class CategoryService {
         List<String> allowedTypes = List.of(
                 "image/jpeg",
                 "image/png",
-                "image/webp",
-                "image/svg+xml");
+                "image/webp");
 
         if (contentType == null || !allowedTypes.contains(contentType)) {
             throw new AppException(ErrorCode.IMAGE_INVALID_TYPE);

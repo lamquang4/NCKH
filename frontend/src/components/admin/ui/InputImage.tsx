@@ -6,6 +6,7 @@ import { ReactSortable } from "react-sortablejs";
 import Button from "../../ui/Button";
 import Label from "../../ui/Label";
 import Input from "../../ui/Input";
+import { LuCloudUpload } from "react-icons/lu";
 type SortableImage = {
   id: string;
   url: string;
@@ -71,28 +72,16 @@ function InputImage({
         htmlFor={InputId}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
-        className="flex flex-col p-[15px] items-center justify-center w-full min-h-70 h-auto border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 "
+        className="flex flex-col p-[15px] items-center justify-center w-full min-h-70 h-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 "
       >
         {!previewImages.length ? (
-          <div className="flex flex-col items-center justify-center text-[#ADB0BB]">
-            <svg
-              className="w-12 h-12 mb-4"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 20 16"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="1.5"
-                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-              />
-            </svg>
+          <div className="flex flex-col items-center justify-center text-neutral space-y-4">
+            <LuCloudUpload size={48} />
 
-            <p className="mb-2 font-semibold">Bấm để tải, kéo hoặc thả</p>
-            <p>PNG, JPG, WEBP</p>
+            <div className="space-y-2 text-center">
+              <p className="font-semibold">Bấm để tải, kéo hoặc thả</p>
+              <p>PNG, JPG, WEBP</p>
+            </div>
           </div>
         ) : (
           <ReactSortable
