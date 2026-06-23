@@ -704,7 +704,7 @@ public class ProductService {
             String productId,
             String imageId) {
 
-        // Validate size
+        // Validate size (2MB)
         if (file.getSize() > 2 * 1024 * 1024) {
             throw new AppException(ErrorCode.IMAGE_SIZE_EXCEEDED);
         }
