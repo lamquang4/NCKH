@@ -27,7 +27,7 @@ docker compose up --build
 | Hạng mục         | Công nghệ / Công cụ                                                       |
 | ---------------- | ------------------------------------------------------------------------- |
 | Frontend         | Vite + TypeScript + React 19 <br> TailwindCSS <br> Redux <br> Axios + SWR |
-| Backend          | Spring Boot + Maven + Java 17 <br> Spring Security + JWT + OAuth2         |
+| Backend          | Spring Boot + Maven + Java 17 <br> Spring Security + JWT       |
 | Containerization | Docker                                                                    |
 | Database         | MySQL, MongoDB, Redis                                                     |
 | Media Storage    | Cloudinary                                                                |
