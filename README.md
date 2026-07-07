@@ -27,7 +27,7 @@ docker compose up --build
 | Hạng mục         | Công nghệ / Công cụ                                                       |
 | ---------------- | ------------------------------------------------------------------------- |
 | Frontend         | Vite + TypeScript + React 19 <br> TailwindCSS <br> Redux <br> Axios + SWR |
-| Backend          | Spring Boot + Maven + Java 17 <br> Spring Security + JWT       |
+| Backend          | Spring Boot + Maven + Java 17 <br> Spring Security + JWT                  |
 | Containerization | Docker                                                                    |
 | Database         | MySQL, MongoDB, Redis                                                     |
 | Media Storage    | Cloudinary                                                                |
@@ -36,10 +36,29 @@ docker compose up --build
 
 ## Kiến trúc hệ thống
 
-**Danh sách Microservice**
+### Frontend
+
+Single Page Application (SPA) component-based, xây dựng bằng React + TypeScript, build bằng Vite. Giao diện dùng TailwindCSS, responsive trên nhiều thiết bị và Redux Toolkit quản lý state toàn cục.
+
+Sử dụng PrivateRoute để ngăn người dùng chưa đăng nhập không vào được trang cần đăng nhập và PublicRoute để cho phép người dùng vào trang không cần đăng nhập.
+
+SWR để cache và tự động revalidate dữ liệu từ server kết hợp với Axios gọi API qua interceptor để đính JWT vào header và xử lý lỗi tập trung.
+
+JWT lưu qua js-cookie, giải mã role bằng jwt-decode; tự động đăng xuất khi token hết hạn hoặc không hợp lệ.
+
+### Backend (Microservice)
+
+12 service độc lập, mỗi service chạy trên cổng riêng, tự quản lý database riêng (MySQL, MongoDB, Redis) và giao tiếp đồng bộ qua REST API bằng OpenFeign.
+
+Mỗi service tự kiểm tra JWT verify và phân quyền theo vai trò (Role-based access controll) bằng @PreAuthorize và Spring Security.
+
+Xử lý lỗi tập trung và chuẩn hóa API Response thống nhất cho tất cả service.
+
+Giám sát qua Zipkin (tracing) và Prometheus (metrics).
 
 | Service           | Port | Database       | Chức năng                                              |
 | ----------------- | ---- | -------------- | ------------------------------------------------------ |
+| api-gateway       | 8090 | —              | Định tuyến, xử lý CORS                                 |
 | eureka-server     | 8173 | -              | Service registry, quản lý đăng ký và phát hiện service |
 | auth-service      | 8089 | MySQL          | Xác thực người dùng, cấp phát & kiểm tra JWT token     |
 | brand-service     | 8088 | MySQL          | Quản lý thương hiệu sản phẩm                           |
@@ -51,8 +70,6 @@ docker compose up --build
 | category-service  | 8082 | MySQL          | Quản lý danh mục sản phẩm                              |
 | product-service   | 8081 | MySQL          | Quản lý sản phẩm                                       |
 | user-service      | 8080 | MySQL          | Quản lý thông tin tài khoản người dùng                 |
-
-Các service giao tiếp đồng bộ qua REST API; API Gateway định tuyến request và xác thực JWT token trước khi chuyển tiếp vào hệ thống. Spring Security kiểm tra quyền truy cập bằng `@PreAuthorize`.
 
 ## Trợ lý ảo
 

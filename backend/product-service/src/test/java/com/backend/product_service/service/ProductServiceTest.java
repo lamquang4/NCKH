@@ -30,6 +30,7 @@ import com.backend.product_service.client.CartServiceClient;
 import com.backend.product_service.client.CategoryServiceClient;
 import com.backend.product_service.client.OrderServiceClient;
 import com.backend.product_service.dto.request.ProductQueryRequest;
+import com.backend.product_service.dto.request.StockRequest;
 import com.backend.product_service.dto.response.BrandResponse;
 import com.backend.product_service.dto.response.CategoryResponse;
 import com.backend.product_service.dto.response.ProductAssistantResponse;
@@ -257,6 +258,36 @@ class ProductServiceTest {
         // Then
         assertThat(product.getStatus()).isEqualTo(0);
         verify(productRepository).save(product);
+    }
+
+    @Test
+    void decreaseStock_ShouldBatchLoadProductsInOneQuery_WhenRequestsContainMultipleProducts() {
+        // Given
+        Product product1 = createSampleProduct();
+        product1.setId("prod-1");
+        product1.setStock(10);
+        product1.setTotalSold(5);
+
+        Product product2 = createSampleProduct();
+        product2.setId("prod-2");
+        product2.setStock(6);
+        product2.setTotalSold(2);
+
+        when(productRepository.findByIdIn(anyList())).thenReturn(List.of(product1, product2));
+        when(productRepository.save(any(Product.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        // When
+        productService.decreaseStock(List.of(
+                new StockRequest("prod-1", 2),
+                new StockRequest("prod-2", 1)
+        ));
+
+        // Then
+        verify(productRepository).findByIdIn(anyList());
+        assertThat(product1.getStock()).isEqualTo(8);
+        assertThat(product1.getTotalSold()).isEqualTo(7);
+        assertThat(product2.getStock()).isEqualTo(5);
+        assertThat(product2.getTotalSold()).isEqualTo(3);
     }
 
     // ==========================================
