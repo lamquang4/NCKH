@@ -3,6 +3,7 @@ package com.backend.product_service.service;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -622,11 +623,25 @@ public class ProductService {
     // trừ só lượng stock
     @Transactional
     public void decreaseStock(List<StockRequest> requests) {
+        if (requests == null || requests.isEmpty()) {
+            return;
+        }
+
+        List<String> productIds = requests.stream()
+                .map(StockRequest::getProductId)
+                .distinct()
+                .toList();
+
+        Map<String, Product> productMap = new HashMap<>();
+        for (Product product : productRepository.findByIdIn(productIds)) {
+            productMap.put(product.getId(), product);
+        }
 
         for (StockRequest req : requests) {
-
-            Product product = productRepository.findById(req.getProductId())
-                    .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
+            Product product = productMap.get(req.getProductId());
+            if (product == null) {
+                throw new AppException(ErrorCode.PRODUCT_NOT_FOUND);
+            }
 
             if (product.getStock() < req.getQuantity()) {
                 throw new AppException(ErrorCode.PRODUCT_OUT_OF_STOCK);
@@ -642,19 +657,32 @@ public class ProductService {
     // trả số lượng stock
     @Transactional
     public void increaseStock(List<StockRequest> requests) {
+        if (requests == null || requests.isEmpty()) {
+            return;
+        }
+
+        List<String> productIds = requests.stream()
+                .map(StockRequest::getProductId)
+                .distinct()
+                .toList();
+
+        Map<String, Product> productMap = new HashMap<>();
+        for (Product product : productRepository.findByIdIn(productIds)) {
+            productMap.put(product.getId(), product);
+        }
 
         for (StockRequest req : requests) {
-
-            Product product = productRepository.findById(req.getProductId())
-                    .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
+            Product product = productMap.get(req.getProductId());
+            if (product == null) {
+                throw new AppException(ErrorCode.PRODUCT_NOT_FOUND);
+            }
 
             if (product.getStock() < req.getQuantity()) {
                 throw new AppException(ErrorCode.PRODUCT_OUT_OF_STOCK);
             }
 
             product.setStock(product.getStock() + req.getQuantity());
-            product.setTotalSold(
-                    Math.max(0, product.getTotalSold() - req.getQuantity()));
+            product.setTotalSold(Math.max(0, product.getTotalSold() - req.getQuantity()));
 
             productRepository.save(product);
         }
