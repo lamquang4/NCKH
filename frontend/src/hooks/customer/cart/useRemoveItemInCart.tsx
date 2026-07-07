@@ -14,32 +14,37 @@ export function useRemoveItemInCart() {
     if (!userId || !productId || !token) return;
 
     setIsLoading(true);
+    const url = `${import.meta.env.VITE_BACKEND_URL}/cart/${productId}`;
+
     try {
-      const url = `${import.meta.env.VITE_BACKEND_URL}/cart/${productId}`;
-
       await mutate(
-        (current: ApiResponse<CartResponse> | undefined) => {
-          if (!current?.data) return current;
-          return {
-            ...current,
-            data: {
-              ...current.data,
-              items: current.data.items.filter(
-                (i) => i.productId !== productId,
-              ),
-            },
-          };
+        axios
+          .delete(url, { headers: { Authorization: `Bearer ${token}` } })
+          .then(() => undefined),
+        {
+          optimisticData: (
+            current: ApiResponse<CartResponse> | undefined,
+          ): ApiResponse<CartResponse> => {
+            if (!current?.data) {
+              throw new Error("Chưa tải được dữ liệu giỏ hàng.");
+            }
+            return {
+              ...current,
+              data: {
+                ...current.data,
+                items: current.data.items.filter(
+                  (item) => item.productId !== productId,
+                ),
+              },
+            };
+          },
+          rollbackOnError: true,
+          populateCache: false,
+          revalidate: true,
         },
-        { revalidate: false },
       );
-
-      await axios.delete(url, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
-      await mutate();
-      throw err;
     } finally {
       setIsLoading(false);
     }

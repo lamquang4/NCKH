@@ -15,41 +15,42 @@ export function useChangeQuantityItemInCart() {
 
   const changeQuantity = async (userId: string, data: CartItemRequest) => {
     const token = getCookie("token-customer");
+    if (!userId || !data || !token) return;
 
-    if (!userId || !data || !token) {
-      return;
-    }
     setIsLoading(true);
+    const url = `${import.meta.env.VITE_BACKEND_URL}/cart`;
+
     try {
-      const url = `${import.meta.env.VITE_BACKEND_URL}/cart`;
-
       await mutate(
-        (current: ApiResponse<CartResponse> | undefined) => {
-          if (!current?.data) return current;
-          return {
-            ...current,
-            data: {
-              ...current.data,
-              items: current.data.items.map((i) =>
-                i.productId === data.productId
-                  ? { ...i, quantity: data.quantity }
-                  : i,
-              ),
-            },
-          };
+        axios
+          .put(url, data, { headers: { Authorization: `Bearer ${token}` } })
+          .then(() => undefined),
+        {
+          optimisticData: (
+            current: ApiResponse<CartResponse> | undefined,
+          ): ApiResponse<CartResponse> => {
+            if (!current?.data) {
+              throw new Error("Chưa tải được dữ liệu giỏ hàng.");
+            }
+            return {
+              ...current,
+              data: {
+                ...current.data,
+                items: current.data.items.map((i) =>
+                  i.productId === data.productId
+                    ? { ...i, quantity: data.quantity }
+                    : i,
+                ),
+              },
+            };
+          },
+          rollbackOnError: true,
+          populateCache: false,
+          revalidate: true,
         },
-        { revalidate: false },
       );
-
-      await axios.put(url, data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      await mutate();
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
-      await mutate();
       throw err;
     } finally {
       setIsLoading(false);
