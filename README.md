@@ -2,7 +2,7 @@
 
 Đề tài nghiên cứu khoa học sinh viên - Mã số: **SVC2025-150**
 
-Đề tài nghiên cứu khoa học tại Trường Đại học Sài Gòn xây dựng một trợ lý ảo đóng vai trò như người bán hàng thông minh trong hệ thống thương mại điện tử, ứng dụng công nghệ AI Agent trên nền tảng N8N kết hợp với kiến trúc Microservice.
+Đề tài nghiên cứu khoa học tại Trường Đại học Sài Gòn xây dựng một trợ lý ảo cho hệ thống thương mại điện tử, trong đó Backend được phát triển theo kiến trúc Microservice và trợ lý ảo được triển khai dưới dạng AI Agent trên nền tảng N8N.
 
 ![](docs/images/ui1.png)
 
@@ -71,9 +71,9 @@ Giám sát qua Zipkin (tracing) và Prometheus (metrics).
 | product-service   | 8081 | MySQL          | Quản lý sản phẩm                                       |
 | user-service      | 8080 | MySQL          | Quản lý thông tin tài khoản người dùng                 |
 
-## Trợ lý ảo
+### Trợ lý ảo
 
-### Tính năng chính
+**Tính năng chính**
 
 - Tư vấn, tìm kiếm sản phẩm bằng ngôn ngữ tự nhiên tiếng Việt.
 - Gợi ý sản phẩm cá nhân hóa dựa trên lịch sử mua sắm (gọi tool on-demand, không inject sẵn dữ liệu vào system message).
@@ -82,7 +82,7 @@ Giám sát qua Zipkin (tracing) và Prometheus (metrics).
 - Tra cứu đơn hàng và chi tiết đơn hàng.
 - Ghi nhớ ngữ cảnh hội thoại (Short Memory) để phản hồi liên kết, logic trong suốt phiên chat.
 
-### Luồng hoạt động
+**Luồng hoạt động**
 
 Trợ lý ảo nhận tin nhắn từ người dùng kèm lịch sử hội thoại gần nhất, sau đó trả về JSON gồm nội dung phản hồi và danh sách ID sản phẩm liên quan (nếu có):
 
