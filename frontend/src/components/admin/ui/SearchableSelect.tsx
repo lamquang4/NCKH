@@ -7,12 +7,12 @@ type Option = {
   label: string;
 };
 
-type SearchableSelectProps = {
+interface SearchableSelectProps {
   options: Option[];
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
-};
+}
 
 function SearchableSelect({
   options,

@@ -1,3 +1,12 @@
+export type BrandStatus = 0 | 1;
+export type CategoryStatus = 0 | 1;
+export type ProductStatus = 0 | 1;
+export type UserStatus = 0 | 1;
+export type OrderStatus = 0 | 1 | 2 | 3 | 4 | 5;
+export type PaymentStatus = 0 | 1;
+export type UserRole = "CUSTOMER" | "ADMIN";
+export type MessageRole = "USER" | "ASSISTANT";
+
 // Request
 export interface MessageRequest {
   chatId?: string;
@@ -26,20 +35,20 @@ export interface UserRequest {
   fullname: string;
   phone: string;
   birthDate?: string;
-  gender?: number | null;
+  gender?: number;
   password?: string;
-  role?: "CUSTOMER" | "ADMIN";
-  status?: number;
+  role?: UserRole;
+  status?: UserStatus;
 }
 
 export interface BrandRequest {
   name: string;
-  status: number;
+  status: BrandStatus;
 }
 
 export interface CategoryRequest {
   name: string;
-  status: number;
+  status: CategoryStatus;
 }
 
 export interface SpecificationRequest {
@@ -53,7 +62,7 @@ export interface ProductRequest {
   price: number;
   discount: number;
   description: string;
-  status: number;
+  status: ProductStatus;
   stock: number;
   categoryId: string;
   brandId: string;
@@ -82,26 +91,26 @@ export interface UserResponse {
   id: string;
   email: string;
   fullname: string;
-  phone?: string;
-  birthDate?: string;
-  gender?: number;
-  role: "CUSTOMER" | "ADMIN";
-  status: number;
+  phone: string | null;
+  birthDate: string | null;
+  gender: number | null;
+  role: UserRole;
+  status: UserStatus;
 }
 
 export interface BrandResponse {
   id: string;
   name: string;
   slug: string;
-  status: number;
+  status: BrandStatus;
 }
 
 export interface CategoryResponse {
   id: string;
   name: string;
   slug: string;
-  image?: string;
-  status: number;
+  image: string | null;
+  status: CategoryStatus;
 }
 
 export interface BrandSimpleResponse {
@@ -137,7 +146,7 @@ export interface ProductDetailResponse {
   discount: number;
   finalPrice: number;
   description: string;
-  status: number;
+  status: ProductStatus;
   stock: number;
   category: CategorySimpleResponse;
   brand: BrandSimpleResponse;
@@ -154,7 +163,7 @@ export interface ProductListItemResponse {
   finalPrice: number;
   stock: number;
   totalSold: number;
-  status: number;
+  status: ProductStatus;
   categoryName: string;
   brandName: string;
   images: ImageProductResponse[];
@@ -169,7 +178,7 @@ export interface CartItemResponse {
   slug: string;
   quantity: number;
   stock: number;
-  status: number;
+  status: ProductStatus;
 }
 
 export interface CartResponse {
@@ -198,7 +207,7 @@ export interface OrderResponse {
   city: string;
   ward: string;
   paymethod: string;
-  status: number;
+  status: OrderStatus;
   total: number;
   items: OrderItemResponse[];
   createdAt: string;
@@ -211,7 +220,7 @@ export interface PaymentResponse {
   paymethod: string;
   amount: number;
   transactionId: string;
-  status: number; // 1 success, 0 refund
+  status: PaymentStatus; // 1 success, 0 refund
   createdAt: string;
 }
 
@@ -229,17 +238,16 @@ export type Province = {
 export interface MessageResponse {
   id: string;
   chatId: string;
-  role: string;
+  role: MessageRole;
   content: string;
-  products?: ProductListItemResponse[];
-  extraData?: Record<string, any>;
+  products: ProductListItemResponse[];
   createdAt: string;
 }
 
 // token
 export interface TokenPayload {
   sub: string;
-  role: "ADMIN" | "CUSTOMER";
+  role: UserRole;
   exp: number;
   iat: number;
 }

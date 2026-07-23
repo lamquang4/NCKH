@@ -63,7 +63,7 @@ public class Product {
     private String slug;
 
     @Column(nullable = false)
-    private Integer status;
+    private Integer status; // 0, 1
 
     @Column(nullable = false)
     private Integer stock;

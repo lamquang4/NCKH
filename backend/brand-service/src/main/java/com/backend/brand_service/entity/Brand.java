@@ -41,7 +41,7 @@ public class Brand {
     private String slug;
 
     @Column(nullable = false)
-    private Integer status;
+    private Integer status; // 0, 1
 
     @CreatedDate
     @Column(updatable = false)
