@@ -8,6 +8,7 @@ import Input from "../../ui/Input";
 import Select from "../../ui/Select";
 import Button from "../../ui/Button";
 import Label from "../../ui/Label";
+import type { CategoryStatus } from "../../../types/type";
 
 function AddCategoryForm() {
   const [data, setData] = useState({
@@ -59,7 +60,7 @@ function AddCategoryForm() {
     await addCategory(
       {
         name: data.name.trim(),
-        status: Number(data.status),
+        status: Number(data.status) as CategoryStatus,
       },
       orderedFiles[0],
     );

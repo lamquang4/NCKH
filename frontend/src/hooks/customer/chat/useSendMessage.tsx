@@ -21,6 +21,7 @@ export default function useSendMessage() {
       content: "Trợ lý ảo đang phản hồi...",
       role: "ASSISTANT",
       createdAt: new Date().toISOString(),
+      products: [],
     };
 
     const optimisticMessage: MessageResponse = {
@@ -29,6 +30,7 @@ export default function useSendMessage() {
       content: data.content,
       role: "USER",
       createdAt: new Date().toISOString(),
+      products: [],
     };
 
     setIsLoading(true);

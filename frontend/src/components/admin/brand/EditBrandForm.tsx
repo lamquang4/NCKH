@@ -7,6 +7,7 @@ import Input from "../../ui/Input";
 import Select from "../../ui/Select";
 import Button from "../../ui/Button";
 import Label from "../../ui/Label";
+import type { BrandStatus } from "../../../types/type";
 
 function EditBrandForm() {
   const navigate = useNavigate();
@@ -62,7 +63,7 @@ function EditBrandForm() {
 
     await updateBrand({
       name: data.name.trim(),
-      status: Number(data.status),
+      status: Number(data.status) as BrandStatus,
     });
   };
 

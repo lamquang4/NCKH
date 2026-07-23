@@ -2,9 +2,9 @@ import { type ReactNode, useEffect, useState } from "react";
 import Header from "./header/Header";
 import MenuSide from "./MenuSide";
 
-interface LayoutProps {
+type LayoutProps = {
   children: ReactNode;
-}
+};
 
 function LayoutPage({ children }: LayoutProps) {
   const [menuOpen, setMenuOpen] = useState(false);

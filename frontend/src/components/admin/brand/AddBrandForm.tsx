@@ -6,6 +6,7 @@ import Select from "../../ui/Select";
 import Button from "../../ui/Button";
 import Label from "../../ui/Label";
 import toast from "react-hot-toast";
+import type { BrandStatus } from "../../../types/type";
 
 function AddBrandForm() {
   const [data, setData] = useState({
@@ -40,7 +41,7 @@ function AddBrandForm() {
 
     await addBrand({
       name: data.name.trim(),
-      status: Number(data.status),
+      status: Number(data.status) as BrandStatus,
     });
 
     setData({

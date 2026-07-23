@@ -2,7 +2,7 @@ export type BrandStatus = 0 | 1;
 export type CategoryStatus = 0 | 1;
 export type ProductStatus = 0 | 1;
 export type UserStatus = 0 | 1;
-export type OrderStatus = 0 | 1 | 2 | 3 | 4 | 5;
+export type OrderStatus = -1 | 0 | 1 | 2 | 3 | 4 | 5;
 export type PaymentStatus = 0 | 1;
 export type UserRole = "CUSTOMER" | "ADMIN";
 export type MessageRole = "USER" | "ASSISTANT";
@@ -35,7 +35,7 @@ export interface UserRequest {
   fullname: string;
   phone: string;
   birthDate?: string;
-  gender?: number;
+  gender?: number | null;
   password?: string;
   role?: UserRole;
   status?: UserStatus;
@@ -84,14 +84,14 @@ export interface ApiResponse<T> {
 
 export interface LoginResponse {
   token: string;
-  role: string;
+  role: UserRole;
 }
 
 export interface UserResponse {
   id: string;
   email: string;
   fullname: string;
-  phone: string | null;
+  phone: string;
   birthDate: string | null;
   gender: number | null;
   role: UserRole;

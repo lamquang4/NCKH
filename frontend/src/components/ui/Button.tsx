@@ -1,6 +1,7 @@
 import React from "react";
 
-type Props = React.ButtonHTMLAttributes<HTMLButtonElement>;
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
 
 function Button({ children, ...props }: Props) {
   return <button {...props}>{children}</button>;

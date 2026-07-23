@@ -6,10 +6,10 @@ import Image from "../../../ui/Image";
 import Overplay from "../../../ui/Overplay";
 import { LuX } from "react-icons/lu";
 
-interface MenuMobileProps {
+type MenuMobileProps = {
   isOpen: boolean;
   onToggleMenu: () => void;
-}
+};
 function MenuMobile({ isOpen, onToggleMenu }: MenuMobileProps) {
   const { categories } = useGetActiveCategories();
 
