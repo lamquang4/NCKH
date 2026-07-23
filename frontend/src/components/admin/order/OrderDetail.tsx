@@ -92,7 +92,7 @@ function OrderDetail() {
 
               <div className="px-[20px]">
                 <div className="flex justify-center w-full py-[20px]">
-                  {order?.status && (
+                  {order?.status != null && (
                     <Select
                       name="status"
                       disabled={isLoadingUpdate}
