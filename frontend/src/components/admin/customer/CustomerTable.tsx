@@ -7,10 +7,10 @@ import Button from "../../ui/Button";
 import { USER_STATUS_OPTIONS } from "../../../constants/filterOptions";
 import type { UserResponse } from "../../../types/type";
 
-type Props = {
+interface Props {
   customers: UserResponse[];
   isLoading: boolean;
-};
+}
 
 function CustomerTable({ customers, isLoading }: Props) {
   const { updateStatusUser, isLoading: isLoadingUpdate } =

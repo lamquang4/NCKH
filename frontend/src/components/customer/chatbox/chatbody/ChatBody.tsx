@@ -2,12 +2,12 @@ import { memo } from "react";
 import MessageList from "./MessageList";
 import type { MessageResponse } from "../../../../types/type";
 
-type Props = {
+interface Props {
   messages: MessageResponse[];
   isLoading: boolean;
   hasMore: boolean;
   loadMore: () => void;
-};
+}
 
 function ChatBody({ messages, isLoading, hasMore, loadMore }: Props) {
   return (

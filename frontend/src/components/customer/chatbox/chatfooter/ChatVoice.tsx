@@ -4,10 +4,10 @@ import { RiVoiceAiLine } from "react-icons/ri";
 import { useVoice } from "../../../../hooks/customer/useVoice";
 import Button from "../../../ui/Button";
 
-type Props = {
+interface Props {
   inputRef: React.RefObject<HTMLTextAreaElement | null>;
   onInput: () => void;
-};
+}
 
 function ChatVoice({ inputRef, onInput }: Props) {
   const { recording, startVoice, stopVoice } = useVoice({

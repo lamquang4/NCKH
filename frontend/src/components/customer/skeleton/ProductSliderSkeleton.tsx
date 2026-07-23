@@ -1,9 +1,9 @@
 import { memo } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode } from "swiper/modules";
-type Props = {
+interface Props {
   count: number;
-};
+}
 
 function ProductSliderSkeleton({ count }: Props) {
   return (

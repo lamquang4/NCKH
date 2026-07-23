@@ -5,10 +5,10 @@ import Input from "../../../ui/Input";
 import Button from "../../../ui/Button";
 import { LuX } from "react-icons/lu";
 
-type Props = {
+interface Props {
   onToggleSearch: () => void;
   searchOpen: boolean;
-};
+}
 
 function SearchMobile({ onToggleSearch, searchOpen }: Props) {
   const navigate = useNavigate();

@@ -3,11 +3,11 @@ import "yet-another-react-lightbox/styles.css";
 import Download from "yet-another-react-lightbox/plugins/download";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 
-type Props = {
+interface Props {
   image: string;
   open: boolean;
   onClose: () => void;
-};
+}
 
 function ImageViewer({ image, open, onClose }: Props) {
   return (

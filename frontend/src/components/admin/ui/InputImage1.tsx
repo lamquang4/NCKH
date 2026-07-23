@@ -2,12 +2,12 @@ import { memo } from "react";
 import { RiImageEditFill } from "react-icons/ri";
 import Input from "../../ui/Input";
 import Label from "../../ui/Label";
-type Props = {
+interface Props {
   InputId: string;
   onFileSelect: (file: File, imageIndex: number) => void;
   sizeIcon: number;
   imageIndex: number;
-};
+}
 
 function InputImage1({ InputId, onFileSelect, sizeIcon, imageIndex }: Props) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

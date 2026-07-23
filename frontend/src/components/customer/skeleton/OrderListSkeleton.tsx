@@ -1,7 +1,7 @@
 import { memo } from "react";
-type Props = {
+interface Props {
   count: number;
-};
+}
 
 function OrderListSkeleton({ count }: Props) {
   return (

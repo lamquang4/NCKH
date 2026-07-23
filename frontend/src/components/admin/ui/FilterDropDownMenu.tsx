@@ -3,14 +3,14 @@ import { FaSortDown } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import Button from "../../ui/Button";
 
-type Props = {
+interface Props {
   title: string;
   array: {
     name: string;
     value: number | null;
   }[];
   paramName: string;
-};
+}
 
 function FilterDropDownMenu({ title, array, paramName }: Props) {
   const navigate = useNavigate();

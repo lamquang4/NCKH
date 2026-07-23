@@ -2,17 +2,17 @@ import { useState, useRef, useEffect, memo } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import Input from "../../ui/Input";
 
-type Option = {
+interface Option {
   value: string;
   label: string;
-};
+}
 
-type SearchableSelectProps = {
+interface SearchableSelectProps {
   options: Option[];
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
-};
+}
 
 function SearchableSelect({
   options,

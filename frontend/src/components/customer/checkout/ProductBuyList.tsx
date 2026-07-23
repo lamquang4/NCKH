@@ -3,10 +3,10 @@ import Image from "../../ui/Image";
 import type { CartItemResponse } from "../../../types/type";
 import ProductBuyListSkeleton from "../skeleton/ProductBuyListSkeleton";
 
-type Props = {
+interface Props {
   items: CartItemResponse[];
   isLoading: boolean;
-};
+}
 
 function ProductBuyList({ items, isLoading = false }: Props) {
   return (

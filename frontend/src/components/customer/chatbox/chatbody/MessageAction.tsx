@@ -2,9 +2,9 @@ import { memo } from "react";
 import Button from "../../../ui/Button";
 import { MdContentCopy } from "react-icons/md";
 
-type Props = {
+interface Props {
   onCopy: () => void;
-};
+}
 
 function MessageAction({ onCopy }: Props) {
   return (

@@ -6,10 +6,10 @@ import { Link } from "react-router-dom";
 import type { OrderResponse } from "../../../../types/type";
 import OrderInfoSkeleton from "../../skeleton/OrderInfoSkeleton";
 
-type Props = {
+interface Props {
   order: OrderResponse;
   isLoading: boolean;
-};
+}
 
 const steps = [
   { label: "Chờ xác nhận", icon: <LuArchive size={24} /> },

@@ -2,9 +2,9 @@ import { memo } from "react";
 import Image from "../../../ui/Image";
 import Button from "../../../ui/Button";
 import { LuX } from "react-icons/lu";
-type Props = {
+interface Props {
   onClose: () => void;
-};
+}
 
 function ChatHeader({ onClose }: Props) {
   return (

@@ -4,7 +4,7 @@ import Input from "../../ui/Input";
 import Select from "../../ui/Select";
 import Label from "../../ui/Label";
 
-type Props = {
+interface Props {
   data: {
     fullname: string;
     phone: string;
@@ -25,7 +25,7 @@ type Props = {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => void;
   provinces: Province[];
-};
+}
 
 function ShippingInfoForm({ data, setData, onChange, provinces }: Props) {
   const selectedProvince = useMemo(

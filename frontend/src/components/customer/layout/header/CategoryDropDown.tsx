@@ -3,10 +3,10 @@ import type { CategoryResponse } from "../../../../types/type";
 import Image from "../../../ui/Image";
 import { memo } from "react";
 
-type Props = {
+interface Props {
   categories: CategoryResponse[];
   categoryDropDownOpen: boolean;
-};
+}
 
 function CategoryDropDown({ categories, categoryDropDownOpen }: Props) {
   if (!categoryDropDownOpen) return null;

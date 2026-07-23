@@ -7,11 +7,10 @@ import useUpdateStatusOrder from "../../../hooks/admin/order/useUpdateStatusOrde
 import Select from "../../ui/Select";
 import { ORDER_STATUS_OPTIONS } from "../../../constants/filterOptions";
 import type { OrderResponse } from "../../../types/type";
-
-type Props = {
+interface Props {
   orders: OrderResponse[];
   isLoading: boolean;
-};
+}
 
 function OrderTable({ orders, isLoading }: Props) {
   const { updateStatusOrder, isLoading: isLoadingUpdate } =

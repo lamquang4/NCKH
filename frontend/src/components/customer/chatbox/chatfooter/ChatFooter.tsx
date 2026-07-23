@@ -9,9 +9,9 @@ import ChatVoice from "./ChatVoice";
 import { openAuthModal } from "../../../../redux/slices/authModalSlice";
 import { useAppDispatch } from "../../../../redux/store";
 
-type Props = {
+interface Props {
   isLoadingMessages: boolean;
-};
+}
 
 function ChatFooter({ isLoadingMessages }: Props) {
   const dispatch = useAppDispatch();

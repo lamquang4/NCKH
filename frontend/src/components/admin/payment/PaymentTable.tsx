@@ -4,10 +4,10 @@ import FilterDropDownMenu from "../ui/FilterDropDownMenu";
 import { PAYMENT_STATUS_OPTIONS } from "../../../constants/filterOptions";
 import type { PaymentResponse } from "../../../types/type";
 
-type Props = {
+interface Props {
   payments: PaymentResponse[];
   isLoading: boolean;
-};
+}
 
 function PaymentTable({ payments, isLoading }: Props) {
   return (

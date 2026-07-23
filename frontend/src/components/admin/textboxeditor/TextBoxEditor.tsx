@@ -17,10 +17,10 @@ import Link from "@tiptap/extension-link";
 import ToolBar from "./toolbar/ToolBar";
 import BubbleMenuBar from "./BubbleMenuBar";
 
-type Props = {
+interface Props {
   content: string;
   onChange?: (value: string) => void;
-};
+}
 
 function TextBoxEditor({ content, onChange }: Props) {
   const editor = useEditor({

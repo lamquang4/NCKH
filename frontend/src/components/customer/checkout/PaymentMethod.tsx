@@ -1,9 +1,9 @@
 import Image from "../../ui/Image";
 import Input from "../../ui/Input";
-type Props = {
+interface Props {
   paymethod: string;
   setPaymethod: (value: string) => void;
-};
+}
 
 const paymethods = [
   {

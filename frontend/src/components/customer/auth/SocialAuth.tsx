@@ -2,9 +2,9 @@ import { memo } from "react";
 import { FaGoogle } from "react-icons/fa6";
 import Button from "../../ui/Button";
 
-type Props = {
+interface Props {
   title: string;
-};
+}
 
 function SocialAuth({ title }: Props) {
   const providers = [

@@ -1,8 +1,8 @@
 import { memo } from "react";
 
-type Props = {
+interface Props {
   count: number;
-};
+}
 
 function ProductBuyListSkeleton({ count }: Props) {
   return (

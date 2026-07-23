@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 import Image from "../../ui/Image";
 
-type Props = {
+interface Props {
   banners: {
     mobile: string;
     desktop: string;
   }[];
-};
+}
 
 function PromotionBanner({ banners }: Props) {
   return (

@@ -7,12 +7,12 @@ import Button from "../../ui/Button";
 import Label from "../../ui/Label";
 import Input from "../../ui/Input";
 import { LuCloudUpload } from "react-icons/lu";
-type SortableImage = {
+interface SortableImage  {
   id: string;
   url: string;
 };
 
-type Props = {
+interface Props {
   InputId: string;
   previewImages: string[];
   onPreviewImage: (
