@@ -26,23 +26,23 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class Otp {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private String id;
 
-    @Column(nullable = false)
-    private String email;
+  @Column(nullable = false)
+  private String email;
 
-    @Column(nullable = false, length = 255)
-    private String otp; // hash
+  @Column(nullable = false, length = 255)
+  private String otp; // hash
 
-    @Column(nullable = false)
-    private LocalDateTime expiredAt;
+  @Column(nullable = false)
+  private LocalDateTime expiredAt;
 
-      @Column(nullable = false)
-    private int failedAttempts;
+  @Column(nullable = false)
+  private int failedAttempts;
 
-    @CreatedDate
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
+  @CreatedDate
+  @Column(updatable = false)
+  private LocalDateTime createdAt;
 }

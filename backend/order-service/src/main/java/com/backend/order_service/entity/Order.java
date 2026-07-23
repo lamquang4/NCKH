@@ -68,7 +68,8 @@ public class Order {
   private String paymethod;
 
   @Column(nullable = false)
-  private Integer status;
+  private Integer status; // -1 chờ thanh toán, 0 chờ xác nhận, 1 xác nhận, 2 đang giao, 3 giao thành
+                          // công, 4 hủy, 5 trả hàng
 
   @Column(nullable = false)
   private BigDecimal total;

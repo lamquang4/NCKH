@@ -10,6 +10,7 @@ import Input from "../../ui/Input";
 import Select from "../../ui/Select";
 import Button from "../../ui/Button";
 import Label from "../../ui/Label";
+import type { UserStatus } from "../../../types/type";
 
 function EditAdminForm() {
   const navigate = useNavigate();
@@ -94,7 +95,7 @@ function EditAdminForm() {
       phone: data.phone.trim(),
       email: data.email.trim(),
       role: "ADMIN",
-      status: Number(data.status),
+      status: Number(data.status) as UserStatus,
       ...(data.password.trim() && { password: data.password.trim() }),
     });
 

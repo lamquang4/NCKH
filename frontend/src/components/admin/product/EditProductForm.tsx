@@ -26,6 +26,7 @@ import Button from "../../ui/Button";
 import Input from "../../ui/Input";
 import Select from "../../ui/Select";
 import Label from "../../ui/Label";
+import type { ProductStatus } from "../../../types/type";
 
 const TextBoxEditor = lazy(() => import("../textboxeditor/TextBoxEditor"));
 
@@ -261,7 +262,7 @@ function EditProductForm() {
         price: data.price,
         discount: data.discount,
         description: data.description,
-        status: Number(data.status),
+        status: Number(data.status) as ProductStatus,
         stock: data.stock,
         categoryId: data.category,
         brandId: data.brand,

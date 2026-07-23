@@ -11,6 +11,7 @@ import Input from "../../ui/Input";
 import Select from "../../ui/Select";
 import Button from "../../ui/Button";
 import Label from "../../ui/Label";
+import type { CategoryStatus } from "../../../types/type";
 
 function EditCategoryForm() {
   const navigate = useNavigate();
@@ -84,7 +85,7 @@ function EditCategoryForm() {
     await updateCategory(
       {
         name: data.name.trim(),
-        status: Number(data.status),
+        status: Number(data.status) as CategoryStatus,
       },
       orderedFiles[0],
     );

@@ -52,10 +52,10 @@ public class User {
     private String password;
 
     @Column(nullable = false)
-    private String role; // customer, admin
+    private String role; // CUSTOMER, ADMIN
 
     @Column(nullable = false)
-    private Integer status;
+    private Integer status; // 0 chặn, 1 bình thường
 
     @CreatedDate
     @Column(updatable = false)
