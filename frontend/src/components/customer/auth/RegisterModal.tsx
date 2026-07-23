@@ -15,10 +15,10 @@ import Overplay from "../../ui/Overplay";
 import Label from "../../ui/Label";
 import { LuX } from "react-icons/lu";
 
-type Props = {
+interface Props {
   onClose: () => void;
   onSwitchLogin: () => void;
-};
+}
 
 function RegisterModal({ onClose, onSwitchLogin }: Props) {
   const [data, setData] = useState({

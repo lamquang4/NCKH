@@ -3,9 +3,9 @@ import Image from "../../ui/Image";
 import { memo, useEffect } from "react";
 import { Link } from "react-router-dom";
 import useGetSuggestionProducts from "../../../hooks/customer/product/list/useGetSuggestionProducts";
-type Props = {
+interface Props {
   search: string;
-};
+}
 function SuggestionProduct({ search }: Props) {
   const { products, isLoading, setKeyword } = useGetSuggestionProducts(10);
 

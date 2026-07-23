@@ -6,7 +6,7 @@ import Image from "../../../ui/Image";
 import Overplay from "../../../ui/Overplay";
 import { LuX } from "react-icons/lu";
 
-type MenuMobileProps = {
+interface MenuMobileProps  {
   isOpen: boolean;
   onToggleMenu: () => void;
 };

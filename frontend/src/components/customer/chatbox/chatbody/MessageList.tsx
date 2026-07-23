@@ -2,12 +2,12 @@ import { memo, useCallback, useLayoutEffect, useRef } from "react";
 import MessageItem from "./MessageItem";
 import type { MessageResponse } from "../../../../types/type";
 
-type Props = {
+interface Props {
   messages: MessageResponse[];
   isLoading: boolean;
   hasMore: boolean;
   loadMore: () => void;
-};
+}
 
 function MessageList({ messages, isLoading, hasMore, loadMore }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);

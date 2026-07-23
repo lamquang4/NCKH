@@ -11,39 +11,39 @@ import { AiOutlineCreditCard } from "react-icons/ai";
 import { TiTags } from "react-icons/ti";
 import Button from "../../ui/Button";
 import Overplay from "../../ui/Overplay";
-type Props = {
+interface Props {
   menuOpen: boolean;
   onToggleMenu: () => void;
-};
+}
 
-type MenuChild = {
+interface MenuChild {
   label: string;
   path: string;
-};
+}
 
-type MenuItemBase = {
+interface MenuItemBase {
   icon: ReactNode;
   label: string;
-};
+}
 
-type MenuItemWithChildren = MenuItemBase & {
+interface MenuItemWithChildren extends MenuItemBase {
   key: string;
   children: MenuChild[];
   path?: never;
-};
+}
 
-type MenuItemSingle = MenuItemBase & {
+interface MenuItemSingle extends MenuItemBase {
   path: string;
   children?: never;
   key?: never;
-};
+}
 
 type MenuItem = MenuItemWithChildren | MenuItemSingle;
 
-type MenuGroup = {
-  title: string;
+interface MenuGroup {
+  title?: string;
   items: MenuItem[];
-};
+}
 
 const menuData: MenuGroup[] = [
   {

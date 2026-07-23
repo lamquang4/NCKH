@@ -4,9 +4,9 @@ import Image from "../../ui/Image";
 import { CiCalendar } from "react-icons/ci";
 import { memo } from "react";
 
-type Props = {
+interface Props {
   order: OrderResponse;
-};
+}
 
 function OrderCard({ order }: Props) {
   return (

@@ -1,9 +1,9 @@
 import { memo, useEffect, useRef, useState } from "react";
 import Button from "../../../ui/Button";
 
-type Props = {
+interface Props {
   description: string;
-};
+}
 
 function ProductDescription({ description }: Props) {
   const wrapperRef = useRef<HTMLDivElement>(null);

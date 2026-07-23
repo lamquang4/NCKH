@@ -1,9 +1,9 @@
 import { forwardRef, memo } from "react";
 
-type Props = {
+interface Props {
   onInput: () => void;
   onSubmit: (e?: React.FormEvent) => void;
-};
+}
 
 const ChatInput = forwardRef<HTMLTextAreaElement, Props>(
   ({ onInput, onSubmit }, ref) => {

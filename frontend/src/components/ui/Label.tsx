@@ -1,6 +1,7 @@
 import React from "react";
 
-type Props = React.LabelHTMLAttributes<HTMLLabelElement>;
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+interface Props extends React.LabelHTMLAttributes<HTMLLabelElement> {}
 
 function Label({ children, ...props }: Props) {
   return <label {...props}>{children}</label>;

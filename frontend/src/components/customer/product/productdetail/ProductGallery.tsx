@@ -7,9 +7,9 @@ import type { ImageProductResponse } from "../../../../types/type";
 import ImageViewer from "../../../ui/ImageViewer";
 import Button from "../../../ui/Button";
 
-type Props = {
+interface Props {
   images: ImageProductResponse[];
-};
+}
 
 function ProductGallery({ images }: Props) {
   const [mainImage, setMainImage] = useState<string>("");

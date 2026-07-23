@@ -1,8 +1,8 @@
 import React from "react";
 import { memo } from "react";
-type Props = {
+interface Props {
   count: number;
-};
+}
 
 function CartItemListSkeleton({ count }: Props) {
   return (

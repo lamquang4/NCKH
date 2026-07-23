@@ -7,10 +7,10 @@ import CartItem from "./CartItem";
 import CartItemListSkeleton from "../skeleton/CartItemListSkeleton";
 import Button from "../../ui/Button";
 
-type Props = {
+interface Props {
   cart: CartResponse;
   isLoading: boolean;
-};
+}
 
 function CartItemList({ cart, isLoading = false }: Props) {
   const navigate = useNavigate();

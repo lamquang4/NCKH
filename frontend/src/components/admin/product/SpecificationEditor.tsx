@@ -4,7 +4,7 @@ import { memo } from "react";
 import Button from "../../ui/Button";
 import Input from "../../ui/Input";
 
-type Props = {
+interface Props {
   specifications: SpecificationResponse[];
   setSpecifications: React.Dispatch<
     React.SetStateAction<SpecificationResponse[]>
@@ -17,7 +17,7 @@ type Props = {
     field: "specKey" | "specValue",
     value: string,
   ) => void;
-};
+}
 
 const SpecificationEditor = ({
   specifications,

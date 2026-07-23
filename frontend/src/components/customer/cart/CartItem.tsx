@@ -9,10 +9,10 @@ import toast from "react-hot-toast";
 import Button from "../../ui/Button";
 import { LuTrash2 } from "react-icons/lu";
 
-type Props = {
+interface Props {
   item: CartItemResponse;
   userId: string;
-};
+}
 
 function CartItem({ item, userId }: Props) {
   const max = 15;

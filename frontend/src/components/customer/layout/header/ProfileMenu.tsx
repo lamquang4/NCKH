@@ -5,9 +5,9 @@ import useLogout from "../../../../hooks/auth/useLogout";
 import Button from "../../../ui/Button";
 import { useAppDispatch } from "../../../../redux/store";
 import { openAuthModal } from "../../../../redux/slices/authModalSlice";
-type Props = {
+interface Props {
   profileMenuOpen: boolean;
-};
+}
 
 function ProfileMenu({ profileMenuOpen }: Props) {
   const { account, isLoading } = useGetAccount("CUSTOMER");

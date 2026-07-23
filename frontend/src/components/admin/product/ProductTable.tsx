@@ -12,10 +12,10 @@ import Button from "../../ui/Button";
 import { PRODUCT_STATUS_OPTIONS } from "../../../constants/filterOptions";
 import type { ProductListItemResponse } from "../../../types/type";
 
-type Props = {
+interface Props {
   products: ProductListItemResponse[];
   isLoading: boolean;
-};
+}
 
 function ProductTable({ products, isLoading }: Props) {
   const { deleteProduct, isLoading: isLoadingDelete } = useDeleteProduct();

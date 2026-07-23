@@ -4,7 +4,7 @@ import ProfileMenu from "./ProfileMenu";
 import { useCallback, useState } from "react";
 import Button from "../../../ui/Button";
 
-type Props = {
+interface Props {
   onToggleMenu: () => void;
 };
 

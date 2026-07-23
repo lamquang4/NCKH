@@ -12,10 +12,10 @@ import Button from "../../ui/Button";
 import { BRAND_STATUS_OPTIONS } from "../../../constants/filterOptions";
 import type { BrandResponse } from "../../../types/type";
 
-type Props = {
+interface Props {
   brands: BrandResponse[];
   isLoading: boolean;
-};
+}
 
 function BrandTable({ brands, isLoading }: Props) {
   const { deleteBrand, isLoading: isLoadingDelete } = useDeleteBrand();

@@ -13,10 +13,10 @@ import Button from "../../ui/Button";
 import { USER_STATUS_OPTIONS } from "../../../constants/filterOptions";
 import type { UserResponse } from "../../../types/type";
 
-type Props = {
+interface Props {
   admins: UserResponse[];
   isLoading: boolean;
-};
+}
 
 function AdminTable({ admins, isLoading }: Props) {
   const { account } = useGetAccount("ADMIN");

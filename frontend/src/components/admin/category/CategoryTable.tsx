@@ -12,10 +12,10 @@ import Button from "../../ui/Button";
 import { CATEGORY_STATUS_OPTIONS } from "../../../constants/filterOptions";
 import type { CategoryResponse } from "../../../types/type";
 
-type Props = {
+interface Props {
   categories: CategoryResponse[];
   isLoading: boolean;
-};
+}
 
 function CategoryTable({ categories, isLoading }: Props) {
   const { deleteCategory, isLoading: isLoadingDelete } = useDeleteCategory();

@@ -4,9 +4,9 @@ import ChatHeader from "./chatheader/ChatHeader";
 import ChatFooter from "./chatfooter/ChatFooter";
 import useGetChatMessages from "../../../hooks/customer/chat/useGetChatMessages";
 
-type Props = {
+interface Props {
   onClose: () => void;
-};
+}
 
 function ChatWindow({ onClose }: Props) {
   const { messages, isLoading, hasMore, loadMore } = useGetChatMessages();

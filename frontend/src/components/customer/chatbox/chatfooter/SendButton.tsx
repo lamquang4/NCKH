@@ -2,11 +2,11 @@ import { memo } from "react";
 import { LuSendHorizontal } from "react-icons/lu";
 import Button from "../../../ui/Button";
 
-type Props = {
+interface Props {
   textLength: number;
   isLoadingSendMessage: boolean;
   isLoadingMessages: boolean;
-};
+}
 
 function ChatButton({
   textLength,

@@ -1,14 +1,16 @@
 import { memo } from "react";
-import type {
-  SpecificationResponse,
-} from "../../../../types/type";
+import type { SpecificationResponse } from "../../../../types/type";
 
-type Props = {
+interface Props {
   categoryName: string;
-  brandName: string
+  brandName: string;
   specifications: SpecificationResponse[];
-};
-function ProductInformation({ categoryName, brandName, specifications }: Props) {
+}
+function ProductInformation({
+  categoryName,
+  brandName,
+  specifications,
+}: Props) {
   return (
     <div className="text-black space-y-[15px]">
       <h4>Thông tin chi tiết</h4>

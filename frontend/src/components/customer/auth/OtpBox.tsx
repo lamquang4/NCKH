@@ -4,11 +4,11 @@ import { validateOtp } from "../../../utils/validateOtp";
 import Input from "../../ui/Input";
 import Button from "../../ui/Button";
 
-type Props = {
+interface Props {
   value: string;
   onChange: (otp: string) => void;
   onResend: () => void;
-};
+}
 
 function OtpBox({ value, onChange, onResend }: Props) {
   const [isTimerActive, setIsTimerActive] = useState<boolean>(true);

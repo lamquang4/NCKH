@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import type { ProductListItemResponse } from "../../../../types/type";
 import ToolTip from "../../ui/ToolTip";
 
-type Props = {
+interface Props  {
   products: ProductListItemResponse[];
 };
 

@@ -3,13 +3,16 @@ import Image from "../../../ui/Image";
 import MessageAction from "./MessageAction";
 import { memo, useCallback } from "react";
 import MessageProductList from "./MessageProductList";
-import type { ProductListItemResponse } from "../../../../types/type";
+import type {
+  MessageRole,
+  ProductListItemResponse,
+} from "../../../../types/type";
 
-type props = {
-  role: "ASSISTANT" | "USER";
+interface props {
+  role: MessageRole;
   content: string;
   products?: ProductListItemResponse[];
-};
+}
 
 function MessageItem({ role, content, products }: props) {
   const handleCopy = useCallback(async () => {
