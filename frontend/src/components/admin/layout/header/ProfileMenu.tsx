@@ -7,7 +7,7 @@ import useGetAccount from "../../../../hooks/auth/useGetAccount";
 import useLogout from "../../../../hooks/auth/useLogout";
 import Button from "../../../ui/Button";
 
-type Props = {
+interface Props {
   menuOpen: boolean;
   onToggleMenu: () => void;
 };
