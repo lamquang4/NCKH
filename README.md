@@ -8,6 +8,16 @@
 
 ![](docs/images/ui2.png)
 
+## Demo
+
+**Quy trình mua hàng**
+
+[Xem video demo](https://quanglam.vercel.app/assets/projects/project2/video2.mp4)
+
+**Tương tác với trợ lý ảo**
+
+[Xem video demo](https://quanglam.vercel.app/assets/projects/project2/video1.mp4)
+
 ## Cài đặt môi trường
 
 **1. Clone repository**
