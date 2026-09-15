@@ -69,7 +69,7 @@ Giám sát qua Zipkin (tracing) và Prometheus (metrics).
 | Service           | Port | Database       | Chức năng                                              |
 | ----------------- | ---- | -------------- | ------------------------------------------------------ |
 | api-gateway       | 8090 | —              | Định tuyến, xử lý CORS                                 |
-| eureka-server     | 8173 | -              | Service registry, quản lý đăng ký và phát hiện service |
+| eureka-server     | 8761 | -              | Service registry, quản lý đăng ký và phát hiện service |
 | auth-service      | 8089 | MySQL          | Xác thực người dùng, cấp phát & kiểm tra JWT token     |
 | brand-service     | 8088 | MySQL          | Quản lý thương hiệu sản phẩm                           |
 | assistant-service | 8087 | -              | Trung gian kết nối hệ thống với N8N                    |
