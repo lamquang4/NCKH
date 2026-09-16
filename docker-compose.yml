@@ -1,15 +1,23 @@
 networks:
   app-network:
+    name: app-network
     driver: bridge
+
+x-java-common: &java-common
+  networks:
+    - app-network
+  restart: on-failure
+  mem_limit: 350m
+  environment:
+    - JAVA_TOOL_OPTIONS=-Xms32m -Xmx200m -XX:+UseSerialGC -XX:TieredStopAtLevel=1 -Xss256k
 
 services:
   eureka-server:
+    <<: *java-common
     build: ./backend/eureka-server
     container_name: eureka-server
     ports:
       - "8761:8761"
-    networks:
-      - app-network
     env_file:
       - ./backend/eureka-server/.env
     healthcheck:
@@ -20,148 +28,103 @@ services:
       start_period: 40s
 
   user-service:
+    <<: *java-common
     build: ./backend/user-service
     container_name: user-service
-    networks:
-      - app-network
     env_file:
       - ./backend/user-service/.env
     depends_on:
       eureka-server:
         condition: service_healthy
-    restart: on-failure
 
   auth-service:
+    <<: *java-common
     build: ./backend/auth-service
     container_name: auth-service
-    networks:
-      - app-network
     env_file:
       - ./backend/auth-service/.env
     depends_on:
-      eureka-server:
-        condition: service_healthy
-    restart: on-failure
+      user-service:
+        condition: service_started
 
   product-service:
+    <<: *java-common
     build: ./backend/product-service
     container_name: product-service
-    networks:
-      - app-network
     env_file:
       - ./backend/product-service/.env
     depends_on:
-      eureka-server:
-        condition: service_healthy
-    restart: on-failure
+      auth-service:
+        condition: service_started
 
   category-service:
+    <<: *java-common
     build: ./backend/category-service
     container_name: category-service
-    networks:
-      - app-network
     env_file:
       - ./backend/category-service/.env
     depends_on:
-      eureka-server:
-        condition: service_healthy
-    restart: on-failure
+      product-service:
+        condition: service_started
 
   brand-service:
+    <<: *java-common
     build: ./backend/brand-service
     container_name: brand-service
-    networks:
-      - app-network
     env_file:
       - ./backend/brand-service/.env
     depends_on:
-      eureka-server:
-        condition: service_healthy
-    restart: on-failure
+      category-service:
+        condition: service_started
 
   order-service:
+    <<: *java-common
     build: ./backend/order-service
     container_name: order-service
-    networks:
-      - app-network
     env_file:
       - ./backend/order-service/.env
     depends_on:
-      eureka-server:
-        condition: service_healthy
-    restart: on-failure
+      brand-service:
+        condition: service_started
 
   payment-service:
+    <<: *java-common
     build: ./backend/payment-service
     container_name: payment-service
-    networks:
-      - app-network
     env_file:
       - ./backend/payment-service/.env
     depends_on:
-      eureka-server:
-        condition: service_healthy
-    restart: on-failure
+      order-service:
+        condition: service_started
 
   cart-service:
+    <<: *java-common
     build: ./backend/cart-service
     container_name: cart-service
-    networks:
-      - app-network
     env_file:
       - ./backend/cart-service/.env
     depends_on:
-      eureka-server:
-        condition: service_healthy
-    restart: on-failure
+      payment-service:
+        condition: service_started
 
   chat-service:
+    <<: *java-common
     build: ./backend/chat-service
     container_name: chat-service
-    networks:
-      - app-network
     env_file:
       - ./backend/chat-service/.env
     depends_on:
-      eureka-server:
-        condition: service_healthy
-    restart: on-failure
-
-  assistant-service:
-    build: ./backend/assistant-service
-    container_name: assistant-service
-    networks:
-      - app-network
-    env_file:
-      - ./backend/assistant-service/.env
-    depends_on:
-      eureka-server:
-        condition: service_healthy
-      n8n:
+      cart-service:
         condition: service_started
-    restart: on-failure
-
-  api-gateway:
-    build: ./backend/api-gateway
-    container_name: api-gateway
-    ports:
-      - "8090:8090"
-    networks:
-      - app-network
-    env_file:
-      - ./backend/api-gateway/.env
-    depends_on:
-      eureka-server:
-        condition: service_healthy
-    restart: on-failure
 
   n8n:
     image: n8nio/n8n
     container_name: n8n
-    ports:
-      - "5678:5678"
+    mem_limit: 300m
     networks:
       - app-network
+    ports:
+      - "5678:5678"
     environment:
       - N8N_HOST=0.0.0.0
       - N8N_PORT=5678
@@ -173,5 +136,37 @@ services:
       - ./n8n:/home/node/.n8n
     restart: always
 
-volumes:
-  n8n_data:
+  assistant-service:
+    <<: *java-common
+    build: ./backend/assistant-service
+    container_name: assistant-service
+    env_file:
+      - ./backend/assistant-service/.env
+    depends_on:
+      chat-service:
+        condition: service_started
+      n8n:
+        condition: service_started
+
+  api-gateway:
+    <<: *java-common
+    build: ./backend/api-gateway
+    container_name: api-gateway
+    ports:
+      - "8090:8090"
+    env_file:
+      - ./backend/api-gateway/.env
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    networks:
+      - app-network
+    ports:
+      - "5173:5173"
+    env_file:
+      - ./frontend/.env

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { validatePhone } from "../../../utils/validatePhone";
-import useGetProvinces from "../../../hooks/customer/useGetProvincesVN";
+import useGetProvinces from "../../../hooks/useGetProvincesVN";
 import Image from "../../ui/Image";
 import ProductBuyList from "./ProductBuyList";
 import PaymentMethod from "./PaymentMethod";

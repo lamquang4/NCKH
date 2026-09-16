@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { LuMic } from "react-icons/lu";
 import { RiVoiceAiLine } from "react-icons/ri";
-import { useVoice } from "../../../../hooks/customer/useVoice";
+import { useVoice } from "../../../../hooks/useVoice";
 import Button from "../../../ui/Button";
 
 interface Props {

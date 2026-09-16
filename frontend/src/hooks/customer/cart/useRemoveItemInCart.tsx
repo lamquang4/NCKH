@@ -3,7 +3,6 @@ import { useState } from "react";
 import { getCookie } from "../../../utils/cookieUtil";
 import { toast } from "react-hot-toast";
 import useGetCart from "./useGetCart";
-import type { ApiResponse, CartResponse } from "../../../types/type";
 
 export function useRemoveItemInCart() {
   const [isLoading, setIsLoading] = useState(false);
@@ -17,32 +16,10 @@ export function useRemoveItemInCart() {
     const url = `${import.meta.env.VITE_BACKEND_URL}/cart/${productId}`;
 
     try {
-      await mutate(
-        axios
-          .delete(url, { headers: { Authorization: `Bearer ${token}` } })
-          .then(() => undefined),
-        {
-          optimisticData: (
-            current: ApiResponse<CartResponse> | undefined,
-          ): ApiResponse<CartResponse> => {
-            if (!current?.data) {
-              throw new Error("Chưa tải được dữ liệu giỏ hàng.");
-            }
-            return {
-              ...current,
-              data: {
-                ...current.data,
-                items: current.data.items.filter(
-                  (item) => item.productId !== productId,
-                ),
-              },
-            };
-          },
-          rollbackOnError: true,
-          populateCache: false,
-          revalidate: true,
-        },
-      );
+      await axios.delete(url, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      await mutate();
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
     } finally {
