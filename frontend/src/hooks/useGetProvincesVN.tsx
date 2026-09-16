@@ -1,6 +1,6 @@
 import axios from "axios";
 import useSWR from "swr";
-import type { Province } from "../../types/type";
+import type { Province } from "../types/type";
 
 type ResponseType = {
   data: Province[];
