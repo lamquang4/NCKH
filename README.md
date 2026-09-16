@@ -68,7 +68,7 @@ Giám sát qua Zipkin (tracing) và Prometheus (metrics).
 
 | Service           | Port | Database       | Chức năng                                              |
 | ----------------- | ---- | -------------- | ------------------------------------------------------ |
-| api-gateway       | 8090 | —              | Định tuyến, xử lý CORS                                 |
+| api-gateway       | 8090 | -              | Định tuyến, xử lý CORS                                 |
 | eureka-server     | 8761 | -              | Service registry, quản lý đăng ký và phát hiện service |
 | auth-service      | 8089 | MySQL          | Xác thực người dùng, cấp phát & kiểm tra JWT token     |
 | brand-service     | 8088 | MySQL          | Quản lý thương hiệu sản phẩm                           |
@@ -80,6 +80,8 @@ Giám sát qua Zipkin (tracing) và Prometheus (metrics).
 | category-service  | 8082 | MySQL          | Quản lý danh mục sản phẩm                              |
 | product-service   | 8081 | MySQL          | Quản lý sản phẩm                                       |
 | user-service      | 8080 | MySQL          | Quản lý thông tin tài khoản người dùng                 |
+
+**Các services đăng ký trên Eureka Server**
 
 ![](docs/images/eureka.png)
 
