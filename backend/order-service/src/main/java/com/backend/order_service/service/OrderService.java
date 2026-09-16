@@ -144,7 +144,7 @@ public class OrderService {
                         orderPage = orderRepository.findAll(pageable);
                 }
 
-                return orderPage.map(this::mapWithClient);
+                return mapPageWithClient(orderPage);
         }
 
         // lấy các đơn hàng của người dùng
@@ -175,7 +175,7 @@ public class OrderService {
                                                         pageable);
                 }
 
-                return orderPage.map(this::mapWithClient);
+                return mapPageWithClient(orderPage);
         }
 
         // lấy 1 đơn hàng theo id
@@ -303,6 +303,31 @@ public class OrderService {
                         sb.append(chars.charAt(random.nextInt(chars.length())));
                 }
                 return sb.toString();
+        }
+
+        private Page<OrderResponse> mapPageWithClient(Page<Order> orderPage) {
+                List<Order> orders = orderPage.getContent();
+                if (orders.isEmpty()) {
+                        return new org.springframework.data.domain.PageImpl<>(List.of(), orderPage.getPageable(), orderPage.getTotalElements());
+                }
+
+                List<String> productIds = orders.stream()
+                                .flatMap(order -> order.getItems().stream())
+                                .map(OrderItem::getProductId)
+                                .distinct()
+                                .toList();
+
+                List<ProductListItemResponse> products = productServiceClient.getProductsByIdsInternal(productIds);
+                Map<String, ProductListItemResponse> productMap = products.stream()
+                                .collect(Collectors.toMap(
+                                                ProductListItemResponse::getId,
+                                                p -> p));
+
+                List<OrderResponse> responses = orders.stream()
+                                .map(order -> OrderMapper.toResponse(order, productMap))
+                                .toList();
+
+                return new org.springframework.data.domain.PageImpl<>(responses, orderPage.getPageable(), orderPage.getTotalElements());
         }
 
         private OrderResponse mapWithClient(Order order) {

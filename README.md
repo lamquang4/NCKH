@@ -38,10 +38,10 @@ docker compose up --build
 | ---------------- | ------------------------------------------------------------------------- |
 | Frontend         | Vite + TypeScript + React 19 <br> TailwindCSS <br> Redux <br> Axios + SWR |
 | Backend          | Spring Boot + Maven + Java 17 <br> Spring Security + JWT                  |
-| Containerization | Docker                                                                    |
 | Database         | MySQL, MongoDB, Redis                                                     |
-| Media Storage    | Cloudinary                                                                |
 | Monitoring       | Actuator + Prometheus + Zipkin                                            |
+| Containerization | Docker                                                                    |
+| Media Storage    | Cloudinary                                                                |
 | CI/CD            | GitHub Actions                                                            |
 
 ## Kiến trúc hệ thống
@@ -80,6 +80,8 @@ Giám sát qua Zipkin (tracing) và Prometheus (metrics).
 | category-service  | 8082 | MySQL          | Quản lý danh mục sản phẩm                              |
 | product-service   | 8081 | MySQL          | Quản lý sản phẩm                                       |
 | user-service      | 8080 | MySQL          | Quản lý thông tin tài khoản người dùng                 |
+
+![](docs/images/eureka.png)
 
 ### Trợ lý ảo
 

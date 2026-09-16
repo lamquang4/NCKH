@@ -182,22 +182,30 @@ public class CartService {
         try {
             redisTemplate.opsForValue().set(key, value, ttl);
         } catch (Exception e) {
-            throw new AppException(ErrorCode.REDIS_OPERATION_FAILED);
+
         }
     }
 
     private void invalidateCartResponse(String userId) {
         if (redisTemplate == null)
             return;
-        redisTemplate.delete(CART_RESPONSE_KEY_PREFIX + userId);
+        try {
+            redisTemplate.delete(CART_RESPONSE_KEY_PREFIX + userId);
+        } catch (Exception e) {
+            // log warning
+        }
     }
 
     private void invalidateAllCartKeys(String userId) {
         if (redisTemplate == null)
             return;
-        redisTemplate.delete(List.of(
-                CART_KEY_PREFIX + userId,
-                CART_RESPONSE_KEY_PREFIX + userId));
+        try {
+            redisTemplate.delete(List.of(
+                    CART_KEY_PREFIX + userId,
+                    CART_RESPONSE_KEY_PREFIX + userId));
+        } catch (Exception e) {
+            // log warning
+        }
     }
 
     // helper
