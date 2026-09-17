@@ -259,6 +259,6 @@ Nhóm tiến hành sử dụng số liệu từ bảng benchmark trên để ph�
 
 **Nhận xét:**
 
-Gemini 2.5 Flash đạt 86.6% trên MMMLU và 90.2% trên Global PIQA, cho thấy khả năng hiểu ngôn ngữ đa lĩnh vực và xử lý các tình huống suy luận thực tế tốt. Ở các tác vụ chuyên sâu, mô hình đạt 82.8% trên GPQA Diamond và 79.5% trên τ²-bench, thấp hơn một số mô hình được so sánh.
+Gemini 2.5 Flash đạt 86.6% MMMLU, cho thấy khả năng hiểu ngôn ngữ đa lĩnh vực ở mức cao và đáp ứng tốt yêu cầu về hiểu ngôn ngữ tự nhiên trong hệ thống hội thoại. Ở benchmark PIQA, mô hình đạt 90.2%, cho thấy khả năng xử lý các tình huống thực tiễn và logic cơ bản hiệu quả. Tuy nhiên, với GPQA Diamond (82.8%) và Agentic Tool Use (79.5%), hiệu năng thấp hơn một số mô hình được so sánh, đặc biệt ở các tác vụ yêu cầu suy luận chuyên sâu và tương tác với công cụ.
 
-Bù lại, Gemini 2.5 Flash có chi phí thấp nhất trong nhóm với $0.30/1M input tokens và $2.50/1M output tokens. Với kết quả thực nghiệm trên hệ thống và yêu cầu AI Agent cần xử lý nhiều tác vụ nghiệp vụ, nhóm lựa chọn Gemini 2.5 Flash do đáp ứng tốt nhu cầu hội thoại, hỗ trợ tool calling và có chi phí triển khai phù hợp.
+Về chi phí vận hành, Gemini 2.5 Flash có mức giá $0.30 input và $2.50 output / 1M tokens, thấp nhất trong các mô hình được so sánh. Đây là yếu tố quan trọng khi AI Agent được sử dụng chung và phục vụ nhiều khách hàng đồng thời. Từ những kết quả trên, Gemini 2.5 Flash được lựa chọn làm mô hình ngôn ngữ lớn cho trợ lý ảo nhờ đáp ứng tốt yêu cầu hiểu ngôn ngữ tự nhiên, có hiệu năng ổn định trong các tác vụ hội thoại và chi phí triển khai phù hợp với điều kiện thực tế của hệ thống.
