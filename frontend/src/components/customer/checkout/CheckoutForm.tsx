@@ -13,7 +13,7 @@ import useAddOrder from "../../../hooks/customer/order/useAddOrder";
 import usePaymentMomo from "../../../hooks/customer/payment/usePaymentMomo";
 import Loading from "../../ui/Loading";
 import Button from "../../ui/Button";
-import Overplay from "../../ui/Overplay";
+import Overlay from "../../ui/Overlay";
 
 function CheckoutForm() {
   const navigate = useNavigate();
@@ -246,10 +246,10 @@ function CheckoutForm() {
       </div>
 
       {(isLoadingCart || isLoadingOrder || isLoadingPaymentMomo) && (
-        <Overplay className="z-50">
+        <Overlay className="z-50">
           <Loading height={0} size={55} color="white" thickness={8} />
           <h4 className="text-white">Vui lòng chờ trong giây lát...</h4>
-        </Overplay>
+        </Overlay>
       )}
     </section>
   );

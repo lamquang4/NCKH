@@ -10,7 +10,7 @@ import { Link, useLocation } from "react-router-dom";
 import { AiOutlineCreditCard } from "react-icons/ai";
 import { TiTags } from "react-icons/ti";
 import Button from "../../ui/Button";
-import Overplay from "../../ui/Overplay";
+import Overlay from "../../ui/Overlay";
 interface Props {
   menuOpen: boolean;
   onToggleMenu: () => void;
@@ -223,7 +223,7 @@ function MenuSide({ menuOpen, onToggleMenu }: Props) {
         </ul>
       </nav>
 
-      {menuOpen && <Overplay className="xl:hidden" onClose={onToggleMenu} />}
+      {menuOpen && <Overlay className="xl:hidden" onClose={onToggleMenu} />}
     </>
   );
 }

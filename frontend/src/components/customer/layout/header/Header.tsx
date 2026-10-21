@@ -15,7 +15,7 @@ import MenuDropDown from "./CategoryDropDown";
 import useGetActiveCategories from "../../../../hooks/customer/category/useGetActiveCategories";
 import Button from "../../../ui/Button";
 import AuthModal from "../../auth/AuthModal";
-import Overplay from "../../../ui/Overplay";
+import Overlay from "../../../ui/Overlay";
 
 function Header() {
   const [searchOpen, setSearchOpen] = useState<boolean>(false);
@@ -176,7 +176,7 @@ function Header() {
 
       <AuthModal />
 
-      {searchOpen && <Overplay className="z-14" onClose={toggleSearch} />}
+      {searchOpen && <Overlay className="z-14" onClose={toggleSearch} />}
     </>
   );
 }
