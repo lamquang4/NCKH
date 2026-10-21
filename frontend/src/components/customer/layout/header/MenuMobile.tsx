@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 import useGetActiveCategories from "../../../../hooks/customer/category/useGetActiveCategories";
 import Button from "../../../ui/Button";
 import Image from "../../../ui/Image";
-import Overplay from "../../../ui/Overplay";
+import Overlay from "../../../ui/Overlay";
 import { LuX } from "react-icons/lu";
 
-interface MenuMobileProps  {
+interface MenuMobileProps {
   isOpen: boolean;
   onToggleMenu: () => void;
-};
+}
 function MenuMobile({ isOpen, onToggleMenu }: MenuMobileProps) {
   const { categories } = useGetActiveCategories();
 
@@ -76,7 +76,7 @@ function MenuMobile({ isOpen, onToggleMenu }: MenuMobileProps) {
         </ul>
       </nav>
 
-      {isOpen && <Overplay className="z-15" onClose={onToggleMenu} />}
+      {isOpen && <Overlay className="z-15" onClose={onToggleMenu} />}
     </>
   );
 }

@@ -11,7 +11,7 @@ import Input from "../../ui/Input";
 import { validateOtp } from "../../../utils/validateOtp";
 import OtpBox from "./OtpBox";
 import { OTP_LENGTH } from "../../../constants/otp";
-import Overplay from "../../ui/Overplay";
+import Overlay from "../../ui/Overlay";
 import Label from "../../ui/Label";
 import { LuX } from "react-icons/lu";
 
@@ -270,10 +270,10 @@ function RegisterModal({ onClose, onSwitchLogin }: Props) {
       </div>
 
       {(isLoading || isLoadingSendResetOTP) && (
-        <Overplay className="z-99 xl:hidden">
+        <Overlay className="z-99 xl:hidden">
           <Loading height={0} size={55} color="white" thickness={8} />
           <h4 className="text-white">Vui lòng chờ trong giây lát...</h4>
-        </Overplay>
+        </Overlay>
       )}
     </>
   );

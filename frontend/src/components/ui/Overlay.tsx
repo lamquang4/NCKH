@@ -3,7 +3,7 @@ interface Props {
   children?: React.ReactNode;
   className?: string;
 }
-function Overplay({ onClose, children, className }: Props) {
+function Overlay({ onClose, children, className }: Props) {
   const handleOverlayClick = () => {
     if (onClose) onClose();
   };
@@ -18,4 +18,4 @@ function Overplay({ onClose, children, className }: Props) {
   );
 }
 
-export default Overplay;
+export default Overlay;

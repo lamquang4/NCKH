@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import Image from "../../ui/Image";
 import Button from "../../ui/Button";
 import ChatWindow from "../chatbox/ChatWindow";
-import Overplay from "../../ui/Overplay";
+import Overlay from "../../ui/Overlay";
 function FloatingWidget() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -40,7 +40,7 @@ function FloatingWidget() {
         </Button>
       </div>
 
-      {isOpen && <Overplay className="z-15" onClose={toggleChat} />}
+      {isOpen && <Overlay className="z-15" onClose={toggleChat} />}
     </>
   );
 }
